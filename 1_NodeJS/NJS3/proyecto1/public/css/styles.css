@@ -1,0 +1,46 @@
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  /* Agregamos esto para que en el celular el texto no pegue contra el borde */
+  margin: 0;
+  padding: 10px;
+}
+
+.container {
+  margin-top: 40px;
+}
+
+button {
+  margin: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+img {
+  margin-top: 15px;
+  width: 200px;
+  /* Agregamos esto para que la imagen no desborde en pantallas chicas */
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- SECCIÓN RESPONSIVA (Agregado) --- */
+@media (max-width: 600px) {
+  .container {
+    margin-top: 20px;
+  }
+
+  button {
+    /* Los botones se adaptan al ancho de la pantalla del celular */
+    width: 90%;
+    display: block;
+    margin: 10px auto;
+    padding: 15px; /* Más grandes para que sea fácil tocarlos con el dedo */
+  }
+
+  img {
+    width: 150px; /* Un poquito más chica en móviles para que no ocupe toda la pantalla */
+  }
+}

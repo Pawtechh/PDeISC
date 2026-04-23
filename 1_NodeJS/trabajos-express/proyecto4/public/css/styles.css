@@ -1,0 +1,72 @@
+body { 
+  background: #1a0a2e; 
+  color: #e0d7f5; 
+  font-family: 'Segoe UI', sans-serif; 
+  min-height: 100vh; 
+  margin: 0;
+  padding: 15px; /* Evita que el contenido toque los bordes del celular */
+}
+
+.panel { 
+  background: #2d1b4e; 
+  border: 1px solid #7c3aed44; 
+  border-radius: 12px; 
+  min-height: 80px; 
+  width: 100%; /* Asegura que el panel sea fluido */
+  max-width: 1000px; /* Evita que se estire demasiado en monitores grandes */
+  margin: 10px auto;
+  padding: 15px;
+  box-sizing: border-box; /* Incluye el padding en el ancho total */
+}
+
+.log { 
+  background: #0f0722; 
+  border: 1px solid #7c3aed33; 
+  border-radius: 8px; 
+  min-height: 60px; 
+  font-size: 0.85rem; 
+  font-family: monospace; 
+  color: #a78bfa; 
+  padding: 10px;
+  overflow-x: auto; /* Permite scroll lateral si el texto es muy largo en móviles */
+}
+
+.nodo-a { 
+  display: inline-block; 
+  margin: 6px; 
+  padding: 8px 16px; 
+  background: #4c1d95; 
+  border-radius: 8px; 
+  color: #ddd6fe; 
+  text-decoration: none; 
+  border: 1px solid #7c3aed; 
+  transition: background 0.2s; 
+}
+
+.nodo-a:hover { 
+  background: #6d28d9; 
+  color: #fff; 
+}
+
+.log-item { 
+  margin-bottom: 4px; 
+  padding: 4px 8px; 
+  border-left: 3px solid #7c3aed; 
+}
+
+/* --- AJUSTES PARA DISPOSITIVOS MÓVILES --- */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .nodo-a {
+    display: block; /* Los nodos ocupan todo el ancho para facilitar el toque */
+    text-align: center;
+    margin: 10px 0;
+  }
+
+  .panel {
+    padding: 10px;
+  }
+}

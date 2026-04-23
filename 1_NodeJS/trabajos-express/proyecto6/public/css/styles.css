@@ -1,0 +1,66 @@
+body { 
+  background: #0c1929; 
+  color: #dbeafe; 
+  font-family: 'Segoe UI', sans-serif; 
+  min-height: 100vh; 
+  /* Cambio: Agregamos padding y margin para evitar que el contenido toque los bordes en móviles */
+  margin: 0;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.form-control, .form-select {
+  background: #1e3a5f !important;
+  border: 1px solid #2563eb55;
+  color: #dbeafe !important;
+  /* Cambio: Asegura que los inputs no se desborden */
+  max-width: 100%;
+}
+
+.form-control::placeholder { color: #93c5fd88; }
+
+.panel { 
+  background: #112240; 
+  border: 1px solid #1e40af44; 
+  border-radius: 14px; 
+  /* Cambio: Hacemos el panel fluido con un ancho máximo */
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.dato-fila { 
+  display: flex; 
+  justify-content: space-between; 
+  padding: 8px 0; 
+  border-bottom: 1px solid #1e40af33; 
+  animation: slideIn 0.3s ease; 
+  /* Cambio: Permite que el contenido se envuelva si es muy largo */
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dato-label { color: #60a5fa; font-weight: 600; }
+.dato-valor { color: #e0f2fe; }
+
+@keyframes slideIn { 
+  from { opacity: 0; transform: translateX(10px); } 
+  to { opacity: 1; transform: translateX(0); } 
+}
+
+/* --- AJUSTE RESPONSIVO MÍNIMO --- */
+@media (max-width: 600px) {
+  .dato-fila {
+    /* En celulares, ponemos la etiqueta arriba y el valor abajo */
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+  
+  .panel {
+    padding: 15px;
+    margin-top: 10px;
+  }
+}

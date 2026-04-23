@@ -1,0 +1,43 @@
+body { 
+  background: #0a1628; 
+  color: #cdd9e5; 
+  font-family: 'Segoe UI', sans-serif; 
+  min-height: 100vh; 
+  /* Cambio: Agregamos un margen y padding base para que el contenido no toque los bordes */
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.objeto-html { 
+  background: #161f2e; 
+  border: 1px solid #2d4a6b; 
+  border-radius: 10px; 
+  padding: 16px; 
+  margin-bottom: 14px; 
+  animation: fadeIn 0.4s ease; 
+  /* Cambio: Hacemos que el ancho sea flexible con un máximo para pantallas grandes */
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+@keyframes fadeIn { 
+  from { opacity: 0; transform: translateY(10px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+
+/* --- AJUSTE RESPONSIVO MÍNIMO --- */
+@media (max-width: 600px) {
+  body {
+    padding: 10px; /* Menos espacio en los bordes para ganar lugar en celulares */
+  }
+
+  .objeto-html {
+    padding: 12px;
+    margin-bottom: 10px;
+    font-size: 0.95rem; /* Ajuste leve de lectura para pantallas pequeñas */
+  }
+}

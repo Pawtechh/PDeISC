@@ -1,0 +1,77 @@
+﻿body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f7f6;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.controles {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#contenedor-padre {
+  background: #f9f9f9;
+  border: 2px dashed #bbb;
+  min-height: 120px;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.hijo {
+  background: #3498db;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+button {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-add { background: #3498db; }
+.btn-count { background: #2c3e50; }
+
+button:hover {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+}
+
+#resultado {
+  font-size: 1.1rem;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+/* Responsivo para celulares */
+@media (max-width: 450px) {
+  .controles {
+    flex-direction: column;
+  }
+}
