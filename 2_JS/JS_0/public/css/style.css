@@ -1,0 +1,101 @@
+/* Estética general de terminal */
+body {
+    background-color: #0d0d0d;
+    color: #00ff41; /* Verde Matrix */
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 20px;
+}
+
+.terminal-container {
+    max-width: 1000px;
+    margin: auto;
+    border: 1px solid #333;
+    padding: 20px;
+    background: #111;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+}
+
+header h1 {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+.user-info {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #333;
+    margin: 20px 0;
+}
+
+/* Caja de cada Menú */
+.menu-box {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 4px;
+}
+
+.menu-box h3 {
+    margin-top: 0;
+    color: #fff;
+    border-bottom: 1px solid #00ff41;
+    display: inline-block;
+}
+
+.leyenda {
+    font-size: 0.85rem;
+    color: #ffb400; /* Color alerta para restricciones */
+    margin: 10px 0;
+}
+
+/* El monitor donde se ve el array en tiempo real */
+.monitor {
+    background: #000;
+    padding: 10px;
+    border-radius: 3px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #00d1ff; /* Color para los datos del array */
+    min-height: 20px;
+}
+
+/* Controles */
+input[type="text"] {
+    background: #222;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 8px;
+    width: 250px;
+}
+
+button {
+    background: #00ff41;
+    color: #000;
+    border: none;
+    padding: 8px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #008f11;
+}
+
+button:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
