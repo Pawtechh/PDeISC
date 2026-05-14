@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filtro de TXT</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <div class="topbar">
+        <h1>Filtro de números desde TXT</h1>
+        <button id="themeToggle" class="btn secondary">Modo oscuro</button>
+      </div>
+
+      <form id="uploadForm" class="form">
+        <label for="txtfile">Subir archivo .txt</label>
+        <input id="txtfile" name="txtfile" type="file" accept=".txt" />
+        <button type="submit" class="btn">Procesar archivo</button>
+      </form>
+
+      <p id="message" class="message"></p>
+
+      <div class="grid">
+        <div class="panel">
+          <h2>Números útiles</h2>
+          <div id="usefulList" class="list"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Estadísticas</h2>
+          <p id="stats"></p>
+        </div>
+
+        <div class="panel">
+          <h2>Factoriales</h2>
+          <div id="factorialList" class="list"></div>
+        </div>
+
+        <div class="panel">
+          <h2>TXT generado</h2>
+          <a id="downloadLink" href="#" download style="display:none;">Descargar resultado</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

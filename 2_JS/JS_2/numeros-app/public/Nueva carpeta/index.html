@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cargador de Números</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --tr: 0.35s cubic-bezier(.4,0,.2,1); }
+    [data-theme="dark"]  { --bg:#0d0f14;--sur:#151821;--brd:#252a38;--acc:#5af2c8;--acc2:#ff6b6b;--txt:#e8eaf0;--sub:#6b7280;--chbg:#1c2130;--chbrd:#2e3750;--glow:0 0 24px #5af2c840; }
+    [data-theme="light"] { --bg:#f0f2f8;--sur:#ffffff;--brd:#dde1ef;--acc:#0e7a5c;--acc2:#d93030;--txt:#111827;--sub:#6b7280;--chbg:#e8f4f0;--chbrd:#b2ddd0;--glow:0 0 24px #0e7a5c20; }
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem 5rem;transition:background var(--tr),color var(--tr)}
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--brd) 1px,transparent 1px),linear-gradient(90deg,var(--brd) 1px,transparent 1px);background-size:40px 40px;opacity:.3;pointer-events:none;z-index:0}
+    .wrapper{position:relative;z-index:1;width:100%;max-width:680px}
+
+    header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2.5rem}
+    .logo-tag{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--acc);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.25rem}
+    h1{font-size:clamp(1.6rem,5vw,2.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.1}
+    h1 span{color:var(--acc)}
+
+    .tog{background:var(--sur);border:1px solid var(--brd);border-radius:999px;cursor:pointer;width:52px;height:28px;position:relative;transition:background var(--tr),border var(--tr);flex-shrink:0;margin-top:6px}
+    .tog::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:var(--acc);top:3px;left:4px;transition:transform var(--tr)}
+    [data-theme="light"] .tog::after{transform:translateX(23px)}
+    .ticon{position:absolute;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none}
+    .ticon.m{left:6px}.ticon.s{right:5px}
+
+    .card{background:var(--sur);border:1px solid var(--brd);border-radius:20px;padding:2rem;margin-bottom:1.5rem;transition:background var(--tr),border var(--tr)}
+
+    .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+    .pl{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--sub);text-transform:uppercase;letter-spacing:.1em}
+    .pc{font-family:'Space Mono',monospace;font-size:.85rem;font-weight:700;color:var(--acc)}
+    .pt{height:6px;background:var(--brd);border-radius:999px;overflow:hidden;margin-bottom:1.75rem}
+    .pf{height:100%;background:var(--acc);border-radius:999px;width:0%;transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+    .irow{display:flex;gap:.75rem}
+    .iwrap{flex:1;position:relative}
+    .ni{width:100%;background:var(--bg);border:1px solid var(--brd);border-radius:12px;color:var(--txt);font-family:'Space Mono',monospace;font-size:1.2rem;padding:.85rem 1.1rem;outline:none;transition:border var(--tr),box-shadow var(--tr);-moz-appearance:textfield}
+    .ni::-webkit-inner-spin-button,.ni::-webkit-outer-spin-button{-webkit-appearance:none}
+    .ni:focus{border-color:var(--acc);box-shadow:var(--glow)}
+    .ni.err{border-color:var(--acc2);box-shadow:0 0 18px #ff6b6b30;animation:shake .35s ease}
+    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+    .btn{border:none;border-radius:12px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;transition:transform .15s,box-shadow .15s,background .2s;white-space:nowrap}
+    .btn:active{transform:scale(.96)}
+    .badd{background:var(--acc);color:#0d0f14;padding:.85rem 1.4rem}
+    .badd:hover{box-shadow:var(--glow)}
+    .badd:disabled,.bsave:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+
+    .emsg{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--acc2);min-height:1rem;margin-top:.5rem;letter-spacing:.05em;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s}
+    .emsg.on{opacity:1;transform:translateY(0)}
+
+    .clbl{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--sub);text-transform:uppercase;letter-spacing:.15em;margin-bottom:1rem}
+    .cgrid{display:flex;flex-wrap:wrap;gap:.6rem;min-height:48px}
+    .chip{display:flex;align-items:center;gap:.5rem;background:var(--chbg);border:1px solid var(--chbrd);border-radius:10px;padding:.45rem .85rem;font-family:'Space Mono',monospace;font-size:.85rem;color:var(--txt);animation:cin .3s cubic-bezier(.34,1.56,.64,1) both;transition:background var(--tr),border var(--tr)}
+    @keyframes cin{from{opacity:0;transform:scale(.7) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .cidx{font-size:.65rem;color:var(--acc);font-weight:700}
+    .cdel{background:none;border:none;color:var(--sub);cursor:pointer;font-size:.8rem;padding:0;line-height:1;transition:color .15s}
+    .cdel:hover{color:var(--acc2)}
+    .ehint{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--sub);align-self:center}
+
+    .sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+    @media(max-width:480px){.sgrid{grid-template-columns:repeat(2,1fr)}}
+    .sbox{background:var(--bg);border:1px solid var(--brd);border-radius:12px;padding:.85rem;text-align:center;transition:background var(--tr),border var(--tr)}
+    .sv{font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--acc);display:block}
+    .sl{font-size:.65rem;color:var(--sub);text-transform:uppercase;letter-spacing:.1em;margin-top:.2rem}
+
+    .actions{display:flex;gap:.75rem;flex-wrap:wrap}
+    .bsave{flex:1;background:var(--acc);color:#0d0f14;padding:1rem 1.5rem;font-size:1rem;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:.5rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;transition:box-shadow .2s;border:none;white-space:nowrap}
+    .bsave:hover:not(:disabled){box-shadow:var(--glow)}
+    .bclear{background:transparent;border:1px solid var(--brd);color:var(--sub);padding:1rem 1.2rem;border-radius:14px;font-size:.85rem;transition:border .2s,color .2s}
+    .bclear:hover{border-color:var(--acc2);color:var(--acc2)}
+
+    .need-hint{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--sub);text-align:center;margin-top:.75rem;min-height:1rem;letter-spacing:.04em}
+
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--sur);border:1px solid var(--acc);color:var(--txt);font-family:'Space Mono',monospace;font-size:.8rem;padding:.75rem 1.4rem;border-radius:999px;box-shadow:var(--glow);transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:100;white-space:nowrap}
+    .toast.on{transform:translateX(-50%) translateY(0)}
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div>
+      <div class="logo-tag">// herramienta numérica</div>
+      <h1>Cargador<br>de <span>Números</span></h1>
+    </div>
+    <button class="tog" id="tog" title="Cambiar tema" aria-label="Cambiar tema">
+      <span class="ticon m">🌙</span>
+      <span class="ticon s">☀️</span>
+    </button>
+  </header>
+
+  <div class="card">
+    <div class="ph">
+      <span class="pl">Progreso</span>
+      <span class="pc" id="pc">0 / 20</span>
+    </div>
+    <div class="pt"><div class="pf" id="pf"></div></div>
+    <div class="irow">
+      <div class="iwrap">
+        <input type="text" id="ni" class="ni" placeholder="Ingresá un número…" inputmode="numeric" autocomplete="off" maxlength="15"/>
+      </div>
+      <button class="btn badd" id="badd">+ Agregar</button>
+    </div>
+    <div class="emsg" id="emsg"></div>
+  </div>
+
+  <div class="card">
+    <div class="clbl">Números ingresados</div>
+    <div class="cgrid" id="cgrid">
+      <span class="ehint">Ningún número todavía…</span>
+    </div>
+  </div>
+
+  <div class="card" id="scard" style="display:none">
+    <div class="clbl">Estadísticas en tiempo real</div>
+    <div class="sgrid">
+      <div class="sbox"><span class="sv" id="ssum">—</span><div class="sl">Suma</div></div>
+      <div class="sbox"><span class="sv" id="savg">—</span><div class="sl">Promedio</div></div>
+      <div class="sbox"><span class="sv" id="smin">—</span><div class="sl">Mínimo</div></div>
+      <div class="sbox"><span class="sv" id="smax">—</span><div class="sl">Máximo</div></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="bsave" id="bsave" disabled>↓ Guardar como .txt</button>
+    <button class="btn bclear" id="bclear">Limpiar</button>
+  </div>
+  <div class="need-hint" id="nhint">Necesitás al menos 10 números para guardar</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const MIN=10, MAX=20;
+  let nums=[];
+  const $ = id => document.getElementById(id);
+  const html=document.documentElement;
+
+  $('tog').onclick=()=>{ html.dataset.theme = html.dataset.theme==='dark'?'light':'dark'; };
+
+  $('ni').addEventListener('input',()=>{
+    let v=$('ni').value;
+    // Permite solo dígitos, punto decimal y signo menos al inicio
+    v=v.replace(/[^0-9.\-]/g,'');
+    v=v.replace(/(?!^)-/g,'');
+    const pts=v.split('.');
+    if(pts.length>2) v=pts[0]+'.'+pts.slice(1).join('');
+    $('ni').value=v;
+    clearErr();
+  });
+  $('ni').addEventListener('keydown',e=>{ if(e.key==='Enter') add(); });
+  $('badd').onclick=add;
+
+  function add(){
+    const raw=$('ni').value.trim();
+    if(raw===''||raw==='-'||raw==='.'){showErr('Ingresá un número válido.');shake();return;}
+    if(!/^-?\d+(\.\d+)?$/.test(raw)){showErr('Solo se permiten números (ej: 42, -7, 3.14).');shake();return;}
+    if(nums.length>=MAX){showErr('Máximo '+MAX+' números permitidos.');shake();return;}
+    nums.push(Number(raw));
+    $('ni').value='';
+    clearErr();
+    render();
+    $('ni').focus();
+  }
+
+  window.removeNum=function(i){ nums.splice(i,1); render(); };
+
+  function render(){
+    // Chips
+    const g=$('cgrid');
+    g.innerHTML='';
+    if(nums.length===0){
+      g.innerHTML='<span class="ehint">Ningún número todavía…</span>';
+    } else {
+      nums.forEach((n,i)=>{
+        const d=document.createElement('div');
+        d.className='chip';
+        d.innerHTML=`<span class="cidx">#${String(i+1).padStart(2,'0')}</span><span>${n}</span><button class="cdel" onclick="removeNum(${i})" title="Eliminar">✕</button>`;
+        g.appendChild(d);
+      });
+    }
+    // Progress
+    $('pf').style.width=(nums.length/MAX*100)+'%';
+    $('pc').textContent=`${nums.length} / ${MAX}`;
+    // Buttons
+    $('badd').disabled=nums.length>=MAX;
+    $('bsave').disabled=nums.length<MIN;
+    // Hint
+    if(nums.length===0) $('nhint').textContent='Necesitás al menos 10 números para guardar';
+    else if(nums.length<MIN) $('nhint').textContent=`Faltan ${MIN-nums.length} número(s) para poder guardar`;
+    else $('nhint').textContent='✓ Listo para guardar';
+    // Stats
+    if(nums.length>0){
+      $('scard').style.display='block';
+      const sum=nums.reduce((a,b)=>a+b,0);
+      $('ssum').textContent=Number.isInteger(sum)?sum:sum.toFixed(2);
+      $('savg').textContent=(sum/nums.length).toFixed(2);
+      $('smin').textContent=Math.min(...nums);
+      $('smax').textContent=Math.max(...nums);
+    } else {
+      $('scard').style.display='none';
+    }
+  }
+
+  $('bsave').onclick=async()=>{
+    if(nums.length<MIN) return;
+    try{
+      const r=await fetch('/guardar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({numeros:nums})});
+      if(!r.ok) throw 0;
+      const blob=await r.blob();
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url; a.download='numeros.txt'; a.click();
+      URL.revokeObjectURL(url);
+      showToast('✓ Archivo guardado correctamente');
+    }catch(e){ showToast('✗ Error al guardar'); }
+  };
+
+  $('bclear').onclick=()=>{
+    if(!nums.length) return;
+    nums=[]; $('ni').value=''; clearErr(); render();
+    showToast('Lista limpiada');
+  };
+
+  function showErr(m){$('emsg').textContent=m;$('emsg').classList.add('on');}
+  function clearErr(){$('emsg').classList.remove('on');}
+  function shake(){const n=$('ni');n.classList.remove('err');void n.offsetWidth;n.classList.add('err');setTimeout(()=>n.classList.remove('err'),400);}
+
+  let tt;
+  function showToast(m){
+    $('toast').textContent=m;$('toast').classList.add('on');
+    clearTimeout(tt);tt=setTimeout(()=>$('toast').classList.remove('on'),2800);
+  }
+
+  render();
+</script>
+</body>
+</html>

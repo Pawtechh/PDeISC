@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtro TXT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Filtro Inteligente de TXT</h1>
+
+        <button id="themeButton">Modo Oscuro</button>
+
+        <form id="uploadForm">
+            <input type="file" id="txtFile" accept=".txt" required>
+            <button type="submit">Procesar TXT</button>
+        </form>
+ 
+        <div id="message"></div>
+
+        <div class="results">
+
+            <div class="card">
+                <h2>Números útiles</h2>
+                <ul id="usefulList"></ul>
+            </div>
+
+            <div class="card">
+                <h2>Números factoriales</h2>
+                <ul id="factorialList"></ul>
+            </div>
+
+            <div class="card">
+                <h2>Estadísticas</h2>
+                <p id="usefulCount"></p>
+                <p id="uselessCount"></p>
+                <p id="percentage"></p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
