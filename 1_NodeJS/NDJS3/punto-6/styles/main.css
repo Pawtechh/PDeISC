@@ -1,0 +1,296 @@
+/**
+ * Archivo: main.css
+ * Propósito: Estilos para proyecto 6 (formulario registro)
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #f0f2f5;
+  --bg-secondary: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #666;
+  --border-color: #ddd;
+  --shadow: 0 2px 8px rgba(0,0,0,0.1);
+  --btn-primary: #007bff;
+  --btn-secondary: #6c757d;
+  --btn-danger: #dc3545;
+  --input-border: #ccc;
+  --input-focus: #007bff;
+  --error-color: #dc3545;
+  --success-color: #28a745;
+  --preview-bg: #f8f9fa;
+}
+
+body.dark {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e2e;
+  --text-primary: #eeeeee;
+  --text-secondary: #aaa;
+  --border-color: #333;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --btn-primary: #e94560;
+  --btn-secondary: #7f8c8d;
+  --btn-danger: #ff4757;
+  --input-border: #555;
+  --input-focus: #e94560;
+  --error-color: #ff6b6b;
+  --success-color: #2ed573;
+  --preview-bg: #2a2a35;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--bg-secondary);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.header h1 {
+  font-size: 1.3rem;
+}
+
+.theme-btn {
+  background-color: var(--btn-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Columnas: horizontal en escritorio */
+.form-column, .preview-column {
+  flex: 1;
+  min-width: 300px;
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.form-column h2, .preview-column h2 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--btn-primary);
+}
+
+/* Estilos del formulario */
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.form-group input:not([type="radio"]):not([type="checkbox"]),
+.form-group select {
+  padding: 0.6rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.radio-group, .checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.radio-group label, .checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.action-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  flex: 1;
+}
+
+.action-btn.primary {
+  background-color: var(--btn-primary);
+  color: white;
+}
+
+.action-btn.secondary {
+  background-color: var(--btn-secondary);
+  color: white;
+}
+
+.action-btn.danger {
+  background-color: var(--btn-danger);
+  color: white;
+}
+
+.action-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* Vista previa */
+.preview-container {
+  background-color: var(--preview-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 400px;
+}
+
+.empty-preview {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 2rem;
+}
+
+.preview-card {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.preview-card h3 {
+  color: var(--btn-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.preview-field {
+  display: flex;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.preview-field .label {
+  font-weight: bold;
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.preview-field .value {
+  color: var(--text-primary);
+}
+
+.intereses-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.interes-badge {
+  background-color: var(--btn-primary);
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.message-area {
+  width: 100%;
+  margin-top: 0;
+  padding: 0.75rem;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  border-left: 4px solid var(--btn-primary);
+}
+
+/* Responsive: móvil = vertical */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .form-column, .preview-column {
+    width: 100%;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
+  
+  .preview-field {
+    flex-direction: column;
+  }
+  
+  .preview-field .label {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+}

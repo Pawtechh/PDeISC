@@ -1,0 +1,204 @@
+/**
+ * Archivo: main.css
+ * Propósito: Estilos globales para el proyecto Node.js
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #666;
+  --border-color: #ddd;
+  --shadow: 0 2px 8px rgba(0,0,0,0.1);
+  --btn-primary: #007bff;
+  --btn-success: #28a745;
+  --btn-warning: #ffc107;
+  --btn-info: #17a2b8;
+  --btn-secondary: #6c757d;
+  --card-bg: #f8f9fa;
+  --menu-bg: #2c3e50;
+  --menu-hover: #3498db;
+}
+
+body.dark {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e2e;
+  --text-primary: #eeeeee;
+  --text-secondary: #aaa;
+  --border-color: #333;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --btn-primary: #e94560;
+  --btn-success: #2ed573;
+  --btn-warning: #f39c12;
+  --btn-info: #00cec9;
+  --btn-secondary: #7f8c8d;
+  --card-bg: #2a2a35;
+  --menu-bg: #1a1a2e;
+  --menu-hover: #e94560;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--bg-secondary);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.header h1 {
+  font-size: 1.3rem;
+}
+
+.menu-nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.menu-item {
+  background-color: var(--menu-bg);
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.menu-item:hover {
+  background-color: var(--menu-hover);
+  transform: translateY(-2px);
+}
+
+.menu-item.active {
+  background-color: var(--btn-primary);
+}
+
+.theme-btn {
+  background-color: var(--btn-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  color: var(--btn-primary);
+}
+
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.card {
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  flex: 1;
+  min-width: 250px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  color: var(--btn-primary);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.card p {
+  margin: 0.5rem 0;
+  color: var(--text-secondary);
+}
+
+.action-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.action-btn.primary { background-color: var(--btn-primary); color: white; }
+.action-btn.success { background-color: var(--btn-success); color: white; }
+.action-btn.warning { background-color: var(--btn-warning); color: #333; }
+.action-btn.info { background-color: var(--btn-info); color: white; }
+.action-btn.secondary { background-color: var(--btn-secondary); color: white; }
+
+.action-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+pre {
+  background-color: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .menu-nav {
+    justify-content: center;
+  }
+  
+  .cards-grid {
+    flex-direction: column;
+  }
+}

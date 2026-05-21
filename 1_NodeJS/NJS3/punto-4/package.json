@@ -1,0 +1,13 @@
+{
+  "name": "proyecto4-nodos-a",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Crear y modificar nodos <a> con atributos",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

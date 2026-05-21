@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto 2 - Eventos DHTML</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1>Proyecto 2 - 5 Componentes con Eventos</h1>
+      <button id="themeToggle" class="theme-btn">🌙 Modo Oscuro</button>
+    </header>
+
+    <main class="main-content">
+      <!-- Barra de navegación horizontal (escritorio) / vertical (móvil) -->
+      <nav class="nav-buttons">
+        <button data-component="contador" class="nav-btn active">Contador</button>
+        <button data-component="lista" class="nav-btn">Lista de Tareas</button>
+        <button data-component="color" class="nav-btn">Selector Color</button>
+        <button data-component="texto" class="nav-btn">Texto Dinámico</button>
+        <button data-component="calculadora" class="nav-btn">Calculadora Simple</button>
+      </nav>
+
+      <!-- Contenedor donde se renderiza el componente activo -->
+      <div id="componentContainer" class="component-container"></div>
+
+      <!-- Área de mensajes -->
+      <div id="messageArea" class="message-area"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

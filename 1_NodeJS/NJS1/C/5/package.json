@@ -1,0 +1,12 @@
+{
+  "name": "ejercicio5-tabla",
+  "version": "1.0.0",
+  "description": "Mostrar resultados en tabla con estilos en el navegador",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

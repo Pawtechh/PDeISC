@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Proyecto 1 - Manipulación DOM</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+  <!-- Contenedor principal fluido, sin espacios laterales en escritorio -->
+  <div class="app-container">
+    <header class="header">
+      <h1>Manipulación DOM - Proyecto 1</h1>
+      <!-- Boton modo oscuro/claro -->
+      <button id="themeToggle" class="theme-btn" aria-label="Cambiar tema">🌙 Modo Oscuro</button>
+    </header>
+
+    <main class="main-content">
+      <!-- Elemento H1 dinamico -->
+      <h1 id="dynamicH1" class="dynamic-title">Hola DOM</h1>
+
+      <!-- Botones de control: disposicion horizontal en escritorio, vertical en movil -->
+      <div class="buttons-grid">
+        <button id="btnAgregarH1" class="action-btn">Agregar H1 (Hola DOM)</button>
+        <button id="btnCambiarTexto" class="action-btn">Cambiar texto H1 (Chau DOM)</button>
+        <button id="btnCambiarColor" class="action-btn">Cambiar color H1</button>
+        <button id="btnAgregarImg" class="action-btn">Agregar imagen</button>
+        <button id="btnCambiarImg" class="action-btn">Cambiar imagen</button>
+        <button id="btnCambiarTamImg" class="action-btn">Cambiar tamaño imagen</button>
+      </div>
+
+      <!-- Contenedor para la imagen (feedback visual) -->
+      <div id="imageContainer" class="image-container"></div>
+
+      <!-- Area de mensajes sin alert() -->
+      <div id="messageArea" class="message-area"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

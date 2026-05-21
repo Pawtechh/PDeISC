@@ -1,0 +1,13 @@
+{
+  "name": "proyecto6-formulario",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Formulario de registro con validación y vista previa",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

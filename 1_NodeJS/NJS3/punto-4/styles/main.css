@@ -1,0 +1,274 @@
+/**
+ * Archivo: main.css
+ * Propósito: Estilos para proyecto 4
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #f0f2f5;
+  --bg-secondary: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #666;
+  --border-color: #ddd;
+  --shadow: 0 2px 8px rgba(0,0,0,0.1);
+  --btn-primary: #007bff;
+  --btn-warning: #ffc107;
+  --btn-warning-text: #333;
+  --btn-secondary: #6c757d;
+  --btn-danger: #dc3545;
+  --btn-success: #28a745;
+  --link-color: #007bff;
+  --link-hover: #0056b3;
+  --log-bg: #f8f9fa;
+}
+
+body.dark {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e2e;
+  --text-primary: #eeeeee;
+  --text-secondary: #aaa;
+  --border-color: #333;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --btn-primary: #e94560;
+  --btn-warning: #f39c12;
+  --btn-warning-text: #fff;
+  --btn-secondary: #7f8c8d;
+  --btn-danger: #ff4757;
+  --btn-success: #2ed573;
+  --link-color: #e94560;
+  --link-hover: #ff6b81;
+  --log-bg: #2a2a35;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--bg-secondary);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.header h1 {
+  font-size: 1.3rem;
+}
+
+.theme-btn {
+  background-color: var(--btn-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Paneles: horizontal en escritorio */
+.left-panel, .right-panel {
+  flex: 1;
+  min-width: 280px;
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.left-panel h2, .right-panel h2 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--btn-primary);
+}
+
+.action-group {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.action-group h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.action-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin: 0.25rem;
+}
+
+.action-btn.primary {
+  background-color: var(--btn-primary);
+  color: white;
+}
+
+.action-btn.warning {
+  background-color: var(--btn-warning);
+  color: var(--btn-warning-text);
+}
+
+.action-btn.secondary {
+  background-color: var(--btn-secondary);
+  color: white;
+}
+
+.action-btn.danger {
+  background-color: var(--btn-danger);
+  color: white;
+}
+
+.action-btn.success {
+  background-color: var(--btn-success);
+  color: white;
+}
+
+.action-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.modify-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Estilos para los nodos */
+.nodos-container {
+  background-color: var(--log-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 300px;
+  margin-bottom: 1.5rem;
+}
+
+.nodo-item {
+  background-color: var(--bg-secondary);
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  border-left: 4px solid var(--btn-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nodo-item a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nodo-item a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.nodo-info {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-family: monospace;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 2rem;
+}
+
+/* Log area */
+.log-area {
+  margin-top: 1rem;
+}
+
+.log-area h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.log-container {
+  background-color: var(--log-bg);
+  border-radius: 8px;
+  padding: 0.75rem;
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+
+.log-entry {
+  padding: 0.4rem;
+  border-bottom: 1px solid var(--border-color);
+  font-family: monospace;
+}
+
+.log-entry .timestamp {
+  color: var(--btn-primary);
+  font-weight: bold;
+}
+
+.log-entry .modified {
+  color: var(--btn-success);
+}
+
+.message-area {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  border-left: 4px solid var(--btn-primary);
+}
+
+/* Responsive: móvil = vertical */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .left-panel, .right-panel {
+    width: 100%;
+  }
+  
+  .nodo-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

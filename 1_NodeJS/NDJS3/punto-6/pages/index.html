@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto 6 - Formulario de Registro</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1>Proyecto 6 - Formulario de Registro</h1>
+      <button id="themeToggle" class="theme-btn">🌙 Modo Oscuro</button>
+    </header>
+
+    <main class="main-content">
+      <!-- Columna izquierda: formulario -->
+      <div class="form-column">
+        <h2>📝 Formulario de Registro</h2>
+        
+        <form id="registroForm" class="registro-form">
+          <!-- Campo texto -->
+          <div class="form-group">
+            <label for="nombre">Nombre completo *</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
+            <div class="error-message" id="error-nombre"></div>
+          </div>
+
+          <!-- Campo email -->
+          <div class="form-group">
+            <label for="email">Correo electrónico *</label>
+            <input type="email" id="email" name="email" placeholder="ejemplo@dominio.com" required>
+            <div class="error-message" id="error-email"></div>
+          </div>
+
+          <!-- Campo number -->
+          <div class="form-group">
+            <label for="edad">Edad *</label>
+            <input type="number" id="edad" name="edad" min="1" max="120" placeholder="18" required>
+            <div class="error-message" id="error-edad"></div>
+          </div>
+
+          <!-- Campo radio (género) -->
+          <div class="form-group">
+            <label>Género *</label>
+            <div class="radio-group">
+              <label><input type="radio" name="genero" value="Masculino"> Masculino</label>
+              <label><input type="radio" name="genero" value="Femenino"> Femenino</label>
+              <label><input type="radio" name="genero" value="Otro"> Otro</label>
+              <label><input type="radio" name="genero" value="Prefiero no decir"> Prefiero no decir</label>
+            </div>
+            <div class="error-message" id="error-genero"></div>
+          </div>
+
+          <!-- Campo select -->
+          <div class="form-group">
+            <label for="pais">País *</label>
+            <select id="pais" name="pais" required>
+              <option value="">Selecciona un país</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Bolivia">Bolivia</option>
+              <option value="Brasil">Brasil</option>
+              <option value="Chile">Chile</option>
+              <option value="Colombia">Colombia</option>
+              <option value="Ecuador">Ecuador</option>
+              <option value="España">España</option>
+              <option value="México">México</option>
+              <option value="Perú">Perú</option>
+              <option value="Uruguay">Uruguay</option>
+              <option value="Venezuela">Venezuela</option>
+            </select>
+            <div class="error-message" id="error-pais"></div>
+          </div>
+
+          <!-- Campo checkbox (intereses) -->
+          <div class="form-group">
+            <label>Intereses (puedes seleccionar varios)</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="intereses" value="Deportes"> Deportes</label>
+              <label><input type="checkbox" name="intereses" value="Música"> Música</label>
+              <label><input type="checkbox" name="intereses" value="Tecnología"> Tecnología</label>
+              <label><input type="checkbox" name="intereses" value="Lectura"> Lectura</label>
+              <label><input type="checkbox" name="intereses" value="Cine"> Cine</label>
+              <label><input type="checkbox" name="intereses" value="Viajes"> Viajes</label>
+            </div>
+          </div>
+
+          <!-- Botones -->
+          <div class="form-buttons">
+            <button type="submit" class="action-btn primary">✅ Registrar</button>
+            <button type="reset" class="action-btn secondary" id="btnReset">🗑️ Limpiar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Columna derecha: vista previa -->
+      <div class="preview-column">
+        <h2>👤 Datos Registrados</h2>
+        <div id="previewContainer" class="preview-container">
+          <div class="empty-preview">
+            Completa el formulario y presiona "Registrar" para ver los datos aquí
+          </div>
+        </div>
+        <button id="btnLimpiarPreview" class="action-btn danger" style="margin-top: 1rem; width: 100%;">
+          🧹 Limpiar vista previa
+        </button>
+      </div>
+
+      <div id="messageArea" class="message-area"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

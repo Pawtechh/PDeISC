@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto 3 - Contar Hijos</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1>Proyecto 3 - Contar hijos de un elemento</h1>
+      <button id="themeToggle" class="theme-btn">🌙 Modo Oscuro</button>
+    </header>
+
+    <main class="main-content">
+      <div class="two-columns">
+        <!-- Columna izquierda: elemento con hijos para analizar -->
+        <div class="column">
+          <h2>Elemento a analizar (click para contar hijos)</h2>
+          <div id="elementoParaAnalizar" class="target-element">
+            <div class="card">Hijo 1 - Tarjeta</div>
+            <div class="card">Hijo 2 - Tarjeta</div>
+            <div class="card">Hijo 3 - Tarjeta</div>
+            <span>Hijo 4 - Span</span>
+            <p>Hijo 5 - Párrafo</p>
+            <button>Hijo 6 - Botón</button>
+            <div class="card special">Hijo 7 - Especial</div>
+          </div>
+          <button id="btnContarHijos" class="action-btn primary">🔢 CONTAR HIJOS</button>
+        </div>
+
+        <!-- Columna derecha: resultado y controles dinámicos -->
+        <div class="column">
+          <h2>Resultado</h2>
+          <div id="resultadoArea" class="result-area">
+            <p>Presiona el botón o haz click en el recuadro gris</p>
+          </div>
+          
+          <h3 style="margin-top: 1.5rem;">Agregar más hijos</h3>
+          <div class="add-controls">
+            <input type="text" id="hijoTexto" placeholder="Texto del nuevo hijo">
+            <select id="tipoHijo">
+              <option value="div">Div</option>
+              <option value="p">Párrafo</option>
+              <option value="span">Span</option>
+              <option value="button">Botón</option>
+            </select>
+            <button id="btnAgregarHijo" class="action-btn success">➕ Agregar Hijo</button>
+          </div>
+          
+          <button id="btnEliminarUltimo" class="action-btn danger" style="margin-top: 0.5rem;">🗑️ Eliminar último hijo</button>
+        </div>
+      </div>
+
+      <div id="messageArea" class="message-area"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

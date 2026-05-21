@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto 4 - Nodos &lt;a&gt;</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1>Proyecto 4 - Crear y modificar nodos &lt;a&gt;</h1>
+      <button id="themeToggle" class="theme-btn">🌙 Modo Oscuro</button>
+    </header>
+
+    <main class="main-content">
+      <!-- Panel izquierdo: botones de acción -->
+      <div class="left-panel">
+        <h2>Acciones</h2>
+        
+        <div class="action-group">
+          <h3>Crear 5 nodos &lt;a&gt;</h3>
+          <button id="btnCrear5Nodos" class="action-btn primary">➕ Crear 5 enlaces</button>
+        </div>
+
+        <div class="action-group">
+          <h3>Modificar atributos</h3>
+          <div class="modify-buttons">
+            <button id="btnModificarGoogle" class="action-btn warning">Cambiar Google → Bing</button>
+            <button id="btnModificarYoutube" class="action-btn warning">Cambiar YouTube → Vimeo</button>
+            <button id="btnModificarGitHub" class="action-btn warning">Cambiar GitHub → GitLab</button>
+            <button id="btnModificarTwitter" class="action-btn warning">Cambiar Twitter → Mastodon</button>
+            <button id="btnModificarWikipedia" class="action-btn warning">Cambiar Wikipedia → Wikilibros</button>
+          </div>
+        </div>
+
+        <div class="action-group">
+          <h3>Modificar todos (aleatorio)</h3>
+          <button id="btnModificarTodos" class="action-btn secondary">🎲 Cambiar todos aleatoriamente</button>
+          <button id="btnResetearNodos" class="action-btn danger">🔄 Resetear a valores originales</button>
+        </div>
+      </div>
+
+      <!-- Panel derecho: lista de nodos -->
+      <div class="right-panel">
+        <h2>Lista de enlaces (5 nodos mínimo)</h2>
+        <div id="nodosContainer" class="nodos-container">
+          <div class="empty-message">Presiona "Crear 5 nodos" para comenzar</div>
+        </div>
+        
+        <!-- Área de log de cambios -->
+        <div class="log-area">
+          <h3>📋 Registro de cambios</h3>
+          <div id="logContainer" class="log-container"></div>
+        </div>
+      </div>
+
+      <div id="messageArea" class="message-area"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

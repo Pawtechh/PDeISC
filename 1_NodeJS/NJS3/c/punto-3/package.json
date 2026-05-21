@@ -1,0 +1,13 @@
+{
+  "name": "proyecto3-contar-hijos",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Contar hijos de un elemento mediante evento click",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

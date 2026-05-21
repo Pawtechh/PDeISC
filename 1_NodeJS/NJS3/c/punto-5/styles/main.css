@@ -1,0 +1,344 @@
+/**
+ * Archivo: main.css
+ * Propósito: Estilos para proyecto 5
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #666;
+  --border-color: #ddd;
+  --shadow: 0 2px 8px rgba(0,0,0,0.1);
+  --btn-primary: #007bff;
+  --btn-warning: #ffc107;
+  --btn-warning-text: #333;
+  --btn-success: #28a745;
+  --btn-secondary: #6c757d;
+  --btn-info: #17a2b8;
+  --btn-danger: #dc3545;
+  --card-bg: #f8f9fa;
+  --alert-bg: #fff3cd;
+  --alert-border: #ffeeba;
+  --alert-text: #856404;
+  --progress-bg: #e9ecef;
+  --progress-fill: #007bff;
+  --modal-overlay: rgba(0,0,0,0.5);
+}
+
+body.dark {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e2e;
+  --text-primary: #eeeeee;
+  --text-secondary: #aaa;
+  --border-color: #333;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --btn-primary: #e94560;
+  --btn-warning: #f39c12;
+  --btn-warning-text: #fff;
+  --btn-success: #2ed573;
+  --btn-secondary: #7f8c8d;
+  --btn-info: #00cec9;
+  --btn-danger: #ff4757;
+  --card-bg: #2a2a35;
+  --alert-bg: #2c2c1a;
+  --alert-border: #5c5c2a;
+  --alert-text: #f1c40f;
+  --progress-bg: #3a3a45;
+  --progress-fill: #e94560;
+  --modal-overlay: rgba(0,0,0,0.7);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--bg-secondary);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.header h1 {
+  font-size: 1.3rem;
+}
+
+.theme-btn {
+  background-color: var(--btn-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Layout horizontal en escritorio */
+.left-panel, .right-panel, .log-panel {
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+/* En escritorio, los dos primeros paneles van en fila */
+@media (min-width: 769px) {
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    grid-template-areas: 
+      "left right"
+      "log log";
+    gap: 1.5rem;
+  }
+  
+  .left-panel {
+    grid-area: left;
+  }
+  
+  .right-panel {
+    grid-area: right;
+  }
+  
+  .log-panel {
+    grid-area: log;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
+
+.left-panel h2, .right-panel h2, .log-panel h3 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--btn-primary);
+}
+
+.buttons-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.action-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  flex: 1;
+  min-width: 120px;
+}
+
+.action-btn.primary {
+  background-color: var(--btn-primary);
+  color: white;
+}
+
+.action-btn.warning {
+  background-color: var(--btn-warning);
+  color: var(--btn-warning-text);
+}
+
+.action-btn.success {
+  background-color: var(--btn-success);
+  color: white;
+}
+
+.action-btn.secondary {
+  background-color: var(--btn-secondary);
+  color: white;
+}
+
+.action-btn.info {
+  background-color: var(--btn-info);
+  color: white;
+}
+
+.action-btn.danger {
+  background-color: var(--btn-danger);
+  color: white;
+}
+
+.action-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.action-group {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.action-group h3 {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+/* Contenedor de elementos */
+.elementos-container {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 400px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 2rem;
+}
+
+/* Estilos para elementos agregados dinámicamente */
+.tarjeta {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--btn-primary);
+}
+
+.tarjeta h4 {
+  margin-bottom: 0.5rem;
+}
+
+.alerta {
+  background-color: var(--alert-bg);
+  border: 1px solid var(--alert-border);
+  color: var(--alert-text);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.progreso-container {
+  margin-bottom: 0.75rem;
+}
+
+.progreso-bar {
+  background-color: var(--progress-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 20px;
+}
+
+.progreso-fill {
+  background-color: var(--progress-fill);
+  width: 0%;
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+.lista-item {
+  background-color: var(--bg-secondary);
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--btn-success);
+}
+
+.badge {
+  display: inline-block;
+  background-color: var(--btn-primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--bg-secondary);
+  padding: 1.5rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: var(--shadow);
+}
+
+.modal-content button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Log */
+.log-container {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 0.75rem;
+  max-height: 150px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+
+.log-entry {
+  padding: 0.3rem;
+  border-bottom: 1px solid var(--border-color);
+  font-family: monospace;
+}
+
+.log-entry .timestamp {
+  color: var(--btn-primary);
+  font-weight: bold;
+}
+
+.message-area {
+  padding: 0.75rem;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  border-left: 4px solid var(--btn-primary);
+}

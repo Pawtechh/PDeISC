@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto 5 - innerHTML</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1>Proyecto 5 - Agregar objetos HTML con innerHTML</h1>
+      <button id="themeToggle" class="theme-btn">🌙 Modo Oscuro</button>
+    </header>
+
+    <main class="main-content">
+      <!-- Panel izquierdo: botones para agregar elementos -->
+      <div class="left-panel">
+        <h2>📦 Componentes para agregar</h2>
+        
+        <div class="buttons-grid">
+          <button id="btnAgregarTarjeta" class="action-btn primary">
+            🃏 Agregar Tarjeta
+          </button>
+          <button id="btnAgregarAlerta" class="action-btn warning">
+            ⚠️ Agregar Alerta
+          </button>
+          <button id="btnAgregarProgreso" class="action-btn success">
+            📊 Agregar Barra Progreso
+          </button>
+          <button id="btnAgregarLista" class="action-btn secondary">
+            📋 Agregar Lista
+          </button>
+          <button id="btnAgregarBadge" class="action-btn info">
+            🏷️ Agregar Badge
+          </button>
+          <button id="btnAgregarModal" class="action-btn danger">
+            🪟 Agregar Modal
+          </button>
+        </div>
+
+        <div class="action-group">
+          <h3>Acciones sobre el contenedor</h3>
+          <button id="btnLimpiarTodo" class="action-btn danger">🗑️ Limpiar todo</button>
+          <button id="btnVaciarLog" class="action-btn secondary">🧹 Vaciar registro</button>
+        </div>
+      </div>
+
+      <!-- Panel derecho: contenedor donde se agregan los elementos -->
+      <div class="right-panel">
+        <h2>📄 Contenedor de elementos</h2>
+        <div id="elementosContainer" class="elementos-container">
+          <div class="empty-message">Presiona cualquier botón para agregar elementos vía innerHTML</div>
+        </div>
+      </div>
+
+      <!-- Registro de acciones -->
+      <div class="log-panel">
+        <h3>📝 Registro de elementos agregados</h3>
+        <div id="logContainer" class="log-container"></div>
+      </div>
+
+      <div id="messageArea" class="message-area"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/scripts/main.js"></script>
+</body>
+</html>
