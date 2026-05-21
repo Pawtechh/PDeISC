@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>forEach() · Punto 9</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+<div class="container-lg py-4">
+  <div class="text-center mb-4">
+    <h1 class="display-6 fw-semibold"><a href="https://es.javascript.info/array" target="_blank"><i class="bi bi-files"></i></a> forEach() · Punto 9</h1>
+    <p class="text-secondary">Muestra, calcula o procesa cada elemento del array</p>
+  </div>
+
+  <div id="alertContainer" class="mb-4"></div>
+
+  <div class="row g-4">
+    <!-- 1️⃣ Saludos con forEach -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><i class="bi bi-chat-heart"></i> Saludos personalizados</div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between"><small>Nombres</small><span id="nombresCount" class="badge bg-secondary">0</span></div>
+            <div class="array-preview" id="nombresDisplay">[Ana, Luis, Carla, Diego]</div>
+          </div>
+          <button id="saludarBtn" class="btn btn-primary-gradient w-100 mt-2">Mostrar saludos (forEach)</button>
+          <div class="input-group mt-2"><input type="text" id="nuevoNombre" class="form-control" placeholder="Agregar nombre"><button id="agregarNombreBtn" class="btn btn-outline-dark">Agregar</button></div>
+          <button id="vaciarNombresBtn" class="btn btn-danger-gradient w-100 mt-2">Vaciar array</button>
+          <div class="mt-3"><small>Resultado:</small><div id="salidaSaludos" class="border rounded p-2 bg-light small" style="min-height: 80px;"></div></div>
+          <small class="text-secondary d-block mt-2">💬 Evento: <strong>click</strong>. Muestra "Hola, [nombre]" para cada uno.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2️⃣ Doble de cada número -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><i class="bi bi-calculator"></i> Doble de cada número</div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between"><small>Números</small><span id="numerosCount" class="badge bg-secondary">0</span></div>
+            <div class="array-preview" id="numerosDisplay">[3, 7, 10, 2]</div>
+          </div>
+          <button id="calcularDobleBtn" class="btn btn-warning-gradient w-100 mt-2">Calcular dobles (forEach)</button>
+          <div class="input-group mt-2"><input type="number" id="nuevoNumero" class="form-control" placeholder="Agregar número"><button id="agregarNumeroBtn" class="btn btn-outline-dark">Agregar</button></div>
+          <button id="vaciarNumerosBtn" class="btn btn-danger-gradient w-100 mt-2">Vaciar array</button>
+          <div class="mt-3"><small>Resultado (doble):</small><div id="salidaDobles" class="border rounded p-2 bg-light small" style="min-height: 80px;"></div></div>
+          <small class="text-secondary d-block mt-2">🔢 Evento: <strong>dblclick</strong> en el botón. Muestra "número → doble".</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3️⃣ Objetos: nombre y edad -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><i class="bi bi-people"></i> Objetos: nombre y edad</div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between"><small>Personas</small><span id="personasCount" class="badge bg-secondary">0</span></div>
+            <div class="array-preview" id="personasDisplay">[{nombre:Juan, edad:25}, {nombre:María, edad:30}, {nombre:Pedro, edad:22}]</div>
+          </div>
+          <button id="mostrarPersonasBtn" class="btn btn-success-gradient w-100 mt-2">Mostrar nombres con edad (forEach)</button>
+          <div class="input-group mt-2">
+            <input type="text" id="nuevoNombreObj" class="form-control" placeholder="Nombre" style="flex:2">
+            <input type="number" id="nuevaEdadObj" class="form-control" placeholder="Edad" style="flex:1">
+            <button id="agregarPersonaBtn" class="btn btn-outline-dark">Agregar</button>
+          </div>
+          <button id="vaciarPersonasBtn" class="btn btn-danger-gradient w-100 mt-2">Vaciar array</button>
+          <div class="mt-3"><small>Resultado:</small><div id="salidaPersonas" class="border rounded p-2 bg-light small" style="min-height: 80px;"></div></div>
+          <small class="text-secondary d-block mt-2">👥 Evento: <strong>submit</strong> del formulario (Enter en inputs). Muestra "nombre tiene X años".</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>splice() · Punto 5</title>
+  <!-- Bootstrap 5 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+<div class="container-lg py-4">
+  <div class="text-center mb-4">
+    <h1 class="display-6 fw-semibold"><a href="https://es.javascript.info/array" target="_blank"><i class="bi bi-files"></i></a> splice() · Punto 5</h1>
+    <p class="text-secondary">Eliminar, insertar y reemplazar elementos en un array</p>
+  </div>
+
+  <!-- Contenedor de alertas externo -->
+  <div id="alertContainer" class="mb-4"></div>
+
+  <div class="row g-4">
+    
+    <!-- 1️⃣ Eliminar dos elementos desde posición 1 -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-trash"></i> Eliminar · splice(pos, 2)
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Array de letras</small>
+              <span id="letrasCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="letrasDisplay">[A, B, C, D, E]</div>
+          </div>
+          <button id="eliminarBtn" class="btn btn-danger-gradient w-100 mt-2"><i class="bi bi-dash-circle"></i> Eliminar 2 desde posición 1 (splice)</button>
+          <button id="resetLetrasBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar [A, B, C, D, E]</button>
+          <small class="text-secondary d-block mt-2">⚡ splice(1, 2) → elimina 'B' y 'C'.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2️⃣ Insertar nuevo nombre en segunda posición (sin eliminar) -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-person-plus"></i> Insertar · splice(pos, 0, nuevo)
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Nombres existentes</small>
+              <span id="nombresCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="nombresDisplay">[Ana, Luis, Marta]</div>
+          </div>
+          <div class="input-group mt-2">
+            <input type="text" id="nuevoNombre" class="form-control" placeholder="Nombre a insertar">
+            <button id="insertarBtn" class="btn btn-primary-gradient">Insertar en 2ª posición</button>
+          </div>
+          <button id="resetNombresBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar [Ana, Luis, Marta]</button>
+          <small class="text-secondary d-block mt-2">📌 splice(1, 0, nombre) → inserta sin eliminar nada.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3️⃣ Reemplazar dos elementos desde posición determinada -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-arrow-repeat"></i> Reemplazar · splice(pos, 2, nuevo1, nuevo2)
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Colores favoritos</small>
+              <span id="coloresCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="coloresDisplay">[Rojo, Verde, Azul, Amarillo, Morado]</div>
+          </div>
+          <div class="row g-2 mt-2">
+            <div class="col-6">
+              <label class="form-label small">Posición inicio</label>
+              <select id="posReemplazo" class="form-select">
+                <option value="0">0 (Rojo)</option>
+                <option value="1" selected>1 (Verde)</option>
+                <option value="2">2 (Azul)</option>
+                <option value="3">3 (Amarillo)</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label small">Doble clic para reemplazar</label>
+              <input type="text" id="nuevoColor1" class="form-control form-control-sm" placeholder="Nuevo 1" value="Negro">
+              <input type="text" id="nuevoColor2" class="form-control form-control-sm mt-1" placeholder="Nuevo 2" value="Blanco">
+            </div>
+          </div>
+          <button id="reemplazarBtn" class="btn btn-warning-gradient w-100 mt-2"><i class="bi bi-pencil-square"></i> Reemplazar (click)</button>
+          <button id="resetColoresBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar colores</button>
+          <small class="text-secondary d-block mt-2">🎨 Reemplaza 2 elementos desde la posición elegida.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/main.js"></script>
+</body>
+</html>

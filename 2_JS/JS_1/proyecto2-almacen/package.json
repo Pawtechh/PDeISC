@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "name": "proyect2-almacen",
+  "version": "1.0.0",
+  "description": "Almacén de datos con array, sessionStorage y localStorage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

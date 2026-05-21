@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "name": "proyecto1-tres-formas",
+  "version": "1.0.0",
+  "description": "Demostración de 3 formas de leer formularios en JavaScript",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sort() · Punto 13</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+<div class="container-lg py-4">
+  <div class="text-center mb-4">
+    <h1 class="display-6 fw-semibold"><a href="https://es.javascript.info/array" target="_blank"><i class="bi bi-files"></i></a> sort() · Punto 13</h1>
+    <p class="text-secondary">Numeros ascendente, palabras alfabéticamente, objetos por edad</p>
+  </div>
+
+  <div id="alertContainer" class="mb-4"></div>
+
+  <div class="row g-4">
+    <!-- 1️⃣ Números de menor a mayor -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><i class="bi bi-123"></i> Números ascendente</div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between"><small>Array original</small><span id="numerosCount" class="badge bg-secondary">0</span></div>
+            <div class="array-preview" id="numerosOriginalDisplay">[5, 2, 8, 1, 9]</div>
+          </div>
+          <button id="ordenarNumerosBtn" class="btn btn-primary-gradient w-100 mt-2">sort() ascendente (click)</button>
+          <div class="input-group mt-2"><input type="number" id="nuevoNumero" class="form-control" placeholder="Agregar número"><button id="agregarNumeroBtn" class="btn btn-outline-dark">Agregar</button></div>
+          <button id="restaurarNumerosBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar original</button>
+          <button id="vaciarNumerosBtn" class="btn btn-danger-gradient w-100 mt-2">Vaciar array</button>
+          <small class="text-secondary d-block mt-2">🔢 sort((a,b) => a - b). Evento: <strong>click</strong> ordena.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2️⃣ Palabras alfabéticamente -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><i class="bi bi-sort-alpha-down"></i> Palabras A-Z</div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between"><small>Array original</small><span id="palabrasCount" class="badge bg-secondary">0</span></div>
+            <div class="array-preview" id="palabrasOriginalDisplay">[perro, gato, elefante, ballena, delfin]</div>
+          </div>
+          <button id="ordenarPalabrasBtn" class="btn btn-warning-gradient w-100 mt-2">sort() alfabético (doble click)</button>
+          <div class="input-group mt-2"><input type="text" id="nuevaPalabra" class="form-control" placeholder="Agregar palabra"><button id="agregarPalabraBtn" class="btn btn-outline-dark">Agregar</button></div>
+          <button id="restaurarPalabrasBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar original</button>
+          <button id="vaciarPalabrasBtn" class="btn btn-danger-gradient w-100 mt-2">Vaciar array</button>
+          <small class="text-secondary d-block mt-2">📝 sort() (por defecto). Evento: <strong>dblclick</strong>.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3️⃣ Objetos ordenados por edad -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><i class="bi bi-person-standing"></i> Objetos por edad</div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between"><small>Array original</small><span id="personasCount" class="badge bg-secondary">0</span></div>
+            <div class="array-preview" id="personasOriginalDisplay">[{nombre:Ana,edad:32}, {nombre:Luis,edad:25}, {nombre:Carlos,edad:40}]</div>
+          </div>
+          <button id="ordenarPorEdadBtn" class="btn btn-success-gradient w-100 mt-2">sort() por edad (click)</button>
+          <div class="input-group mt-2">
+            <input type="text" id="nombrePersona" class="form-control" placeholder="Nombre">
+            <input type="number" id="edadPersona" class="form-control" placeholder="Edad">
+            <button id="agregarPersonaBtn" class="btn btn-outline-dark">Agregar</button>
+          </div>
+          <button id="restaurarPersonasBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar original</button>
+          <button id="vaciarPersonasBtn" class="btn btn-danger-gradient w-100 mt-2">Vaciar array</button>
+          <small class="text-secondary d-block mt-2">👥 Evento: <strong>change</strong> en input de edad muestra ayuda. sort((a,b) => a.edad - b.edad).</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/main.js"></script>
+</body>
+</html>

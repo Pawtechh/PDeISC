@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>includes() · Punto 8</title>
+  <!-- Bootstrap 5 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+<div class="container-lg py-4">
+  <div class="text-center mb-4">
+    <h1 class="display-6 fw-semibold"><a href="https://es.javascript.info/array" target="_blank"><i class="bi bi-files"></i></a> includes() · Punto 8</h1>
+    <p class="text-secondary">Comprueba existencia sin modificar el array · Eventos variados</p>
+  </div>
+
+  <!-- Contenedor de alertas externo -->
+  <div id="alertContainer" class="mb-4"></div>
+
+  <div class="row g-4">
+    
+    <!-- 1️⃣ Comprobar si contiene "admin" -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-shield-lock"></i> ¿Contiene "admin"?
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Lista de roles</small>
+              <span id="rolesCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="rolesDisplay">[user, editor, admin, guest]</div>
+          </div>
+          <button id="buscarAdminBtn" class="btn btn-primary-gradient w-100 mt-2"><i class="bi bi-person-check"></i> ¿Está "admin"? (click)</button>
+          <div class="input-group mt-2">
+            <input type="text" id="nuevoRol" class="form-control" placeholder="Agregar rol">
+            <button id="agregarRolBtn" class="btn btn-outline-dark">Agregar (push)</button>
+          </div>
+          <button id="vaciarRolesBtn" class="btn btn-danger-gradient w-100 mt-2"><i class="bi bi-trash"></i> Vaciar array</button>
+          <small class="text-secondary d-block mt-2">🔍 Evento: <strong>click</strong> en botón. Doble clic en el array lo restaura.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2️⃣ Indicar si existe "verde" en colores -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-palette"></i> ¿Existe "verde"?
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Colores disponibles</small>
+              <span id="coloresCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="coloresDisplay">[rojo, azul, amarillo, violeta]</div>
+          </div>
+          <button id="buscarVerdeBtn" class="btn btn-warning-gradient w-100 mt-2"><i class="bi bi-tree"></i> ¿Está "verde"? (doble click)</button>
+          <div class="input-group mt-2">
+            <input type="text" id="nuevoColor" class="form-control" placeholder="Agregar color">
+            <button id="agregarColorBtn" class="btn btn-outline-dark">Agregar (push)</button>
+          </div>
+          <button id="vaciarColoresBtn" class="btn btn-danger-gradient w-100 mt-2"><i class="bi bi-trash"></i> Vaciar array</button>
+          <small class="text-secondary d-block mt-2">🎨 Evento: <strong>dblclick</strong> en el botón de búsqueda. Focusout en input muestra ayuda.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3️⃣ Verificar si número existe antes de sumarlo (evitar duplicados) -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-plus-slash-minus"></i> Agregar solo si no existe
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Array de números</small>
+              <span id="numerosCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="numerosDisplay">[5, 12, 8, 3]</div>
+          </div>
+          <div class="input-group mt-2">
+            <input type="number" id="numeroNuevo" class="form-control" placeholder="Número a agregar">
+            <button id="agregarSiNoExisteBtn" class="btn btn-success-gradient">Agregar si no existe</button>
+          </div>
+          <button id="vaciarNumerosBtn" class="btn btn-danger-gradient w-100 mt-2"><i class="bi bi-trash"></i> Vaciar array</button>
+          <small class="text-secondary d-block mt-2">🔢 Evento: <strong>submit</strong> del formulario simulado con Enter. Verifica includes() antes de pushear.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/main.js"></script>
+</body>
+</html>

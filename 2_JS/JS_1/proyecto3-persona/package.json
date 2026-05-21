@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "name": "proyecto3-personas",
+  "version": "1.0.0",
+  "description": "Almacén de personas con LocalStorage y listado de nombres",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

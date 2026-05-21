@@ -1,0 +1,17 @@
+{
+  "name": "gestion-personas",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Gestión de Personas con Express y módulos ES6",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["express", "personas", "modo oscuro"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

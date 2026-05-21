@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>shift() · Punto 4</title>
+  <!-- Bootstrap 5 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+<div class="container-lg py-4">
+  <div class="text-center mb-4">
+    <h1 class="display-6 fw-semibold"><a href="https://es.javascript.info/array" target="_blank"><i class="bi bi-files"></i></a> shift() · Punto 4</h1>
+    <p class="text-secondary">Elimina el primer elemento · Simula colas · Eventos variados (submit, dblclick, focusout)</p>
+  </div>
+
+  <!-- Contenedor de alertas (ubicación libre) -->
+  <div id="alertContainer" class="mb-4"></div>
+
+  <div class="row g-4">
+    
+    <!-- TARJETA 1: Números enteros - shift() primero -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-123"></i> Números enteros · shift()
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Array de enteros</small>
+              <span id="enterosCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="enterosDisplay">[10, 20, 30, 40]</div>
+          </div>
+          <button id="shiftEnteroBtn" class="btn btn-danger-gradient w-100 mt-2"><i class="bi bi-box-arrow-right"></i> shift() → Eliminar primero</button>
+          <div class="input-group mt-3">
+            <input type="number" id="nuevoEntero" class="form-control" placeholder="Nuevo número (al final)">
+            <button id="pushEnteroBtn" class="btn btn-outline-dark">Agregar (push)</button>
+          </div>
+          <button id="resetEnterosBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar [10,20,30,40]</button>
+          <small class="text-secondary d-block mt-2">⚡ Evento principal: <strong>click</strong> en botón shift. También puedes usar <strong>doble clic</strong> en el array para reiniciar.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- TARJETA 2: Mensajes de chat - shift() primer mensaje -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-chat-dots"></i> Chat · shift() mensajes
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Mensajes del chat</small>
+              <span id="mensajesCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="mensajesDisplay">[Hola, ¿cómo estás?, Nos vemos]</div>
+          </div>
+          <form id="formMensaje">
+            <div class="input-group mt-2">
+              <input type="text" id="nuevoMensaje" class="form-control" placeholder="Nuevo mensaje (al final)" required>
+              <button type="submit" class="btn btn-primary-gradient">Enviar mensaje (push)</button>
+            </div>
+          </form>
+          <button id="shiftMensajeBtn" class="btn btn-danger-gradient w-100 mt-2"><i class="bi bi-chat-right-dots"></i> shift() → Eliminar primer mensaje</button>
+          <button id="resetMensajesBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar chat</button>
+          <small class="text-secondary d-block mt-2">💬 Evento: <strong>submit</strong> del formulario para agregar mensaje. El botón shift usa click.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- TARJETA 3: Cola atención al cliente - simular turnos con shift() -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-people"></i> Cola de atención · shift()
+        </div>
+        <div class="card-body">
+          <div class="array-box">
+            <div class="d-flex justify-content-between">
+              <small>Clientes en espera</small>
+              <span id="colaCount" class="badge bg-secondary">0</span>
+            </div>
+            <div class="array-preview" id="colaDisplay">[Cliente A, Cliente B, Cliente C]</div>
+          </div>
+          <div class="d-flex gap-2 mt-2">
+            <input type="text" id="nuevoCliente" class="form-control" placeholder="Nombre del cliente">
+            <button id="agregarClienteBtn" class="btn btn-outline-dark">Agregar a la cola (push)</button>
+          </div>
+          <button id="atenderClienteBtn" class="btn btn-danger-gradient w-100 mt-2"><i class="bi bi-person-check"></i> Atender primero (shift)</button>
+          <button id="resetColaBtn" class="btn btn-outline-secondary w-100 mt-2">Restaurar cola [A, B, C]</button>
+          <small class="text-secondary d-block mt-2">🎫 Evento: <strong>focusout</strong> en el input de cliente agrega automáticamente (sin click). El botón atender usa click.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/main.js"></script>
+</body>
+</html>

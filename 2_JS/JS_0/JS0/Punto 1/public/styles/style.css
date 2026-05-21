@@ -1,0 +1,267 @@
+/**
+ * ARCHIVO: main.css
+ * PROPÓSITO: Estilos para proyecto3 - Gestión de Personas
+ * MODIFICADO: Diseño web-first, modo oscuro mejorado, botón scroll top
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+}
+
+/* ========== CONTENEDOR FLUIDO SIN ESPACIOS LATERALES ========== */
+.container-fluid {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+}
+
+/* ========== BOTÓN TEMA ========== */
+.theme-toggle-container {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+}
+
+.btn-theme-toggle {
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+/* ========== MODO CLARO (light) ========== */
+body.light-mode {
+    background: #f0f2f5;
+    color: #1a1a2e;
+}
+
+body.light-mode .card {
+    background: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .form-control,
+body.light-mode .form-select {
+    background-color: white;
+    border: 1px solid #ccc;
+    color: #1a1a2e;
+}
+
+body.light-mode .form-control:focus,
+body.light-mode .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+body.light-mode .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+body.light-mode .nombre-item {
+    border-bottom-color: #ddd;
+}
+
+body.light-mode .nombre-item:hover {
+    background: #f8f9fa;
+}
+
+body.light-mode .persona-card {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== MODO OSCURO (dark) ========== */
+body.dark-mode {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode .card {
+    background: #1e1e2f;
+    border: 1px solid #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #2d2d3f;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+    border-color: #6ea8fe;
+    box-shadow: 0 0 0 0.2rem rgba(110, 168, 254, 0.25);
+}
+
+body.dark-mode .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: #0b5ed7;
+}
+
+body.dark-mode .nombre-item {
+    border-bottom-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode .nombre-item:hover {
+    background: #2a2a3b;
+}
+
+body.dark-mode .persona-card {
+    background: #2a2a3b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;
+}
+
+body.dark-mode .persona-card h6 {
+    color: #6ea8fe;
+}
+
+body.dark-mode .alert-info {
+    background-color: #1e3a5f;
+    color: #b8e1fc;
+    border-color: #0d6efd;
+}
+
+body.dark-mode .alert-success {
+    background-color: #0f3d2e;
+    color: #a8f0d6;
+}
+
+body.dark-mode .alert-danger {
+    background-color: #4a1e2c;
+    color: #f8b4c4;
+}
+
+body.dark-mode .text-muted {
+    color: #aaa !important;
+}
+
+/* ========== LISTA DE NOMBRES (vertical, pero ordenada) ========== */
+.lista-nombres {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.lista-nombres .nombre-item {
+    padding: 10px;
+    border-bottom: 1px solid;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ========== LISTADO HORIZONTAL DE PERSONAS - REQUISITO WEB ========== */
+.personas-horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2rem;
+    overflow-x: auto;
+    padding: 1rem 0.5rem;
+    width: 100%;
+    scrollbar-width: thin;
+}
+
+.persona-card {
+    flex: 0 0 auto;
+    width: 320px;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: transform 0.2s;
+}
+
+.persona-card:hover {
+    transform: translateY(-3px);
+}
+
+.persona-card h6 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.persona-card p {
+    margin: 0.25rem 0;
+    font-size: 0.8rem;
+}
+
+/* ========== BOTÓN VOLVER ARRIBA (SCROLL TOP) ========== */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.scroll-top-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+body.dark-mode .scroll-top-btn {
+    background-color: #6ea8fe;
+    color: #121212;
+}
+
+body.dark-mode .scroll-top-btn:hover {
+    background-color: #4a8fd8;
+}
+
+/* ========== RESPONSIVE: Escritorio ya es horizontal, móvil cambia a columna ========== */
+@media (max-width: 768px) {
+    .personas-horizontal {
+        flex-direction: column;
+    }
+    
+    .persona-card {
+        width: 100%;
+    }
+    
+    .container-fluid {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    .scroll-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+}

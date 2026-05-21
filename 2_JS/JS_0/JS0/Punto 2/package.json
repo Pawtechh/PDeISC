@@ -1,0 +1,17 @@
+{
+  "name": "punto2-pop",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Demostración de pop() en arrays con modo oscuro y diseño responsive",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["pop", "arrays", "express", "modo oscuro"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
