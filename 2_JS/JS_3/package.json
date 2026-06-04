@@ -1,0 +1,12 @@
+{
+  "name": "arcade-retro",
+  "version": "1.0.0",
+  "description": "Menú principal de videojuegos retro con Express",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

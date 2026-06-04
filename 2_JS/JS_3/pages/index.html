@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estanga Games</title>
+<link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+
+<!-- DETECCIÓN DE MÓVIL (se ejecuta inmediatamente) -->
+<script>
+  (function() {
+    // Si ya estamos en mobile.html, no hacer nada
+    if (window.location.pathname === '/mobile.html') return;
+    // Evitar redirección repetitiva en la misma sesión
+    if (sessionStorage.getItem('redirect_to_mobile')) return;
+
+    const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isSmallScreen = window.innerWidth <= 768;
+    
+    if (isMobileUA || isSmallScreen) {
+      sessionStorage.setItem('redirect_to_mobile', 'true');
+      window.location.href = '/mobile.html';
+    }
+  })();
+</script>
+
+<!-- ══ MAIN MENU ══ -->
+<div id="screen-menu" class="screen active">
+  <div class="menu-title">ESTANGA</div>
+  <div class="menu-sub">★ ARCADE GAMES ★</div>
+  <div class="game-cards">
+    <div class="game-card" data-game="snake">
+      <span class="card-icon">🐍</span>
+      <div class="card-title">SNAKE</div>
+      <div class="card-desc">Clásico juego de la serpiente.<br>1 o 2 jugadores.<br>Sprays incluidos.</div>
+    </div>
+    <div class="game-card" data-game="pacman">
+      <span class="card-icon">👾</span>
+      <div class="card-title">PACMAN</div>
+      <div class="card-desc">Esquiva fantasmas.<br>Come todos los puntos.<br>Sprays incluidos.</div>
+    </div>
+  </div>
+  <div class="leaderboard-global">
+    <div class="leaderboard-header">🏆 TOP 10 GLOBAL 🏆</div>
+    <div id="global-leaderboard-list" class="leaderboard-list"></div>
+  </div>
+</div>
+
+<!-- ══ MODE SELECT ══ -->
+<div id="screen-mode" class="screen">
+  <button class="back-btn" data-back="menu">◄ BACK</button>
+  <div class="mode-title" id="mode-title">SELECCIONAR MODO</div>
+  <div class="mode-cards" id="mode-cards"></div>
+  <div class="leaderboard-global">
+    <div class="leaderboard-header">🏆 TOP 10 GLOBAL 🏆</div>
+    <div id="global-leaderboard-list-mode" class="leaderboard-list"></div>
+  </div>
+</div>
+
+<!-- ══ PLAYER NAMES ══ -->
+<div id="screen-names" class="screen">
+  <button class="back-btn" data-back="mode">◄ BACK</button>
+  <div class="names-title">INGRESA TU NOMBRE</div>
+  <div class="name-inputs" id="name-inputs"></div>
+  <button class="btn-primary" id="start-game-btn">▶ JUGAR</button>
+  <div class="leaderboard-global">
+    <div class="leaderboard-header">🏆 TOP 10 GLOBAL 🏆</div>
+    <div id="global-leaderboard-list-names" class="leaderboard-list"></div>
+  </div>
+</div>
+
+<!-- ══ GAME SCREEN ══ -->
+<div id="screen-game" class="screen">
+  <div class="game-container">
+    <div class="game-area">
+      <div class="game-header">
+        <div class="player-hud p1-hud">
+          <div>
+            <div class="player-tag" id="p1-tag">P1</div>
+            <div class="player-score">SCORE: <span id="p1-score">0</span></div>
+          </div>
+          <div>
+            <div class="spray-label">SPRAYS</div>
+            <div class="spray-indicator" id="p1-sprays">
+              <div class="spray-dot"></div>
+              <div class="spray-dot"></div>
+              <div class="spray-dot"></div>
+            </div>
+          </div>
+        </div>
+        <div class="player-hud p2-hud" id="p2-hud" style="display:none">
+          <div>
+            <div class="player-tag" id="p2-tag">P2</div>
+            <div class="player-score">SCORE: <span id="p2-score">0</span></div>
+          </div>
+          <div>
+            <div class="spray-label">SPRAYS</div>
+            <div class="spray-indicator" id="p2-sprays">
+              <div class="spray-dot"></div>
+              <div class="spray-dot"></div>
+              <div class="spray-dot"></div>
+            </div>
+          </div>
+        </div>
+        <button class="back-btn" style="position:relative;top:auto;left:auto" id="exit-game-btn">✕ SALIR</button>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+        <div class="game-overlay" id="game-overlay">
+          <div class="overlay-title" id="overlay-title">LISTO?</div>
+          <div class="overlay-sub" id="overlay-sub">PRESIONÁ UNA FLECHA PARA COMENZAR</div>
+        </div>
+      </div>
+
+      <div class="game-controls-hint" id="controls-hint"></div>
+    </div>
+    
+    <div class="leaderboard-panel">
+      <div class="leaderboard-header">🏆 TOP 10 - MODO ACTUAL 🏆</div>
+      <div id="game-leaderboard-list" class="leaderboard-list"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/scripts/main.js"></script>
+</body>
+</html>
