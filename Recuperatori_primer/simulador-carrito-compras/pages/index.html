@@ -1,0 +1,381 @@
+<!--
+    Archivo: pages/index.html
+    Proposito: Interfaz grafica de usuario para el Simulador de Carrito de Compras.
+               Estructura HTML semantica que integra el catalogo de productos, el panel
+               del carrito, el sistema de gestion ABM y los comprobantes fiscales.
+    Modulos usados:
+        - /styles/estilos.css (Hoja de estilos y temas con variables CSS)
+        - Axios CDN (Libreria HTTP para catalogo y ABM)
+        - /scripts/principal.js (Modulo principal ES6)
+    Funciones y componentes principales:
+        - Script anti-flash en <head> para modo claro/oscuro.
+        - Encabezado con buscador reactivo y selector de tema.
+        - Disposicion horizontal al 100% para escritorio y vertical para moviles.
+        - Modales para Checkout, Factura y Gestion ABM de productos.
+        - Contenedor de notificaciones flotantes en el DOM sin alert().
+-->
+<!DOCTYPE html>
+<html lang="es" data-tema="claro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Carrito de Compras | 1er Cuatrimestre</title>
+
+    <!-- Script Anti-Flash para Modo Claro/Oscuro (Requisito 12) -->
+    <script>
+        (function() {
+            const temaPreferido = localStorage.getItem('preferencia_tema_tienda') || 'claro';
+            document.documentElement.setAttribute('data-tema', temaPreferido);
+        })();
+    </script>
+
+    <!-- Icono Favicon Vectorial SVG sin dependencias externas -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cpath d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z'/%3E%3C/svg%3E">
+
+    <!-- Hoja de Estilos Principal -->
+    <link rel="stylesheet" href="/styles/estilos.css">
+
+    <!-- Libreria Axios para peticiones HTTP -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+    <!-- ================= ENCABEZADO Y BARRA DE NAVEGACION ================= -->
+    <header class="encabezado-navegacion">
+        <div class="fila-navegacion">
+            
+            <div class="marca-logotipo">
+                <span class="titulo-logotipo">TechStore Pro</span>
+                <span class="subtitulo-logotipo">Simulador de Carrito de Compras &bull; Node.js y POO</span>
+            </div>
+
+            <!-- Buscador en Tiempo Real (Evento input con filtrado en servidor) -->
+            <div class="barra-busqueda-superior">
+                <input 
+                    type="search" 
+                    id="campo-busqueda-texto" 
+                    class="campo-busqueda-estilizado" 
+                    placeholder="Buscar articulos por nombre o descripcion..."
+                    autocomplete="off"
+                />
+            </div>
+
+            <!-- Acciones de Navegacion y Control de Tema -->
+            <div class="acciones-navegacion">
+                <!-- Boton Modo Claro / Oscuro (Requisito 12) -->
+                <button 
+                    type="button" 
+                    id="boton-cambiar-tema" 
+                    class="boton-tema-color" 
+                    aria-pressed="false"
+                    title="Alternar entre modo claro y oscuro">
+                    <span class="texto-boton-tema">Modo Oscuro</span>
+                </button>
+
+                <!-- Boton Nuevo Producto (ABM - Requisito 15) -->
+                <button 
+                    type="button" 
+                    id="boton-nuevo-producto" 
+                    class="boton-accion-secundario"
+                    title="Registrar un nuevo producto en el catalogo">
+                    + Nuevo Articulo
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ================= BANNER DE CUPONES COMERCIALES ================= -->
+    <section class="banner-cupones-comerciales" aria-label="Cupones disponibles">
+        <span class="etiqueta-banner">Cupones de Descuento Vigentes:</span>
+        <div id="cupones-disponibles-lista" class="lista-cupones-banner">
+            <!-- Inyectado dinamicamente desde principal.js con Axios -->
+        </div>
+    </section>
+
+    <!-- ================= DISPOSICION PRINCIPAL (REQUISITO 10: 100% HORIZONTAL DESKTOP / VERTICAL MOVIL) ================= -->
+    <main class="disposicion-principal-aplicacion">
+        
+        <!-- COLUMNA IZQUIERDA: CATALOGO Y FILTROS -->
+        <section class="seccion-columna-catalogo" aria-label="Catalogo de articulos">
+            
+            <!-- Panel de Categorias y Controles de Ordenamiento -->
+            <div class="panel-filtros-catalogo">
+                <div id="contenedor-chips-categorias" class="fila-categorias-chips">
+                    <!-- Se inyectan dinamicamente con Axios -->
+                </div>
+
+                <div class="barra-herramientas-filtros">
+                    <div class="grupo-control-filtro">
+                        <span>Inventario:</span>
+                        <strong id="indicador-total-articulos">0 articulos</strong>
+                    </div>
+
+                    <div class="grupo-control-filtro">
+                        <label for="campo-precio-min">Rango Precio:</label>
+                        <input type="number" id="campo-precio-min" class="campo-filtro-numero" placeholder="Min" min="0">
+                        <span>-</span>
+                        <input type="number" id="campo-precio-max" class="campo-filtro-numero" placeholder="Max" min="0">
+                        <button type="button" id="boton-filtrar-precios" class="boton-accion-secundario">Filtrar</button>
+                    </div>
+
+                    <div class="grupo-control-filtro">
+                        <label for="selector-criterio-orden">Ordenar por:</label>
+                        <select id="selector-criterio-orden" class="selector-orden-estilizado">
+                            <option value="precio-asc">Precio: Menor a Mayor</option>
+                            <option value="precio-desc">Precio: Mayor a Menor</option>
+                            <option value="nombre-asc">Nombre: A a Z</option>
+                            <option value="nombre-desc">Nombre: Z a A</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="boton-restablecer-filtros" class="boton-accion-secundario" title="Limpiar todos los filtros">
+                        Restablecer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grilla de Tarjetas de Articulos -->
+            <div id="grilla-catalogo-productos" class="grilla-productos-catalogo">
+                <!-- Se inyecta dinamicamente con moduloInterfaz.js -->
+            </div>
+
+        </section>
+
+        <!-- COLUMNA DERECHA: PANEL DEL CARRITO DE COMPRAS -->
+        <aside class="seccion-columna-carrito" aria-label="Carrito de compras actual">
+            
+            <header class="encabezado-panel-carrito">
+                <h2 class="titulo-panel-carrito">Carrito de Compras</h2>
+                <span id="contador-carrito-total" class="insignia-unidades-carrito">0</span>
+            </header>
+
+            <!-- Listado de Renglones del Carrito (Vector de Clases) -->
+            <div id="lista-elementos-carrito" class="lista-elementos-carrito-contenedor">
+                <!-- Inyectado dinamicamente con moduloInterfaz.js -->
+            </div>
+
+            <!-- Seccion de Cupon Promocional -->
+            <div class="bloque-cupon-descuento">
+                <input 
+                    type="text" 
+                    id="campo-codigo-cupon" 
+                    class="campo-cupon-texto" 
+                    placeholder="Codigo de descuento" 
+                    maxlength="20"
+                />
+                <button type="button" id="boton-aplicar-cupon" class="boton-accion-primario">Aplicar</button>
+            </div>
+
+            <!-- Resumen Financiero: Subtotal, Cupon, IVA y Total -->
+            <div class="tabla-resumen-financiero">
+                <div class="linea-resumen">
+                    <span>Subtotal mercaderia:</span>
+                    <strong id="resumen-subtotal-valor">$0.00</strong>
+                </div>
+
+                <div id="fila-descuento-cupon" class="linea-resumen descuento-activo oculto">
+                    <div style="display: flex; align-items: center; gap: 0.4rem;">
+                        <span>Descuento aplicado:</span>
+                        <button type="button" id="boton-quitar-cupon" style="background: none; border: none; color: var(--color-peligro); cursor: pointer; font-size: 0.75rem;">(Quitar)</button>
+                    </div>
+                    <strong id="resumen-descuento-cupon-valor">-$0.00</strong>
+                </div>
+
+                <div class="linea-resumen">
+                    <span>IVA (21%):</span>
+                    <strong id="resumen-iva-valor">$0.00</strong>
+                </div>
+
+                <div class="linea-resumen linea-total-destacada">
+                    <span>Total a cancelar:</span>
+                    <strong id="resumen-total-valor">$0.00</strong>
+                </div>
+            </div>
+
+            <!-- Botones de Accion del Carrito -->
+            <div class="botones-accion-carrito">
+                <button type="button" id="boton-vaciar-carrito" class="boton-vaciar-estilizado" disabled>
+                    Vaciar Carrito
+                </button>
+                <button type="button" id="boton-iniciar-checkout" class="boton-checkout-estilizado" disabled>
+                    Iniciar Checkout
+                </button>
+            </div>
+
+        </aside>
+
+    </main>
+
+    <!-- ================= MODAL: FORMULARIO DE CHECKOUT (CONFIRMAR COMPRA) ================= -->
+    <div id="modal-formulario-checkout" class="capa-modal-fondo oculto" role="dialog" aria-modal="true">
+        <div class="caja-modal-contenido">
+            <header class="encabezado-modal">
+                <h3 class="titulo-modal">Confirmacion de Orden y Pago</h3>
+                <button type="button" id="boton-cerrar-checkout" class="boton-cerrar-aviso" aria-label="Cerrar modal">&times;</button>
+            </header>
+
+            <form id="formulario-finalizar-compra" class="formulario-estilizado">
+                <div class="fila-formulario-doble">
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="checkout-nombre">Nombre * (solo letras, min. 3)</label>
+                        <input type="text" id="checkout-nombre" class="control-input" required minlength="3" placeholder="Ej: Maria">
+                    </div>
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="checkout-apellido">Apellido * (solo letras, min. 2)</label>
+                        <input type="text" id="checkout-apellido" class="control-input" required minlength="2" placeholder="Ej: Lopez">
+                    </div>
+                </div>
+
+                <div class="fila-formulario-doble">
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="checkout-email">Correo Electronico *</label>
+                        <input type="email" id="checkout-email" class="control-input" required placeholder="maria@ejemplo.com">
+                    </div>
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="checkout-telefono">Telefono * (solo numeros, min. 8)</label>
+                        <input type="tel" id="checkout-telefono" class="control-input" required placeholder="Ej: 1144556677">
+                    </div>
+                </div>
+
+                <div class="fila-formulario-doble">
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="checkout-direccion">Calle y Altura * (Ej: Belgrano 1234)</label>
+                        <input type="text" id="checkout-direccion" class="control-input" required placeholder="Ej: San Martin 500">
+                    </div>
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="checkout-ciudad">Ciudad * (solo letras, min. 3)</label>
+                        <input type="text" id="checkout-ciudad" class="control-input" required placeholder="Ej: Buenos Aires">
+                    </div>
+                </div>
+
+                <div class="campo-formulario-grupo">
+                    <label class="etiqueta-campo" for="checkout-metodo-pago">Metodo de Pago *</label>
+                    <select id="checkout-metodo-pago" class="control-input">
+                        <option value="Tarjeta de Credito">Tarjeta de Credito (1 Pago / Cuotas)</option>
+                        <option value="Tarjeta de Debito">Tarjeta de Debito</option>
+                        <option value="Transferencia Bancaria">Transferencia Bancaria (CBU / Alias)</option>
+                        <option value="Efectivo contra entrega">Efectivo contra entrega</option>
+                    </select>
+                </div>
+
+                <footer class="acciones-formulario">
+                    <button type="button" id="boton-cancelar-checkout" class="boton-accion-secundario">Cancelar</button>
+                    <button type="submit" class="boton-accion-primario">Confirmar y Pagar</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: ALTA Y MODIFICACION DE PRODUCTOS (ABM - REQUISITO 15) ================= -->
+    <div id="modal-abm-producto" class="capa-modal-fondo oculto" role="dialog" aria-modal="true">
+        <div class="caja-modal-contenido">
+            <header class="encabezado-modal">
+                <h3 id="titulo-modal-abm" class="titulo-modal">Gestion de Producto</h3>
+                <button type="button" id="boton-cerrar-modal-abm" class="boton-cerrar-aviso" aria-label="Cerrar modal">&times;</button>
+            </header>
+
+            <form id="formulario-abm" class="formulario-estilizado">
+                <input type="hidden" id="abm-producto-id">
+
+                <div class="campo-formulario-grupo">
+                    <label class="etiqueta-campo" for="abm-nombre">Nombre del Articulo *</label>
+                    <input type="text" id="abm-nombre" class="control-input" required placeholder="Ej: Monitor 24 Pulgadas IPS">
+                </div>
+
+                <div class="fila-formulario-doble">
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="abm-precio">Precio Unitario ($) *</label>
+                        <input type="number" id="abm-precio" class="control-input" step="0.01" min="0.01" required placeholder="199.99">
+                    </div>
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="abm-categoria">Categoria *</label>
+                        <input type="text" id="abm-categoria" class="control-input" required placeholder="Ej: Monitores">
+                    </div>
+                </div>
+
+                <div class="fila-formulario-doble">
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="abm-existencias">Existencias en Inventario *</label>
+                        <input type="number" id="abm-existencias" class="control-input" min="0" required placeholder="10">
+                    </div>
+                    <div class="campo-formulario-grupo">
+                        <label class="etiqueta-campo" for="abm-descuento">Descuento (%)</label>
+                        <input type="number" id="abm-descuento" class="control-input" min="0" max="90" value="0">
+                    </div>
+                </div>
+
+                <div class="campo-formulario-grupo">
+                    <label class="etiqueta-campo" for="abm-imagen">Enlace de Imagen (URL)</label>
+                    <input type="url" id="abm-imagen" class="control-input" placeholder="https://ejemplo.com/imagen.jpg">
+                </div>
+
+                <div class="campo-formulario-grupo">
+                    <label class="etiqueta-campo" for="abm-descripcion">Descripcion Detallada</label>
+                    <textarea id="abm-descripcion" class="control-input" rows="3" placeholder="Caracteristicas tecnicas del producto..."></textarea>
+                </div>
+
+                <footer class="acciones-formulario">
+                    <button type="button" id="boton-cancelar-abm" class="boton-accion-secundario">Cancelar</button>
+                    <button type="submit" class="boton-accion-primario">Guardar Articulo</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: FACTURA / TICKET IMPRIMIBLE ================= -->
+    <div id="modal-ticket-factura" class="capa-modal-fondo oculto" role="dialog" aria-modal="true">
+        <div class="caja-modal-contenido" style="max-width: 720px;">
+            <header class="encabezado-modal sin-impresion">
+                <h3 class="titulo-modal">Comprobante Fiscal Emitido</h3>
+                <button type="button" id="boton-cerrar-ticket" class="boton-cerrar-aviso" aria-label="Cerrar modal">&times;</button>
+            </header>
+
+            <div id="cuerpo-ticket-imprimible">
+                <!-- Se inyecta dinamicamente con moduloInterfaz.js -->
+            </div>
+
+            <footer class="acciones-formulario sin-impresion">
+                <button type="button" id="boton-imprimir-ticket" class="boton-accion-secundario">
+                    Imprimir / Guardar PDF
+                </button>
+                <button type="button" id="boton-continuar-comprando" class="boton-accion-primario">
+                    Continuar Comprando
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ================= MODAL PERSONALIZADO DE CONFIRMACION (SIN ALERT/CONFIRM NATIVO) ================= -->
+    <div id="modal-confirmacion-baja" class="capa-modal-fondo oculto" role="dialog" aria-modal="true">
+        <div class="caja-modal-contenido" style="max-width: 440px;">
+            <header class="encabezado-modal">
+                <h3 class="titulo-modal">Confirmar Operacion</h3>
+            </header>
+            <p id="texto-confirmacion-baja" style="font-size: 0.88rem; color: var(--color-texto-secundario); margin-bottom: 1.5rem;">
+                ¿Desea proseguir con la accion?
+            </p>
+            <footer class="acciones-formulario">
+                <button type="button" id="boton-cancelar-baja" class="boton-accion-secundario">Cancelar</button>
+                <button type="button" id="boton-confirmar-baja" class="boton-accion-primario" style="background-color: var(--color-peligro); border-color: var(--color-peligro);">Confirmar</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ================= CONTENEDOR DE AVISOS EN EL DOM (SIN ALERT) ================= -->
+    <div id="contenedor-notificaciones" class="contenedor-avisos-fijo"></div>
+
+    <!-- ================= BOTON DE SCROLL PARA VOLVER ARRIBA ================= -->
+    <button 
+        type="button" 
+        id="boton-volver-arriba" 
+        class="boton-flotante-arriba oculto" 
+        aria-label="Volver a la parte superior"
+        title="Volver a la parte superior">
+        &uarr;
+    </button>
+
+    <!-- Script Principal Modular (ES Modules) -->
+    <script type="module" src="/scripts/principal.js"></script>
+</body>
+</html>
