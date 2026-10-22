@@ -5,6 +5,14 @@ const DiscordStrategy = require('passport-discord').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const db = require('./db');
 
+// Habilitar prompt=select_account en GitHub para forzar el selector de cuentas y evitar el bypass automático
+GitHubStrategy.prototype.authorizationParams = function (options) {
+  const params = {};
+  if (options.prompt) params.prompt = options.prompt;
+  if (options.login) params.login = options.login;
+  return params;
+};
+
 const PORT = process.env.PORT || 4000;
 const callbackFor = (id) =>
   process.env[`${id.toUpperCase()}_CALLBACK_URL`] || `http://localhost:${PORT}/api/auth/${id}/callback`;

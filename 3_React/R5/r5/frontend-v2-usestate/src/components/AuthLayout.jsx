@@ -8,22 +8,14 @@ export function Logo({ size = 28 }) {
   );
 }
 
-const POINTS = [
-  'Contraseñas cifradas con bcrypt',
-  'Sesión con token JWT que se mantiene al recargar',
-  'Ingreso social, sin crear otra contraseña',
-];
-
 export default function AuthLayout({ title, subtitle, children, footer }) {
   return (
     <div className="auth">
-      <aside className="auth-brand">
-        <Logo size={40} />
-        <h1>Tu cuenta, protegida y lista en segundos.</h1>
-        <ul>{POINTS.map((p) => <li key={p}>{p}</li>)}</ul>
-      </aside>
       <main className="auth-card">
-        <h2>{title}</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+          <Logo size={34} />
+          <h2 style={{ margin: 0 }}>{title}</h2>
+        </div>
         {subtitle && <p className="muted">{subtitle}</p>}
         {children}
         {footer && <p className="form-footer">{footer}</p>}
