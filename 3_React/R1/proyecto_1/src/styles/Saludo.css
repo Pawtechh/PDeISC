@@ -1,0 +1,38 @@
+/* Estilos del componente Saludo: minimalista, paleta neutra. */
+
+.saludo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    font-family: "Poppins", system-ui, sans-serif;
+    text-align: center;
+}
+
+.saludo__titulo {
+    font-size: 4rem;
+    font-weight: 300;
+    color: var(--texto);
+    margin: 0;
+    letter-spacing: -0.5px;
+
+    /* Transición suave para el efecto hover. */
+    transition: color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.saludo__titulo:hover {
+    color: var(--indigo);       /* cambia a un acento índigo sutil */
+    transform: scale(1.08);     /* crece un poco (zoom) */
+}
+
+@media (max-width: 768px) {
+    .saludo__titulo {
+        font-size: 2.5rem;
+    }
+}

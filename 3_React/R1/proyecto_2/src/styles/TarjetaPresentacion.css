@@ -1,0 +1,78 @@
+/* Estilos de la credencial de identificación: minimalista, paleta neutra. */
+
+.credencial {
+    width: 480px;
+    max-width: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: var(--tarjeta);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    font-family: "Poppins", system-ui, sans-serif;
+}
+
+/* Banda superior oscura. */
+.credencial__cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+}
+
+.credencial__titulo {
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Cuerpo: foto a la izquierda, datos a la derecha. */
+.credencial__cuerpo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 20px;
+}
+
+.credencial__imagen {
+    width: 100px;
+    height: 100px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.credencial__datos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.credencial__nombre {
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--texto);
+    margin: 0;
+}
+
+.credencial__profesion {
+    font-size: 1rem;
+    color: var(--texto-suave);
+    margin: 0;
+}
+
+/* Franja inferior tipo tarjeta de acceso. */
+.credencial__franja {
+    height: 10px;
+    background-color: var(--borde);
+}
+
+@media (max-width: 768px) {
+    .credencial {
+        width: 100%;
+    }
+
+    .credencial__cuerpo {
+        flex-direction: column;
+        text-align: center;
+    }
+}

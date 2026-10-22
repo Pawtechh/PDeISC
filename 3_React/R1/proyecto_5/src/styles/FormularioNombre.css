@@ -1,0 +1,112 @@
+/* Estilos del componente FormularioNombre: tarjeta centrada y responsive. */
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    width: 420px;
+    max-width: 100%;
+    padding: 40px 32px;
+    border-radius: 16px;
+
+    background-color: var(--tarjeta);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    font-family: "Poppins", system-ui, sans-serif;
+}
+
+/* Formulario y mensaje de bienvenida: ambos en columna centrada. */
+.formulario__form,
+.formulario__bienvenida {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+/* Título del formulario. */
+.formulario__titulo {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--texto);
+    text-align: center;
+}
+
+/* Mensaje de bienvenida (nombre en grande). */
+.formulario__mensaje {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--acento-hover);
+    text-align: center;
+}
+
+/* Campo de texto. */
+.formulario__entrada {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--texto);
+    background-color: var(--tarjeta);
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.formulario__entrada:focus {
+    border-color: var(--acento);
+}
+
+/* Botón principal (Enviar). */
+.formulario__boton {
+    width: 100%;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: var(--acento);
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.formulario__boton:hover {
+    background-color: var(--acento-hover);
+}
+
+.formulario__boton:active {
+    transform: scale(0.98);
+}
+
+/* Botón secundario (Ingresar otro nombre): gris. */
+.formulario__boton--secundario {
+    background-color: var(--gris);
+    color: var(--texto);
+}
+
+.formulario__boton--secundario:hover {
+    background-color: var(--gris-hover);
+}
+
+/* Mensaje de error (validación sin alert). */
+.formulario__error {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #dc2626;
+    text-align: center;
+}
+
+/* Móvil: la tarjeta ocupa todo el ancho disponible. */
+@media (max-width: 768px) {
+    .formulario {
+        width: 100%;
+    }
+}

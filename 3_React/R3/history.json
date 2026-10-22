@@ -1,0 +1,13 @@
+{
+  "project": "r3",
+  "created_at": "2026-09-29T02:27:47Z",
+  "versions": [
+    {
+      "id": "v1",
+      "timestamp": "2026-09-29T02:27:48Z",
+      "reason": "initial",
+      "archived": false
+    }
+  ],
+  "current": "v1"
+}

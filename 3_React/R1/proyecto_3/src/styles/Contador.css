@@ -1,0 +1,99 @@
+/* Estilos del componente Contador: tarjeta centrada, minimalista y responsive. */
+
+.contador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    width: 340px;
+    max-width: 100%;
+    padding: 40px 32px;
+    border-radius: 14px;
+
+    background-color: var(--tarjeta);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    font-family: "Poppins", system-ui, sans-serif;
+}
+
+/* Título de la tarjeta. */
+.contador__titulo {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+}
+
+/* El número grande que muestra el valor actual. */
+.contador__valor {
+    margin: 0;
+    font-size: 5rem;
+    font-weight: 300;
+    color: var(--texto);
+    line-height: 1;
+}
+
+/* Fila de botones: en escritorio van uno al lado del otro. */
+.contador__acciones {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+/* Estilo base compartido por ambos botones. */
+.contador__boton {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    font-size: 1rem;
+    font-family: inherit;
+
+    /* Transición suave para el efecto hover/active. */
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Botón "Decrementar": gris neutro. */
+.contador__boton--restar {
+    background-color: var(--gris);
+    color: var(--texto);
+}
+
+.contador__boton--restar:hover {
+    background-color: var(--gris-hover);
+}
+
+/* Botón "Incrementar": azul de acento. */
+.contador__boton--sumar {
+    background-color: var(--acento);
+    color: #ffffff;
+}
+
+.contador__boton--sumar:hover {
+    background-color: var(--acento-hover);
+}
+
+/* Efecto de "presionado" al hacer clic. */
+.contador__boton:active {
+    transform: scale(0.96);
+}
+
+/* Móvil: los botones se apilan en columna. */
+@media (max-width: 768px) {
+    .contador {
+        width: 100%;
+    }
+
+    .contador__acciones {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .contador__boton {
+        width: 100%;
+    }
+}

@@ -1,0 +1,12 @@
+/* Estilos generales del componente App: centra el contenido en pantalla. */
+
+.contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    /* Padding chico en desktop para aprovechar todo el ancho de pantalla. */
+    padding: 16px;
+    box-sizing: border-box;
+}
+

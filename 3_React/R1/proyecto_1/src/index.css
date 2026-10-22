@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+/* Estilos globales: reset, base del documento y variables de tema. */
+
+/* Variables de color: tema claro (por defecto). */
+:root {
+    --fondo: #ffffff;
+    --texto: #111827;
+    --texto-suave: #6b7280;
+    --tarjeta: #ffffff;
+    --borde: #e5e7eb;
+    --acento: #059669;
+    --acento-hover: #047857;
+    --indigo: #7c3aed;
+}
+
+/* Variables de color: tema oscuro (cuando <html> tiene data-tema="oscuro"). */
+[data-tema="oscuro"] {
+    --fondo: #111827;
+    --texto: #f3f4f6;
+    --texto-suave: #9ca3af;
+    --tarjeta: #1f2937;
+    --borde: #374151;
+    --acento: #10b981;
+    --acento-hover: #34d399;
+    --indigo: #a78bfa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    width: 100%;
+    min-height: 100vh;
+}
+
+body {
+    font-family: "Poppins", system-ui, -apple-system, sans-serif;
+    color: var(--texto);
+    background-color: var(--fondo);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Botón flotante para alternar el tema. */
+.boton-tema {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    background-color: var(--tarjeta);
+    color: var(--texto);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.boton-tema:hover {
+    background-color: var(--borde);
+}

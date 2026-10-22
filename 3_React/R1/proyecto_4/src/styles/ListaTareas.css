@@ -1,0 +1,461 @@
+/* Estilos del componente ListaTareas: layout en dos columnas y responsive. */
+
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    width: 100%;
+    max-width: 1280px;
+    padding: 28px;
+    border-radius: 16px;
+
+    background-color: var(--tarjeta);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    font-family: "Poppins", system-ui, sans-serif;
+}
+
+/* Cabecera: título a la izquierda, resumen de conteos a la derecha. */
+.lista__cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Título principal. */
+.lista__titulo {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--texto);
+}
+
+/* Fila de contadores (Total / Pendientes / Completadas). */
+.lista__resumen {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Cada contador. */
+.lista__resumen-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 12px;
+    border-radius: 999px;
+    background-color: var(--gris);
+    color: var(--texto-suave);
+    font-size: 0.85rem;
+}
+
+.lista__resumen-item strong {
+    font-weight: 700;
+    color: var(--texto);
+}
+
+/* Contador de pendientes (ámbar). */
+.lista__resumen-item--pendientes {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.lista__resumen-item--pendientes strong {
+    color: #92400e;
+}
+
+/* Contador de completadas (verde). */
+.lista__resumen-item--completadas {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.lista__resumen-item--completadas strong {
+    color: #166534;
+}
+
+/* Contenedor de las dos columnas: en fila (escritorio), en columna (móvil). */
+.lista__columnas {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* Cada panel (formulario o listados). */
+.lista__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Panel izquierdo (formulario): ocupa 1 parte.
+   Fondo gris claro + borde para diferenciarlo de los listados. */
+.lista__panel--formulario {
+    flex: 1 1 35%;
+    padding: 18px;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    background-color: var(--tarjeta-suave);
+}
+
+/* Panel derecho (listados): ocupa el resto.
+   Se limita su altura y se agrega scroll interno para que la lista
+   no estire la página hacia abajo cuando hay muchas tareas. */
+.lista__panel--listados {
+    flex: 1 1 65%;
+    max-height: 70vh;      /* altura máxima: 70% del alto de la pantalla */
+    overflow-y: auto;      /* scroll vertical solo cuando hace falta */
+    padding-right: 8px;    /* separación para que el scroll no tape el texto */
+}
+
+/* Subtítulos de los paneles y sectores. */
+.lista__subtitulo {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Formulario en columna (título, descripción, botones). */
+.lista__formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Campo de texto (input y textarea comparten este estilo). */
+.lista__entrada {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--texto);
+    background-color: var(--tarjeta);
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.lista__entrada:focus {
+    border-color: var(--acento);
+}
+
+/* El textarea se puede agrandar solo verticalmente. */
+.lista__entrada--area {
+    resize: vertical;
+    min-height: 70px;
+}
+
+/* Botón principal (Agregar / Guardar cambios). */
+.lista__boton {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: var(--acento);
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.lista__boton:hover {
+    background-color: var(--acento-hover);
+}
+
+.lista__boton:active {
+    transform: scale(0.96);
+}
+
+/* Botón "Cancelar" (gris, secundario). */
+.lista__boton--cancelar {
+    background-color: var(--gris);
+    color: var(--texto);
+}
+
+.lista__boton--cancelar:hover {
+    background-color: var(--gris-hover);
+}
+
+/* Mensaje de error (validación sin alert). */
+.lista__error {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #dc2626;
+}
+
+/* Texto que se muestra cuando no hay tareas. */
+.lista__vacia {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--texto-suave);
+}
+
+/* Sector (Pendientes / Completadas). */
+.lista__sector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Contenedor de la lista de tareas. */
+.lista__elementos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Cada tarea de la lista. */
+.lista__elemento {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 12px 16px;
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--borde);   /* barrita lateral (se pinta según estado) */
+    border-radius: 8px;
+    background-color: var(--tarjeta);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.lista__elemento:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+/* Barra lateral ámbar para tareas pendientes. */
+.lista__elemento--pendiente {
+    border-left-color: #f59e0b;
+}
+
+/* Barra lateral verde para tareas completadas. */
+.lista__elemento--completada {
+    border-left-color: #22c55e;
+}
+
+/* Contenedor del título + descripción de la tarea. */
+.lista__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+/* Título de cada tarea. */
+.lista__titulo-tarea {
+    font-size: 1rem;
+    color: var(--texto);
+    word-break: break-word;
+}
+
+/* Título tachado cuando está completada. */
+.lista__titulo-tarea--completada {
+    text-decoration: line-through;
+    color: var(--texto-suave);
+}
+
+/* Descripción o subtarea (gris, más chica). */
+.lista__descripcion {
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    word-break: break-word;
+}
+
+/* Fila de botones de acción de cada tarea. */
+.lista__acciones {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+/* Botones de acción (Completar / Editar / Eliminar). */
+.lista__boton-accion {
+    padding: 6px 12px;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: var(--tarjeta);
+    color: var(--texto-suave);
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.lista__boton-accion:hover {
+    background-color: var(--gris);
+    border-color: var(--borde);
+}
+
+/* Botón "Completar" (verde). */
+.lista__boton-accion--completar {
+    color: #166534;
+    border-color: #bbf7d0;
+    background-color: #f0fdf4;
+}
+
+.lista__boton-accion--completar:hover {
+    background-color: #dcfce7;
+    border-color: #86efac;
+}
+
+/* Botón "Marcar pendiente" (ámbar). */
+.lista__boton-accion--reabrir {
+    color: #92400e;
+    border-color: #fde68a;
+    background-color: #fffbeb;
+}
+
+.lista__boton-accion--reabrir:hover {
+    background-color: #fef3c7;
+    border-color: #fcd34d;
+}
+
+/* Botón "Editar" (azul). */
+.lista__boton-accion--editar {
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+    background-color: #eff6ff;
+}
+
+.lista__boton-accion--editar:hover {
+    background-color: #dbeafe;
+    border-color: #93c5fd;
+}
+
+/* Botón "Eliminar" (rojo). */
+.lista__boton-accion--eliminar {
+    color: #b91c1c;
+    border-color: #fecaca;
+    background-color: #fef2f2;
+}
+
+.lista__boton-accion--eliminar:hover {
+    background-color: #fee2e2;
+    border-color: #fca5a5;
+}
+
+/* Barra de scroll fina y discreta (solo en el panel de listados). */
+.lista__panel--listados::-webkit-scrollbar {
+    width: 8px;
+}
+
+.lista__panel--listados::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.lista__panel--listados::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 999px;
+}
+
+.lista__panel--listados::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Modal de confirmación de eliminación. */
+
+/* Fondo oscuro semitransparente que tapa toda la pantalla. */
+.lista__modal-fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Tarjeta centrada del modal. */
+.lista__modal {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    border-radius: 12px;
+    background-color: var(--tarjeta);
+    border: 1px solid var(--borde);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Título del modal. */
+.lista__modal-titulo {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--texto);
+}
+
+/* Texto del modal. */
+.lista__modal-texto {
+    margin: 0 0 20px;
+    font-size: 0.95rem;
+    color: var(--texto-suave);
+    line-height: 1.5;
+}
+
+/* Fila de botones del modal (a la derecha). */
+.lista__modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Móvil (≤768px): todo pasa a una sola columna vertical. */
+@media (max-width: 768px) {
+    .lista {
+        padding: 20px;
+    }
+
+    .lista__cabecera {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .lista__resumen {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .lista__columnas {
+        flex-direction: column;
+    }
+
+    .lista__panel {
+        width: 100%;
+    }
+
+    /* En celular la lista ocupa menos alto para no estirar la página. */
+    .lista__panel--listados {
+        max-height: 45vh;
+    }
+
+    /* Las acciones de cada tarea se apilan para que entren. */
+    .lista__elemento {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .lista__acciones {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+
