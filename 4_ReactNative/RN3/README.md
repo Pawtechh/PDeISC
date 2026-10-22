@@ -63,3 +63,15 @@ El proyecto ya tiene configurado:
    * Cuando te pregunte: *"Generate a new Android Keystore?"*, seleccioná **Yes** (EAS gestiona las llaves criptográficas de forma segura en la nube).
    * La compilación se ejecutará en los servidores de Expo (toma unos minutos).
    * Al finalizar, te devolverá un **enlace directo de descarga** y un **código QR** para descargar e instalar el archivo `.apk` directamente en tu teléfono Android.
+
+---
+
+## 📥 APK Compilado Listo para Instalar
+
+Ya se encuentra compilada y generada la versión para Android de este trabajo práctico:
+
+- **Archivo local en el repositorio:** [`4_ReactNative/RN3/app.apk`](./app.apk)
+- **Enlace directo CDN Expo:** [Descargar app.apk (Expo CDN)](https://expo.dev/artifacts/eas/FsyA3zWo69fAdC5kg3D22Nm43SPCThmoRKkvqItSI7A.apk)
+- **Panel de compilación EAS:** [Ver detalles y log de compilación en Expo](https://expo.dev/accounts/pocorena-luis/projects/tp3-herramientas-nativas/builds/dd6dfebc-5ffd-482e-bb86-859fb5104329)
+
+> **Nota de instalación:** En dispositivos Android, al instalar un archivo APK directamente desde el navegador o explorador de archivos, verificar contar con suficiente espacio de almacenamiento disponible y habilitar el permiso de *"Instalar aplicaciones de fuentes desconocidas"*.
