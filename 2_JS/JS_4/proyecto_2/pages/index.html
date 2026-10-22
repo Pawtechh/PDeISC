@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Filtrado de números desde TXT</title>
+    <link rel="stylesheet" href="/styles/style.css">
+    <script>
+        (function () {
+            const tema = localStorage.getItem('tema');
+            if (tema === 'oscuro') document.documentElement.classList.add('tema-oscuro');
+        })();
+    </script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="main-header">
+            <h1>Filtrador de números</h1>
+            <button id="btnTema" class="tema-toggle">🌙 Modo oscuro</button>
+        </header>
+
+        <div class="two-columns">
+            <!-- Columna izquierda: subida y resultados -->
+            <div class="col-left">
+                <section class="upload-panel">
+                    <h2>Subir archivo .txt</h2>
+                    <form id="uploadForm">
+                        <div class="input-group">
+                            <label for="archivoTxt">Seleccionar archivo (formato: un número por línea)</label>
+                            <input type="file" id="archivoTxt" name="archivoTxt" accept=".txt" required>
+                        </div>
+                        <button type="submit" class="btn success btn-full">Procesar archivo</button>
+                    </form>
+                    <div id="feedback" class="feedback"></div>
+                </section>
+
+                <section id="resultadosPanel" class="resultados-panel" style="display: none;">
+                    <h2>Resultados del filtrado</h2>
+                    <div class="estadisticas">
+                        <p><strong>Total números leídos:</strong> <span id="total">0</span></p>
+                        <p><strong>Números útiles (mismo primero y último dígito):</strong> <span id="utiles">0</span>
+                        </p>
+                        <p><strong>Números no útiles:</strong> <span id="noUtiles">0</span></p>
+                        <p><strong>Porcentaje de útiles:</strong> <span id="porcentaje">0</span>%</p>
+                    </div>
+                    <h3>Lista ordenada ascendente de números útiles</h3>
+                    <div id="listaUtiles" class="numeros-lista"></div>
+                    <button id="btnDescargar" class="btn primary btn-full">Descargar archivo filtrado (TXT)</button>
+                </section>
+            </div>
+
+            <!-- Columna derecha: información adicional -->
+            <div class="col-right">
+                <div class="info-panel">
+                    <h3>¿Qué hace esta herramienta?</h3>
+                    <p>Sube un archivo <code>.txt</code> con un número por línea (como los generados en el punto
+                        anterior).</p>
+                    <p>El sistema filtra los números que <strong>empiezan y terminan con el mismo dígito</strong>.</p>
+                    <p>Ejemplos: <strong>525</strong> (empieza con 5, termina con 5) → útil.<br>
+                        <strong>123</strong> (1 ≠ 3) → no útil.<br>
+                        <strong>7</strong> (único dígito) → útil.
+                    </p>
+                    <p>El archivo original en el servidor <strong>se sobrescribe</strong> con el resultado filtrado y
+                        ordenado.</p>
+                    <p>Puedes descargar el nuevo archivo con el botón correspondiente.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Los archivos se guardan en el servidor (carpeta uploads) y se sobrescriben con el filtrado.</p>
+        </footer>
+    </div>
+
+    <script type="module" src="/scripts/main.js"></script>
+</body>
+
+</html>

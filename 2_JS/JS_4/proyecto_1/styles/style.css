@@ -1,0 +1,266 @@
+/**
+ * style.css
+ * Layout de dos columnas (horizontal en desktop, vertical en móvil)
+ * Sin espacios laterales excesivos, variables para claro/oscuro.
+ */
+
+:root {
+    --bg-body: #f5f7fa;
+    --bg-card: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #334155;
+    --border-color: #e2e8f0;
+    --btn-primary-bg: #3b82f6;
+    --btn-primary-hover: #2563eb;
+    --btn-success-bg: #10b981;
+    --btn-success-hover: #059669;
+    --btn-danger-bg: #ef4444;
+    --btn-danger-hover: #dc2626;
+    --btn-warning-bg: #f59e0b;
+    --btn-warning-hover: #d97706;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --input-bg: #ffffff;
+}
+
+:root.tema-oscuro {
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --border-color: #334155;
+    --btn-primary-bg: #2563eb;
+    --btn-primary-hover: #3b82f6;
+    --btn-success-bg: #059669;
+    --btn-success-hover: #10b981;
+    --btn-danger-bg: #dc2626;
+    --btn-danger-hover: #ef4444;
+    --btn-warning-bg: #d97706;
+    --btn-warning-hover: #f59e0b;
+    --input-bg: #0f172a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1rem;
+    width: 100%;
+}
+
+/* Layout de dos columnas */
+.two-columns {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.col-left,
+.col-right {
+    flex: 1;
+    min-width: 280px;
+}
+
+/* Panel izquierdo: mismo estilo anterior */
+.ingreso-panel,
+.listado-panel,
+.preview-panel {
+    background: var(--bg-card);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.input-group input {
+    flex: 2;
+    min-width: 150px;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+    transition: background 0.2s;
+}
+
+.btn.primary {
+    background: var(--btn-primary-bg);
+}
+
+.btn.primary:hover {
+    background: var(--btn-primary-hover);
+}
+
+.btn.success {
+    background: var(--btn-success-bg);
+}
+
+.btn.success:hover {
+    background: var(--btn-success-hover);
+}
+
+.btn.danger {
+    background: var(--btn-danger-bg);
+}
+
+.btn.danger:hover {
+    background: var(--btn-danger-hover);
+}
+
+.btn.warning {
+    background: var(--btn-warning-bg);
+}
+
+.btn.warning:hover {
+    background: var(--btn-warning-hover);
+}
+
+.btn-full {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.contador-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.numeros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.numero-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.numero-valor {
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: monospace;
+}
+
+.card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.card-actions button {
+    padding: 0.25rem 0.7rem;
+    font-size: 0.8rem;
+}
+
+.preview-panel textarea {
+    width: 100%;
+    height: 180px;
+    font-family: monospace;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    resize: vertical;
+    margin-bottom: 1rem;
+}
+
+.feedback {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--bg-card);
+    border-left: 4px solid var(--btn-primary-bg);
+}
+
+footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+/* Responsive: móvil -> columnas verticales */
+@media (max-width: 768px) {
+    .two-columns {
+        flex-direction: column;
+    }
+
+    .app-container {
+        padding: 0.75rem;
+    }
+
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .numeros-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tema-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    color: var(--text-primary);
+}

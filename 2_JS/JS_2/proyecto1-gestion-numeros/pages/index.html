@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestión de Números | ABM + Guardado</title>
+  <link rel="stylesheet" href="/styles/style.css">
+  <script>
+    (function () {
+      const tema = localStorage.getItem('tema');
+      document.documentElement.dataset.theme = (tema === 'claro') ? 'light' : 'dark';
+    })();
+  </script>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- Barra superior -->
+  <header class="topbar">
+    <div>
+      <div class="logo-tag">// herramienta numérica</div>
+      <h1>Gestión de <span>Números</span></h1>
+    </div>
+    <div class="topbar-right">
+      <button class="tema-toggle" id="btnTema" title="Cambiar tema" aria-label="Cambiar tema">
+        <span class="ticon m">🌙</span>
+        <span class="ticon s">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="card">
+      <div class="card-title">Progreso</div>
+      <div class="ph">
+        <span class="pl">Números</span>
+        <span class="pc" id="contador">0 / 20</span>
+      </div>
+      <div class="pt"><div class="pf" id="pf"></div></div>
+      <div class="need-hint" id="nhint">Necesitás al menos 10 números para guardar</div>
+    </div>
+
+    <div class="card" id="scard" style="display:none">
+      <div class="card-title">Estadísticas en tiempo real</div>
+      <div class="sgrid">
+        <div class="sbox"><span class="sv" id="ssum">—</span><div class="sl">Suma</div></div>
+        <div class="sbox"><span class="sv" id="savg">—</span><div class="sl">Promedio</div></div>
+        <div class="sbox"><span class="sv" id="smin">—</span><div class="sl">Mínimo</div></div>
+        <div class="sbox"><span class="sv" id="smax">—</span><div class="sl">Máximo</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+
+    <div class="card">
+      <div class="card-title">Ingresar número entero</div>
+      <div class="input-group">
+        <div class="iwrap">
+          <input type="text" id="numeroInput" placeholder="Ej: 42" inputmode="numeric" autocomplete="off" maxlength="12">
+        </div>
+        <button id="btnAgregar" class="btn">+ Agregar</button>
+      </div>
+      <div class="emsg" id="emsg"></div>
+    </div>
+
+    <div class="card" style="flex:1">
+      <div class="card-title">Lista de números (mínimo 10, máximo 20)</div>
+      <div class="numeros-grid" id="listaContainer">
+        <span class="ehint">Sin números todavía…</span>
+      </div>
+    </div>
+
+    <div class="card preview-panel">
+      <div class="card-title">Vista previa del archivo .txt</div>
+      <textarea id="previewTxt" readonly placeholder="Aquí se mostrarán los números al guardar..."></textarea>
+      <div class="actions">
+        <button id="btnGuardarTodo" class="btn success btn-full" disabled>💾 Guardar en servidor + elegir ubicación local</button>
+      </div>
+      <div id="feedback" class="feedback"></div>
+    </div>
+
+  </main>
+
+</div>
+
+<button class="back-to-top" id="backToTop" title="Volver arriba" aria-label="Volver arriba">↑</button>
+<div class="toast" id="toast"></div>
+
+<script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

@@ -45,9 +45,12 @@ export function initTheme() {
     });
   }
 }
+<<<<<<< HEAD
+=======
 
 if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', () => {
     initTheme();
   });
 }
+>>>>>>> 4134120d2bb620760a2c98915ecb3f9fb0752bff

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Preview Surfboard Images</title>
+  <style>
+    body { font-family: sans-serif; background: #0f172a; color: white; padding: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card { background: #1e293b; border-radius: 8px; overflow: hidden; padding: 10px; }
+    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 6px; }
+    .title { font-weight: bold; margin-top: 8px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; background: #0284c7; font-size: 12px; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Galería de Imágenes de Tablas</h1>
+  <div class="grid" id="container"></div>
+
+  <script>
+    const boards = [
+      { id: 'board-seed-1', tipo: 'Fish', name: "Channel Islands FishBeard 5'8", img: 'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-2', tipo: 'Shortboard', name: "Lost Driver 2.0 Pro Performance", img: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-3', tipo: 'Longboard', name: "Torq Classic Longboard 9'1", img: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-4', tipo: 'Funboard', name: "UVA Retro Single Fin 7'2", img: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-5', tipo: 'Funboard', name: "Catch Surf Odysea Skipper 6'0", img: 'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-6', tipo: 'SUP', name: "Naish Mana All-Around SUP 10'0", img: 'https://images.unsplash.com/photo-1526495124232-a04e1849168c?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-7', tipo: 'Shortboard', name: "Al Merrick Happy Everyday 5'10", img: 'https://images.unsplash.com/photo-1468413253725-0d5181091126?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-8', tipo: 'Funboard', name: "Firewire Sunday Rob Machado 6'4", img: 'https://images.unsplash.com/photo-1692566755914-516e4d40520b?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-9', tipo: 'Longboard', name: "NSP Elements HDT Longboard 9'2", img: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-10', tipo: 'Shortboard', name: "JS Industries Monsta Box 2020 5'9", img: 'https://images.unsplash.com/photo-1537519646099-335112f03225?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-11', tipo: 'Bodyboard', name: "Morey Mach 7 Pro Bodyboard 42\"", img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-12', tipo: 'SUP', name: "Fanatic Fly Allwave SUP 9'6", img: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-13', tipo: 'Fish', name: "DHD Phoenix Summer Twin 5'7", img: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-14', tipo: 'Shortboard', name: "Pyzel Ghost JJF 6'1", img: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-15', tipo: 'Longboard', name: "Bing Levitator Noserider 9'4", img: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-16', tipo: 'Funboard', name: "Modern Highline Poly 6'8", img: 'https://images.unsplash.com/photo-1776347503185-f0c97da79fd1?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-17', tipo: 'Bodyboard', name: "Hubboards Hubb Edition 41.5\"", img: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&auto=format&fit=crop&q=80' },
+      { id: 'board-seed-18', tipo: 'SUP', name: "Starboard Whopper SUP 10'0", img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80' },
+    ];
+
+    const c = document.getElementById('container');
+    boards.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+        <span class="badge">\${b.tipo}</span>
+        <img src="\${b.img}" alt="\${b.name}" loading="eager" />
+        <div class="title">\${b.name}</div>
+        <div style="font-size: 11px; color: #94a3b8; word-break: break-all;">\${b.id}</div>
+      `;
+      c.appendChild(div);
+    });
+  </script>
+</body>
+</html>

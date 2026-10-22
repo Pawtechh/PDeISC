@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Estanga Games - Versión Móvil</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: radial-gradient(circle at 20% 30%, #0a0a1a, #03030a);
+      font-family: 'Press Start 2P', monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    .card {
+      background: rgba(15, 15, 26, 0.95);
+      border: 2px solid #00f5ff;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+      max-width: 90%;
+      width: 400px;
+      padding: 30px 20px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .card-icon {
+      font-size: 3rem;
+      display: inline-block;
+      filter: drop-shadow(0 0 8px #ff006e);
+      margin-bottom: 15px;
+    }
+    h1 {
+      font-size: 1.2rem;
+      color: #00ff41;
+      text-shadow: 0 0 5px #00ff41;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 0.6rem;
+      line-height: 1.6;
+      color: #ccc;
+      margin: 20px 0;
+    }
+    .footnote {
+      margin-top: 25px;
+      font-size: 0.35rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="card-icon">📱🎮</div>
+  <h1>ESTANGA MOBILE</h1>
+  <p>⚡ Esta experiencia arcade está diseñada para PC.<br>
+     Los controles y la jugabilidad requieren teclado físico.<br><br>
+     Por favor, accede desde una computadora de escritorio o laptop.</p>
+  <div class="footnote">Estanga Games – Retro Arcade</div>
+</div>
+<script>
+  // Limpiar la bandera de redirección para futuras visitas desde PC
+  sessionStorage.removeItem('redirect_to_mobile');
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Gestión de Números | ABM + Guardado</title>
+    <link rel="stylesheet" href="/styles/style.css">
+    <script>
+        (function () {
+            const tema = localStorage.getItem('tema');
+            if (tema === 'oscuro') document.documentElement.classList.add('tema-oscuro');
+        })();
+    </script>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <header class="main-header">
+            <h1>Gestión de Números</h1>
+            <button id="btnTema" class="tema-toggle">🌙 Modo oscuro</button>
+        </header>
+
+        <div class="two-columns">
+            <!-- COLUMNA IZQUIERDA: ABM de números -->
+            <div class="col-left">
+                <section class="ingreso-panel">
+                    <div class="input-group">
+                        <label for="numeroInput">Número entero:</label>
+                        <input type="number" id="numeroInput" placeholder="Ej: 42" step="1">
+                        <button id="btnAgregar" class="btn primary">Agregar</button>
+                    </div>
+                    <div class="contador-info">
+                        <span>📊 Cantidad: <strong id="contador">0</strong></span>
+                        <span>🔢 Mínimo 10 | Máximo 20</span>
+                    </div>
+                </section>
+
+                <section class="listado-panel">
+                    <h2>Lista de números</h2>
+                    <div id="listaContainer" class="numeros-grid"></div>
+                </section>
+            </div>
+
+            <!-- COLUMNA DERECHA: vista previa del contenido y botón único -->
+            <div class="col-right">
+                <div class="preview-panel">
+                    <h3>Contenido del archivo .txt</h3>
+                    <textarea id="previewTxt" readonly
+                        placeholder="Aquí se mostrarán los números al guardar..."></textarea>
+                    <button id="btnGuardarTodo" class="btn success btn-full">💾 Guardar en servidor + elegir ubicación
+                        local</button>
+                    <div id="feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Ingrese entre 10 y 20 números | Edite o elimine | Al guardar: servidor + "Guardar como..."</p>
+        </footer>
+    </div>
+
+    <script type="module" src="/scripts/main.js"></script>
+</body>
+
+</html>

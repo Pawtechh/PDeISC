@@ -1,0 +1,74 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+
+# Production & Build
+dist/
+build/
+.expo/
+_expo/
+backend/public/_expo/
+web-build/
+
+# Environment variables (strict protection: ignore all .env variants)
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+!backend/.env.example
+!mobile/.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+logs/
+
+# Prisma & Database
+dev.db
+dev.db-journal
+*.sqlite
+*.sqlite3
+*.db
+*.sql
+*.dump
+
+# Security, Keystores, Certificates & Private Keys
+*.jks
+*.keystore
+*.p8
+*.p12
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.pub
+id_rsa*
+id_ed25519*
+tunnel_key*
+active_*_url.txt
+cloudflared.exe
+cloudflared*
+ngrok.exe
+ngrok*
+
+# Local tunnel & scratch test runners
+start_*.js
+test_*.js
+test_*.png
+scratch_*.js
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

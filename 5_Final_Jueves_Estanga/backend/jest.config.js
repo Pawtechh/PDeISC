@@ -1,0 +1,26 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: [
+    '**/__tests__/**/health.test.ts',
+    '**/__tests__/**/auth.service.test.ts',
+    '**/__tests__/**/auth.controller.test.ts',
+    '**/__tests__/**/oauth.test.ts',
+    '**/__tests__/**/boards.test.ts',
+    '**/__tests__/**/pricing.engine.test.ts',
+    '**/__tests__/**/rentals.test.ts',
+    '**/__tests__/**/payments.test.ts',
+    '**/__tests__/**/agency.test.ts',
+    '**/__tests__/**/owner.test.ts',
+    '**/__tests__/**/claims.test.ts',
+    '**/__tests__/**/loyalty.test.ts',
+    '**/__tests__/**/legal.test.ts',
+    '**/__tests__/**/errorHandler.test.ts',
+  ],
+  verbose: true,
+  forceExit: true,
+  clearMocks: true,
+  resetMocks: true,
+  restoreMocks: true,
+};

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Filtrador de Números desde TXT</title>
+  <link rel="stylesheet" href="/styles/style.css">
+  <script>
+    (function () {
+      const tema = localStorage.getItem('tema');
+      document.documentElement.dataset.theme = (tema === 'claro') ? 'light' : 'dark';
+    })();
+  </script>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <header class="topbar">
+    <div>
+      <div class="logo-tag">// filtro de archivos</div>
+      <h1>Filtrador de <span>Números</span></h1>
+    </div>
+    <div class="topbar-right">
+      <button class="tema-toggle" id="btnTema" title="Cambiar tema" aria-label="Cambiar tema">
+        <span class="ticon m">🌙</span>
+        <span class="ticon s">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <div class="card info-panel">
+      <div class="card-title">¿Qué hace esta herramienta?</div>
+      <p>Subí un archivo <code>.txt</code> con un número entero por línea.</p>
+      <p>El sistema filtra los números <strong>útiles</strong>: aquellos cuyo primer y último dígito son iguales.</p>
+      <p><strong>525</strong> → útil (5...5). <strong>123</strong> → no útil (1≠3). <strong>7</strong> → útil (un solo dígito).</p>
+      <p>Entre los útiles, se marcan con <span class="leyenda swatch">★</span> los que además son <strong>números factoriales</strong> (1, 2, 6, 24, 120, 720...).</p>
+      <p>El resultado se guarda en el servidor y podés descargarlo.</p>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <div class="card">
+      <div class="card-title">Subir archivo .txt</div>
+      <form id="uploadForm">
+        <div class="file-drop" id="dropZone">
+          <input type="file" id="archivoTxt" name="archivoTxt" accept=".txt" required>
+        </div>
+        <div class="actions" style="margin-top:1rem">
+          <button type="submit" class="btn btn-full">Procesar archivo</button>
+        </div>
+      </form>
+      <div id="feedback" class="feedback"></div>
+    </div>
+
+    <div class="card" id="resultadosPanel" style="display:none">
+      <div class="card-title">Resultados del filtrado</div>
+      <div class="result-stats">
+        <div class="sbox"><span class="sv" id="total">0</span><div class="sl">Total leídos</div></div>
+        <div class="sbox"><span class="sv" id="utiles">0</span><div class="sl">Útiles</div></div>
+        <div class="sbox"><span class="sv" id="noUtiles">0</span><div class="sl">No útiles</div></div>
+        <div class="sbox"><span class="sv" id="porcentaje">0%</span><div class="sl">% útiles</div></div>
+      </div>
+
+      <div class="card-title">Números útiles (orden ascendente)</div>
+      <div class="leyenda"><span class="leyenda swatch">★</span> = número factorial</div>
+      <div class="numeros-lista" id="listaUtiles"></div>
+
+      <div class="actions">
+        <button id="btnDescargar" class="btn btn-full">↓ Descargar archivo filtrado (TXT)</button>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<button class="back-to-top" id="backToTop" title="Volver arriba" aria-label="Volver arriba">↑</button>
+<div class="toast" id="toast"></div>
+
+<script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

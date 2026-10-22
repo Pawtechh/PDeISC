@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Operativo & Guía de Distribución — Surf Rental MDP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ocean-950: #03152B;
+      --ocean-900: #052A57;
+      --ocean-800: #063B7C;
+      --ocean-700: #084FA8;
+      --ocean-600: #0A66D4;
+      --ocean-500: #1E85F5;
+      --ocean-100: #D1E9FF;
+      --ocean-50: #EFF8FF;
+      --sunset-500: #FF8C42;
+      --sunset-600: #F26B1D;
+      --sand-900: #1F1E19;
+      --sand-800: #2E2D27;
+      --sand-700: #4A473C;
+      --sand-500: #8A8574;
+      --sand-300: #D4D0C2;
+      --sand-200: #E8E6DD;
+      --sand-100: #F4F3EE;
+      --sand-50: #FAFAF7;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(5, 42, 87, 0.08);
+      --shadow-lg: 0 10px 30px rgba(5, 42, 87, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--sand-50); color: var(--sand-900); line-height: 1.6; padding-bottom: 60px; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Top bar & Actions */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--sand-200);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--ocean-900);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .btn-primary { background: var(--ocean-500); color: #FFF; }
+    .btn-primary:hover { background: var(--ocean-600); }
+    .btn-secondary { background: var(--sand-100); color: var(--ocean-900); border-color: var(--sand-300); }
+    .btn-secondary:hover { background: var(--sand-200); }
+    .btn-accent { background: var(--sunset-500); color: #FFF; }
+    .btn-accent:hover { background: var(--sunset-600); }
+
+    /* Container */
+    .container {
+      max-width: 1040px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+
+    /* Hero Banner */
+    .hero {
+      background: linear-gradient(135deg, var(--ocean-950) 0%, var(--ocean-800) 60%, var(--ocean-600) 100%);
+      color: #FFF;
+      padding: 40px 36px;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '🏄‍♂️';
+      position: absolute;
+      right: 24px;
+      bottom: -15px;
+      font-size: 110px;
+      opacity: 0.18;
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      font-size: 15px;
+      color: var(--ocean-100);
+      max-width: 780px;
+      line-height: 1.6;
+    }
+
+    /* Index Nav */
+    .toc-card {
+      background: #FFF;
+      border: 1px solid var(--sand-200);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    .toc-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ocean-900);
+      margin-bottom: 16px;
+      border-bottom: 2px solid var(--ocean-50);
+      padding-bottom: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--sand-700);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 14px;
+      background: var(--sand-50);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--sand-200);
+      transition: all 0.2s ease;
+    }
+    .toc-item:hover {
+      background: var(--ocean-50);
+      color: var(--ocean-700);
+      border-color: var(--ocean-100);
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: #FFF;
+      border: 1px solid var(--sand-200);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--sand-100);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .section-icon.blue { background: var(--ocean-50); color: var(--ocean-600); }
+    .section-icon.orange { background: #FFF7ED; color: var(--sunset-600); }
+    .section-icon.green { background: #ECFDF5; color: var(--success); }
+    .section-icon.purple { background: #F5F3FF; color: #7C3AED; }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ocean-900);
+    }
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--sand-500);
+      font-weight: 500;
+    }
+
+    .pill-badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pill-blue { background: var(--ocean-50); color: var(--ocean-700); border: 1px solid var(--ocean-100); }
+    .pill-orange { background: #FFF7ED; color: var(--sunset-600); border: 1px solid #FFEDD5; }
+    .pill-green { background: #ECFDF5; color: var(--success); border: 1px solid #A7F3D0; }
+    .pill-red { background: #FEF2F2; color: var(--danger); border: 1px solid #FECACA; }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ocean-900);
+      margin: 20px 0 10px 0;
+    }
+    p {
+      font-size: 14px;
+      color: var(--sand-700);
+      margin-bottom: 12px;
+    }
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--sand-700);
+    }
+    li { margin-bottom: 6px; }
+
+    /* Rules & Notice Callouts */
+    .callout {
+      border-left: 4px solid var(--ocean-500);
+      background: var(--ocean-50);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 16px 0;
+    }
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: #FEF2F2;
+    }
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: #FFFBEB;
+    }
+    .callout.success {
+      border-left-color: var(--success);
+      background: #ECFDF5;
+    }
+    .callout-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .callout.danger .callout-title { color: var(--danger); }
+    .callout.warning .callout-title { color: var(--warning); }
+    .callout.success .callout-title { color: var(--success); }
+    .callout.info .callout-title { color: var(--ocean-700); }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 16px 0;
+      border: 1px solid var(--sand-200);
+      border-radius: var(--radius-md);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    th {
+      background: var(--sand-100);
+      color: var(--ocean-900);
+      padding: 12px 14px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--sand-200);
+    }
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--sand-200);
+      color: var(--sand-700);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--sand-50); }
+
+    /* Code blocks */
+    pre {
+      background: #0F172A;
+      color: #F8FAFC;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      font-size: 12.5px;
+      line-height: 1.5;
+      margin: 12px 0 16px 0;
+    }
+    code {
+      background: var(--sand-100);
+      color: var(--ocean-700);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* Print Styles for Perfect PDF Generation */
+    @media print {
+      body { background: #FFF; color: #000; padding: 0; }
+      .top-bar, .action-buttons, .btn { display: none !important; }
+      .container { max-width: 100%; margin: 0; padding: 0; }
+      .hero {
+        background: #052A57 !important;
+        color: #FFF !important;
+        box-shadow: none;
+        border-radius: 8px;
+        page-break-after: avoid;
+      }
+      .section-card {
+        border: 1px solid #CCC;
+        box-shadow: none;
+        border-radius: 8px;
+        page-break-inside: avoid;
+        margin-bottom: 24px;
+      }
+      a { text-decoration: none; color: inherit; }
+      pre { background: #1E293B !important; color: #FFF !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Bar -->
+  <header class="top-bar">
+    <div class="brand-title">
+      🏄‍♂️ <span>Surf Rental MDP</span>
+      <span class="pill-badge pill-blue">Manual Operativo v2.0</span>
+    </div>
+    <div class="action-buttons">
+      <a href="http://localhost:8081" target="_blank" class="btn btn-secondary">🌐 Abrir App Web</a>
+      <a href="/api-docs" target="_blank" class="btn btn-secondary">⚡ Swagger API</a>
+      <a href="/manual/manual-operativo-surf-rental-mdp.pdf" download class="btn btn-primary">📥 Descargar PDF Oficial (A4)</a>
+      <button onclick="window.print()" class="btn btn-accent">🖨️ Imprimir / Guardar PDF</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Hero Header -->
+    <section class="hero">
+      <span class="hero-badge">Documento Oficial de Operaciones & Distribución</span>
+      <h1>Manual Operativo & Arquitectura de Distribución</h1>
+      <p>
+        Guía integral con protocolos obligatorios, reglas de negocio, flujos entre perfiles (Agencia, Dueño de Tabla, Surfista) y manual de despliegue en producción para <strong>Surf Rental MDP</strong> (Sede Central Playa Grande, Mar del Plata).
+      </p>
+    </section>
+
+    <!-- Table of Contents -->
+    <nav class="toc-card">
+      <h2 class="toc-title">Índice General de Contenidos</h2>
+      <div class="toc-grid">
+        <a href="#agencia" class="toc-item">🏢 1. Mostrador Sede (Agencia)</a>
+        <a href="#owner" class="toc-item">💰 2. Propietarios (Owner)</a>
+        <a href="#consumer" class="toc-item">🏄 3. Surfistas (Consumer)</a>
+        <a href="#devops" class="toc-item">⚙️ 4. Infraestructura & DevOps</a>
+        <a href="#politicas" class="toc-item">⚖️ 5. Políticas & Sanciones</a>
+      </div>
+    </nav>
+
+    <!-- Variable 1: Sede Central / Mostrador Físico (Agencia) -->
+    <section id="agencia" class="section-card">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon blue">🏢</div>
+          <div>
+            <h2 class="section-title">Variable 1: Sede Central / Mostrador Físico (Rol Agencia)</h2>
+            <span class="section-subtitle">Gestión de mostrador, entrega física, firma digital y devoluciones</span>
+          </div>
+        </div>
+        <span class="pill-badge pill-blue">OPERACIONES DE MOSTRADOR</span>
+      </div>
+
+      <p>
+        El rol <strong>AGENCIA</strong> opera el mostrador central en Playa Grande. Es responsable de la custodia del equipamiento, la validación de identidad física de los surfistas y el control de calidad en la entrega y devolución.
+      </p>
+
+      <h3>1.1 Protocolo de Check-In (Entrega de Tabla)</h3>
+      <ol>
+        <li><strong>Identificación Física Obligatoria (+18):</strong> El operador solicita el DNI/Pasaporte en mano y valida que la foto y datos coincidan con la cuenta del usuario. La app bloquea la entrega si no se marca la casilla de verificación.</li>
+        <li><strong>Inspección Fotográfica Inicial:</strong> Se registran 3 ángulos fotográficos (Deck/Proa, Bottom/Fondo, Quillas/Tail) antes de que la tabla salga al agua.</li>
+        <li><strong>Firma Digital en Pantalla con Token SHA-256:</strong> El surfista firma en el pad táctil del mostrador. Se genera un hash criptográfico inmutable vinculado a los Términos y Condiciones v1.0.</li>
+        <li><strong>Entrega Física:</strong> La tabla pasa a estado <code>ALQUILADA</code> y el alquiler a <code>EN_CURSO</code>. Se disparan notificaciones automáticas tanto al surfista como al propietario.</li>
+      </ol>
+
+      <h3>1.2 Protocolo de Check-Out (Devolución)</h3>
+      <ol>
+        <li><strong>Búsqueda Rápida:</strong> El operador escanea el código QR de la tabla o busca el número de pase (ej: <code>#srmdp-a1b2c3d4</code>).</li>
+        <li><strong>Control Antisalitre (Regla Obligatoria):</strong> Se inspecciona que la tabla haya sido lavada con agua dulce en las duchas de la sede.</li>
+      </ol>
+
+      <div class="callout danger">
+        <div class="callout-title">⚠️ Regla Antisalitre — Multa Automática de $10.000 ARS</div>
+        Si la tabla es devuelta con salitre o sin enjuague de agua dulce, el operador desmarca la opción "Enjuagada con agua dulce". El sistema debita automáticamente una multa de <strong>$10.000 ARS</strong> de la pre-autorización de garantía y emite la notificación sancionatoria.
+      </div>
+
+      <h3>1.3 Detección y Reporte Obligatorio de Daños</h3>
+      <p>
+        Si la tabla presenta fisuras, abolladuras, golpes en canto o rotura de quillas:
+      </p>
+      <ul>
+        <li><strong>Descripción Técnica Alfanumérica Obligatoria:</strong> El sistema rechaza descripciones vacías o compuestas únicamente por números. Es obligatorio redactar una explicación detallada con letras y números (ejemplo: <em>"Golpe de 4cm en canto derecho con fisura en fibra y quilla central suelta"</em>).</li>
+        <li><strong>Fotografía Obligatoria del Daño:</strong> Es requisito indispensable adjuntar o capturar la fotografía del daño. Esta foto se almacena en el registro de devolución y se sitúa en primer lugar para la revisión técnica del propietario.</li>
+        <li><strong>Transición de Estados:</strong> El alquiler pasa inmediatamente a <code>PENDIENTE_REVISION</code> y la tabla a <code>MANTENIMIENTO</code>, impidiendo nuevas reservas hasta su peritaje.</li>
+      </ul>
+    </section>
+
+    <!-- Variable 2: Propietarios de Tablas (Owner) -->
+    <section id="owner" class="section-card">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon orange">💰</div>
+          <div>
+            <h2 class="section-title">Variable 2: Propietarios de Tablas (Rol Owner)</h2>
+            <span class="section-subtitle">Custodia física, liquidación financiera 95/5, retiros y peritaje 24h</span>
+          </div>
+        </div>
+        <span class="pill-badge pill-orange">GESTIÓN DE ACTIVOS & INGRESOS</span>
+      </div>
+
+      <p>
+        Los <strong>OWNERS</strong> monetizan sus tablas de surf depositándolas en custodia en la Sede Central. La plataforma se encarga de la exhibición, seguro de daños, cobro y entrega.
+      </p>
+
+      <h3>2.1 Modelo Financiero: Desglose 95% / 5%</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Concepto</th>
+              <th>Porcentaje</th>
+              <th>Destino</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Ganancia Propietario</strong></td>
+              <td><strong>95%</strong></td>
+              <td>Saldo Disponible Owner</td>
+              <td>Acreditación instantánea tras cada alquiler conforme.</td>
+            </tr>
+            <tr>
+              <td><strong>Comisión de Sede</strong></td>
+              <td><strong>5%</strong></td>
+              <td>Surf Rental MDP</td>
+              <td>Cubre mostrador físico, limpieza de sede y soporte técnico.</td>
+            </tr>
+            <tr>
+              <td><strong>Garantía Bloqueada</strong></td>
+              <td>$30.000 ARS</td>
+              <td>Pre-autorización MP</td>
+              <td>Garantía retenida al surfista para multas o reparaciones.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2.2 Membresía y Custodia en Sede</h3>
+      <p>
+        El servicio de custodia y seguro tiene un costo mensual de <strong>$1.000 ARS/mes</strong> por tabla, con los <strong>primeros 3 meses 100% bonificados</strong> de bienvenida.
+      </p>
+
+      <h3>2.3 Retiro de Fondos (Extracción a CBU/Alias)</h3>
+      <p>
+        El Owner puede solicitar la extracción de su saldo disponible en cualquier momento:
+      </p>
+      <ul>
+        <li><strong>Monto Mínimo de Extracción:</strong> $1.000 ARS.</li>
+        <li><strong>Débito Inmediato del Saldo Disponible:</strong> Al confirmar la transferencia, el importe se deduce automáticamente del <code>saldoDisponible</code> para evitar retiros duplicados.</li>
+        <li><strong>Historial de Transferencias:</strong> Cada operación genera un identificador único (ej: <code>TRF-MDP-7492</code>) con comprobante auditable y estado <code>EN_PROCESO</code> / <code>APROBADO</code>.</li>
+      </ul>
+
+      <h3>2.4 Comparador de Fotos & Regla de las 24 Horas ("Silencio = Aceptación")</h3>
+      <div class="callout warning">
+        <div class="callout-title">⏳ Plazo Perentorio de Peritaje de 24 Horas</div>
+        Cuando la agencia recibe una tabla con daño, el propietario dispone de un visor comparativo de fotos (Entrega vs Devolución).
+        Tiene <strong>24 horas exactas</strong> para ratificar el daño e iniciar el reclamo de seguro.
+        Pasadas las 24 horas sin respuesta, la plataforma aplica la regla de <strong>silencio como aceptación tácita</strong> del estado final.
+      </div>
+
+      <h3>2.5 Ciclo de Mantenimiento Preventivo (45 Días)</h3>
+      <p>
+        Para garantizar la seguridad de los surfistas en Mar del Plata, cada tabla debe registrar un mantenimiento preventivo cada 45 días (revisión de parafina, tapones de quilla, leash string y laminado). Si transcurren los 45 días sin inspección registrada, la tabla pasa automáticamente a <code>MANTENIMIENTO</code> y queda oculta del catálogo.
+      </p>
+    </section>
+
+    <!-- Variable 3: Surfistas / Clientes Finales (Consumer) -->
+    <section id="consumer" class="section-card">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon green">🏄</div>
+          <div>
+            <h2 class="section-title">Variable 3: Surfistas / Clientes Finales (Rol Consumer)</h2>
+            <span class="section-subtitle">Catálogo en tiempo real, reserva horaria sin solapamiento y puntos</span>
+          </div>
+        </div>
+        <span class="pill-badge pill-green">EXPERIENCIA DE USUARIO</span>
+      </div>
+
+      <h3>3.1 Catálogo y Disponibilidad en Tiempo Real</h3>
+      <p>
+        El catálogo cuenta con 18 tablas activas clasificadas en 4 categorías:
+      </p>
+      <ul>
+        <li><strong>Shortboards (Rendimiento):</strong> Al Merrick Flyer 6'0, DHD Sweet Spot 6'2, Channel Islands Rocket 5'10, Lost Driver 2.0 5'11, Pyzel Ghost 6'1.</li>
+        <li><strong>Fish & Funboards (Olas suaves):</strong> Firewire Seaside 5'6, Torq Mod Fish 6'3, HaydenShapes Hypto Krypto 5'8, Lost RNF 96 5'7.</li>
+        <li><strong>Longboards (Clásico):</strong> Stewart Ripster 9'0, Walden Mega Magic 9'2, Torq Longboard 9'0, NSP Elements 9'0, Takayama In The Pink 9'3.</li>
+        <li><strong>Stand Up Paddle / SUP:</strong> Fanatic Fly Air 10'4, Starboard GO 10'8, Naish Mana 10'0, Red Paddle Ride 10'6.</li>
+      </ul>
+
+      <div class="callout info">
+        <div class="callout-title">🔒 Algoritmo de Disponibilidad Estricta (No Solapamiento)</div>
+        El backend valida con precisión de minutos cualquier reserva previa en estado <code>ACTIVA</code>, <code>PENDIENTE</code> o <code>EN_CURSO</code>. Si un surfista reserva una tabla de 14:00 a 16:00 hs, ningún otro usuario podrá reservarla en ese rango ni en horarios que se superpongan.
+      </div>
+
+      <h3>3.2 Programa de Fidelización & Puntos Wave</h3>
+      <p>
+        Los surfistas acumulan <strong>50 puntos por cada hora de alquiler completada</strong>. Los puntos pueden canjearse por descuentos directos en futuros alquileres o cera/parafina oficial en mostrador.
+      </p>
+    </section>
+
+    <!-- Variable 4: Despliegue Técnico, Infraestructura & DevOps -->
+    <section id="devops" class="section-card">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon purple">⚙️</div>
+          <div>
+            <h2 class="section-title">Variable 4: Infraestructura, Despliegue & DevOps</h2>
+            <span class="section-subtitle">Docker Compose, MySQL 8, Prisma ORM y Variables de Entorno</span>
+          </div>
+        </div>
+        <span class="pill-badge pill-blue">GUÍA TÉCNICA DE PRODUCCIÓN</span>
+      </div>
+
+      <h3>4.1 Arquitectura del Sistema</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Componente</th>
+              <th>Tecnología</th>
+              <th>Puerto Local</th>
+              <th>Función</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Base de Datos</strong></td>
+              <td>MySQL 8.0 (InnoDB, utf8mb4)</td>
+              <td><code>3306</code></td>
+              <td>Almacenamiento relacional, índices de disponibilidad y auditoría.</td>
+            </tr>
+            <tr>
+              <td><strong>Backend API</strong></td>
+              <td>Node.js 20, TypeScript, Express, Prisma</td>
+              <td><code>3000</code></td>
+              <td>Lógica de negocio, autenticación JWT, Swagger, endpoints REST.</td>
+            </tr>
+            <tr>
+              <td><strong>Frontend App</strong></td>
+              <td>React Native 0.76, Expo 52, Redux Toolkit</td>
+              <td><code>8081</code></td>
+              <td>Aplicación Web responsiva e instalable en iOS y Android.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>4.2 Matriz de Variables de Entorno (.env)</h3>
+      <p>Para desplegar en cualquier servidor o contenedor, configurar las siguientes variables en <code>backend/.env</code>:</p>
+      <pre><code># Base de Datos MySQL
+DATABASE_URL="mysql://root:password@localhost:3306/surf_rental"
+
+# Servidor Backend
+PORT=3000
+NODE_ENV=production
+
+# Seguridad & Autenticación
+JWT_SECRET="mdp_surf_rental_jwt_super_secret_key_2026_xyz"
+JWT_EXPIRES_IN="7d"
+REFRESH_TOKEN_EXPIRES_IN="30d"
+
+# Pasarela de Pagos (MercadoPago)
+MP_ACCESS_TOKEN="TEST-1234567890-PROD-MERCADOPAGO-KEY"
+MP_PUBLIC_KEY="TEST-PUBLIC-KEY-MDP"
+
+# Reglas de Negocio
+GARANTIA_MONTO=30000
+MULTA_NO_LAVAR=10000
+COMISION_AGENCIA_PCT=5
+MANTENIMIENTO_DIAS=45
+PLAZO_DISPUTA_HORAS=24
+SUSCRIPCION_OWNER=1000
+MESES_GRATIS_OWNER=3</code></pre>
+
+      <h3>4.3 Pasos de Puesta en Marcha / Arranque</h3>
+      <pre><code># 1. Clonar repositorio y entrar a backend
+cd backend
+npm install
+
+# 2. Sincronizar base de datos y generar cliente Prisma
+npx prisma db push
+npx prisma generate
+
+# 3. Cargar datos semilla de tablas y usuarios iniciales
+npm run seed
+
+# 4. Iniciar backend en modo producción
+npm run build && npm start
+
+# 5. Iniciar frontend Expo
+cd ../mobile
+npm install
+npx expo start --web</code></pre>
+    </section>
+
+    <!-- Variable 5: Políticas Legales & Sanciones -->
+    <section id="politicas" class="section-card">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon blue">⚖️</div>
+          <div>
+            <h2 class="section-title">Variable 5: Políticas Legales & Marco de Seguridad</h2>
+            <span class="section-subtitle">Contrato de comodato, firma electrónica y jurisprudencia marítima</span>
+          </div>
+        </div>
+        <span class="pill-badge pill-blue">MARCO JURÍDICO</span>
+      </div>
+
+      <p>
+        Todo alquiler formalizado a través de Surf Rental MDP se encuadra en el contrato de comodato comercial regido por el Código Civil y Comercial de la Nación Argentina (Arts. 1533 a 1541):
+      </p>
+      <ul>
+        <li><strong>Firma Digital Vinculante:</strong> La rúbrica digital capturada en el mostrador genera un token criptográfico intransferible de auditoría que certifica la conformidad del estado inicial de la tabla.</li>
+        <li><strong>Responsabilidad por Custodia:</strong> El surfista es custodio civil del activo durante las horas de uso y asume el deber de restitución en idénticas condiciones.</li>
+        <li><strong>Pre-autorización de Daños:</strong> La retención preventiva de $30.000 ARS no constituye pago anticipado sino fianza líquida para reparaciones express o multas de antisalitre.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer style="text-align: center; color: var(--sand-500); font-size: 13px; padding: 20px;">
+    Surf Rental MDP © 2026 — Sede Central Playa Grande, Paseo Victoria Ocampo, Mar del Plata, Argentina.
+  </footer>
+
+</body>
+</html>

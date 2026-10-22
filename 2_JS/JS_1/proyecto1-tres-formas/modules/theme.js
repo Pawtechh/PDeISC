@@ -56,6 +56,8 @@ export function initTheme() {
         });
     }
 }
+<<<<<<< HEAD
+=======
 
 // Auto-ejecutar cuando se importa en página con DOM listo
 if (typeof document !== 'undefined') {
@@ -63,3 +65,4 @@ if (typeof document !== 'undefined') {
         initTheme();
     });
 }
+>>>>>>> 4134120d2bb620760a2c98915ecb3f9fb0752bff

@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  # ========================================================
+  # MySQL Database Service
+  # ========================================================
+  mysql:
+    image: mysql:8.0
+    container_name: surf_rental_mysql
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_dev_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-surf_rental_db}
+      MYSQL_USER: ${MYSQL_USER:-surf_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-surf_dev_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - surf_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root_dev_password}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ========================================================
+  # Backend Node.js API Service
+  # ========================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: surf_rental_backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: mysql://${MYSQL_USER:-surf_user}:${MYSQL_PASSWORD:-surf_dev_password}@mysql:3306/${MYSQL_DATABASE:-surf_rental_db}?connection_limit=20&pool_timeout=20
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-dev_access_secret_change_in_production}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-dev_refresh_secret_change_in_production}
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 7d
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://app.surfrentalmdp.com.ar,https://api.surfrentalmdp.com.ar}
+    ports:
+      - "3000:3000"
+    networks:
+      - surf_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  # ========================================================
+  # Nginx Reverse Proxy & Static Web Host
+  # ========================================================
+  nginx:
+    image: nginx:alpine
+    container_name: surf_rental_nginx
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./mobile/dist:/var/www/mobile-web:ro
+      - certbot_conf:/etc/letsencrypt:ro
+      - certbot_www:/var/www/certbot:ro
+    networks:
+      - surf_network
+
+  # ========================================================
+  # Certbot SSL Renewal Service
+  # ========================================================
+  certbot:
+    image: certbot/certbot
+    container_name: surf_rental_certbot
+    volumes:
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - surf_network
+
+networks:
+  surf_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  certbot_conf:
+    driver: local
+  certbot_www:
+    driver: local

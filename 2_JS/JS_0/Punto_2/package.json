@@ -1,0 +1,12 @@
+{
+  "name": "punto2-pop",
+  "version": "1.0.0",
+  "description": "pop() - eliminar ultimo elemento de un array",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Surf Rental MDP",
+    "slug": "surf-rental-mdp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FAFAF7"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.surfrental.mdp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FAFAF7"
+      },
+      "package": "com.surfrental.mdp",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "INTERNET"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "scheme": "surfrental",
+    "extra": {
+      "googleClientId": "mock-google-client-id.apps.googleusercontent.com",
+      "facebookAppId": "mock-facebook-app-id",
+      "appleClientId": "com.surfrental.mdp.web"
+    }
+  }
+}

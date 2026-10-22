@@ -1,0 +1,282 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CONSUMER
+  OWNER
+  AGENCIA
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+  FACEBOOK
+  APPLE
+  GITHUB
+}
+
+enum BoardStatus {
+  DISPONIBLE
+  ALQUILADA
+  MANTENIMIENTO
+  PRIVADA
+}
+
+enum RentalStatus {
+  PENDIENTE
+  ACTIVA
+  EN_CURSO
+  PENDIENTE_REVISION
+  DEVUELTA
+  RECLAMO
+  CANCELADA
+}
+
+enum ClaimStatus {
+  ABIERTO
+  NOTIFICADO
+  ACEPTADO
+  DISPUTADO
+  EN_MEDIACION
+  SIN_RESPUESTA
+  RESUELTO_OWNER
+  RESUELTO_CONSUMER
+  COBRADO
+  DERIVADO_LEGAL
+  CERRADO
+}
+
+enum PaymentStatus {
+  PENDIENTE
+  APROBADO
+  RECHAZADO
+  REEMBOLSADO
+  PRE_AUTORIZADO
+  DEBITADO
+}
+
+model User {
+  id              String         @id @default(uuid())
+  email           String         @unique
+  passwordHash    String?        // Nullable para logins 100% OAuth
+  role            Role           @default(CONSUMER)
+  nombre          String
+  telefono        String?
+  dni             String?        @unique
+  dniFotoUrl      String?
+  authProvider    AuthProvider   @default(LOCAL)
+  oauthId         String?
+  puntos          Int            @default(0)
+  puntosSancion   Int            @default(0)
+  activo          Boolean        @default(true)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relaciones
+  boards          Board[]        @relation("OwnerBoards")
+  rentalsConsumer Rental[]       @relation("ConsumerRentals")
+  reviews         Review[]
+  claimsReported  InsuranceClaim[] @relation("ClaimsReportedBy")
+  refreshTokens   RefreshToken[]
+  notifications   Notification[]
+  payouts         Payout[]       @relation("OwnerPayouts")
+
+  @@index([email])
+  @@index([dni])
+  @@index([role])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique @db.VarChar(512)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Board {
+  id                    String      @id @default(uuid())
+  ownerId               String
+  owner                 User        @relation("OwnerBoards", fields: [ownerId], references: [id], onDelete: Cascade)
+  titulo                String
+  marca                 String
+  modelo                String
+  medidas               String      // ej: "6'1 x 19 1/2 x 2 1/2"
+  volumenLitros         Decimal?    @db.Decimal(5, 2)
+  tipoTabla             String      // Shortboard, Longboard, Funboard, Fish
+  precioHora            Decimal     @db.Decimal(10, 2)
+  valorTasadoUsd        Decimal     @db.Decimal(10, 2)
+  estado                BoardStatus @default(DISPONIBLE)
+  fotos                 Json        // array de URLs con blurhash
+  polizaSeguroNumero    String?
+  polizaAseguradora     String?
+  ultimoMantenimiento   DateTime?   @default(now())
+  proximoMantenimiento  DateTime?
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  rentals               Rental[]
+  reviews               Review[]
+
+  @@index([ownerId])
+  @@index([estado])
+  @@index([marca, modelo])
+}
+
+model Rental {
+  id                  String        @id @default(uuid())
+  consumerId          String
+  consumer            User          @relation("ConsumerRentals", fields: [consumerId], references: [id], onDelete: Restrict)
+  boardId             String
+  board               Board         @relation(fields: [boardId], references: [id], onDelete: Restrict)
+  fechaInicio         DateTime
+  fechaFinEstimada    DateTime
+  fechaDevolucionReal DateTime?
+  horas               Int
+  precioBase          Decimal       @db.Decimal(10, 2)
+  descuento           Decimal       @default(0.00) @db.Decimal(10, 2)
+  precioSeguro        Decimal       @default(0.00) @db.Decimal(10, 2)
+  precioTotal         Decimal       @db.Decimal(10, 2)
+  gananciaOwner       Decimal       @db.Decimal(10, 2)
+  gananciaAgencia     Decimal       @db.Decimal(10, 2)
+  puntosGanados       Int           @default(0)
+  puntosUsados        Int           @default(0)
+  estado              RentalStatus  @default(PENDIENTE)
+  
+  // Entrega y devolución
+  fotosRetiro         Json?
+  firmaRetiroUrl      String?
+  fotosDevolucion     Json?
+  descripcionDanio    String?       @db.Text
+  lavada              Boolean?      @default(true)
+  multaLavado         Decimal?      @default(0.00) @db.Decimal(10, 2)
+  
+  // Legal
+  contratoHash        String?
+  versionTerminos     String?       @default("1.0")
+  ipAceptacion        String?
+  
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  payments            Payment[]
+  claims              InsuranceClaim[]
+  review              Review?
+
+  @@index([consumerId])
+  @@index([boardId])
+  @@index([estado])
+  @@index([fechaInicio])
+}
+
+model InsuranceClaim {
+  id                  String      @id @default(uuid())
+  rentalId            String
+  rental              Rental      @relation(fields: [rentalId], references: [id], onDelete: Restrict)
+  reportadoPorId      String
+  reportadoPor        User        @relation("ClaimsReportedBy", fields: [reportadoPorId], references: [id], onDelete: Restrict)
+  montoReclamado      Decimal     @db.Decimal(10, 2)
+  descripcion         String      @db.Text
+  fotosDano           Json
+  presupuestoReparacionUrl String?
+  estado              ClaimStatus @default(ABIERTO)
+  notificadoAt        DateTime?
+  plazoDisputaVence   DateTime?
+  resolucionAgencia   String?     @db.Text
+  cobradoAt           DateTime?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  @@index([rentalId])
+  @@index([estado])
+}
+
+model Payment {
+  id                  String        @id @default(uuid())
+  rentalId            String
+  rental              Rental        @relation(fields: [rentalId], references: [id], onDelete: Restrict)
+  mpPreferenceId      String?
+  mpPaymentId         String?       @unique
+  monto               Decimal       @db.Decimal(10, 2)
+  estado              PaymentStatus @default(PENDIENTE)
+  tipo                String        // ALQUILER, PRE_AUTH_DANO, MULTA
+  metadataJson        Json?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@index([rentalId])
+  @@index([estado])
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  rentalId    String   @unique
+  rental      Rental   @relation(fields: [rentalId], references: [id], onDelete: Restrict)
+  boardId     String
+  board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  calificacion Int     // 1 a 5
+  comentario  String   @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([boardId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  titulo    String
+  mensaje   String
+  tipo      String   // ALQUILER, RECLAMO, MANTENIMIENTO, MULTA, SISTEMA
+  leido     Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model DigitalSignature {
+  id              String   @id @default(uuid())
+  userId          String
+  documentSlug    String
+  documentHash    String   // SHA-256
+  version         String   @default("1.0")
+  rentalId        String?
+  ipAddress       String
+  userAgent       String?
+  signatureData   String?  @db.Text
+  auditToken      String   @unique
+  verified        Boolean  @default(true)
+  timestamp       DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([documentSlug])
+  @@index([rentalId])
+  @@index([auditToken])
+}
+
+model Payout {
+  id         String   @id @default(uuid())
+  ownerId    String
+  owner      User     @relation("OwnerPayouts", fields: [ownerId], references: [id], onDelete: Cascade)
+  monto      Decimal  @db.Decimal(10, 2)
+  cbuAlias   String
+  transferId String   @unique
+  estado     String   @default("EN_PROCESO")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([ownerId])
+}
