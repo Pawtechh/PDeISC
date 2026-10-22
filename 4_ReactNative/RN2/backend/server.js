@@ -4,7 +4,7 @@ const cors = require('cors');
 const mysql = require('mysql2/promise');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -141,6 +141,115 @@ app.post('/api/login', async (req, res) => {
   return res.status(401).json({
     success: false,
     message: 'Usuario o contraseña incorrectos.',
+  });
+});
+
+// Ruta para registrar un nuevo usuario: POST /api/register
+app.post('/api/register', async (req, res) => {
+  const { nombre, email, password, rol } = req.body || {};
+
+  const cleanNombre = typeof nombre === 'string' ? nombre.trim() : '';
+  const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+  const cleanPassword = typeof password === 'string' ? password.trim() : '';
+  const cleanRol = typeof rol === 'string' && rol.trim() ? rol.trim() : 'Estudiante';
+
+  // Validaciones del servidor
+  if (!cleanNombre || cleanNombre.length < 3) {
+    return res.status(400).json({
+      success: false,
+      message: 'El nombre es obligatorio y debe tener al menos 3 caracteres.',
+    });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!cleanEmail || !emailRegex.test(cleanEmail)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Ingresá un correo electrónico válido.',
+    });
+  }
+
+  if (!cleanPassword || cleanPassword.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message: 'La contraseña debe tener al menos 6 caracteres.',
+    });
+  }
+
+  try {
+    // 1. Intentar registrar en MySQL si está conectado
+    if (dbPool) {
+      const [existing] = await dbPool.query(
+        'SELECT id FROM usuarios WHERE LOWER(email) = ? LIMIT 1',
+        [cleanEmail]
+      );
+
+      if (existing && existing.length > 0) {
+        return res.status(409).json({
+          success: false,
+          message: 'El correo electrónico ya está registrado en el sistema.',
+        });
+      }
+
+      const [insertResult] = await dbPool.query(
+        'INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)',
+        [cleanNombre, cleanEmail, cleanPassword, cleanRol]
+      );
+
+      const newUser = {
+        id: insertResult.insertId,
+        nombre: cleanNombre,
+        email: cleanEmail,
+        rol: cleanRol,
+        horaIngreso: new Date().toLocaleTimeString('es-AR'),
+      };
+
+      console.log(`[REGISTRO MYSQL] Usuario creado: ${cleanNombre} (${cleanEmail})`);
+      return res.status(201).json({
+        success: true,
+        message: '¡Usuario registrado exitosamente!',
+        source: 'mysql',
+        user: newUser,
+      });
+    }
+  } catch (error) {
+    console.error('Error al insertar en MySQL:', error.message);
+  }
+
+  // 2. Registrar en memoria (FALLBACK_USERS)
+  const existingFallback = FALLBACK_USERS.find(
+    (u) => u.email.toLowerCase() === cleanEmail
+  );
+
+  if (existingFallback) {
+    return res.status(409).json({
+      success: false,
+      message: 'El correo electrónico ya está registrado en el sistema.',
+    });
+  }
+
+  const newId = FALLBACK_USERS.length > 0 ? Math.max(...FALLBACK_USERS.map((u) => u.id)) + 1 : 1;
+  const newFallbackUser = {
+    id: newId,
+    nombre: cleanNombre,
+    email: cleanEmail,
+    password: cleanPassword,
+    rol: cleanRol,
+  };
+  FALLBACK_USERS.push(newFallbackUser);
+
+  console.log(`[REGISTRO MEMORIA] Usuario creado: ${cleanNombre} (${cleanEmail})`);
+  return res.status(201).json({
+    success: true,
+    message: '¡Usuario registrado exitosamente!',
+    source: 'memory_fallback',
+    user: {
+      id: newId,
+      nombre: cleanNombre,
+      email: cleanEmail,
+      rol: cleanRol,
+      horaIngreso: new Date().toLocaleTimeString('es-AR'),
+    },
   });
 });
 

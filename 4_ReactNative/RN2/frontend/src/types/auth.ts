@@ -13,6 +13,13 @@ export interface LoginResponse {
   user?: User;
 }
 
+export interface RegisterResponse {
+  success: boolean;
+  message: string;
+  source?: string;
+  user?: User;
+}
+
 export interface BienvenidaCardProps {
   id: number;
   nombre: string;
