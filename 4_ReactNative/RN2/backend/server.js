@@ -257,6 +257,6 @@ app.post('/api/register', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log('========================================================');
   console.log(`🚀 API Backend escuchando en http://0.0.0.0:${PORT}`);
-  console.log(`📱 En Expo Go celular conectar a: http://192.168.100.63:${PORT}/api/login`);
+  console.log(`📱 En Expo Go celular conectar a: http://10.0.5.80:${PORT}/api/login`);
   console.log('========================================================');
 });
