@@ -35,9 +35,11 @@ Sistema integral full-stack para alquiler de tablas de surf en la costa atlánti
 ### Aspectos Destacados
 * **Arquitectura Monorepo**: Backend en Node.js / Express con arquitectura modular por capas, tipado estricto con Zod y base de datos relacional MySQL gestionada con Prisma ORM.
 * **Aplicación Mobile Multiplataforma**: Desarrollada en React Native con Expo SDK, adaptada responsive para Mobile, Tablet y Escritorio (PC).
+* **Gestión Dinámica de Comisión de Sede**: Panel web para configurar en tiempo real el porcentaje que cobra la agencia (requiere confirmación por contraseña especial de seguridad), recalculando al instante todos los splits, cotizaciones y registros contables de la plataforma.
 * **Firma Biométrica Digital (Ley 25.506 / 25.326)**: Sustitución de firma manuscrita por autenticación biométrica (Huella Digital / FaceID) en contratos de alquiler y recepción en mostrador, generando certificados criptográficos SHA-256 inmutables.
 * **Escáner e Inspección QR en Vivo**: Generación de matrices QR ISO estándar para cada tabla y pase de retiro, decodificación por cámara en tiempo real mediante `jsQR` en mostrador de agencia.
 * **Seguridad de Producción**: 20 directivas de endurecimiento aplicadas (Rate limiting, Helmet, validación Zod anti-mass assignment, JWT con rotación de refresh tokens, cookies seguras y sanitización).
+* **Despliegue y Hosting en Vivo**: Servidor activo expuesto mediante túnel seguro HTTPS con base de datos en segundo plano y documentación Swagger disponible en `/api-docs`.
 
 ---
 
