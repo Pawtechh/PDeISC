@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { StyleSheet, View, TouchableOpacity, Alert, ScrollView, Platform } from 'react-native';
-import { Stack, Row, Text, Card, Badge, Button, Divider } from '../../components/ui';
+import { StyleSheet, View, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import { Stack, Row, Text, Card, Badge, Button, Divider, CopyButtonWithConfetti } from '../../components/ui';
 import { colors, radii, spacing, useTheme } from '../../theme';
 import { Board } from '../../api/boardsApi';
 import { useGetQuoteMutation, useCreateRentalMutation, RentalQuote } from '../../api/rentalsApi';
@@ -174,6 +174,12 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                 </Row>
               </Card>
             )}
+            <CopyButtonWithConfetti
+              textToCopy={biometricSignature?.signature_hash || `SRMDP-RESERVA-${board.id.slice(0, 8).toUpperCase()}`}
+              label="Copiar Hash de Auditoría & Código de Pase"
+              copiedLabel="¡Copiado con Éxito al Portapapeles!"
+              style={{ width: '100%', justifyContent: 'center', marginTop: spacing.xs }}
+            />
             <Button
               title="Entendido / Ir a Mis Alquileres"
               variant="primary"

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
-import { Screen, Stack, Row, Text, Card, Badge, Button, Divider } from '../../components/ui';
+import { Screen, Stack, Row, Text, Card, Badge, Button, Divider, LightboxViewer } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { Board, useGetBoardQuery } from '../../api/boardsApi';
@@ -16,6 +16,7 @@ export interface BoardDetailScreenProps {
 export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, navigation }) => {
   const { theme, isDark } = useTheme();
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [selectedLightboxPhoto, setSelectedLightboxPhoto] = useState<string | null>(null);
 
   const boardParam = route?.params?.board;
   const boardId = boardParam?.id || route?.params?.boardId || '';
@@ -55,12 +56,18 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         <View style={styles.galleryContainer}>
           <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
             {fotos.map((foto, index) => (
-              <Image
+              <TouchableOpacity
                 key={index}
-                source={{ uri: foto }}
-                style={styles.galleryImage}
-                contentFit="cover"
-              />
+                activeOpacity={0.9}
+                onPress={() => setSelectedLightboxPhoto(foto)}
+                accessibilityLabel="Ver foto ampliada"
+              >
+                <Image
+                  source={{ uri: foto }}
+                  style={styles.galleryImage}
+                  contentFit="cover"
+                />
+              </TouchableOpacity>
             ))}
           </ScrollView>
           <View style={styles.badgeOverlay}>
@@ -208,6 +215,13 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
           }}
         />
       </Modal>
+
+      <LightboxViewer
+        visible={Boolean(selectedLightboxPhoto)}
+        imageUrl={selectedLightboxPhoto}
+        title={board.titulo}
+        onClose={() => setSelectedLightboxPhoto(null)}
+      />
     </Screen>
   );
 };
