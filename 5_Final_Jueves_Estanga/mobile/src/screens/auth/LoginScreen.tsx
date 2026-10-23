@@ -192,32 +192,28 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           />
           <View style={styles.heroOverlayContent}>
             <View style={styles.brandPill}>
-              <Text style={styles.brandPillDot}>●</Text>
-              <Text style={styles.brandPillText}>PLAYA GRANDE • SEDE CENTRAL</Text>
+              <Text style={styles.brandPillText}>PLAYA GRANDE • MAR DEL PLATA</Text>
             </View>
 
             <Text variant="display" style={styles.heroBrandTitle}>
-              🌊 SURF RENTAL
+              SURF RENTAL
             </Text>
             <Text style={styles.heroBrandTagline}>
-              Tablas de alta gama. Olas legendarias de Mar del Plata.
+              Tablas de autor y alto rendimiento.
             </Text>
             <Text style={styles.heroBrandDesc}>
-              Flota exclusiva de shapers locales con retiro inmediato en sede Playa Grande mediante código QR.
+              Flota seleccionada de shapers locales con reserva y retiro inmediato en sede Playa Grande.
             </Text>
 
             <View style={styles.telemetryRow}>
               <View style={styles.telemetryBadge}>
-                <Text style={styles.telemetryIcon}>🏄‍♂️</Text>
-                <Text style={styles.telemetryLabel}>+50 Tablas Pro</Text>
+                <Text style={styles.telemetryLabel}>50+ Tablas</Text>
               </View>
               <View style={styles.telemetryBadge}>
-                <Text style={styles.telemetryIcon}>⏱️</Text>
                 <Text style={styles.telemetryLabel}>Retiro en 5 min</Text>
               </View>
               <View style={styles.telemetryBadge}>
-                <Text style={styles.telemetryIcon}>🌊</Text>
-                <Text style={styles.telemetryLabel}>Swell 1.3m Activo</Text>
+                <Text style={styles.telemetryLabel}>Cobertura Total</Text>
               </View>
             </View>
           </View>
@@ -256,7 +252,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               <FormInput
                 control={control}
                 name="email"
-                label="Email del Surfista"
+                label="Email"
                 placeholder="surfista@mdp.com"
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -284,7 +280,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               </Row>
 
               <Button
-                title={isLoading ? 'Ingresando a la Sede...' : 'Ingresar al Mar'}
+                title={isLoading ? 'Ingresando...' : 'Iniciar Sesión'}
                 variant="primary"
                 size="lg"
                 isLoading={isLoading || isSubmitting}
@@ -295,7 +291,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
               {hasBiometrics && (
                 <Button
-                  title={`🔒 Ingresar con ${biometricType}`}
+                  title={`Ingresar con ${biometricType}`}
                   variant="secondary"
                   size="md"
                   onPress={handleBiometricAuth}
@@ -331,8 +327,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             ]}
           >
             <Stack spacing="xs">
-              <Row align="center" justify="center" spacing="xs">
-                <Text style={{ fontSize: 13 }}>⚡</Text>
+              <Row align="center" justify="center">
                 <Text
                   variant="caption"
                   style={[
@@ -340,26 +335,26 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                     { color: isDark ? '#D4AF37' : colors.sunset[600] },
                   ]}
                 >
-                  ACCESO DIRECTO POR ROL • EVALUACIÓN
+                  ACCESO DIRECTO POR ROL
                 </Text>
               </Row>
               <Row spacing="sm" justify="space-between">
                 <Button
-                  title="🏄 Consumer"
+                  title="Consumer"
                   size="sm"
                   variant="secondary"
                   style={styles.roleBtn}
                   onPress={() => handleDevLogin('CONSUMER')}
                 />
                 <Button
-                  title="🛠️ Owner"
+                  title="Owner"
                   size="sm"
                   variant="secondary"
                   style={styles.roleBtn}
                   onPress={() => handleDevLogin('OWNER')}
                 />
                 <Button
-                  title="🏢 Agencia"
+                  title="Agencia"
                   size="sm"
                   variant="secondary"
                   style={styles.roleBtn}

@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Modal, RefreshControl } from 'react
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Star, Search, LayoutGrid, Award, Shield, Clock, Waves } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { Screen, Stack, Row, Text, Input, Badge, Button, EmptyState, GlassCard } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
@@ -110,11 +111,10 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <View style={styles.heroBannerContent}>
             <Row justify="space-between" align="center" style={styles.heroHeaderRow}>
               <View style={styles.brandLocationPill}>
-                <Text style={styles.brandLocationDot}>●</Text>
-                <Text style={styles.brandLocationText}>PLAYA GRANDE • SEDE CENTRAL MDP</Text>
+                <Text style={styles.brandLocationText}>PLAYA GRANDE • MAR DEL PLATA</Text>
               </View>
               <View style={styles.stockBadge}>
-                <Text style={styles.stockBadgeText}>🟢 {data?.data?.length || 0} TABLAS DISPONIBLES</Text>
+                <Text style={styles.stockBadgeText}>{data?.data?.length || 0} TABLAS DISPONIBLES</Text>
               </View>
             </Row>
 
@@ -127,19 +127,19 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
 
             <View style={styles.kpiRow}>
               <View style={styles.kpiChip}>
-                <Text style={styles.kpiChipIcon}>🏄</Text>
+                <Award size={13} color="#D4AF37" />
                 <Text style={styles.kpiChipText}>Shapers Marplatenses</Text>
               </View>
               <View style={styles.kpiChip}>
-                <Text style={styles.kpiChipIcon}>⏱️</Text>
-                <Text style={styles.kpiChipText}>Retiro QR 5 min</Text>
+                <Clock size={13} color="#00E5FF" />
+                <Text style={styles.kpiChipText}>Retiro en 5 min</Text>
               </View>
               <View style={styles.kpiChip}>
-                <Text style={styles.kpiChipIcon}>⭐</Text>
+                <Star size={13} color="#D4AF37" fill="#D4AF37" />
                 <Text style={styles.kpiChipText}>4.9/5 Calificación</Text>
               </View>
               <View style={styles.kpiChip}>
-                <Text style={styles.kpiChipIcon}>🛡️</Text>
+                <Shield size={13} color="#00E5FF" />
                 <Text style={styles.kpiChipText}>Cobertura Total</Text>
               </View>
             </View>
@@ -154,7 +154,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <View style={styles.featuredSection}>
             <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
               <Row align="center" spacing="xs">
-                <Text style={styles.sectionIcon}>⭐</Text>
+                <Star size={14} color="#D4AF37" fill="#D4AF37" />
                 <Text
                   variant="caption"
                   style={[styles.sectionTitle, { color: isDark ? '#D4AF37' : '#0A66D4' }]}
@@ -184,12 +184,12 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         <View style={styles.gridSection}>
           <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
             <Row align="center" spacing="xs">
-              <Text style={styles.sectionIcon}>🏄</Text>
+              <Waves size={14} color={isDark ? '#D4AF37' : '#0A66D4'} />
               <Text
                 variant="caption"
                 style={[styles.sectionTitle, { color: isDark ? '#D4AF37' : '#0A66D4' }]}
               >
-                EXPLORAR TODAS LAS TABLAS {selectedType !== 'Todos' ? `• ${selectedType.toUpperCase()}` : ''} ({boardsList.length})
+                TODAS LAS TABLAS {selectedType !== 'Todos' ? `• ${selectedType.toUpperCase()}` : ''} ({boardsList.length})
               </Text>
             </Row>
             <View
@@ -198,13 +198,17 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                 {
                   backgroundColor: isDark ? 'rgba(0, 229, 255, 0.1)' : '#EFF6FF',
                   borderColor: isDark ? 'rgba(0, 229, 255, 0.3)' : '#BFDBFE',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 4,
                 },
               ]}
             >
+              <LayoutGrid size={11} color={isDark ? '#00E5FF' : '#0A66D4'} />
               <Text
                 style={[styles.gridBadgeText, { color: isDark ? '#00E5FF' : '#0A66D4' }]}
               >
-                ⊞ CUADRÍCULA
+                CUADRÍCULA
               </Text>
             </View>
           </Row>
@@ -225,7 +229,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                   color: isDark ? '#F1F5F9' : '#0F172A',
                 },
               ]}
-              iconLeft={<Text style={styles.searchIcon}>🔍</Text>}
+              iconLeft={<Search size={15} color={isDark ? '#94A3B8' : '#64748B'} />}
             />
           </View>
 

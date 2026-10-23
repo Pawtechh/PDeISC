@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Waves, Timer, Wind, Thermometer } from 'lucide-react-native';
 import { Card, Text, Badge, Row, Stack } from '../ui';
 import { colors } from '../../theme/colors';
 import { spacing } from '../../theme/spacing';
@@ -29,7 +30,7 @@ export const MarineForecastCard: React.FC = () => {
         <Row align="center" justify="center" spacing="sm">
           <ActivityIndicator size="small" color={isDark ? '#00E5FF' : colors.ocean[500]} />
           <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[500]}>
-            Obteniendo reporte marino en vivo de Playa Grande...
+            Obteniendo reporte marino de Playa Grande...
           </Text>
         </Row>
       </Card>
@@ -57,14 +58,13 @@ export const MarineForecastCard: React.FC = () => {
         <Row justify="space-between" align="center">
           <Row align="center" spacing="xs">
             <View style={styles.liveBeacon}>
-              <Text style={styles.liveDot}>●</Text>
-              <Text style={styles.liveText}>TELEMETRÍA EN VIVO</Text>
+              <Text style={styles.liveText}>EN VIVO</Text>
             </View>
             <Text
               variant="body"
               style={[styles.spotTitle, { color: isDark ? '#F1F5F9' : colors.ocean[900] }]}
             >
-              🌊 {forecast.spotName}
+              {forecast.spotName}
             </Text>
           </Row>
           <Badge
@@ -91,9 +91,12 @@ export const MarineForecastCard: React.FC = () => {
           ]}
         >
           <View style={styles.metricItem}>
-            <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
-              🌊 Ola
-            </Text>
+            <Row align="center" spacing="xs">
+              <Waves size={13} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+              <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
+                Ola
+              </Text>
+            </Row>
             <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[700]}>
               {forecast.waveHeightMeters}m
             </Text>
@@ -102,9 +105,12 @@ export const MarineForecastCard: React.FC = () => {
           <View style={[styles.metricDivider, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#E2E8F0' }]} />
 
           <View style={styles.metricItem}>
-            <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
-              ⏱️ Periodo
-            </Text>
+            <Row align="center" spacing="xs">
+              <Timer size={13} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+              <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
+                Periodo
+              </Text>
+            </Row>
             <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[700]}>
               {forecast.wavePeriodSeconds}s
             </Text>
@@ -113,9 +119,12 @@ export const MarineForecastCard: React.FC = () => {
           <View style={[styles.metricDivider, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#E2E8F0' }]} />
 
           <View style={styles.metricItem}>
-            <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
-              💨 Viento
-            </Text>
+            <Row align="center" spacing="xs">
+              <Wind size={13} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+              <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
+                Viento
+              </Text>
+            </Row>
             <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[700]}>
               {forecast.windSpeedKmh}k
             </Text>
@@ -124,9 +133,12 @@ export const MarineForecastCard: React.FC = () => {
           <View style={[styles.metricDivider, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#E2E8F0' }]} />
 
           <View style={styles.metricItem}>
-            <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
-              🌡️ Agua
-            </Text>
+            <Row align="center" spacing="xs">
+              <Thermometer size={13} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+              <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
+                Agua
+              </Text>
+            </Row>
             <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[700]}>
               {forecast.waterTemperatureCelsius}°C
             </Text>

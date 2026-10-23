@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, Platform, useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Layers, ShieldCheck, TrendingUp, User } from 'lucide-react-native';
 import { MyBoardsScreen } from '../screens/owner/MyBoardsScreen';
 import { RevisionsScreen } from '../screens/owner/RevisionsScreen';
 import { EarningsScreen } from '../screens/owner/EarningsScreen';
@@ -75,8 +76,8 @@ export const OwnerTabs: React.FC = () => {
         component={MyBoardsScreen}
         options={{
           tabBarLabel: 'Mis Tablas',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>🏄‍♂️</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <Layers size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -85,8 +86,8 @@ export const OwnerTabs: React.FC = () => {
         component={RevisionsScreen}
         options={{
           tabBarLabel: 'Revisiones',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>🔍</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <ShieldCheck size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -95,8 +96,8 @@ export const OwnerTabs: React.FC = () => {
         component={EarningsScreen}
         options={{
           tabBarLabel: 'Ganancias',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>💰</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <TrendingUp size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -105,8 +106,8 @@ export const OwnerTabs: React.FC = () => {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Perfil',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>👤</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <User size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />

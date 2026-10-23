@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, Platform, useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Waves, FileText, Award, User } from 'lucide-react-native';
 import { CatalogScreen } from '../screens/consumer/CatalogScreen';
 import { MyRentalsScreen } from '../screens/consumer/MyRentalsScreen';
 import { PointsScreen } from '../screens/consumer/PointsScreen';
@@ -75,8 +76,8 @@ export const ConsumerTabs: React.FC = () => {
         component={CatalogScreen}
         options={{
           tabBarLabel: 'Catálogo',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>🏄</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <Waves size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -85,8 +86,8 @@ export const ConsumerTabs: React.FC = () => {
         component={MyRentalsScreen}
         options={{
           tabBarLabel: 'Alquileres',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>📋</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <FileText size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -95,8 +96,8 @@ export const ConsumerTabs: React.FC = () => {
         component={PointsScreen}
         options={{
           tabBarLabel: 'Puntos',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>⭐</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <Award size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -105,8 +106,8 @@ export const ConsumerTabs: React.FC = () => {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Perfil',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>👤</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <User size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />

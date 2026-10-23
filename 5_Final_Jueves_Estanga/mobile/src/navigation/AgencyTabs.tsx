@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, Platform, useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { LayoutDashboard, PackageCheck, RotateCcw, User } from 'lucide-react-native';
 import { AgencyDashboardScreen } from '../screens/agency/AgencyDashboardScreen';
 import { DeliveriesScreen } from '../screens/agency/DeliveriesScreen';
 import { ReturnsScreen } from '../screens/agency/ReturnsScreen';
@@ -75,8 +76,8 @@ export const AgencyTabs: React.FC = () => {
         component={AgencyDashboardScreen}
         options={{
           tabBarLabel: 'Dashboard',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>📊</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <LayoutDashboard size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -85,8 +86,8 @@ export const AgencyTabs: React.FC = () => {
         component={DeliveriesScreen}
         options={{
           tabBarLabel: 'Entregas',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>📦</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <PackageCheck size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -95,8 +96,8 @@ export const AgencyTabs: React.FC = () => {
         component={ReturnsScreen}
         options={{
           tabBarLabel: 'Devoluciones',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>↩️</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <RotateCcw size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -105,8 +106,8 @@ export const AgencyTabs: React.FC = () => {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Perfil',
-          tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.65 }}>👤</Text>
+          tabBarIcon: ({ color, focused }) => (
+            <User size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
