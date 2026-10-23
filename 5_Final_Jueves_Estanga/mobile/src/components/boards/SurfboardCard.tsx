@@ -110,14 +110,10 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
             style={styles.heroImage}
           />
 
-          {/* Deep Vignette to blend studio photography seamlessly */}
+          {/* Subtle bottom fade to blend smoothly into card body */}
           <LinearGradient
-            colors={
-              isDark
-                ? ['rgba(8, 12, 20, 0.45)', 'transparent', 'rgba(8, 12, 20, 0.85)']
-                : ['rgba(0, 0, 0, 0.1)', 'transparent', 'rgba(0, 0, 0, 0.35)']
-            }
-            locations={[0, 0.5, 1]}
+            colors={['transparent', isDark ? 'rgba(13, 19, 29, 0.7)' : 'rgba(255, 255, 255, 0.5)']}
+            locations={[0.7, 1.0]}
             style={StyleSheet.absoluteFillObject}
             pointerEvents="none"
           />

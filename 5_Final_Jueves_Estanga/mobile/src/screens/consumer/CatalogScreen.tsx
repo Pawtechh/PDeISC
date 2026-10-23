@@ -350,7 +350,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: spacing.md,
-    paddingBottom: 96,
+    paddingBottom: 150,
   },
   heroBanner: {
     position: 'relative',
