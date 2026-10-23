@@ -123,6 +123,9 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navi
 const styles = StyleSheet.create({
   container: {
     paddingVertical: spacing.xl,
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
   },
   link: {
     fontWeight: '700',

@@ -246,7 +246,10 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.xl,
+    maxWidth: 540,
+    width: '100%',
+    alignSelf: 'center',
   },
   link: {
     fontWeight: '700',

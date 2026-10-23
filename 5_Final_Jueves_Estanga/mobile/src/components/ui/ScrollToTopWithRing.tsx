@@ -19,17 +19,16 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
   visible = true,
   style,
 }) => {
-  const { theme, isDark } = useTheme();
+  const { isDark } = useTheme();
 
   if (!visible) return null;
 
-  const size = 52;
-  const strokeWidth = 3.5;
+  const size = 48;
+  const strokeWidth = 3;
   const radius = (size - strokeWidth * 2) / 2;
   const circumference = 2 * Math.PI * radius;
   const clampedProgress = Math.min(Math.max(progress, 0), 1);
   const strokeDashoffset = circumference - circumference * clampedProgress;
-  const percentText = Math.round(clampedProgress * 100);
 
   const handlePress = () => {
     try {
@@ -43,7 +42,7 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
   };
 
   const primaryColor = isDark ? '#00E5FF' : colors.ocean[600];
-  const trackColor = isDark ? 'rgba(212, 175, 55, 0.2)' : 'rgba(0, 0, 0, 0.08)';
+  const trackColor = isDark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(0, 0, 0, 0.08)';
 
   return (
     <TouchableOpacity
@@ -52,12 +51,13 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#121824' : colors.white,
+          backgroundColor: isDark ? 'rgba(18, 24, 36, 0.92)' : 'rgba(255, 255, 255, 0.96)',
           shadowColor: primaryColor,
+          borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(0, 0, 0, 0.1)',
         },
         style,
       ]}
-      accessibilityLabel={`Volver arriba (${percentText}% leído)`}
+      accessibilityLabel="Volver arriba"
       accessibilityRole="button"
       testID="btn-scroll-to-top-ring"
     >
@@ -86,15 +86,13 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
         />
       </Svg>
       <View style={styles.innerContent}>
-        <Text style={{ fontSize: 13, lineHeight: 16 }}>▲</Text>
         <Text
-          variant="caption"
           style={[
-            styles.percentText,
-            { color: isDark ? '#D4AF37' : colors.ocean[700] },
+            styles.arrowIcon,
+            { color: isDark ? '#00E5FF' : colors.ocean[600] },
           ]}
         >
-          {percentText}%
+          ↑
         </Text>
       </View>
     </TouchableOpacity>
@@ -106,9 +104,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 84,
     right: 20,
-    width: 52,
-    height: 52,
+    width: 48,
+    height: 48,
     borderRadius: radii.full,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 8,
@@ -126,9 +125,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  percentText: {
-    fontSize: 9,
+  arrowIcon: {
+    fontSize: 20,
+    lineHeight: 22,
     fontWeight: '700',
-    marginTop: -2,
   },
 });

@@ -31,6 +31,13 @@ export const Card: React.FC<CardProps> = ({
           backgroundColor: theme.card,
           borderColor: theme.border,
         },
+        Platform.OS === 'web'
+          ? ({
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              transition: 'border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease',
+            } as any)
+          : null,
         shadows[shadow],
         { padding: spacing[padding] },
         style,

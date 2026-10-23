@@ -152,33 +152,7 @@ export const Screen: React.FC<ScreenProps> = ({
           <View style={dynamicContentContainerStyle}>{children}</View>
         )}
 
-        {/* Chiche 4: Floating Command Palette Trigger Pill */}
-        {Platform.OS === 'web' && (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={[
-              styles.cmdPill,
-              {
-                backgroundColor: isDark ? 'rgba(18, 24, 36, 0.9)' : 'rgba(255, 255, 255, 0.92)',
-                borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : colors.sand[300],
-              },
-            ]}
-            onPress={() => setShowCommandPalette(true)}
-            accessibilityLabel="Abrir menú de comandos (Cmd+K)"
-            testID="btn-open-command-palette"
-          >
-            <Text style={{ fontSize: 13 }}>⚡</Text>
-            <Text
-              variant="caption"
-              color={isDark ? '#00E5FF' : colors.ocean[700]}
-              style={{ fontWeight: '700', fontSize: 11 }}
-            >
-              ⌘K
-            </Text>
-          </TouchableOpacity>
-        )}
-
-        {/* Chiche 1: Botón Volver Arriba con Anillo SVG de Porcentaje */}
+        {/* Chiche 1: Botón Volver Arriba Minimalista con Anillo SVG */}
         {scrollable && showScrollToTop && (
           <ScrollToTopWithRing
             visible={isScrolledDown}
@@ -220,28 +194,10 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   standardContainer: {
-    maxWidth: 1440,
+    maxWidth: 1280,
   },
   fullWidthContainer: {
     maxWidth: '100%',
     paddingHorizontal: spacing.xl,
-  },
-  cmdPill: {
-    position: 'absolute',
-    top: 14,
-    right: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: radii.full,
-    borderWidth: 1,
-    elevation: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    zIndex: 998,
   },
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MyBoardsScreen } from '../screens/owner/MyBoardsScreen';
 import { RevisionsScreen } from '../screens/owner/RevisionsScreen';
@@ -21,11 +21,18 @@ export const OwnerTabs: React.FC = () => {
         tabBarActiveTintColor: isDark ? theme.primary : colors.ocean[600],
         tabBarInactiveTintColor: isDark ? '#94A3B8' : colors.sand[500],
         tabBarStyle: {
-          backgroundColor: theme.surface,
-          borderTopColor: theme.border,
+          backgroundColor: isDark ? 'rgba(18, 24, 36, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+          borderTopColor: isDark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(0, 0, 0, 0.08)',
+          borderTopWidth: 1,
           height: 64,
           paddingBottom: 8,
           paddingTop: 6,
+          ...(Platform.OS === 'web'
+            ? ({
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+              } as any)
+            : {}),
         },
         tabBarLabelStyle: {
           fontSize: 11,

@@ -77,7 +77,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
     <Screen
       atmosphericGradient={true}
       scrollable
-      showScrollToTop={false}
+      showScrollToTop={true}
       refreshControl={
         <RefreshControl
           refreshing={isFetching}

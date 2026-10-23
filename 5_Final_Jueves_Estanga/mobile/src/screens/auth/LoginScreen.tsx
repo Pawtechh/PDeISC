@@ -310,7 +310,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.xl,
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
   },
   header: {
     alignItems: 'center',

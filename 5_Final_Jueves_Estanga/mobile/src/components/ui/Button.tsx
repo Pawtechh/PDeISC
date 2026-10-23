@@ -8,6 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { colors, radii, spacing } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { Text } from './Text';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
@@ -40,6 +41,8 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth = false,
   testID,
 }) => {
+  const { isDark, theme } = useTheme();
+
   const getContainerStyle = (): ViewStyle => {
     const base: ViewStyle = {
       flexDirection: 'row',
@@ -54,6 +57,7 @@ export const Button: React.FC<ButtonProps> = ({
     if (Platform.OS === 'web') {
       (base as any).cursor = disabled || isLoading ? 'not-allowed' : 'pointer';
       (base as any).userSelect = 'none';
+      (base as any).transition = 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
     }
 
     // Padding según size
@@ -75,37 +79,75 @@ export const Button: React.FC<ButtonProps> = ({
         break;
     }
 
-    // Color según variante
-    switch (variant) {
-      case 'primary':
-        base.backgroundColor = disabled ? colors.sand[300] : colors.ocean[500];
-        break;
-      case 'secondary':
-        base.backgroundColor = disabled ? colors.sand[100] : colors.ocean[50];
-        base.borderWidth = 1;
-        base.borderColor = disabled ? colors.sand[200] : colors.ocean[200];
-        break;
-      case 'ghost':
-        base.backgroundColor = 'transparent';
-        break;
-      case 'danger':
-        base.backgroundColor = disabled ? colors.sand[300] : colors.semantic.danger;
-        break;
+    // Color según variante y modo oscuro
+    if (isDark) {
+      switch (variant) {
+        case 'primary':
+          base.backgroundColor = disabled ? 'rgba(255, 255, 255, 0.12)' : '#00E5FF';
+          if (!disabled) {
+            base.shadowColor = '#00E5FF';
+            base.shadowOffset = { width: 0, height: 2 };
+            base.shadowOpacity = 0.3;
+            base.shadowRadius = 8;
+            base.elevation = 4;
+          }
+          break;
+        case 'secondary':
+          base.backgroundColor = disabled ? 'rgba(255, 255, 255, 0.04)' : 'rgba(18, 24, 36, 0.85)';
+          base.borderWidth = 1;
+          base.borderColor = disabled ? 'rgba(255, 255, 255, 0.1)' : 'rgba(212, 175, 55, 0.38)';
+          break;
+        case 'ghost':
+          base.backgroundColor = 'transparent';
+          break;
+        case 'danger':
+          base.backgroundColor = disabled ? 'rgba(239, 68, 68, 0.3)' : colors.semantic.danger;
+          break;
+      }
+    } else {
+      switch (variant) {
+        case 'primary':
+          base.backgroundColor = disabled ? colors.sand[300] : colors.ocean[500];
+          break;
+        case 'secondary':
+          base.backgroundColor = disabled ? colors.sand[100] : colors.ocean[50];
+          base.borderWidth = 1;
+          base.borderColor = disabled ? colors.sand[200] : colors.ocean[200];
+          break;
+        case 'ghost':
+          base.backgroundColor = 'transparent';
+          break;
+        case 'danger':
+          base.backgroundColor = disabled ? colors.sand[300] : colors.semantic.danger;
+          break;
+      }
     }
 
     return base;
   };
 
   const getTextColor = (): string => {
-    if (disabled) return colors.sand[500];
-    switch (variant) {
-      case 'primary':
-      case 'danger':
-        return colors.white;
-      case 'secondary':
-        return colors.ocean[600];
-      case 'ghost':
-        return colors.ocean[600];
+    if (disabled) return isDark ? '#94A3B8' : colors.sand[500];
+    if (isDark) {
+      switch (variant) {
+        case 'primary':
+          return '#090C10';
+        case 'secondary':
+          return '#D4AF37';
+        case 'ghost':
+          return '#00E5FF';
+        case 'danger':
+          return colors.white;
+      }
+    } else {
+      switch (variant) {
+        case 'primary':
+        case 'danger':
+          return colors.white;
+        case 'secondary':
+        case 'ghost':
+          return colors.ocean[600];
+      }
     }
   };
 
