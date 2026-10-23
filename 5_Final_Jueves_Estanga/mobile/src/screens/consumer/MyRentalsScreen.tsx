@@ -102,7 +102,7 @@ export const MyRentalsScreen: React.FC = () => {
             </Text>
           </Stack>
           <Button
-            title="🏄 Ir al Catálogo"
+            title="Ir al Catálogo"
             variant="primary"
             size="sm"
             onPress={() => navigation.navigate('Catálogo')}
@@ -176,7 +176,7 @@ export const MyRentalsScreen: React.FC = () => {
           <EmptyState
             title="No tenés alquileres en esta sección"
             description="Explorá el catálogo de tablas para reservar tu próxima sesión en Playa Grande."
-            actionTitle="🏄 Explorar Catálogo"
+            actionTitle="Explorar Catálogo"
             onAction={() => navigation.navigate('Catálogo')}
           />
         ) : (

@@ -730,7 +730,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                           slotPeriodFilter === 'DISPONIBLES' && styles.filterPeriodTextActive,
                         ]}
                       >
-                        ⚡ Solo Libres ({countDisponibles})
+                        Solo Libres ({countDisponibles})
                       </Text>
                     </TouchableOpacity>
 
@@ -912,7 +912,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           <Stack spacing="sm">
             <Row justify="space-between" align="center">
               <Text variant="h3" color={theme.text}>
-                🏄 Equipamiento para Playa Grande
+                Equipamiento para Playa Grande
               </Text>
               <Badge label="RECOMENDADO" variant="info" />
             </Row>

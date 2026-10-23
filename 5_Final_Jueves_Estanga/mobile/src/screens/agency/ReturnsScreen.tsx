@@ -23,17 +23,17 @@ import { useTheme } from '../../theme/ThemeContext';
 const PRESET_DAMAGE_PHOTOS = [
   {
     id: 'deck',
-    label: '💥 Golpe en Deck / Proa',
+    label: 'Golpe en Deck / Proa',
     url: 'https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800&q=80',
   },
   {
     id: 'fin',
-    label: '🦈 Fisura en Quilla / Tail',
+    label: 'Fisura en Quilla / Tail',
     url: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=800&q=80',
   },
   {
     id: 'rail',
-    label: '⚡ Rotura en Canto / Riel',
+    label: 'Rotura en Canto / Riel',
     url: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=800&q=80',
   },
 ];

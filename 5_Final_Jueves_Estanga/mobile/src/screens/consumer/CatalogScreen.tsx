@@ -111,7 +111,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <View style={styles.heroBannerContent}>
             <Row justify="space-between" align="center" style={styles.heroHeaderRow}>
               <View style={styles.brandLocationPill}>
-                <Text style={styles.brandLocationText}>PLAYA GRANDE • MAR DEL PLATA</Text>
+                <Text style={styles.brandLocationText}>COLECCIÓN EXCLUSIVA • PLAYA GRANDE, MAR DEL PLATA</Text>
               </View>
               <View style={styles.stockBadge}>
                 <Text style={styles.stockBadgeText}>{data?.data?.length || 0} TABLAS DISPONIBLES</Text>
@@ -119,10 +119,10 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
             </Row>
 
             <Text variant="display" style={styles.catalogHeroTitle}>
-              FLOTA DE SURFBOARDS PRO
+              FLOTA DE AUTOR & ALTO RENDIMIENTO
             </Text>
             <Text style={styles.catalogHeroSubtitle}>
-              Tablas de autor y alto rendimiento seleccionadas a mano. Retiro y devolución express en sede Playa Grande.
+              Tablas curadas por shapers marplatenses. Reserva instantánea, equipamiento encerado y entrega express en la orilla de Playa Grande.
             </Text>
 
             <View style={styles.kpiRow}>
@@ -132,7 +132,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
               </View>
               <View style={styles.kpiChip}>
                 <Clock size={13} color="#00E5FF" />
-                <Text style={styles.kpiChipText}>Retiro en 5 min</Text>
+                <Text style={styles.kpiChipText}>Retiro Express 5 min</Text>
               </View>
               <View style={styles.kpiChip}>
                 <Star size={13} color="#D4AF37" fill="#D4AF37" />
@@ -140,7 +140,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
               </View>
               <View style={styles.kpiChip}>
                 <Shield size={13} color="#00E5FF" />
-                <Text style={styles.kpiChipText}>Cobertura Total</Text>
+                <Text style={styles.kpiChipText}>Cobertura Total 100%</Text>
               </View>
             </View>
           </View>

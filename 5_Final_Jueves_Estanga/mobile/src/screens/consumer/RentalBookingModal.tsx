@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StyleSheet, View, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import { ShieldCheck } from 'lucide-react-native';
 import { Stack, Row, Text, Card, Badge, Button, Divider, CopyButtonWithConfetti } from '../../components/ui';
 import { colors, radii, spacing, useTheme } from '../../theme';
 import { Board } from '../../api/boardsApi';
@@ -167,7 +168,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
             {biometricSignature && (
               <Card padding="sm" style={{ width: '100%', backgroundColor: '#F0FDF4', borderColor: '#86EFAC', borderWidth: 1 }}>
                 <Row spacing="xs" align="center">
-                  <Text style={{ fontSize: 16 }}>🛡️</Text>
+                  <ShieldCheck size={16} color={colors.semantic.success} />
                   <Text variant="caption" color={colors.semantic.success} style={{ fontWeight: '700' }}>
                     Contrato Rubricado con Huella Digital ({biometricSignature.signature_hash?.slice(0, 14)}...)
                   </Text>

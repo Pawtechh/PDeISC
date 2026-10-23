@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { ShieldCheck, Fingerprint } from 'lucide-react-native';
 import { Card, Stack, Row, Text } from '../ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -100,7 +101,7 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
           <View style={[styles.signedBox, { backgroundColor: isDark ? '#122018' : '#ECFDF5' }]}>
             <Stack spacing="xs">
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 18 }}>🛡️</Text>
+                <ShieldCheck size={18} color={colors.semantic.success} />
                 <Text variant="body" color={colors.semantic.success} style={{ fontWeight: '700' }}>
                   Huella Digital Verificada con Éxito
                 </Text>

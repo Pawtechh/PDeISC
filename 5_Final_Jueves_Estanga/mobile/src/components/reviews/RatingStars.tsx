@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from '../ui';
-import { colors, spacing } from '../../theme';
+import { Star } from 'lucide-react-native';
+import { spacing } from '../../theme';
 
 export interface RatingStarsProps {
   rating: number;
@@ -14,7 +14,7 @@ export interface RatingStarsProps {
 export const RatingStars: React.FC<RatingStarsProps> = ({
   rating,
   maxStars = 5,
-  size = 22,
+  size = 18,
   interactive = false,
   onRatingChange,
 }) => {
@@ -23,18 +23,14 @@ export const RatingStars: React.FC<RatingStarsProps> = ({
   for (let i = 1; i <= maxStars; i++) {
     const isFilled = i <= Math.round(rating);
     const starNode = (
-      <Text
-        key={i}
-        style={[
-          styles.star,
-          {
-            fontSize: size,
-            color: isFilled ? colors.sunset[500] : colors.sand[300],
-          },
-        ]}
-      >
-        ★
-      </Text>
+      <View key={i} style={styles.starWrapper}>
+        <Star
+          size={size}
+          color={isFilled ? '#D4AF37' : '#475569'}
+          fill={isFilled ? '#D4AF37' : 'transparent'}
+          strokeWidth={1.5}
+        />
+      </View>
     );
 
     if (interactive) {
@@ -60,12 +56,13 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
+    gap: 4,
+  },
+  starWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   touchable: {
     padding: 2,
-  },
-  star: {
-    fontWeight: '900',
   },
 });

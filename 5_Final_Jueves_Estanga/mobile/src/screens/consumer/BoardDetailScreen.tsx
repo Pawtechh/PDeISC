@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
+import { Star } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, Divider, LightboxViewer } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -150,9 +151,12 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
           <Stack spacing="sm">
             <Row justify="space-between" align="center">
               <Text variant="h3">Reseñas de Surfistas</Text>
-              <Text variant="button" color={colors.sunset[500]}>
-                ★ {averageRating} ({totalReviews})
-              </Text>
+              <Row align="center" spacing="xs">
+                <Star size={13} color="#D4AF37" fill="#D4AF37" />
+                <Text variant="button" color={isDark ? '#D4AF37' : colors.sunset[500]}>
+                  {averageRating} ({totalReviews})
+                </Text>
+              </Row>
             </Row>
             {reviews.length > 0 ? (
               reviews.slice(0, 3).map((r) => (

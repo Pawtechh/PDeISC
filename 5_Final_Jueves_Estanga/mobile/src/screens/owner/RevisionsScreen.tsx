@@ -181,16 +181,16 @@ export const RevisionsScreen: React.FC = () => {
         );
       case 'DISPUTADO':
       case 'EN_MEDIACION':
-        return <Badge label="⚖️ EN MEDIACIÓN AGENCIA" variant="ocean" />;
+        return <Badge label="EN MEDIACIÓN AGENCIA" variant="ocean" />;
       case 'RESUELTO_OWNER':
-        return <Badge label="🛡️ LAUDO A FAVOR DUEÑO" variant="success" />;
+        return <Badge label="LAUDO A FAVOR DUEÑO" variant="success" />;
       case 'RESUELTO_CONSUMER':
-        return <Badge label="❌ LAUDO A FAVOR SURFISTA" variant="danger" />;
+        return <Badge label="LAUDO A FAVOR SURFISTA" variant="danger" />;
       case 'ACEPTADO':
       case 'COBRADO':
-        return <Badge label="✅ COBRADO Y ACREDITADO" variant="success" />;
+        return <Badge label="COBRADO Y ACREDITADO" variant="success" />;
       case 'SIN_RESPUESTA':
-        return <Badge label="⏰ ACEPTADO POR SILENCIO" variant="warning" />;
+        return <Badge label="ACEPTADO POR SILENCIO" variant="warning" />;
       default:
         return <Badge label={estado} variant="sand" />;
     }

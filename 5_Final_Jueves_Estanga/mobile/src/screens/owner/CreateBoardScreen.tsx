@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import { Waves } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Input, Button } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -117,7 +118,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
           <Card padding="xl" style={{ width: '100%', maxWidth: 500, alignItems: 'center' }}>
             <Stack spacing="md" align="center">
               <View style={styles.successIconCircle}>
-                <Text style={{ fontSize: 36 }}>🏄</Text>
+                <Waves size={32} color={colors.semantic.success} />
               </View>
               <Text variant="h1" color={colors.semantic.success} style={{ textAlign: 'center' }}>
                 ¡Tabla Publicada con Éxito!
