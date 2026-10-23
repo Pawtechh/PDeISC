@@ -46,8 +46,9 @@ export const MarineForecastCard: React.FC = () => {
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? 'rgba(18, 24, 36, 0.75)' : '#F0F9FF',
-          borderColor: isDark ? 'rgba(0, 229, 255, 0.22)' : '#BAE6FD',
+          backgroundColor: isDark ? 'rgba(18, 24, 36, 0.85)' : '#F0F9FF',
+          borderColor: isDark ? 'rgba(0, 229, 255, 0.28)' : '#BAE6FD',
+          borderRadius: radii.xl,
         },
       ]}
     >
@@ -55,6 +56,10 @@ export const MarineForecastCard: React.FC = () => {
         {/* Header con Spot y Bandera */}
         <Row justify="space-between" align="center">
           <Row align="center" spacing="xs">
+            <View style={styles.liveBeacon}>
+              <Text style={styles.liveDot}>●</Text>
+              <Text style={styles.liveText}>TELEMETRÍA EN VIVO</Text>
+            </View>
             <Text
               variant="body"
               style={[styles.spotTitle, { color: isDark ? '#F1F5F9' : colors.ocean[900] }]}
@@ -78,15 +83,16 @@ export const MarineForecastCard: React.FC = () => {
           style={[
             styles.metricsContainer,
             {
-              backgroundColor: isDark ? 'rgba(9, 12, 16, 0.65)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(0, 229, 255, 0.15)' : '#E2E8F0',
+              backgroundColor: isDark ? 'rgba(9, 12, 16, 0.75)' : '#FFFFFF',
+              borderColor: isDark ? 'rgba(212, 175, 55, 0.25)' : '#E2E8F0',
               borderWidth: 1,
+              borderRadius: radii.lg,
             },
           ]}
         >
           <View style={styles.metricItem}>
             <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
-              Ola (Swell)
+              🌊 Ola
             </Text>
             <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[700]}>
               {forecast.waveHeightMeters}m
@@ -97,7 +103,7 @@ export const MarineForecastCard: React.FC = () => {
 
           <View style={styles.metricItem}>
             <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
-              Periodo
+              ⏱️ Periodo
             </Text>
             <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[700]}>
               {forecast.wavePeriodSeconds}s
@@ -108,7 +114,7 @@ export const MarineForecastCard: React.FC = () => {
 
           <View style={styles.metricItem}>
             <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
-              Viento
+              💨 Viento
             </Text>
             <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[700]}>
               {forecast.windSpeedKmh}k
@@ -119,7 +125,7 @@ export const MarineForecastCard: React.FC = () => {
 
           <View style={styles.metricItem}>
             <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={styles.metricLabel}>
-              Agua
+              🌡️ Agua
             </Text>
             <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[700]}>
               {forecast.waterTemperatureCelsius}°C
@@ -177,6 +183,28 @@ const styles = StyleSheet.create({
   spotTitle: {
     fontWeight: '700',
     color: colors.ocean[900],
+  },
+  liveBeacon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: radii.full,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.35)',
+    marginRight: 4,
+  },
+  liveDot: {
+    color: '#10B981',
+    fontSize: 7,
+  },
+  liveText: {
+    color: '#10B981',
+    fontSize: 9,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   metricsContainer: {
     backgroundColor: colors.white,

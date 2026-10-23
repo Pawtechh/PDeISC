@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Platform } from 'react-native';
+import { Text, Platform, useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AgencyDashboardScreen } from '../screens/agency/AgencyDashboardScreen';
 import { DeliveriesScreen } from '../screens/agency/DeliveriesScreen';
@@ -13,6 +13,49 @@ const Tab = createBottomTabNavigator();
 
 export const AgencyTabs: React.FC = () => {
   const { theme, isDark } = useTheme();
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 768;
+
+  const tabBarStyle = isDesktop
+    ? {
+        position: 'absolute' as const,
+        bottom: 24,
+        left: '50%' as any,
+        transform: [{ translateX: -260 }],
+        width: 520,
+        height: 64,
+        borderRadius: 32,
+        backgroundColor: isDark ? 'rgba(18, 24, 36, 0.88)' : 'rgba(255, 255, 255, 0.94)',
+        borderWidth: 1,
+        borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(0, 0, 0, 0.1)',
+        paddingBottom: 8,
+        paddingTop: 6,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.45,
+        shadowRadius: 24,
+        elevation: 20,
+        ...(Platform.OS === 'web'
+          ? ({
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+            } as any)
+          : {}),
+      }
+    : {
+        backgroundColor: isDark ? 'rgba(18, 24, 36, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+        borderTopColor: isDark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(0, 0, 0, 0.08)',
+        borderTopWidth: 1,
+        height: 64,
+        paddingBottom: 8,
+        paddingTop: 6,
+        ...(Platform.OS === 'web'
+          ? ({
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+            } as any)
+          : {}),
+      };
 
   return (
     <Tab.Navigator
@@ -20,20 +63,7 @@ export const AgencyTabs: React.FC = () => {
         headerShown: false,
         tabBarActiveTintColor: isDark ? theme.primary : colors.ocean[600],
         tabBarInactiveTintColor: isDark ? '#94A3B8' : colors.sand[500],
-        tabBarStyle: {
-          backgroundColor: isDark ? 'rgba(18, 24, 36, 0.94)' : 'rgba(255, 255, 255, 0.96)',
-          borderTopColor: isDark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(0, 0, 0, 0.08)',
-          borderTopWidth: 1,
-          height: 64,
-          paddingBottom: 8,
-          paddingTop: 6,
-          ...(Platform.OS === 'web'
-            ? ({
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-              } as any)
-            : {}),
-        },
+        tabBarStyle,
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: '600',

@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity, Modal, RefreshControl } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { Screen, Stack, Row, Text, Input, Badge, Button, EmptyState, GlassCard } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
@@ -88,47 +90,61 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
       }
     >
       <Stack spacing="lg" style={styles.container}>
-        {/* Glassmorphic Luxury Header */}
-        <GlassCard
-          glow={isDark ? 'champagne' : 'none'}
-          intensity={30}
-          padding="md"
-          borderRadius={radii.xl}
-          style={[
-            styles.headerCard,
-            {
-              backgroundColor: isDark ? 'rgba(18, 24, 36, 0.75)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(212, 175, 55, 0.25)' : '#E2E8F0',
-              shadowColor: isDark ? '#000000' : '#64748B',
-              shadowOpacity: isDark ? 0.3 : 0.08,
-            },
-          ]}
-        >
-          <Row justify="space-between" align="center">
-            <View style={styles.headerTextGroup}>
-              <Row align="center" spacing="xs">
-                <Text
-                  variant="h1"
-                  style={[styles.headerTitle, { color: isDark ? '#F1F5F9' : '#0F172A' }]}
-                >
-                  Catálogo MDP
-                </Text>
-              </Row>
-              <Text
-                variant="body"
-                style={[styles.headerSubtitle, { color: isDark ? '#94A3B8' : '#475569' }]}
-              >
-                Tablas premium de alto rendimiento en Playa Grande
-              </Text>
+        {/* Boutique Coastal Hero Banner */}
+        <View style={styles.heroBanner}>
+          <Image
+            source={{ uri: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1600&q=85' }}
+            style={StyleSheet.absoluteFillObject}
+            contentFit="cover"
+            transition={300}
+          />
+          <LinearGradient
+            colors={[
+              'rgba(9, 12, 16, 0.45)',
+              'rgba(9, 12, 16, 0.85)',
+              '#090C10',
+            ]}
+            locations={[0, 0.65, 1]}
+            style={StyleSheet.absoluteFillObject}
+          />
+          <View style={styles.heroBannerContent}>
+            <Row justify="space-between" align="center" style={styles.heroHeaderRow}>
+              <View style={styles.brandLocationPill}>
+                <Text style={styles.brandLocationDot}>●</Text>
+                <Text style={styles.brandLocationText}>PLAYA GRANDE • SEDE CENTRAL MDP</Text>
+              </View>
+              <View style={styles.stockBadge}>
+                <Text style={styles.stockBadgeText}>🟢 {data?.data?.length || 0} TABLAS DISPONIBLES</Text>
+              </View>
+            </Row>
+
+            <Text variant="display" style={styles.catalogHeroTitle}>
+              FLOTA DE SURFBOARDS PRO
+            </Text>
+            <Text style={styles.catalogHeroSubtitle}>
+              Tablas de autor y alto rendimiento seleccionadas a mano. Retiro y devolución express en sede Playa Grande.
+            </Text>
+
+            <View style={styles.kpiRow}>
+              <View style={styles.kpiChip}>
+                <Text style={styles.kpiChipIcon}>🏄</Text>
+                <Text style={styles.kpiChipText}>Shapers Marplatenses</Text>
+              </View>
+              <View style={styles.kpiChip}>
+                <Text style={styles.kpiChipIcon}>⏱️</Text>
+                <Text style={styles.kpiChipText}>Retiro QR 5 min</Text>
+              </View>
+              <View style={styles.kpiChip}>
+                <Text style={styles.kpiChipIcon}>⭐</Text>
+                <Text style={styles.kpiChipText}>4.9/5 Calificación</Text>
+              </View>
+              <View style={styles.kpiChip}>
+                <Text style={styles.kpiChipIcon}>🛡️</Text>
+                <Text style={styles.kpiChipText}>Cobertura Total</Text>
+              </View>
             </View>
-            <View style={styles.badgeWrapper}>
-              <Badge
-                label={`${data?.data?.length || 0} disponibles`}
-                variant="success"
-              />
-            </View>
-          </Row>
-        </GlassCard>
+          </View>
+        </View>
 
         {/* Live Marine Weather Report (Playa Grande) */}
         <MarineForecastCard />
@@ -330,6 +346,104 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: spacing.md,
+    paddingBottom: 96,
+  },
+  heroBanner: {
+    position: 'relative',
+    borderRadius: radii.xl,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(212, 175, 55, 0.28)',
+    minHeight: 240,
+    justifyContent: 'flex-end',
+    padding: spacing.lg,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  heroBannerContent: {
+    zIndex: 2,
+    gap: spacing.xs,
+  },
+  heroHeaderRow: {
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: spacing.xs,
+  },
+  brandLocationPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(9, 12, 16, 0.85)',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: radii.full,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 229, 255, 0.4)',
+  },
+  brandLocationDot: {
+    color: '#00E5FF',
+    fontSize: 8,
+  },
+  brandLocationText: {
+    color: '#00E5FF',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  stockBadge: {
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: radii.full,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.35)',
+  },
+  stockBadgeText: {
+    color: '#10B981',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  catalogHeroTitle: {
+    color: '#F1F5F9',
+    fontSize: 28,
+    fontWeight: '800',
+    lineHeight: 34,
+    letterSpacing: -0.5,
+  },
+  catalogHeroSubtitle: {
+    color: '#94A3B8',
+    fontSize: 13,
+    lineHeight: 19,
+    maxWidth: 680,
+  },
+  kpiRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: spacing.xs,
+  },
+  kpiChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(18, 24, 36, 0.85)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  kpiChipIcon: {
+    fontSize: 12,
+  },
+  kpiChipText: {
+    color: '#F1F5F9',
+    fontSize: 11,
+    fontWeight: '600',
   },
   headerCard: {
     backgroundColor: 'rgba(18, 24, 36, 0.65)',

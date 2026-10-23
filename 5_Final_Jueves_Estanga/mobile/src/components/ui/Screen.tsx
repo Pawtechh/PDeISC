@@ -10,6 +10,7 @@ import {
   NativeScrollEvent,
   TouchableOpacity,
   Platform,
+  useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -62,6 +63,8 @@ export const Screen: React.FC<ScreenProps> = ({
   gradientColors,
 }) => {
   const { theme, isDark } = useTheme();
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 860;
   const screenBg = atmosphericGradient ? 'transparent' : (backgroundColor || theme.background);
 
   const internalScrollRef = useRef<ScrollView>(null);
@@ -136,6 +139,65 @@ export const Screen: React.FC<ScreenProps> = ({
           barStyle={isDark ? 'light-content' : 'dark-content'}
           backgroundColor={statusBarBg}
         />
+        {Platform.OS === 'web' && isDesktop && (
+          <View
+            style={[
+              styles.desktopTopBar,
+              {
+                backgroundColor: isDark ? 'rgba(9, 12, 16, 0.88)' : 'rgba(255, 255, 255, 0.94)',
+                borderBottomColor: isDark ? 'rgba(212, 175, 55, 0.22)' : 'rgba(0, 0, 0, 0.08)',
+              },
+            ]}
+          >
+            <View style={styles.desktopTopBarInner}>
+              <View style={styles.desktopBrandGroup}>
+                <Text style={styles.desktopBrandWave}>🌊</Text>
+                <Text style={[styles.desktopBrandName, { color: isDark ? '#F1F5F9' : '#0F172A' }]}>
+                  SURF RENTAL
+                </Text>
+                <View style={styles.desktopBrandTag}>
+                  <Text style={styles.desktopBrandTagText}>MDP</Text>
+                </View>
+              </View>
+
+              <View style={styles.desktopStatusTicker}>
+                <Text style={styles.desktopTickerDot}>●</Text>
+                <Text style={styles.desktopTickerText}>SEDE CENTRAL PLAYA GRANDE • ABIERTA</Text>
+              </View>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => setShowCommandPalette(true)}
+                style={[
+                  styles.desktopCmdTrigger,
+                  {
+                    backgroundColor: isDark ? 'rgba(18, 24, 36, 0.9)' : '#F1F5F9',
+                    borderColor: isDark ? 'rgba(212, 175, 55, 0.3)' : '#CBD5E1',
+                  },
+                ]}
+              >
+                <Text style={{ fontSize: 11, color: isDark ? '#94A3B8' : '#64748B' }}>
+                  Comandos
+                </Text>
+                <View
+                  style={[
+                    styles.desktopCmdKbd,
+                    { backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E2E8F0' },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.desktopCmdKbdText,
+                      { color: isDark ? '#00E5FF' : colors.ocean[700] },
+                    ]}
+                  >
+                    ⌘K
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
         {scrollable ? (
           <ScrollView
             ref={activeScrollRef as any}
@@ -199,5 +261,85 @@ const styles = StyleSheet.create({
   fullWidthContainer: {
     maxWidth: '100%',
     paddingHorizontal: spacing.xl,
+  },
+  desktopTopBar: {
+    width: '100%',
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: spacing.xl,
+    zIndex: 990,
+  },
+  desktopTopBarInner: {
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  desktopBrandGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  desktopBrandWave: {
+    fontSize: 18,
+  },
+  desktopBrandName: {
+    fontSize: 14,
+    fontWeight: '800',
+    letterSpacing: 1,
+  },
+  desktopBrandTag: {
+    backgroundColor: 'rgba(0, 229, 255, 0.15)',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 229, 255, 0.35)',
+  },
+  desktopBrandTagText: {
+    color: '#00E5FF',
+    fontSize: 9,
+    fontWeight: '800',
+  },
+  desktopStatusTicker: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: radii.full,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.3)',
+  },
+  desktopTickerDot: {
+    color: '#10B981',
+    fontSize: 8,
+  },
+  desktopTickerText: {
+    color: '#10B981',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  desktopCmdTrigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: radii.md,
+    borderWidth: 1,
+  },
+  desktopCmdKbd: {
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    borderRadius: 4,
+  },
+  desktopCmdKbdText: {
+    fontSize: 10,
+    fontWeight: '700',
   },
 });
