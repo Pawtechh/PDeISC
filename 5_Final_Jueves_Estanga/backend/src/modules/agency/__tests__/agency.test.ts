@@ -272,8 +272,84 @@ describe('Agency Module Tests (MP7 Mostrador Sede Central Playa Grande, Check-in
         .set('Authorization', `Bearer ${agencyToken}`);
 
       expect(res.status).toBe(200);
-      expect(res.body.data.comisionAgenciaPorcentaje).toBe(5);
+      expect(typeof res.body.data.comisionAgenciaPorcentaje).toBe('number');
       expect(res.body.data.multaLavadoEstándar).toBe(10000);
+    });
+  });
+
+  describe('GET y PUT /api/agency/commission (Modificación de % con Contraseña Especial)', () => {
+    it('GET /api/agency/commission debe retornar el % actual de la agencia y de owners', async () => {
+      const res = await request(app).get('/api/agency/commission');
+      expect(res.status).toBe(200);
+      expect(typeof res.body.data.comisionAgenciaPorcentaje).toBe('number');
+      expect(typeof res.body.data.comisionOwnerPorcentaje).toBe('number');
+      expect(res.body.data.comisionAgenciaPorcentaje + res.body.data.comisionOwnerPorcentaje).toBe(100);
+    });
+
+    it('PUT /api/agency/commission debe rechazar con 403 si la contraseña especial es incorrecta', async () => {
+      const res = await request(app)
+        .put('/api/agency/commission')
+        .send({
+          porcentaje: 8,
+          specialPassword: 'clave-totalmente-erronea',
+        });
+
+      expect(res.status).toBe(403);
+      expect(res.body.code).toBe('INVALID_SPECIAL_PASSWORD');
+    });
+
+    it('PUT /api/agency/commission debe rechazar con 400 si el porcentaje es inválido (< 0 o > 50)', async () => {
+      const res = await request(app)
+        .put('/api/agency/commission')
+        .send({
+          porcentaje: 75,
+          specialPassword: 'surf2026',
+        });
+
+      expect(res.status).toBe(400);
+    });
+
+    it('PUT /api/agency/commission debe actualizar exitosamente al 8% y recalcular splits en cascada', async () => {
+      (prisma.rental.findMany as jest.Mock).mockResolvedValue([
+        {
+          id: 'rental-1',
+          precioBase: 10000,
+          precioTotal: 10000,
+          descuento: 0,
+          precioSeguro: 0,
+        },
+      ]);
+      (prisma.rental.update as jest.Mock).mockResolvedValue({ id: 'rental-1' });
+      (prisma.payment.aggregate as jest.Mock).mockResolvedValue({
+        _sum: { monto: 30000 },
+        _count: { id: 3 },
+      });
+
+      const res = await request(app)
+        .put('/api/agency/commission')
+        .send({
+          porcentaje: 8,
+          specialPassword: 'surf2026',
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.comisionAgenciaPorcentaje).toBe(8);
+      expect(res.body.data.comisionOwnerPorcentaje).toBe(92);
+
+      // Comprobar que GET /metrics ahora refleja el 8%
+      const metricsRes = await request(app)
+        .get('/api/agency/metrics')
+        .set('Authorization', `Bearer ${agencyToken}`);
+      expect(metricsRes.status).toBe(200);
+      expect(metricsRes.body.data.comisionAgenciaPorcentaje).toBe(8);
+
+      // Restaurar al 5% para no alterar otros tests
+      await request(app)
+        .put('/api/agency/commission')
+        .send({
+          porcentaje: 5,
+          specialPassword: 'surf2026',
+        });
     });
   });
 });

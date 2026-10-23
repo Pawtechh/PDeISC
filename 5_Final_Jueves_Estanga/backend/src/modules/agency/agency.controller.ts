@@ -50,3 +50,29 @@ export const getAgencyMetrics = async (_req: Request, res: Response, next: NextF
     next(err);
   }
 };
+
+export const getCommission = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const data = agencyService.getAgencyCommission();
+    res.status(200).json({
+      status: 'success',
+      data,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateCommission = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const operator = (req as any).user?.email || 'operador_web';
+    const result = await agencyService.updateAgencyCommission(req.body, operator);
+    res.status(200).json({
+      status: 'success',
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+

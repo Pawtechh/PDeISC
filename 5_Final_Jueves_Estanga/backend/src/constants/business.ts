@@ -1,6 +1,12 @@
+import { systemConfig } from '../config/systemConfig';
+
 export const BUSINESS = {
-  COMISION_AGENCIA: 0.05,
-  GANANCIA_OWNER: 0.95,
+  get COMISION_AGENCIA(): number {
+    return systemConfig.getAgencyCommissionRate();
+  },
+  get GANANCIA_OWNER(): number {
+    return systemConfig.getOwnerCommissionRate();
+  },
   SUSCRIPCION_OWNER: 1000, // ARS/mes
   MESES_GRATIS_OWNER: 3,
   MULTA_NO_LAVAR: 10000,

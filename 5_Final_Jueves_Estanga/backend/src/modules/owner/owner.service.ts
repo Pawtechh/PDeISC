@@ -1,6 +1,7 @@
 import { prisma } from '../../config/prisma';
 import { AppError } from '../../middlewares/errorHandler';
 import { BUSINESS } from '../../constants/business';
+import { systemConfig } from '../../config/systemConfig';
 import {
   RequestPayoutInput,
   CompleteMaintenanceInput,
@@ -172,8 +173,8 @@ export class OwnerService {
         totalBruto,
         gananciaOwner: totalGananciaOwner,
         comisionAgencia: totalComisionAgencia,
-        porcentajeOwner: 95,
-        porcentajeAgencia: 5,
+        porcentajeOwner: systemConfig.getOwnerCommissionPercentage(),
+        porcentajeAgencia: systemConfig.getAgencyCommissionPercentage(),
         totalRetirado,
         saldoDisponible,
         totalAlquileres: todosLosAlquileres.length,

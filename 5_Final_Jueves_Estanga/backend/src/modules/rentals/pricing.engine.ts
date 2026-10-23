@@ -11,6 +11,7 @@ export interface RentalQuoteInput {
   incluyeNeoprene?: boolean;
   incluyeLeash?: boolean;
   incluyeParafina?: boolean;
+  comisionAgenciaRate?: number;
 }
 
 export interface DiscountBreakdown {
@@ -131,8 +132,9 @@ export function calculateRentalQuote(input: RentalQuoteInput): RentalQuoteResult
 
   const precioTotal = Math.max(0, precioBase - descuentoTotal + precioSeguro + precioAccesorios);
 
-  // Split: Comisión agencia 5% del valor base + 100% de los accesorios de mostrador
-  const gananciaAgencia = Math.round(precioBase * BUSINESS.COMISION_AGENCIA) + precioAccesorios;
+  // Split: Comisión agencia (dinámicamente configurable desde web) + 100% de los accesorios de mostrador
+  const agencyRate = input.comisionAgenciaRate !== undefined ? input.comisionAgenciaRate : BUSINESS.COMISION_AGENCIA;
+  const gananciaAgencia = Math.round(precioBase * agencyRate) + precioAccesorios;
   const gananciaOwner = Math.max(0, precioTotal - gananciaAgencia);
 
   // Puntos otorgados al surfista: 10 pts por hora

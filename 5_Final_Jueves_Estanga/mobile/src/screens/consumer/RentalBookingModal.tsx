@@ -424,7 +424,14 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
               Split transparente:
             </Text>
             <Text variant="caption" color={theme.subtext}>
-              Owner: 95% (${quote?.gananciaOwner || 0}) • Agencia: 5% (${quote?.gananciaAgencia || 0})
+              {(() => {
+                const total = quote?.precioTotal || 1;
+                const gananciaOwner = quote?.gananciaOwner || 0;
+                const gananciaAgencia = quote?.gananciaAgencia || 0;
+                const pctAgency = total > 0 ? Math.round((gananciaAgencia / total) * 100) : 5;
+                const pctOwner = Math.max(0, 100 - pctAgency);
+                return `Owner: ${pctOwner}% ($${gananciaOwner.toLocaleString('es-AR')}) • Agencia: ${pctAgency}% ($${gananciaAgencia.toLocaleString('es-AR')})`;
+              })()}
             </Text>
           </Row>
 

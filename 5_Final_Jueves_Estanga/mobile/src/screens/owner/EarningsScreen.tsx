@@ -231,7 +231,7 @@ export const EarningsScreen: React.FC = () => {
                 <Row justify="space-around" style={{ width: '100%', flexWrap: 'wrap', gap: spacing.sm }}>
                   <View style={styles.metricCol}>
                     <Text variant="caption" color={theme.subtext}>
-                      TU GANANCIA (95%)
+                      TU GANANCIA ({resumen.porcentajeOwner ?? 95}%)
                     </Text>
                     <Text variant="h3" color={isDark ? '#34D399' : colors.semantic.success}>
                       ${resumen.gananciaOwner.toLocaleString('es-AR')}
@@ -247,7 +247,7 @@ export const EarningsScreen: React.FC = () => {
                   </View>
                   <View style={styles.metricCol}>
                     <Text variant="caption" color={theme.subtext}>
-                      COMISIÓN SEDE (5%)
+                      COMISIÓN SEDE ({resumen.porcentajeAgencia ?? 5}%)
                     </Text>
                     <Text variant="h3" color={theme.text}>
                       ${resumen.comisionAgencia.toLocaleString('es-AR')}

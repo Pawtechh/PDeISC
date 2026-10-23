@@ -126,7 +126,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
                 Tu tabla <Text style={{ fontWeight: '700' }}>"{titulo}"</Text> ya está disponible en el catálogo oficial de la Sede Central Mar del Plata.
               </Text>
               <Text variant="caption" color={colors.sand[500]} style={{ textAlign: 'center' }}>
-                Comisión: 95% para vos / 5% sede central. Ciclo de mantenimiento preventivo inicializado (45 días).
+                Comisión transparente de sede central. Ciclo de mantenimiento preventivo inicializado (45 días).
               </Text>
               <Row spacing="md" style={{ width: '100%', marginTop: spacing.md }}>
                 <Button
@@ -169,7 +169,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
               Publicar Nueva Tabla
             </Text>
             <Text variant="caption" color={theme.subtext}>
-              Sede Central Mar del Plata (Comisión: 95% para vos / 5% agencia)
+              Sede Central Mar del Plata (Liquidación directa y transparente)
             </Text>
           </View>
           {onClose && (

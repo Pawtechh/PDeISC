@@ -27,6 +27,25 @@ export interface AgencyMetrics {
   multaLavadoEstándar: number;
 }
 
+export interface CommissionPolicy {
+  comisionAgenciaPorcentaje: number;
+  comisionOwnerPorcentaje: number;
+  comisionAgenciaRate: number;
+  comisionOwnerRate: number;
+}
+
+export interface UpdateCommissionRequest {
+  porcentaje: number;
+  specialPassword: string;
+}
+
+export interface UpdateCommissionResponse {
+  comisionAgenciaPorcentaje: number;
+  comisionOwnerPorcentaje: number;
+  rentalsUpdatedCount: number;
+  mensaje: string;
+}
+
 export const agencyApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -38,6 +57,31 @@ export const agencyApi = apiSlice.injectEndpoints({
     getMetrics: builder.query<{ status: string; data: AgencyMetrics }, void>({
       query: () => '/agency/metrics',
       providesTags: ['Metrics', 'AgencyMetrics'],
+    }),
+
+    getCommission: builder.query<{ status: string; data: CommissionPolicy }, void>({
+      query: () => '/agency/commission',
+      providesTags: ['Metrics', 'AgencyMetrics'],
+    }),
+
+    updateCommission: builder.mutation<
+      { status: string; data: UpdateCommissionResponse },
+      UpdateCommissionRequest
+    >({
+      query: (body) => ({
+        url: '/agency/commission',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: [
+        'Rental',
+        'Schedule',
+        'AgencyRental',
+        'Board',
+        'OwnerBoards',
+        'Metrics',
+        'AgencyMetrics',
+      ],
     }),
 
     checkIn: builder.mutation<
@@ -95,6 +139,8 @@ export const agencyApi = apiSlice.injectEndpoints({
 export const {
   useGetScheduleQuery,
   useGetMetricsQuery,
+  useGetCommissionQuery,
+  useUpdateCommissionMutation,
   useCheckInMutation,
   useCheckOutMutation,
 } = agencyApi;

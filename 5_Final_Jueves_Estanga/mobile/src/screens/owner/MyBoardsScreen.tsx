@@ -210,7 +210,7 @@ export const MyBoardsScreen: React.FC = () => {
               <Badge label="GRATIS (Mes 1/3)" variant="success" />
             </Row>
             <Text variant="h3" color={theme.text}>
-              Comisión 95% para vos • $0/mes
+              Liquidación directa de rentas • $0/mes
             </Text>
             <Text variant="caption" color={theme.subtext}>
               Primeros 3 meses 100% bonificados. Luego $1.000 ARS/mes por custodia y mantenimiento en sede.

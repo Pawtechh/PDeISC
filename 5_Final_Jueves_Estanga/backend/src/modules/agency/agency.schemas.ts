@@ -55,3 +55,16 @@ export const agencyCheckOutSchema = z.object({
 );
 
 export type AgencyCheckOutInput = z.infer<typeof agencyCheckOutSchema>;
+
+export const updateCommissionSchema = z.object({
+  porcentaje: z
+    .number({ required_error: 'El porcentaje de comisión es obligatorio' })
+    .min(0, 'El porcentaje de comisión no puede ser menor a 0%')
+    .max(50, 'El porcentaje de comisión no puede ser mayor al 50%'),
+  specialPassword: z
+    .string({ required_error: 'La contraseña especial de confirmación es requerida' })
+    .min(1, 'La contraseña especial de confirmación no puede estar vacía'),
+});
+
+export type UpdateCommissionInput = z.infer<typeof updateCommissionSchema>;
+
