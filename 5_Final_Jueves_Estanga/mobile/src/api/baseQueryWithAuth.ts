@@ -9,10 +9,7 @@ import { RootState } from '../store';
 import { setCredentials, logout } from '../store/slices/authSlice';
 import { tokenStorage } from '../utils/storage';
 
-const getBaseUrl = () => {
-  if (process.env.EXPO_PUBLIC_API_URL) {
-    return process.env.EXPO_PUBLIC_API_URL;
-  }
+export const getBaseUrl = () => {
   if (Platform.OS === 'web' && typeof window !== 'undefined' && window.location?.hostname) {
     const host = window.location.hostname;
     const protocol = window.location.protocol || 'http:';
@@ -23,8 +20,11 @@ const getBaseUrl = () => {
       return `${protocol}//${host}:3000/api`;
     }
 
-    // Si corre a través de túnel público (pinggy, cloudflare, ngrok, localtunnel) o en el servidor unificado
+    // Si corre a través de túnel público (cloudflare, pinggy, ngrok, localtunnel) o en el servidor unificado
     return `${protocol}//${host}${port ? `:${port}` : ''}/api`;
+  }
+  if (process.env.EXPO_PUBLIC_API_URL) {
+    return process.env.EXPO_PUBLIC_API_URL;
   }
   if (Platform.OS === 'android') {
     return 'http://10.0.2.2:3000/api';

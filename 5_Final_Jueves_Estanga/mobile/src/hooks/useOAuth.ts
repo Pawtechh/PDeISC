@@ -5,6 +5,7 @@ import * as Linking from 'expo-linking';
 import { useAppDispatch } from '../store';
 import { setCredentials } from '../store/slices/authSlice';
 import { tokenStorage } from '../utils/storage';
+import { getBaseUrl } from '../api/baseQueryWithAuth';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -31,7 +32,7 @@ export const useOAuth = (provider: OAuthProvider, onError?: (msg: string) => voi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const baseUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api';
+  const baseUrl = getBaseUrl();
 
   const promptAsync = async () => {
     setIsLoading(true);
