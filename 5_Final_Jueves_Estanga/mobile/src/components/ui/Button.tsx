@@ -1,30 +1,42 @@
 import React from 'react';
 import {
-  TouchableOpacity,
-  StyleSheet,
+  Pressable,
   ActivityIndicator,
+  StyleSheet,
   ViewStyle,
   StyleProp,
+  View,
   Platform,
 } from 'react-native';
-import { colors, radii, spacing } from '../../theme';
-import { useTheme } from '../../theme/ThemeContext';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
 import { Text } from './Text';
+import { colors } from '../../theme/colors';
+import { radii } from '../../theme/radii';
+import { spacing } from '../../theme/spacing';
+import { useTheme } from '../../theme/ThemeContext';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps {
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
   variant?: ButtonVariant;
   size?: ButtonSize;
+  fullWidth?: boolean;
   isLoading?: boolean;
   disabled?: boolean;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
-  fullWidth?: boolean;
+  accessibilityLabel?: string;
   testID?: string;
 }
 
@@ -33,152 +45,164 @@ export const Button: React.FC<ButtonProps> = ({
   onPress,
   variant = 'primary',
   size = 'md',
+  fullWidth = false,
   isLoading = false,
   disabled = false,
   iconLeft,
   iconRight,
   style,
-  fullWidth = false,
+  accessibilityLabel,
   testID,
 }) => {
-  const { isDark, theme } = useTheme();
+  const { isDark } = useTheme();
+  const isDisabled = disabled || isLoading;
+  const scale = useSharedValue(1);
 
-  const getContainerStyle = (): ViewStyle => {
-    const base: ViewStyle = {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: radii.md,
-      minHeight: 44, // Accesibilidad: tap target mínimo 44x44
-      gap: spacing.sm,
-      width: fullWidth ? '100%' : 'auto',
-    };
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
-    if (Platform.OS === 'web') {
-      (base as any).cursor = disabled || isLoading ? 'not-allowed' : 'pointer';
-      (base as any).userSelect = 'none';
-      (base as any).transition = 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+  const handlePressIn = () => {
+    if (!isDisabled) {
+      scale.value = withSpring(0.97, { damping: 16, stiffness: 320 });
     }
+  };
 
-    // Padding según size
-    switch (size) {
-      case 'sm':
-        base.paddingVertical = spacing.xs + 2;
-        base.paddingHorizontal = spacing.md;
-        base.minHeight = 44;
-        break;
-      case 'md':
-        base.paddingVertical = spacing.sm + 2;
-        base.paddingHorizontal = spacing.lg;
-        base.minHeight = 48;
-        break;
-      case 'lg':
-        base.paddingVertical = spacing.md;
-        base.paddingHorizontal = spacing.xl;
-        base.minHeight = 56;
-        break;
+  const handlePressOut = () => {
+    scale.value = withSpring(1, { damping: 14, stiffness: 260 });
+  };
+
+  const handlePress = () => {
+    if (isDisabled) return;
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
     }
+    onPress?.();
+  };
 
-    // Color según variante y modo oscuro
-    if (isDark) {
-      switch (variant) {
-        case 'primary':
-          base.backgroundColor = disabled ? 'rgba(255, 255, 255, 0.12)' : '#00E5FF';
-          if (!disabled) {
-            base.shadowColor = '#00E5FF';
-            base.shadowOffset = { width: 0, height: 2 };
-            base.shadowOpacity = 0.3;
-            base.shadowRadius = 8;
-            base.elevation = 4;
-          }
-          break;
-        case 'secondary':
-          base.backgroundColor = disabled ? 'rgba(255, 255, 255, 0.04)' : 'rgba(18, 24, 36, 0.85)';
-          base.borderWidth = 1;
-          base.borderColor = disabled ? 'rgba(255, 255, 255, 0.1)' : 'rgba(212, 175, 55, 0.38)';
-          break;
-        case 'ghost':
-          base.backgroundColor = 'transparent';
-          break;
-        case 'danger':
-          base.backgroundColor = disabled ? 'rgba(239, 68, 68, 0.3)' : colors.semantic.danger;
-          break;
-      }
-    } else {
-      switch (variant) {
-        case 'primary':
-          base.backgroundColor = disabled ? colors.sand[300] : colors.ocean[500];
-          break;
-        case 'secondary':
-          base.backgroundColor = disabled ? colors.sand[100] : colors.ocean[50];
-          base.borderWidth = 1;
-          base.borderColor = disabled ? colors.sand[200] : colors.ocean[200];
-          break;
-        case 'ghost':
-          base.backgroundColor = 'transparent';
-          break;
-        case 'danger':
-          base.backgroundColor = disabled ? colors.sand[300] : colors.semantic.danger;
-          break;
-      }
+  const getVariantStyle = (): ViewStyle => {
+    switch (variant) {
+      case 'primary':
+        return {
+          backgroundColor: isDark ? '#00E5FF' : colors.ocean[600],
+          borderWidth: 1,
+          borderColor: isDark ? '#67E8F9' : colors.ocean[700],
+          shadowColor: isDark ? '#00E5FF' : colors.ocean[600],
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: isDark ? 0.25 : 0.2,
+          shadowRadius: 10,
+          elevation: 4,
+        };
+      case 'secondary':
+        return {
+          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9',
+          borderWidth: 1,
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.16)' : '#CBD5E1',
+        };
+      case 'danger':
+        return {
+          backgroundColor: isDark ? '#EF4444' : colors.semantic.danger,
+          borderWidth: 1,
+          borderColor: '#F87171',
+        };
+      case 'ghost':
+        return {
+          backgroundColor: 'transparent',
+          borderWidth: 1,
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#CBD5E1',
+        };
     }
-
-    return base;
   };
 
   const getTextColor = (): string => {
-    if (disabled) return isDark ? '#94A3B8' : colors.sand[500];
-    if (isDark) {
-      switch (variant) {
-        case 'primary':
-          return '#090C10';
-        case 'secondary':
-          return '#D4AF37';
-        case 'ghost':
-          return '#00E5FF';
-        case 'danger':
-          return colors.white;
-      }
-    } else {
-      switch (variant) {
-        case 'primary':
-        case 'danger':
-          return colors.white;
-        case 'secondary':
-        case 'ghost':
-          return colors.ocean[600];
-      }
+    switch (variant) {
+      case 'primary':
+        return isDark ? '#090C10' : colors.white;
+      case 'danger':
+        return colors.white;
+      case 'secondary':
+        return isDark ? '#F1F5F9' : colors.sand[900];
+      case 'ghost':
+        return isDark ? '#CBD5E1' : colors.ocean[700];
     }
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={onPress}
-      disabled={disabled || isLoading}
-      style={[styles.button, getContainerStyle(), style]}
+    <AnimatedPressable
       testID={testID}
+      onPress={handlePress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      disabled={isDisabled}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel || title}
+      accessibilityState={{ disabled: isDisabled, busy: isLoading }}
+      style={[
+        styles.base,
+        styles[`size_${size}`],
+        getVariantStyle(),
+        fullWidth && { width: '100%' },
+        isDisabled && styles.disabled,
+        animatedStyle,
+        style,
+      ]}
     >
       {isLoading ? (
-        <ActivityIndicator
-          size="small"
-          color={variant === 'primary' || variant === 'danger' ? colors.white : colors.ocean[500]}
-        />
+        <ActivityIndicator size="small" color={getTextColor()} />
       ) : (
-        <>
-          {iconLeft}
-          <Text variant="button" color={getTextColor()}>
+        <View style={styles.content}>
+          {iconLeft && <View style={styles.iconLeft}>{iconLeft}</View>}
+          <Text
+            variant="button"
+            color={getTextColor()}
+            style={{
+              fontWeight: variant === 'primary' ? '800' : '600',
+              letterSpacing: 0.4,
+            }}
+          >
             {title}
           </Text>
-          {iconRight}
-        </>
+          {iconRight && <View style={styles.iconRight}>{iconRight}</View>}
+        </View>
       )}
-    </TouchableOpacity>
+    </AnimatedPressable>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    alignSelf: 'stretch',
+  base: {
+    borderRadius: radii.lg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  size_sm: {
+    paddingVertical: spacing.xs + 3,
+    paddingHorizontal: spacing.md,
+    minHeight: 38,
+  },
+  size_md: {
+    paddingVertical: spacing.sm + 3,
+    paddingHorizontal: spacing.lg,
+    minHeight: 46,
+  },
+  size_lg: {
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.xl,
+    minHeight: 54,
+  },
+  disabled: {
+    opacity: 0.48,
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconLeft: {
+    marginRight: spacing.xs,
+  },
+  iconRight: {
+    marginLeft: spacing.xs,
   },
 });

@@ -22,7 +22,7 @@ export const MyRentalsScreen: React.FC = () => {
   const { numColumns } = useResponsive();
   const navigation = useNavigation<any>();
 
-  const { data, refetch, isFetching, isLoading } = useGetMyRentalsQuery();
+  const { data, refetch, isFetching, isLoading } = useGetMyRentalsQuery(undefined, { pollingInterval: 8000 });
   const [cancelRental, { isLoading: isCancelling }] = useCancelRentalMutation();
 
   useFocusEffect(

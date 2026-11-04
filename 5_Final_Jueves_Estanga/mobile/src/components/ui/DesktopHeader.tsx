@@ -34,12 +34,14 @@ export const DesktopHeader: React.FC = () => {
     return null;
   }
 
+  const activeUserRole = user?.role || user?.rol;
+
   const handleLogout = () => {
     dispatch(logout() as any);
   };
 
   const handleQuickRoleSwitch = async (item: typeof QUICK_ROLES[number]) => {
-    if (user?.role === item.role || switchingRole) return;
+    if (activeUserRole === item.role || switchingRole) return;
     setSwitchingRole(item.role);
     try {
       const response = await login({ email: item.email, password: 'Password123!' }).unwrap();
@@ -48,6 +50,7 @@ export const DesktopHeader: React.FC = () => {
         access: tokens.accessToken,
         refresh: tokens.refreshToken,
       });
+      await tokenStorage.saveUser(newUser);
       resetAllApis(dispatch as any);
       dispatch(
         setCredentials({
@@ -68,8 +71,8 @@ export const DesktopHeader: React.FC = () => {
       style={[
         styles.headerContainer,
         {
-          backgroundColor: isDark ? 'rgba(9, 12, 16, 0.92)' : 'rgba(255, 255, 255, 0.94)',
-          borderBottomColor: isDark ? 'rgba(212, 175, 55, 0.22)' : 'rgba(0, 0, 0, 0.08)',
+          backgroundColor: isDark ? 'rgba(9, 12, 16, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+          borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0',
         },
         Platform.OS === 'web'
           ? ({
@@ -85,23 +88,51 @@ export const DesktopHeader: React.FC = () => {
       <View style={styles.innerContainer}>
         {/* Left: Brand Identity */}
         <View style={styles.brandRow}>
-          <View style={styles.logoBadge}>
-            <Waves size={18} color="#00E5FF" strokeWidth={2.2} />
+          <View
+            style={[
+              styles.logoBadge,
+              {
+                backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE',
+                borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#7DD3FC',
+              },
+            ]}
+          >
+            <Waves size={18} color={isDark ? '#00E5FF' : '#0284C7'} strokeWidth={2.2} />
           </View>
           <View style={styles.brandTexts}>
             <Text style={[styles.brandTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
               SURF RENTAL
             </Text>
-            <Text style={styles.brandSubtitle}>MAR DEL PLATA • EST. 2026</Text>
+            <Text
+              style={[
+                styles.brandSubtitle,
+                { color: isDark ? '#D4AF37' : '#0284C7' },
+              ]}
+            >
+              MAR DEL PLATA • EST. 2026
+            </Text>
           </View>
         </View>
 
         {/* Center: Live Coastal Telemetry Pill */}
         {width >= 1120 && (
-          <View style={styles.telemetryPill}>
+          <View
+            style={[
+              styles.telemetryPill,
+              {
+                backgroundColor: isDark ? 'rgba(0, 229, 255, 0.06)' : '#F0F9FF',
+                borderColor: isDark ? 'rgba(0, 229, 255, 0.22)' : '#BAE6FD',
+              },
+            ]}
+          >
             <View style={styles.livePulseDot} />
-            <Compass size={13} color="#00E5FF" />
-            <Text style={styles.telemetryText}>
+            <Compass size={13} color={isDark ? '#00E5FF' : '#0284C7'} />
+            <Text
+              style={[
+                styles.telemetryText,
+                { color: isDark ? '#CBD5E1' : '#0F172A' },
+              ]}
+            >
               PLAYA GRANDE • OLA 1.3M • 14KT OFFSHORE • AGUA 16.5°C
             </Text>
           </View>
@@ -110,10 +141,22 @@ export const DesktopHeader: React.FC = () => {
         {/* Right: Quick Role Switcher + Active User Capsule */}
         {user ? (
           <View style={styles.userSection}>
-            <View style={styles.roleSwitcherGroup}>
-              <Users size={12} color="#D4AF37" style={{ marginLeft: 6 }} />
+            <View
+              style={[
+                styles.roleSwitcherGroup,
+                {
+                  backgroundColor: isDark ? 'rgba(18, 24, 36, 0.9)' : '#F1F5F9',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#CBD5E1',
+                },
+              ]}
+            >
+              <Users
+                size={12}
+                color={isDark ? '#D4AF37' : '#0284C7'}
+                style={{ marginLeft: 8, marginRight: 2 }}
+              />
               {QUICK_ROLES.map((item) => {
-                const isActive = user?.role === item.role;
+                const isActive = activeUserRole === item.role;
                 const isLoadingThis = switchingRole === item.role;
                 return (
                   <TouchableOpacity
@@ -123,16 +166,27 @@ export const DesktopHeader: React.FC = () => {
                     testID={`header-switch-role-${item.role.toLowerCase()}`}
                     style={[
                       styles.roleSwitchPill,
-                      isActive && styles.roleSwitchPillActive,
+                      isActive && {
+                        backgroundColor: isDark ? 'rgba(0, 229, 255, 0.16)' : '#0284C7',
+                        borderWidth: 1,
+                        borderColor: isDark ? 'rgba(0, 229, 255, 0.45)' : '#0369A1',
+                      },
                     ]}
                   >
                     {isLoadingThis ? (
-                      <ActivityIndicator size="small" color="#00E5FF" />
+                      <ActivityIndicator
+                        size="small"
+                        color={isDark ? '#00E5FF' : '#0284C7'}
+                      />
                     ) : (
                       <Text
                         style={[
                           styles.roleSwitchText,
-                          isActive && styles.roleSwitchTextActive,
+                          { color: isDark ? '#94A3B8' : '#475569' },
+                          isActive && {
+                            color: isDark ? '#00E5FF' : '#FFFFFF',
+                            fontWeight: '800',
+                          },
                         ]}
                       >
                         {item.label}
@@ -144,29 +198,66 @@ export const DesktopHeader: React.FC = () => {
             </View>
 
             <View style={styles.userCapsule}>
-              <View style={styles.userAvatar}>
-                <Text style={styles.avatarLetter}>
+              <View
+                style={[
+                  styles.userAvatar,
+                  {
+                    backgroundColor: isDark ? 'rgba(0, 229, 255, 0.14)' : '#E0F2FE',
+                    borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#7DD3FC',
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.avatarLetter,
+                    { color: isDark ? '#00E5FF' : '#0369A1' },
+                  ]}
+                >
                   {(user.nombre || user.email || 'S').charAt(0).toUpperCase()}
                 </Text>
               </View>
-              <Text style={[styles.userName, { color: isDark ? '#F1F5F9' : '#0F172A' }]} numberOfLines={1}>
+              <Text
+                style={[styles.userName, { color: isDark ? '#F1F5F9' : '#0F172A' }]}
+                numberOfLines={1}
+              >
                 {user.nombre || user.email?.split('@')[0]}
               </Text>
             </View>
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={handleLogout}
-              style={styles.logoutBtn}
+              style={[
+                styles.logoutBtn,
+                {
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#CBD5E1',
+                },
+              ]}
               accessibilityLabel="Cerrar sesión"
               testID="desktop-header-logout"
             >
-              <LogOut size={15} color="#94A3B8" />
+              <LogOut size={15} color={isDark ? '#94A3B8' : '#475569'} />
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={styles.guestPill}>
-            <Shield size={12} color="#D4AF37" />
-            <Text style={styles.guestText}>SEDE CENTRAL • BALNEARIO PLAYA GRANDE</Text>
+          <View
+            style={[
+              styles.guestPill,
+              {
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F8FAFC',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0',
+              },
+            ]}
+          >
+            <Shield size={12} color={isDark ? '#D4AF37' : '#0284C7'} />
+            <Text
+              style={[
+                styles.guestText,
+                { color: isDark ? '#94A3B8' : '#475569' },
+              ]}
+            >
+              SEDE CENTRAL • BALNEARIO PLAYA GRANDE
+            </Text>
           </View>
         )}
       </View>
@@ -199,9 +290,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(0, 229, 255, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.35)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -216,7 +305,6 @@ const styles = StyleSheet.create({
   brandSubtitle: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#D4AF37',
     letterSpacing: 2.2,
     textTransform: 'uppercase',
   },
@@ -227,9 +315,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 229, 255, 0.06)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.22)',
   },
   livePulseDot: {
     width: 7,
@@ -239,8 +325,7 @@ const styles = StyleSheet.create({
   },
   telemetryText: {
     fontSize: 10.5,
-    fontWeight: '600',
-    color: '#94A3B8',
+    fontWeight: '700',
     letterSpacing: 1.1,
   },
   userSection: {
@@ -254,28 +339,16 @@ const styles = StyleSheet.create({
     gap: 4,
     padding: 3,
     borderRadius: 18,
-    backgroundColor: 'rgba(18, 24, 36, 0.85)',
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.25)',
   },
   roleSwitchPill: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 11,
     paddingVertical: 5,
     borderRadius: 14,
-  },
-  roleSwitchPillActive: {
-    backgroundColor: 'rgba(0, 229, 255, 0.16)',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.45)',
   },
   roleSwitchText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#94A3B8',
-  },
-  roleSwitchTextActive: {
-    color: '#00E5FF',
-    fontWeight: '800',
   },
   userCapsule: {
     flexDirection: 'row',
@@ -286,29 +359,24 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarLetter: {
-    color: '#00E5FF',
     fontWeight: '700',
     fontSize: 13,
   },
   userName: {
     fontSize: 13,
     fontWeight: '600',
-    maxWidth: 110,
+    maxWidth: 120,
   },
   logoutBtn: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.06)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -319,14 +387,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   guestText: {
     fontSize: 10,
-    fontWeight: '600',
-    color: '#94A3B8',
+    fontWeight: '700',
     letterSpacing: 1.5,
   },
 });

@@ -17,7 +17,7 @@ import { isMobileDevice } from '../../utils/device';
 
 export const DeliveriesScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
-  const { data, isFetching, refetch } = useGetScheduleQuery();
+  const { data, isFetching, refetch } = useGetScheduleQuery(undefined, { pollingInterval: 8000 });
   const [checkIn, { isLoading: isCheckingIn }] = useCheckInMutation();
   const { signContractWithBiometrics } = useBiometricSignature();
 
@@ -40,15 +40,26 @@ export const DeliveriesScreen: React.FC = () => {
     setIsScanningDeliveryQr(false);
     if (!scanned) return;
 
-    const rentalId = scanned.rentalId || (scanned.code && scanned.code.startsWith('SRMDP-RENTAL-') ? scanned.code.replace('SRMDP-RENTAL-', '') : null);
-    const boardId = (scanned.code && scanned.code.startsWith('SRMDP-BOARD-') ? scanned.code.replace('SRMDP-BOARD-', '') : scanned.id) || null;
+    const cleanCode = (scanned.code || '')
+      .replace(/^SRMDP-RENTAL-/i, '')
+      .replace(/^SRMDP-BOARD-/i, '')
+      .replace(/^SRMDP-/i, '')
+      .trim()
+      .toLowerCase();
 
-    const match = (data?.data || []).find((r) => {
-      if (rentalId && (r.id === rentalId || r.id.toLowerCase().includes(rentalId.toLowerCase()))) return true;
-      if (boardId && r.boardId === boardId) return true;
-      if (scanned.code && (r.id.toLowerCase().includes(scanned.code.toLowerCase()) || r.board?.titulo?.toLowerCase().includes(scanned.code.toLowerCase()))) return true;
-      return false;
-    });
+    const pendingList = (data?.data || []).filter(
+      (r) => r.estado === 'ACTIVA' || r.estado === 'PENDIENTE'
+    );
+
+    const match =
+      pendingList.find((r) => {
+        if (scanned.rentalId && r.id === scanned.rentalId) return true;
+        if (scanned.id && (r.boardId === scanned.id || r.board?.id === scanned.id || r.id === scanned.id)) return true;
+        if (cleanCode && (r.id.toLowerCase().includes(cleanCode) || r.id.slice(-6).toLowerCase() === cleanCode)) return true;
+        if (cleanCode && r.board?.id && r.board.id.slice(-6).toLowerCase() === cleanCode) return true;
+        if (scanned.titulo && r.board?.titulo?.toLowerCase() === scanned.titulo.toLowerCase()) return true;
+        return false;
+      }) || pendingList[0];
 
     if (match) {
       setSelectedRental(match);
@@ -61,12 +72,12 @@ export const DeliveriesScreen: React.FC = () => {
       setModalError(null);
       setFeedbackBanner({
         type: 'success',
-        text: `Pase de retiro detectado por QR: ${match.board?.titulo} (Surfista: ${match.consumer?.nombre || 'Verificado'}).`,
+        text: `Pase de retiro verificado por QR (${scanned.code}): ${match.board?.titulo} • Surfista: ${match.consumer?.nombre || 'Verificado'}.`,
       });
     } else {
       setFeedbackBanner({
         type: 'error',
-        text: `Código QR escaneado: "${scanned.code}". No se encontró ninguna entrega pendiente vinculada.`,
+        text: `Código QR "${scanned.code}" verificado, pero no hay retiros pendientes en este momento.`,
       });
     }
   };
@@ -81,10 +92,20 @@ export const DeliveriesScreen: React.FC = () => {
     const isPending = r.estado === 'ACTIVA' || r.estado === 'PENDIENTE';
     if (!isPending) return false;
     if (!qrSearch.trim()) return true;
-    const q = qrSearch.toLowerCase();
+    const q = qrSearch.toLowerCase().trim();
     const titulo = r.board?.titulo?.toLowerCase() || '';
+    const surfer = r.consumer?.nombre?.toLowerCase() || '';
     const id = r.id.toLowerCase();
-    return titulo.includes(q) || id.includes(q) || `srmdp-${id}`.includes(q);
+    const shortRentalQr = `srmdp-${r.id.slice(-6).toLowerCase()}`;
+    const shortBoardQr = `srmdp-${(r.board?.id || '').slice(-6).toLowerCase()}`;
+    return (
+      titulo.includes(q) ||
+      surfer.includes(q) ||
+      id.includes(q) ||
+      shortRentalQr.includes(q) ||
+      shortBoardQr.includes(q) ||
+      `srmdp-${id}`.includes(q)
+    );
   });
 
   const getEarlyStatus = (rental: Rental | null) => {
@@ -186,12 +207,19 @@ export const DeliveriesScreen: React.FC = () => {
               backgroundColor:
                 feedbackBanner.type === 'success'
                   ? isDark
-                    ? '#064E3B'
-                    : '#D1FAE5'
+                    ? 'rgba(16, 185, 129, 0.12)'
+                    : '#ECFDF5'
                   : isDark
-                  ? '#450A0A'
-                  : '#FEE2E2',
-              borderColor: feedbackBanner.type === 'success' ? '#34D399' : '#F87171',
+                  ? 'rgba(239, 68, 68, 0.12)'
+                  : '#FEF2F2',
+              borderColor:
+                feedbackBanner.type === 'success'
+                  ? isDark
+                    ? 'rgba(16, 185, 129, 0.4)'
+                    : '#34D399'
+                  : isDark
+                  ? 'rgba(239, 68, 68, 0.4)'
+                  : '#F87171',
               borderWidth: 1,
             }}
           >
@@ -201,10 +229,10 @@ export const DeliveriesScreen: React.FC = () => {
                 color={
                   feedbackBanner.type === 'success'
                     ? isDark
-                      ? '#D1FAE5'
+                      ? '#A7F3D0'
                       : '#065F46'
                     : isDark
-                    ? '#FECACA'
+                    ? '#FCA5A5'
                     : '#991B1B'
                 }
                 style={{ flex: 1, fontWeight: '600' }}
@@ -273,8 +301,8 @@ export const DeliveriesScreen: React.FC = () => {
                         <Card
                           padding="xs"
                           style={{
-                            backgroundColor: isDark ? '#451A03' : '#FEF3C7',
-                            borderColor: '#F59E0B',
+                            backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
+                            borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
                             borderWidth: 1,
                           }}
                         >
@@ -294,7 +322,12 @@ export const DeliveriesScreen: React.FC = () => {
                             title="Ver QR"
                             size="sm"
                             variant="secondary"
-                            onPress={() => setSelectedQrBoard(rental.board as any)}
+                            onPress={() =>
+                              setSelectedQrBoard({
+                                ...(rental.board as any),
+                                id: rental.id,
+                              })
+                            }
                           />
                         )}
                         <Button

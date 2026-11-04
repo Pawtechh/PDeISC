@@ -35,12 +35,12 @@ export const AgencyDashboardScreen: React.FC = () => {
     data: metricsData,
     isFetching: fetchingMetrics,
     refetch: refetchMetrics,
-  } = useGetMetricsQuery();
+  } = useGetMetricsQuery(undefined, { pollingInterval: 8000 });
   const {
     data: scheduleData,
     isFetching: fetchingSchedule,
     refetch: refetchSchedule,
-  } = useGetScheduleQuery();
+  } = useGetScheduleQuery(undefined, { pollingInterval: 8000 });
 
   const [updateCommission, { isLoading: isUpdatingCommission }] =
     useUpdateCommissionMutation();

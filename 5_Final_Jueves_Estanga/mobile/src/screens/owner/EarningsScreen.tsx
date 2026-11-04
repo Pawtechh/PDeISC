@@ -271,8 +271,8 @@ export const EarningsScreen: React.FC = () => {
               style={[
                 styles.subCard,
                 {
-                  backgroundColor: isDark ? '#064E3B' : '#F0FDF4',
-                  borderColor: isDark ? '#059669' : '#BBF7D0',
+                  backgroundColor: isDark ? 'rgba(16, 185, 129, 0.09)' : '#F0FDF4',
+                  borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#BBF7D0',
                 },
               ]}
             >

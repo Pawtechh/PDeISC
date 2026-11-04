@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Modal, RefreshControl, Linking } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Moon, Sun, BookOpen, Download, ShieldCheck, Users, LogOut } from 'lucide-react-native';
-import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge } from '../../components/ui';
+import { Moon, Sun, BookOpen, Download, ShieldCheck, Users, LogOut, Smartphone, RefreshCw } from 'lucide-react-native';
+import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge, QrCodeView } from '../../components/ui';
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -26,6 +26,7 @@ export const ProfileScreen: React.FC = () => {
   );
 
   const user = meData?.data?.user || reduxUser;
+  const activeRole = user?.role || user?.rol || 'CONSUMER';
 
   const handleRoleChange = async (role: UserRole) => {
     const creds: Record<UserRole, { email: string; pass: string }> = {
@@ -43,6 +44,7 @@ export const ProfileScreen: React.FC = () => {
         access: tokens.accessToken,
         refresh: tokens.refreshToken,
       });
+      await tokenStorage.saveUser(newUser);
 
       resetAllApis(dispatch);
 
@@ -67,8 +69,14 @@ export const ProfileScreen: React.FC = () => {
       <Stack spacing="lg" style={{ paddingVertical: spacing.md }}>
         <View>
           <Row spacing="xs" align="center">
-            <ShieldCheck size={14} color="#D4AF37" />
-            <Text variant="caption" style={styles.eyebrowText}>
+            <ShieldCheck size={14} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+            <Text
+              variant="caption"
+              style={[
+                styles.eyebrowText,
+                { color: isDark ? '#D4AF37' : colors.ocean[600] },
+              ]}
+            >
               CUENTA VERIFICADA • PLAYA GRANDE
             </Text>
           </Row>
@@ -92,8 +100,8 @@ export const ProfileScreen: React.FC = () => {
               </Text>
             )}
             <Row spacing="xs" align="center">
-              <Badge label={`ROL: ${user?.role || user?.rol || 'CONSUMER'}`} variant="ocean" />
-              {user?.puntos !== undefined && (
+              <Badge label={`ROL: ${activeRole}`} variant="ocean" />
+              {activeRole === 'CONSUMER' && user?.puntos !== undefined && (
                 <Badge label={`Puntos: ${user.puntos} pts`} variant="warning" />
               )}
             </Row>
@@ -106,9 +114,9 @@ export const ProfileScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
                 {isDark ? (
-                  <Moon size={16} color="#D4AF37" />
+                  <Moon size={16} color="#00E5FF" />
                 ) : (
-                  <Sun size={16} color="#D4AF37" />
+                  <Sun size={16} color={colors.ocean[600]} />
                 )}
                 <Text variant="h3" color={theme.text}>
                   Tema de la Aplicación
@@ -116,7 +124,7 @@ export const ProfileScreen: React.FC = () => {
               </Row>
               <Badge
                 label={isDark ? 'MODO OSCURO' : 'MODO CLARO'}
-                variant={isDark ? 'warning' : 'ocean'}
+                variant={isDark ? 'ocean' : 'info'}
               />
             </Row>
             <Text variant="caption" color={theme.subtext}>
@@ -127,7 +135,12 @@ export const ProfileScreen: React.FC = () => {
                 title="Modo Claro"
                 size="sm"
                 variant={!isDark ? 'primary' : 'secondary'}
-                iconLeft={<Sun size={14} color={!isDark ? '#090C10' : theme.text} />}
+                iconLeft={
+                  <Sun
+                    size={14}
+                    color={!isDark ? '#FFFFFF' : '#F1F5F9'}
+                  />
+                }
                 style={styles.flexBtn}
                 onPress={() => setMode('light')}
               />
@@ -135,10 +148,74 @@ export const ProfileScreen: React.FC = () => {
                 title="Modo Oscuro"
                 size="sm"
                 variant={isDark ? 'primary' : 'secondary'}
-                iconLeft={<Moon size={14} color={isDark ? '#090C10' : theme.text} />}
+                iconLeft={
+                  <Moon
+                    size={14}
+                    color={isDark ? '#090C10' : colors.sand[900]}
+                  />
+                }
                 style={styles.flexBtn}
                 onPress={() => setMode('dark')}
               />
+            </Row>
+          </Stack>
+        </Card>
+
+        {/* Sincronización en Vivo Web + App Móvil (Expo Go APK) */}
+        <Card
+          padding="lg"
+          style={{
+            backgroundColor: isDark ? 'rgba(0, 229, 255, 0.04)' : '#F8FAFC',
+            borderColor: isDark ? 'rgba(0, 229, 255, 0.25)' : '#BAE6FD',
+            borderWidth: 1,
+          }}
+        >
+          <Stack spacing="md">
+            <Row justify="space-between" align="center">
+              <Row spacing="xs" align="center">
+                <Smartphone size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                <Text variant="h3" color={theme.text}>
+                  Sincronización Web & Expo Go APK
+                </Text>
+              </Row>
+              <Badge label="DB SYNC EN VIVO" variant="success" />
+            </Row>
+
+            <Row spacing="md" align="center" style={{ flexWrap: 'wrap' }}>
+              <View
+                style={{
+                  padding: 10,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 14,
+                  borderWidth: 1.5,
+                  borderColor: isDark ? '#00E5FF' : colors.ocean[300],
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <QrCodeView
+                  value={
+                    typeof window !== 'undefined' && window.location?.origin
+                      ? window.location.origin
+                      : 'https://sensitive-sized-duke-famous.trycloudflare.com'
+                  }
+                  size={104}
+                />
+              </View>
+              <View style={{ flex: 1, minWidth: 210, gap: 6 }}>
+                <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
+                  Base de Datos MariaDB Unificada
+                </Text>
+                <Text variant="caption" color={theme.subtext}>
+                  Escaneá este código desde tu teléfono o abrí el proyecto en Expo Go APK. Todas las reservas, firmas biométricas, entregas QR y cambios de comisión se sincronizan en tiempo real entre la Web y el dispositivo móvil.
+                </Text>
+                <Row spacing="xs" align="center" style={{ marginTop: 4 }}>
+                  <RefreshCw size={12} color="#10B981" />
+                  <Text variant="caption" color={isDark ? '#34D399' : '#059669'} style={{ fontWeight: '700' }}>
+                    Auto-sync activo cada 8s • Túnel HTTPS conectado
+                  </Text>
+                </Row>
+              </View>
             </Row>
           </Stack>
         </Card>
@@ -147,14 +224,14 @@ export const ProfileScreen: React.FC = () => {
         <Card
           padding="lg"
           style={{
-            borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : colors.ocean[500],
+            borderColor: isDark ? 'rgba(0, 229, 255, 0.28)' : colors.ocean[300],
             borderWidth: 1,
           }}
         >
           <Stack spacing="md">
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <BookOpen size={16} color="#00E5FF" />
+                <BookOpen size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
                 <Text variant="h3" color={theme.text}>
                   Manual Operativo & Guía
                 </Text>
@@ -169,7 +246,7 @@ export const ProfileScreen: React.FC = () => {
                 title="Ver Manual Web"
                 size="sm"
                 variant="secondary"
-                iconLeft={<BookOpen size={14} color={isDark ? '#00E5FF' : colors.ocean[700]} />}
+                iconLeft={<BookOpen size={14} color={isDark ? '#F1F5F9' : colors.sand[900]} />}
                 style={styles.flexBtn}
                 onPress={() => {
                   let url = '/manual';
@@ -204,7 +281,7 @@ export const ProfileScreen: React.FC = () => {
         <Card padding="lg">
           <Stack spacing="md">
             <Row spacing="xs" align="center">
-              <Users size={16} color="#D4AF37" />
+              <Users size={16} color={isDark ? '#D4AF37' : colors.ocean[600]} />
               <Text variant="h3" color={theme.text}>
                 Cambiar Rol (Modo Desarrollo)
               </Text>
@@ -217,7 +294,7 @@ export const ProfileScreen: React.FC = () => {
                 title="Consumer"
                 size="sm"
                 isLoading={isSwitchingRole}
-                variant={(user?.role || user?.rol) === 'CONSUMER' ? 'primary' : 'secondary'}
+                variant={activeRole === 'CONSUMER' ? 'primary' : 'secondary'}
                 style={styles.flexBtn}
                 onPress={() => handleRoleChange('CONSUMER')}
               />
@@ -225,7 +302,7 @@ export const ProfileScreen: React.FC = () => {
                 title="Owner"
                 size="sm"
                 isLoading={isSwitchingRole}
-                variant={(user?.role || user?.rol) === 'OWNER' ? 'primary' : 'secondary'}
+                variant={activeRole === 'OWNER' ? 'primary' : 'secondary'}
                 style={styles.flexBtn}
                 onPress={() => handleRoleChange('OWNER')}
               />
@@ -233,7 +310,7 @@ export const ProfileScreen: React.FC = () => {
                 title="Agencia"
                 size="sm"
                 isLoading={isSwitchingRole}
-                variant={(user?.role || user?.rol) === 'AGENCIA' ? 'primary' : 'secondary'}
+                variant={activeRole === 'AGENCIA' ? 'primary' : 'secondary'}
                 style={styles.flexBtn}
                 onPress={() => handleRoleChange('AGENCIA')}
               />
@@ -301,7 +378,6 @@ export const ProfileScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   eyebrowText: {
-    color: '#D4AF37',
     fontWeight: '800',
     letterSpacing: 1.5,
     fontSize: 10.5,

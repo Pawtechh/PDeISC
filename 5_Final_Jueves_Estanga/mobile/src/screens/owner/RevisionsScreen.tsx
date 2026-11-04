@@ -26,13 +26,13 @@ import { PhotoComparator } from '../../components/owner/PhotoComparator';
 
 export const RevisionsScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
-  const { data, isLoading, isFetching, refetch } = useGetPendingRevisionsQuery();
+  const { data, isLoading, isFetching, refetch } = useGetPendingRevisionsQuery(undefined, { pollingInterval: 8000 });
   const {
     data: claimsData,
     isLoading: isLoadingClaims,
     isFetching: isFetchingClaims,
     refetch: refetchClaims,
-  } = useGetClaimsQuery();
+  } = useGetClaimsQuery(undefined, { pollingInterval: 8000 });
 
   const [reportDamageClaim, { isLoading: isReporting }] = useReportDamageClaimMutation();
   const [approveRevision, { isLoading: isApproving }] = useApproveRevisionMutation();
@@ -226,22 +226,34 @@ export const RevisionsScreen: React.FC = () => {
         <Row
           style={[
             styles.segmentContainer,
-            { backgroundColor: isDark ? '#1E293B' : colors.sand[100] },
+            {
+              backgroundColor: isDark ? 'rgba(18, 24, 36, 0.92)' : colors.sand[100],
+              borderWidth: 1,
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#E2E8F0',
+            },
           ]}
         >
           <TouchableOpacity
             style={[
               styles.segmentBtn,
               activeSection === 'PENDIENTES' && styles.segmentBtnActive,
-              activeSection === 'PENDIENTES' && { backgroundColor: theme.primary },
+              activeSection === 'PENDIENTES' && {
+                backgroundColor: isDark ? '#00E5FF' : colors.ocean[600],
+              },
             ]}
             onPress={() => setActiveSection('PENDIENTES')}
             testID="tab-inspecciones"
           >
             <Text
               variant="button"
-              color={activeSection === 'PENDIENTES' ? theme.primaryText : theme.text}
-              style={{ fontWeight: activeSection === 'PENDIENTES' ? '700' : '500' }}
+              color={
+                activeSection === 'PENDIENTES'
+                  ? isDark
+                    ? '#090C10'
+                    : '#FFFFFF'
+                  : theme.text
+              }
+              style={{ fontWeight: activeSection === 'PENDIENTES' ? '800' : '600' }}
             >
               Inspecciones Pendientes ({revisions.length})
             </Text>
@@ -251,15 +263,23 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.segmentBtn,
               activeSection === 'RECLAMOS' && styles.segmentBtnActive,
-              activeSection === 'RECLAMOS' && { backgroundColor: theme.primary },
+              activeSection === 'RECLAMOS' && {
+                backgroundColor: isDark ? '#00E5FF' : colors.ocean[600],
+              },
             ]}
             onPress={() => setActiveSection('RECLAMOS')}
             testID="tab-mediaciones"
           >
             <Text
               variant="button"
-              color={activeSection === 'RECLAMOS' ? theme.primaryText : theme.text}
-              style={{ fontWeight: activeSection === 'RECLAMOS' ? '700' : '500' }}
+              color={
+                activeSection === 'RECLAMOS'
+                  ? isDark
+                    ? '#090C10'
+                    : '#FFFFFF'
+                  : theme.text
+              }
+              style={{ fontWeight: activeSection === 'RECLAMOS' ? '800' : '600' }}
             >
               Reclamos y Mediación ({claims.length})
             </Text>
@@ -272,12 +292,12 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.feedbackBanner,
               feedbackBanner?.type === 'success' && {
-                backgroundColor: isDark ? '#064E3B' : '#D1FAE5',
-                borderColor: '#34D399',
+                backgroundColor: isDark ? 'rgba(16, 185, 129, 0.12)' : '#D1FAE5',
+                borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : '#34D399',
               },
               feedbackBanner?.type === 'error' && {
-                backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
-                borderColor: '#F87171',
+                backgroundColor: isDark ? 'rgba(239, 68, 68, 0.12)' : '#FEE2E2',
+                borderColor: isDark ? 'rgba(239, 68, 68, 0.4)' : '#F87171',
               },
             ]}
           >
@@ -288,10 +308,10 @@ export const RevisionsScreen: React.FC = () => {
                   color={
                     feedbackBanner?.type === 'success'
                       ? isDark
-                        ? '#D1FAE5'
+                        ? '#A7F3D0'
                         : '#065F46'
                       : isDark
-                      ? '#FECACA'
+                      ? '#FCA5A5'
                       : '#991B1B'
                   }
                   style={{ fontWeight: '600' }}
@@ -305,7 +325,7 @@ export const RevisionsScreen: React.FC = () => {
                   >
                     <Text
                       variant="caption"
-                      color={isDark ? colors.ocean[300] : colors.ocean[700]}
+                      color={isDark ? '#00E5FF' : colors.ocean[700]}
                       style={{ fontWeight: '700', textDecorationLine: 'underline' }}
                     >
                       {feedbackBanner.actionLabel}
@@ -319,10 +339,10 @@ export const RevisionsScreen: React.FC = () => {
                   color={
                     feedbackBanner?.type === 'success'
                       ? isDark
-                        ? '#D1FAE5'
+                        ? '#A7F3D0'
                         : '#065F46'
                       : isDark
-                      ? '#FECACA'
+                      ? '#FCA5A5'
                       : '#991B1B'
                   }
                   style={{ fontWeight: '700', paddingLeft: spacing.sm }}
@@ -344,26 +364,29 @@ export const RevisionsScreen: React.FC = () => {
               padding="md"
               style={[
                 styles.ruleCard,
-                { backgroundColor: isDark ? '#451A03' : '#FEF3C7', borderColor: '#FCD34D' },
+                {
+                  backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
+                  borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
+                },
               ]}
             >
               <Stack spacing="xs">
                 <Row justify="space-between" align="center">
                   <Text
                     variant="caption"
-                    color={isDark ? '#FDE68A' : colors.sunset[600]}
-                    style={{ fontWeight: '700' }}
+                    color={isDark ? '#FBBF24' : colors.sunset[600]}
+                    style={{ fontWeight: '800', letterSpacing: 0.5 }}
                   >
                     REGLA DE PERITAJE RÁPIDO (24 HORAS)
                   </Text>
                   <Badge label="REGLA NO NEGOCIABLE" variant="warning" />
                 </Row>
-                <Text variant="caption" color={isDark ? '#FEF3C7' : colors.sand[900]}>
+                <Text variant="caption" color={isDark ? '#E2E8F0' : colors.sand[900]}>
                   Revisá las fotos dentro de las 24 hs de devuelta la tabla. El silencio del cliente
                   tras ser notificado constituye{' '}
                   <Text
                     variant="caption"
-                    color={isDark ? '#FDE68A' : colors.sand[900]}
+                    color={isDark ? '#FBBF24' : colors.sand[900]}
                     style={{ fontWeight: '700' }}
                   >
                     aceptación tácita del daño
@@ -431,8 +454,8 @@ export const RevisionsScreen: React.FC = () => {
                           style={[
                             styles.damageNoticeBox,
                             {
-                              backgroundColor: isDark ? '#450A0A' : '#FEF2F2',
-                              borderColor: isDark ? '#EF4444' : '#FECACA',
+                              backgroundColor: isDark ? 'rgba(239, 68, 68, 0.10)' : '#FEF2F2',
+                              borderColor: isDark ? 'rgba(239, 68, 68, 0.38)' : '#FECACA',
                             },
                           ]}
                         >
@@ -441,7 +464,7 @@ export const RevisionsScreen: React.FC = () => {
                           </Row>
                           <Text
                             variant="body"
-                            color={isDark ? '#FECACA' : colors.semantic.danger}
+                            color={isDark ? '#FCA5A5' : colors.semantic.danger}
                             style={{ fontWeight: '600' }}
                           >
                             "{rev.descripcionDanio}"
@@ -679,24 +702,24 @@ export const RevisionsScreen: React.FC = () => {
                         style={[
                           styles.trackingBox,
                           claim.estado === 'NOTIFICADO' && {
-                            backgroundColor: isDark ? '#451A03' : '#FEF3C7',
-                            borderColor: '#FCD34D',
+                            backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
+                            borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
                           },
                           (claim.estado === 'EN_MEDIACION' || claim.estado === 'DISPUTADO') && {
-                            backgroundColor: isDark ? '#172554' : '#EFF6FF',
-                            borderColor: '#60A5FA',
+                            backgroundColor: isDark ? 'rgba(0, 229, 255, 0.06)' : '#EFF6FF',
+                            borderColor: isDark ? 'rgba(0, 229, 255, 0.28)' : '#60A5FA',
                           },
                           claim.estado === 'RESUELTO_OWNER' && {
-                            backgroundColor: isDark ? '#064E3B' : '#ECFDF5',
-                            borderColor: '#34D399',
+                            backgroundColor: isDark ? 'rgba(16, 185, 129, 0.10)' : '#ECFDF5',
+                            borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#34D399',
                           },
                           claim.estado === 'RESUELTO_CONSUMER' && {
-                            backgroundColor: isDark ? '#450A0A' : '#FEF2F2',
-                            borderColor: '#F87171',
+                            backgroundColor: isDark ? 'rgba(239, 68, 68, 0.10)' : '#FEF2F2',
+                            borderColor: isDark ? 'rgba(239, 68, 68, 0.35)' : '#F87171',
                           },
                           (claim.estado === 'ACEPTADO' || claim.estado === 'COBRADO') && {
-                            backgroundColor: isDark ? '#064E3B' : '#ECFDF5',
-                            borderColor: '#34D399',
+                            backgroundColor: isDark ? 'rgba(16, 185, 129, 0.10)' : '#ECFDF5',
+                            borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#34D399',
                           },
                         ]}
                       >

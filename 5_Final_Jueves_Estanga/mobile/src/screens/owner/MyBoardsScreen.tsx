@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Modal, ActivityIndicator, RefreshControl, TouchableOpacity, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { CheckSquare, Square, ShieldCheck, Info } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, EmptyState, Input } from '../../components/ui';
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -193,8 +194,8 @@ export const MyBoardsScreen: React.FC = () => {
           style={[
             styles.summaryCard,
             {
-              backgroundColor: isDark ? '#0F172A' : '#EFF6FF',
-              borderColor: isDark ? colors.ocean[700] : '#BFDBFE',
+              backgroundColor: isDark ? 'rgba(0, 229, 255, 0.06)' : '#EFF6FF',
+              borderColor: isDark ? 'rgba(0, 229, 255, 0.25)' : '#BFDBFE',
             },
           ]}
         >
@@ -202,7 +203,7 @@ export const MyBoardsScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <Text
                 variant="caption"
-                color={isDark ? colors.ocean[300] : colors.ocean[700]}
+                color={isDark ? '#00E5FF' : colors.ocean[700]}
                 style={{ fontWeight: '700' }}
               >
                 SUSCRIPCIÓN OWNER
@@ -224,8 +225,8 @@ export const MyBoardsScreen: React.FC = () => {
           style={[
             styles.maintenanceCard,
             {
-              backgroundColor: isDark ? '#451A03' : '#FFFBEB',
-              borderColor: isDark ? '#F59E0B' : '#FDE68A',
+              backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
+              borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
             },
           ]}
         >
@@ -233,11 +234,11 @@ export const MyBoardsScreen: React.FC = () => {
             <View style={{ flex: 1, paddingRight: spacing.sm }}>
               <Text
                 variant="button"
-                color={isDark ? '#FDE68A' : colors.sunset[600]}
+                color={isDark ? '#FBBF24' : colors.sunset[600]}
               >
                 Ciclo de Mantenimiento Obligatorio (45 Días)
               </Text>
-              <Text variant="caption" color={isDark ? '#FEF3C7' : colors.sand[700]}>
+              <Text variant="caption" color={isDark ? '#E2E8F0' : colors.sand[700]}>
                 Toda tabla debe inspeccionarse cada 45 días. Cada inspección aprobada suma +45 días al contador de vigencia.
               </Text>
             </View>
@@ -309,17 +310,17 @@ export const MyBoardsScreen: React.FC = () => {
                             styles.maintBoxBase,
                             isOverdue
                               ? {
-                                  backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
-                                  borderColor: isDark ? '#EF4444' : '#FCA5A5',
+                                  backgroundColor: isDark ? 'rgba(239, 68, 68, 0.10)' : '#FEE2E2',
+                                  borderColor: isDark ? 'rgba(239, 68, 68, 0.35)' : '#FCA5A5',
                                 }
                               : needsSoon
                               ? {
-                                  backgroundColor: isDark ? '#451A03' : '#FEF3C7',
-                                  borderColor: isDark ? '#F59E0B' : '#FCD34D',
+                                  backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FEF3C7',
+                                  borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FCD34D',
                                 }
                               : {
-                                  backgroundColor: isDark ? '#064E3B' : '#F0FDF4',
-                                  borderColor: isDark ? '#10B981' : '#BBF7D0',
+                                  backgroundColor: isDark ? 'rgba(16, 185, 129, 0.10)' : '#F0FDF4',
+                                  borderColor: isDark ? 'rgba(16, 185, 129, 0.32)' : '#BBF7D0',
                                 },
                           ]}
                         >
@@ -552,9 +553,13 @@ export const MyBoardsScreen: React.FC = () => {
                   
                   <TouchableOpacity
                     onPress={() => setCheckQuillas(!checkQuillas)}
-                    style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}
+                    style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
-                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkQuillas ? '' : '⬜'}</Text>
+                    {checkQuillas ? (
+                      <CheckSquare size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                    ) : (
+                      <Square size={16} color={theme.subtext} />
+                    )}
                     <Text variant="caption" color={theme.subtext} style={{ flex: 1 }}>
                       Quillas, tapones FCS/Futures y cajón central ajustados y sin fisuras.
                     </Text>
@@ -562,9 +567,13 @@ export const MyBoardsScreen: React.FC = () => {
 
                   <TouchableOpacity
                     onPress={() => setCheckDeckFibra(!checkDeckFibra)}
-                    style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}
+                    style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
-                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkDeckFibra ? '' : '⬜'}</Text>
+                    {checkDeckFibra ? (
+                      <CheckSquare size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                    ) : (
+                      <Square size={16} color={theme.subtext} />
+                    )}
                     <Text variant="caption" color={theme.subtext} style={{ flex: 1 }}>
                       Deck, cantos y tail sin filtraciones de agua, grietas o delaminación.
                     </Text>
@@ -572,9 +581,13 @@ export const MyBoardsScreen: React.FC = () => {
 
                   <TouchableOpacity
                     onPress={() => setCheckParafina(!checkParafina)}
-                    style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}
+                    style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
-                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkParafina ? '' : '⬜'}</Text>
+                    {checkParafina ? (
+                      <CheckSquare size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                    ) : (
+                      <Square size={16} color={theme.subtext} />
+                    )}
                     <Text variant="caption" color={theme.subtext} style={{ flex: 1 }}>
                       Superficie antideslizante (parafina o grip de tracción) en condiciones aptas.
                     </Text>
@@ -593,7 +606,10 @@ export const MyBoardsScreen: React.FC = () => {
                   }}
                 >
                   <Row spacing="xs" align="center">
-                    <Text style={{ fontSize: 18 }}>{inspectionSigned ? '' : ''}</Text>
+                    <ShieldCheck
+                      size={18}
+                      color={inspectionSigned ? (isDark ? '#34D399' : '#059669') : theme.subtext}
+                    />
                     <View style={{ flex: 1 }}>
                       <Text
                         variant="caption"
@@ -618,9 +634,12 @@ export const MyBoardsScreen: React.FC = () => {
                     borderWidth: 1,
                   }}
                 >
-                  <Text variant="caption" color={isDark ? '#93C5FD' : colors.ocean[700]}>
-                    ℹ️ El ciclo de mantenimiento preventivo queda renovado a 45 días exactos a partir de la fecha de hoy.
-                  </Text>
+                  <Row spacing="xs" align="center">
+                    <Info size={14} color={isDark ? '#93C5FD' : colors.ocean[700]} />
+                    <Text variant="caption" color={isDark ? '#93C5FD' : colors.ocean[700]} style={{ flex: 1 }}>
+                      El ciclo de mantenimiento preventivo queda renovado a 45 días exactos a partir de la fecha de hoy.
+                    </Text>
+                  </Row>
                 </Card>
 
                 {inspectionError && (

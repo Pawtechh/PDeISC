@@ -1,45 +1,41 @@
 import React from 'react';
-import { View, StyleSheet, Image, StyleProp, ViewStyle } from 'react-native';
-import { colors, radii } from '../../theme';
+import { View, StyleSheet, ViewStyle } from 'react-native';
+import { Image } from 'expo-image';
 import { Text } from './Text';
+import { colors } from '../../theme/colors';
+import { radii } from '../../theme/radii';
+import { useTheme } from '../../theme/ThemeContext';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export interface AvatarProps {
-  source?: string;
+  uri?: string | null;
   name?: string;
   size?: AvatarSize;
-  style?: StyleProp<ViewStyle>;
+  style?: ViewStyle;
 }
 
+const sizeMap: Record<AvatarSize, number> = {
+  sm: 32,
+  md: 44,
+  lg: 64,
+  xl: 88,
+};
+
 export const Avatar: React.FC<AvatarProps> = ({
-  source,
-  name = 'SR',
+  uri,
+  name = 'Surfista',
   size = 'md',
   style,
 }) => {
-  const getDimension = (): number => {
-    switch (size) {
-      case 'sm':
-        return 32;
-      case 'md':
-        return 44;
-      case 'lg':
-        return 56;
-      case 'xl':
-        return 72;
-    }
-  };
-
-  const getInitials = (fullName: string): string => {
-    const parts = fullName.trim().split(' ');
-    if (parts.length >= 2 && parts[0] && parts[1]) {
-      return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-    }
-    return fullName.slice(0, 2).toUpperCase();
-  };
-
-  const dimension = getDimension();
+  const { isDark } = useTheme();
+  const dimension = sizeMap[size];
+  const initials = name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('');
 
   return (
     <View
@@ -48,24 +44,26 @@ export const Avatar: React.FC<AvatarProps> = ({
         {
           width: dimension,
           height: dimension,
-          borderRadius: radii.full,
-          backgroundColor: colors.ocean[100],
+          backgroundColor: isDark ? 'rgba(0, 229, 255, 0.14)' : colors.ocean[100],
+          borderWidth: 1.5,
+          borderColor: isDark ? 'rgba(0, 229, 255, 0.38)' : colors.ocean[300],
         },
         style,
       ]}
     >
-      {source ? (
+      {uri ? (
         <Image
-          source={{ uri: source }}
-          style={{ width: dimension, height: dimension, borderRadius: radii.full }}
-          resizeMode="cover"
+          source={{ uri }}
+          style={{ width: dimension, height: dimension }}
+          contentFit="cover"
+          transition={200}
         />
       ) : (
         <Text
-          variant={size === 'sm' ? 'caption' : size === 'lg' || size === 'xl' ? 'h3' : 'button'}
-          color={colors.ocean[700]}
+          variant={size === 'xl' ? 'h2' : size === 'lg' ? 'h3' : 'button'}
+          color={isDark ? '#00E5FF' : colors.ocean[700]}
         >
-          {getInitials(name)}
+          {initials || 'SR'}
         </Text>
       )}
     </View>
@@ -74,8 +72,9 @@ export const Avatar: React.FC<AvatarProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    borderRadius: radii.full,
+    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
   },
 });

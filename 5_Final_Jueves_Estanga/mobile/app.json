@@ -9,33 +9,40 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FAFAF7"
+      "backgroundColor": "#090C10"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.surfrental.mdp"
+      "bundleIdentifier": "com.surfrental.mdp",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Surf Rental MDP utiliza la cámara para escanear códigos QR de pases de retiro e inspección de tablas en sede.",
+        "NSFaceIDUsageDescription": "Surf Rental MDP utiliza Face ID / Touch ID para rubricar contratos de alquiler digitalmente conforme a la Ley 25.506.",
+        "NSLocationWhenInUseUsageDescription": "Surf Rental MDP utiliza tu ubicación para calcular la distancia en vivo a la Sede Central Playa Grande."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FAFAF7"
+        "backgroundColor": "#090C10"
       },
       "package": "com.surfrental.mdp",
       "permissions": [
         "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "INTERNET"
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     },
-    "scheme": "surfrental",
-    "extra": {
-      "googleClientId": "mock-google-client-id.apps.googleusercontent.com",
-      "facebookAppId": "mock-facebook-app-id",
-      "appleClientId": "com.surfrental.mdp.web"
-    }
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }
