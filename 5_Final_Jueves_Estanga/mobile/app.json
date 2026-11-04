@@ -43,7 +43,13 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-secure-store"
-    ]
+      "expo-secure-store",
+      "expo-asset"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "bee0b9e7-2cc7-45d1-9f68-78e4db18c125"
+      }
+    }
   }
 }
