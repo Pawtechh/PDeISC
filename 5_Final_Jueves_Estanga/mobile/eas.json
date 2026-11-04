@@ -1,7 +1,7 @@
 {
   "cli": {
     "version": ">= 12.0.0",
-    "appVersionSource": "remote"
+    "appVersionSource": "local"
   },
   "build": {
     "development": {
@@ -9,6 +9,9 @@
       "distribution": "internal",
       "android": {
         "gradleCommand": ":app:assembleDebug"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://sensitive-sized-duke-famous.trycloudflare.com/api"
       }
     },
     "preview": {
@@ -16,31 +19,18 @@
       "android": {
         "buildType": "apk"
       },
-      "ios": {
-        "simulator": true
-      },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.surfrentalmdp.com.ar/api",
-        "EXPO_PUBLIC_ENVIRONMENT": "preview"
+        "EXPO_PUBLIC_API_URL": "https://sensitive-sized-duke-famous.trycloudflare.com/api",
+        "EXPO_PUBLIC_ENVIRONMENT": "production"
       }
     },
-    "preview-local": {
+    "production": {
       "distribution": "internal",
       "android": {
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://10.0.2.2:3000/api",
-        "EXPO_PUBLIC_ENVIRONMENT": "development"
-      }
-    },
-    "production": {
-      "autoIncrement": true,
-      "android": {
-        "buildType": "app-bundle"
-      },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.surfrentalmdp.com.ar/api",
+        "EXPO_PUBLIC_API_URL": "https://sensitive-sized-duke-famous.trycloudflare.com/api",
         "EXPO_PUBLIC_ENVIRONMENT": "production"
       }
     }

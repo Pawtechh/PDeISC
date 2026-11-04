@@ -4,6 +4,7 @@
     "slug": "surf-rental-mdp",
     "version": "1.0.0",
     "orientation": "portrait",
+    "jsEngine": "hermes",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
