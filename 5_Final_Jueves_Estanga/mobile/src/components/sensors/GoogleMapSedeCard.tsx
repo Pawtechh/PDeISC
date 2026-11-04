@@ -1,31 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Platform, ActivityIndicator } from 'react-native';
-import { Map, CheckCircle2, AlertTriangle, Radio, Navigation } from 'lucide-react-native';
+import { Map, CheckCircle2, AlertTriangle, Radio, Navigation, MapPin } from 'lucide-react-native';
 import { Card, Stack, Row, Text, Badge } from '../ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
-import { sensorService, PLAYA_GRANDE_COORDS } from '../../services/sensorService';
+import {
+  sensorService,
+  PLAYA_GRANDE_COORDS,
+  RealGpsReading,
+} from '../../services/sensorService';
 
 export const GoogleMapSedeCard: React.FC = () => {
   const { theme, isDark } = useTheme();
+  const isPcWeb = Platform.OS === 'web';
 
-  const [gpsData, setGpsData] = useState<{
-    latitude: number;
-    longitude: number;
-    distanceToPlayaGrande: number;
-    isNearBeach: boolean;
-  } | null>(null);
+  const [gpsData, setGpsData] = useState<RealGpsReading | null>(null);
+  const [gpsError, setGpsError] = useState<string | null>(null);
   const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
-    handleRefreshLocation();
-  }, []);
+    // En PC/Web no se ejecuta el sensor de ubicación móvil
+    if (isPcWeb) return;
+
+    let sub: { remove: () => void } | null = null;
+    let mounted = true;
+
+    const initMobileGps = async () => {
+      setIsLocating(true);
+      setGpsError(null);
+      try {
+        const initial = await sensorService.getCurrentLocation();
+        if (mounted) {
+          setGpsData(initial);
+        }
+        const watcher = await sensorService.watchLocation(
+          (reading) => {
+            if (mounted) {
+              setGpsData(reading);
+              setGpsError(null);
+            }
+          },
+          (errMsg) => {
+            if (mounted) setGpsError(errMsg);
+          }
+        );
+        sub = watcher;
+      } catch (err: any) {
+        if (mounted) {
+          setGpsError(err?.message || 'Habilitá el permiso de GPS en tu teléfono');
+        }
+      } finally {
+        if (mounted) setIsLocating(false);
+      }
+    };
+
+    initMobileGps();
+
+    return () => {
+      mounted = false;
+      sub?.remove?.();
+    };
+  }, [isPcWeb]);
 
   const handleRefreshLocation = async () => {
+    if (isPcWeb) return;
     setIsLocating(true);
+    setGpsError(null);
     try {
       const loc = await sensorService.getCurrentLocation();
       setGpsData(loc);
+    } catch (err: any) {
+      setGpsError(err?.message || 'No se pudo obtener la ubicación GPS');
     } finally {
       setIsLocating(false);
     }
@@ -36,9 +81,6 @@ export const GoogleMapSedeCard: React.FC = () => {
   };
 
   const mapEmbedUrl = `https://maps.google.com/maps?q=${PLAYA_GRANDE_COORDS.latitude},${PLAYA_GRANDE_COORDS.longitude}&hl=es&z=16&output=embed`;
-
-  const distanceMts = gpsData?.distanceToPlayaGrande ?? 50;
-  const isClose = distanceMts <= 1500;
 
   return (
     <Card
@@ -53,96 +95,123 @@ export const GoogleMapSedeCard: React.FC = () => {
     >
       <Stack spacing="sm">
         {/* Encabezado */}
-        <Row justify="space-between" align="center">
+        <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
           <Row spacing="sm" align="center">
             <View style={styles.iconCircle}>
               <Map size={16} color="#00E5FF" />
             </View>
             <View>
               <Text variant="h3" color={theme.text}>
-                Mapa Google & Sensor de Proximidad
+                {isPcWeb
+                  ? 'Ubicación de la Sede & Cómo Llegar'
+                  : 'Mapa Google & Sensor GPS en Vivo'}
               </Text>
               <Text variant="caption" color={theme.subtext}>
-                {PLAYA_GRANDE_COORDS.name} • Mar del Plata
+                {PLAYA_GRANDE_COORDS.address}
               </Text>
             </View>
           </Row>
-          <Badge
-            label={isClose ? 'EN ZONA DE ENTREGA' : `${(distanceMts / 1000).toFixed(1)} KM DE SEDE`}
-            variant={isClose ? 'success' : 'warning'}
-          />
+
+          {isPcWeb ? (
+            <Badge label="PLAYA GRANDE • MDP" variant="ocean" />
+          ) : gpsData ? (
+            <Badge
+              label={
+                gpsData.isNearBeach
+                  ? 'EN ZONA DE ENTREGA'
+                  : `${(gpsData.distanceToPlayaGrande / 1000).toFixed(1)} KM DE SEDE`
+              }
+              variant={gpsData.isNearBeach ? 'success' : 'warning'}
+            />
+          ) : (
+            <Badge label="SENSOR GPS MÓVIL" variant="ocean" />
+          )}
         </Row>
 
-        {/* Indicador Central de Distancia Prominente */}
-        <View
-          style={[
-            styles.distanceBanner,
-            {
-              backgroundColor: isDark ? '#111A2B' : '#F0F9FF',
-              borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : colors.ocean[400],
-            },
-          ]}
-        >
-          <Row justify="space-between" align="center">
-            <View style={{ flex: 1 }}>
-              <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700' }}>
-                DISTANCIA EN TIEMPO REAL:
-              </Text>
-              <Text
-                variant="display"
-                color={isDark ? '#00E5FF' : colors.ocean[700]}
-                style={styles.distanceValue}
-              >
-                {distanceMts < 1000 ? `${distanceMts} metros` : `${(distanceMts / 1000).toFixed(2)} km`}
-              </Text>
-              <Row spacing="xs" align="center">
-                {isClose ? (
-                  <CheckCircle2 size={13} color="#34D399" />
-                ) : (
-                  <AlertTriangle size={13} color="#FBBF24" />
-                )}
-                <Text variant="caption" color={theme.subtext}>
-                  {isClose
-                    ? 'Dentro del perímetro habilitado para retiros y devoluciones en mostrador.'
-                    : 'Fuera del radio de entrega inmediata.'}
+        {/* SÓLO EN MÓVIL (Expo Go / APK): Sensor de Ubicación GPS en Tiempo Real */}
+        {!isPcWeb && (
+          <View
+            style={[
+              styles.distanceBanner,
+              {
+                backgroundColor: isDark ? '#111A2B' : '#F0F9FF',
+                borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : colors.ocean[400],
+              },
+            ]}
+          >
+            <Row justify="space-between" align="center">
+              <View style={{ flex: 1 }}>
+                <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700' }}>
+                  DISTANCIA GPS REAL DESDE TU TELÉFONO:
                 </Text>
-              </Row>
-            </View>
-
-            <TouchableOpacity
-              onPress={handleRefreshLocation}
-              disabled={isLocating}
-              style={[
-                styles.refreshBtn,
-                { backgroundColor: isDark ? '#D4AF37' : colors.ocean[600] },
-              ]}
-            >
-              {isLocating ? (
-                <ActivityIndicator size="small" color={isDark ? '#090C10' : '#FFFFFF'} />
-              ) : (
-                <Row spacing="xs" align="center">
-                  <Radio size={13} color={isDark ? '#090C10' : '#FFFFFF'} />
-                  <Text
-                    variant="caption"
-                    color={isDark ? '#090C10' : '#FFFFFF'}
-                    style={{ fontWeight: '700' }}
-                  >
-                    Actualizar GPS
+                {gpsData ? (
+                  <>
+                    <Text
+                      variant="display"
+                      color={isDark ? '#00E5FF' : colors.ocean[700]}
+                      style={styles.distanceValue}
+                    >
+                      {gpsData.distanceToPlayaGrande < 1000
+                        ? `${gpsData.distanceToPlayaGrande} metros`
+                        : `${(gpsData.distanceToPlayaGrande / 1000).toFixed(2)} km`}
+                    </Text>
+                    <Row spacing="xs" align="center">
+                      {gpsData.isNearBeach ? (
+                        <CheckCircle2 size={13} color="#34D399" />
+                      ) : (
+                        <AlertTriangle size={13} color="#FBBF24" />
+                      )}
+                      <Text variant="caption" color={theme.subtext}>
+                        {gpsData.isNearBeach
+                          ? 'Dentro del perímetro habilitado para retiros y devoluciones en mostrador.'
+                          : 'Fuera del radio inmediato de la sede (1.5 km).'}
+                      </Text>
+                    </Row>
+                  </>
+                ) : (
+                  <Text variant="body" color={theme.text} style={{ marginTop: 4 }}>
+                    {isLocating
+                      ? 'Leyendo coordenadas del sensor GPS de tu dispositivo...'
+                      : gpsError || 'Tocá "Actualizar GPS" para medir la distancia desde tu ubicación actual.'}
                   </Text>
-                </Row>
-              )}
-            </TouchableOpacity>
-          </Row>
-        </View>
+                )}
+              </View>
+
+              <TouchableOpacity
+                onPress={handleRefreshLocation}
+                disabled={isLocating}
+                style={[
+                  styles.refreshBtn,
+                  { backgroundColor: isDark ? '#D4AF37' : colors.ocean[600] },
+                ]}
+              >
+                {isLocating ? (
+                  <ActivityIndicator size="small" color={isDark ? '#090C10' : '#FFFFFF'} />
+                ) : (
+                  <Row spacing="xs" align="center">
+                    <Radio size={13} color={isDark ? '#090C10' : '#FFFFFF'} />
+                    <Text
+                      variant="caption"
+                      color={isDark ? '#090C10' : '#FFFFFF'}
+                      style={{ fontWeight: '700' }}
+                    >
+                      Actualizar GPS
+                    </Text>
+                  </Row>
+                )}
+              </TouchableOpacity>
+            </Row>
+          </View>
+        )}
 
         {/* Mapa Interactivo de Google Maps */}
         <View style={styles.mapContainer}>
-          {Platform.OS === 'web' ? (
+          {isPcWeb ? (
             <iframe
               title="Google Maps Sede Playa Grande"
               src={mapEmbedUrl}
               width="100%"
-              height="220"
+              height="240"
               style={{
                 border: 0,
                 borderRadius: '10px',
@@ -152,29 +221,55 @@ export const GoogleMapSedeCard: React.FC = () => {
               loading="lazy"
             />
           ) : (
-            <View style={styles.nativeMapPlaceholder}>
-              <Map size={28} color="#00E5FF" />
+            <View style={[styles.nativeMapPlaceholder, { backgroundColor: isDark ? '#111826' : '#F1F5F9' }]}>
+              <MapPin size={28} color="#00E5FF" />
               <Text variant="body" color={theme.text} style={{ fontWeight: '700', marginTop: 4 }}>
-                Sede Central Playa Grande
+                {PLAYA_GRANDE_COORDS.name}
               </Text>
-              <Text variant="caption" color={theme.subtext}>
-                Lat: {PLAYA_GRANDE_COORDS.latitude}, Lon: {PLAYA_GRANDE_COORDS.longitude}
+              <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center' }}>
+                {PLAYA_GRANDE_COORDS.address}
               </Text>
+              {gpsData && (
+                <Text variant="caption" color="#00E5FF" style={{ marginTop: 6, fontWeight: '700' }}>
+                  Tu GPS actual: {gpsData.latitude.toFixed(5)}, {gpsData.longitude.toFixed(5)}
+                </Text>
+              )}
             </View>
           )}
         </View>
 
-        {/* Coordenadas & Botón para abrir en la app de Google Maps */}
+        {/* Pie con dirección/coordenadas y botón prominente "Cómo Llegar con Google Maps" */}
         <Row justify="space-between" align="center" style={styles.footerRow}>
-          <Text variant="caption" color={theme.subtext} style={styles.coordText}>
-            Tu GPS: {gpsData ? `${gpsData.latitude.toFixed(4)}, ${gpsData.longitude.toFixed(4)}` : 'Obteniendo...'}
-          </Text>
+          <Row spacing="xs" align="center" style={{ flex: 1, paddingRight: 8 }}>
+            <MapPin size={13} color={theme.subtext} />
+            <Text variant="caption" color={theme.subtext} style={styles.coordText}>
+              {isPcWeb
+                ? `Sede Central: ${PLAYA_GRANDE_COORDS.latitude}, ${PLAYA_GRANDE_COORDS.longitude}`
+                : gpsData
+                ? `Tu GPS: ${gpsData.latitude.toFixed(4)}, ${gpsData.longitude.toFixed(4)}`
+                : 'GPS del teléfono listo para ruta'}
+            </Text>
+          </Row>
 
-          <TouchableOpacity onPress={handleOpenDirections} style={styles.directionsBtn}>
+          <TouchableOpacity
+            onPress={handleOpenDirections}
+            style={[
+              styles.directionsBtn,
+              {
+                backgroundColor: isDark ? 'rgba(0, 229, 255, 0.14)' : colors.ocean[600],
+                borderColor: isDark ? '#00E5FF' : colors.ocean[600],
+              },
+            ]}
+            testID="btn-google-maps-directions"
+          >
             <Row spacing="xs" align="center">
-              <Navigation size={13} color={isDark ? '#00E5FF' : colors.ocean[600]} />
-              <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[600]} style={{ fontWeight: '700' }}>
-                Cómo Llegar en Google Maps
+              <Navigation size={14} color={isDark ? '#00E5FF' : '#FFFFFF'} />
+              <Text
+                variant="caption"
+                color={isDark ? '#00E5FF' : '#FFFFFF'}
+                style={{ fontWeight: '700' }}
+              >
+                Cómo Llegar con Google Maps
               </Text>
             </Row>
           </TouchableOpacity>
@@ -225,20 +320,24 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(148, 163, 184, 0.2)',
   },
   nativeMapPlaceholder: {
-    height: 180,
-    backgroundColor: '#1E293B',
+    height: 170,
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.md,
   },
   footerRow: {
-    marginTop: 2,
+    marginTop: 4,
+    flexWrap: 'wrap',
+    gap: 8,
   },
   coordText: {
     fontFamily: 'monospace',
     fontSize: 11,
   },
   directionsBtn: {
-    paddingVertical: spacing.xs,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: radii.md,
+    borderWidth: 1,
   },
 });

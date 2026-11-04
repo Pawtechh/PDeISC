@@ -14,6 +14,7 @@ import { Board3DCarousel } from '../../components/boards/Board3DCarousel';
 import { BoardDetailScreen } from './BoardDetailScreen';
 import { useResponsive } from '../../hooks/useResponsive';
 import { MarineForecastCard } from '../../components/marine/MarineForecastCard';
+import { GoogleMapSedeCard } from '../../components/sensors';
 
 const FILTER_TYPES = ['Todos', 'Longboard', 'Fish', 'Funboard', 'Shortboard', 'Bodyboard', 'SUP'];
 
@@ -33,7 +34,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   }, []);
 
   const { data, isLoading, isFetching, refetch } = useGetBoardsQuery(
-    selectedType !== 'Todos' ? { tipo: selectedType } : undefined
+    selectedType !== 'Todos' ? { tipo: selectedType } : undefined,
+    { pollingInterval: 6000, refetchOnMountOrArgChange: true }
   );
 
   useFocusEffect(
@@ -308,6 +310,9 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
             </View>
           )}
         </View>
+
+        {/* Ubicación de la Sede & Cómo Llegar con Google Maps (y Sensor GPS en Móvil) */}
+        <GoogleMapSedeCard />
       </Stack>
 
       {/* Modal with Full Surfboard Detail */}

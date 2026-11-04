@@ -3,7 +3,7 @@ import * as Location from 'expo-location';
 import { Camera } from 'expo-camera';
 import * as LocalAuthentication from 'expo-local-authentication';
 
-// Coordenadas de la Sede Central Playa Grande (Mar del Plata)
+// Coordenadas reales de la Sede Central Playa Grande (Mar del Plata)
 export const PLAYA_GRANDE_COORDS = {
   latitude: -38.0315,
   longitude: -57.5332,
@@ -12,7 +12,7 @@ export const PLAYA_GRANDE_COORDS = {
 };
 
 /**
- * Calcula la distancia en metros entre dos coordenadas geográficas (Haversine Formula)
+ * Calcula la distancia real en metros entre dos coordenadas geográficas (Haversine Formula)
  */
 export function calculateHaversineDistance(
   lat1: number,
@@ -31,101 +31,118 @@ export function calculateHaversineDistance(
   return Math.round(R * c);
 }
 
+export interface RealGpsReading {
+  latitude: number;
+  longitude: number;
+  distanceToPlayaGrande: number;
+  isNearBeach: boolean;
+  accuracy?: number;
+}
+
 export const sensorService = {
   /**
-   * 1. GPS & Geolocalización (expo-location + Web Geolocation fallback)
+   * Indica si la app corre en PC / Web (donde no aplican sensores físicos móviles de GPS/Huella)
    */
-  async getCurrentLocation(): Promise<{
-    latitude: number;
-    longitude: number;
-    distanceToPlayaGrande: number;
-    isNearBeach: boolean;
-    accuracy?: number;
-  }> {
-    // Si estamos en navegador web, intentar primero Geolocation API nativa del navegador
-    if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.geolocation) {
-      try {
-        const webPos = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            enableHighAccuracy: true,
-            timeout: 6000,
-            maximumAge: 10000,
-          });
-        });
+  isDesktopOrWeb(): boolean {
+    return Platform.OS === 'web';
+  },
 
-        const latitude = webPos.coords.latitude;
-        const longitude = webPos.coords.longitude;
-        const distance = calculateHaversineDistance(
-          latitude,
-          longitude,
-          PLAYA_GRANDE_COORDS.latitude,
-          PLAYA_GRANDE_COORDS.longitude
-        );
-
-        return {
-          latitude,
-          longitude,
-          distanceToPlayaGrande: distance,
-          isNearBeach: distance <= 1500,
-          accuracy: webPos.coords.accuracy,
-        };
-      } catch {
-        // Fallback a expo-location o mock realista
-      }
+  /**
+   * 1. GPS & Geolocalización Nativa Real (expo-location en APK / Expo Go)
+   * Sin coordenadas simuladas ni trucos.
+   */
+  async getCurrentLocation(): Promise<RealGpsReading> {
+    if (Platform.OS === 'web') {
+      throw new Error('Sensor de ubicación nativo reservado para dispositivos móviles');
     }
+
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      throw new Error('Permiso de ubicación denegado en el dispositivo');
+    }
+
+    const position = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+    });
+
+    const { latitude, longitude, accuracy } = position.coords;
+    const distance = calculateHaversineDistance(
+      latitude,
+      longitude,
+      PLAYA_GRANDE_COORDS.latitude,
+      PLAYA_GRANDE_COORDS.longitude
+    );
+
+    return {
+      latitude,
+      longitude,
+      distanceToPlayaGrande: distance,
+      isNearBeach: distance <= 1500,
+      accuracy: accuracy ?? undefined,
+    };
+  },
+
+  /**
+   * Suscripción en tiempo real al GPS del teléfono (expo-location watchPositionAsync)
+   */
+  async watchLocation(
+    onUpdate: (reading: RealGpsReading) => void,
+    onError?: (message: string) => void
+  ): Promise<Location.LocationSubscription | null> {
+    if (Platform.OS === 'web') return null;
 
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        throw new Error('Permiso de geolocalización denegado');
+        onError?.('Permiso de GPS no otorgado. Habilitalo en Ajustes para medir distancia.');
+        return null;
       }
 
-      const position = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      });
-
-      const { latitude, longitude, accuracy } = position.coords;
-      const distance = calculateHaversineDistance(
-        latitude,
-        longitude,
-        PLAYA_GRANDE_COORDS.latitude,
-        PLAYA_GRANDE_COORDS.longitude
+      const sub = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 4000,
+          distanceInterval: 5,
+        },
+        (position) => {
+          const { latitude, longitude, accuracy } = position.coords;
+          const distance = calculateHaversineDistance(
+            latitude,
+            longitude,
+            PLAYA_GRANDE_COORDS.latitude,
+            PLAYA_GRANDE_COORDS.longitude
+          );
+          onUpdate({
+            latitude,
+            longitude,
+            distanceToPlayaGrande: distance,
+            isNearBeach: distance <= 1500,
+            accuracy: accuracy ?? undefined,
+          });
+        }
       );
-
-      return {
-        latitude,
-        longitude,
-        distanceToPlayaGrande: distance,
-        isNearBeach: distance <= 1500,
-        accuracy: accuracy ?? undefined,
-      };
-    } catch {
-      // Coordenadas en Playa Grande (punto de referencia de la Sede)
-      return {
-        latitude: PLAYA_GRANDE_COORDS.latitude,
-        longitude: PLAYA_GRANDE_COORDS.longitude,
-        distanceToPlayaGrande: 45,
-        isNearBeach: true,
-      };
+      return sub;
+    } catch (err: any) {
+      onError?.(err?.message || 'No se pudo leer el sensor GPS del dispositivo.');
+      return null;
     }
   },
 
   /**
-   * 2. Cámara Nativa (expo-camera + Web MediaDevices)
+   * 2. Cámara Nativa (expo-camera)
    */
   async requestCameraPermission(): Promise<boolean> {
     if (Platform.OS === 'web') {
       if (typeof navigator !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          // Detener el stream inmediatamente tras verificar permiso
           stream.getTracks().forEach((track) => track.stop());
           return true;
         } catch {
           return false;
         }
       }
-      return true;
+      return false;
     }
 
     try {
@@ -137,43 +154,68 @@ export const sensorService = {
   },
 
   /**
-   * 3. Biometría (expo-local-authentication + Web / Mobile Fallback)
+   * 3. Biometría Nativa Real (expo-local-authentication en móvil)
    */
-  async authenticateBiometrics(prompt = 'Validá tu identidad con huella digital'): Promise<boolean> {
+  async hasBiometricHardware(): Promise<{ available: boolean; label: string }> {
+    if (Platform.OS === 'web') {
+      return { available: false, label: 'No disponible en PC' };
+    }
     try {
-      if (Platform.OS !== 'web') {
-        const hasHw = await LocalAuthentication.hasHardwareAsync();
-        const isEnr = await LocalAuthentication.isEnrolledAsync();
-        if (hasHw && isEnr) {
-          const result = await LocalAuthentication.authenticateAsync({
-            promptMessage: prompt,
-            cancelLabel: 'Cancelar',
-            disableDeviceFallback: false,
-          });
-          return result.success;
-        }
-      }
+      const hasHw = await LocalAuthentication.hasHardwareAsync();
+      const isEnr = await LocalAuthentication.isEnrolledAsync();
+      if (!hasHw) return { available: false, label: 'Dispositivo sin lector biométrico' };
+      if (!isEnr) return { available: false, label: 'Sin huella/rostro registrado en el teléfono' };
 
-      // En web o dispositivos sin enrolamiento físico, simular proceso biométrico exitoso
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      return true;
+      const types = await LocalAuthentication.supportedAuthenticationTypesAsync();
+      const isFace = types.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION);
+      return {
+        available: true,
+        label: isFace ? 'Face ID / Reconocimiento Facial Activo' : 'Lector de Huella Digital Activo',
+      };
     } catch {
-      return true;
+      return { available: false, label: 'Sensor biométrico no detectado' };
+    }
+  },
+
+  async authenticateBiometrics(prompt = 'Validá tu identidad con huella digital'): Promise<boolean> {
+    if (Platform.OS === 'web') {
+      return false;
+    }
+    try {
+      const hasHw = await LocalAuthentication.hasHardwareAsync();
+      const isEnr = await LocalAuthentication.isEnrolledAsync();
+      if (!hasHw || !isEnr) {
+        return false;
+      }
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: prompt,
+        cancelLabel: 'Cancelar',
+        disableDeviceFallback: false,
+      });
+      return result.success;
+    } catch {
+      return false;
     }
   },
 
   /**
-   * 4. Abrir indicaciones de cómo llegar a la sede en Google Maps
+   * 4. Abrir indicaciones de cómo llegar a la Sede Playa Grande en Google Maps
    */
   openGoogleMapsDirections(userLat?: number, userLon?: number) {
     const dest = `${PLAYA_GRANDE_COORDS.latitude},${PLAYA_GRANDE_COORDS.longitude}`;
-    let url = `https://www.google.com/maps/dir/?api=1&destination=${dest}&destination_place_id=Playa+Grande+Mar+del+Plata`;
-    if (userLat && userLon) {
+    let url = `https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=driving`;
+    if (typeof userLat === 'number' && typeof userLon === 'number') {
       url += `&origin=${userLat},${userLon}`;
     }
+
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      window.open(url, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     Linking.openURL(url).catch(() => {
       if (typeof window !== 'undefined') {
-        window.open(url, '_blank');
+        window.open(url, '_blank', 'noopener,noreferrer');
       }
     });
   },

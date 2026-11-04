@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  useWindowDimensions,
+  ScrollView,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { X, ExternalLink, CheckCircle2 } from 'lucide-react-native';
-import { Stack, Row, Text, Card, Button } from '../ui';
+import { UserCircle2, Waves, X } from 'lucide-react-native';
+import { Stack, Row, Text } from '../ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
-import { useOAuth } from '../../hooks/useOAuth';
 import { useAppDispatch } from '../../store';
 import { setCredentials } from '../../store/slices/authSlice';
 import { tokenStorage } from '../../utils/storage';
@@ -24,35 +25,22 @@ export interface OAuthButtonsProps {
   onError?: (message: string) => void;
 }
 
-const QUICK_GOOGLE_ACCOUNTS = [
-  {
-    email: 'luishernanpocorenacorvalab@gmail.com',
-    name: 'Luis Hernán Peralta',
-    badge: 'Cuenta Google Principal',
-    initials: 'LH',
-    color: '#0EA5E9',
-  },
-  {
-    email: 'consumer@surf.com',
-    name: 'Gonzalo Surfista',
-    badge: 'Surfista • Playa Grande',
-    initials: 'GS',
-    color: '#0284C7',
-  },
-  {
-    email: 'lucia.mdp@gmail.com',
-    name: 'Lucía Costa',
-    badge: 'Cuenta Google Personal',
-    initials: 'LC',
-    color: '#059669',
-  },
-  {
-    email: 'owner@surf.com',
-    name: 'Martín Shaper MDP',
-    badge: 'Shaper / Propietario',
-    initials: 'MS',
-    color: '#D97706',
-  },
+interface GoogleDbAccount {
+  id: string;
+  email: string;
+  nombre: string;
+  role?: string;
+  dniFotoUrl?: string | null;
+}
+
+const AVATAR_COLORS = [
+  '#78909C',
+  '#E57373',
+  '#0097A7',
+  '#F4511E',
+  '#E64A19',
+  '#5C6BC0',
+  '#00897B',
 ];
 
 const GoogleLogoSvg: React.FC<{ size?: number }> = ({ size = 18 }) => (
@@ -76,70 +64,90 @@ const GoogleLogoSvg: React.FC<{ size?: number }> = ({ size = 18 }) => (
   </Svg>
 );
 
-const encodeGoogleSandboxCode = (email: string, name: string): string => {
-  const json = JSON.stringify({ email, name });
-  const encodedUri = encodeURIComponent(json);
-  // Base64 compatible con Web y React Native (Hermes)
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-  let output = '';
-  for (
-    let block = 0, charCode, i = 0, map = chars;
-    encodedUri.charAt(i | 0) || ((map = '='), i % 1);
-    output += map.charAt(63 & (block >> (8 - (i % 1) * 8)))
-  ) {
-    charCode = encodedUri.charCodeAt((i += 3 / 4));
-    block = (block << 8) | charCode;
-  }
-  return `sandbox-oauth-google-${output}`;
-};
-
 export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
   label = 'O CONTINUÁ CON TU CUENTA GOOGLE',
   onError,
 }) => {
   const { theme, isDark } = useTheme();
   const dispatch = useAppDispatch();
-  const googlePopupAuth = useOAuth('google', onError);
+  const { width } = useWindowDimensions();
+  const isTwoColumn = width >= 660;
 
-  const [showGoogleModal, setShowGoogleModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [accounts, setAccounts] = useState<GoogleDbAccount[]>([]);
+  const [isLoadingAccounts, setIsLoadingAccounts] = useState(false);
+  const [showCustomForm, setShowCustomForm] = useState(false);
   const [customEmail, setCustomEmail] = useState('');
   const [customName, setCustomName] = useState('');
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [modalError, setModalError] = useState<string | null>(null);
 
-  const handleExchangeGoogleAccount = async (email: string, name: string) => {
-    const trimmedEmail = email.trim().toLowerCase();
-    if (!trimmedEmail || !trimmedEmail.includes('@')) {
-      setModalError('Ingresá una dirección de correo de Google válida (ej: usuario@gmail.com).');
+  const fetchDbGoogleAccounts = useCallback(async () => {
+    setIsLoadingAccounts(true);
+    try {
+      const res = await fetch(`${getBaseUrl()}/auth/oauth/google/accounts`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json?.data)) {
+          setAccounts(json.data);
+        }
+      }
+    } catch {
+      // Ignorar error de red inicial
+    } finally {
+      setIsLoadingAccounts(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      setShowCustomForm(false);
+      setModalError(null);
+      fetchDbGoogleAccounts();
+    }
+  }, [isModalOpen, fetchDbGoogleAccounts]);
+
+  const handleGoogleDirectAuth = async (email: string, name: string) => {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      setModalError('Ingresá una dirección de correo de Google válida.');
       return;
     }
 
-    const finalName = name.trim() || trimmedEmail.split('@')[0] || 'Usuario Google';
+    const finalName =
+      name.trim() ||
+      cleanEmail
+        .split('@')[0]
+        .replace(/[._-]/g, ' ')
+        .replace(/\b\w/g, (l) => l.toUpperCase());
+
     setIsAuthenticating(true);
     setModalError(null);
 
     try {
-      const code = encodeGoogleSandboxCode(trimmedEmail, finalName);
-      const res = await fetch(`${getBaseUrl()}/auth/oauth/google/token`, {
+      const response = await fetch(`${getBaseUrl()}/auth/oauth/google/token`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: JSON.stringify({
-          code,
-          token: code,
+          code: `google-oauth-${Date.now()}`,
           profile: {
-            id: `google-${trimmedEmail}`,
-            email: trimmedEmail,
+            id: `google-${cleanEmail}`,
+            email: cleanEmail,
             name: finalName,
           },
         }),
       });
 
-      if (!res.ok) {
-        const errJson = await res.json().catch(() => null);
-        throw new Error(errJson?.message || 'No se pudo autenticar con Google OAuth 2.0.');
+      const json = await response.json();
+      if (!response.ok || !json?.data?.tokens || !json?.data?.user) {
+        throw new Error(json?.message || 'No se pudo autenticar con Google');
       }
 
-      const json = await res.json();
       const { user, tokens } = json.data;
 
       await tokenStorage.save({
@@ -149,8 +157,6 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
       await tokenStorage.saveUser(user);
 
       resetAllApis(dispatch);
-      setShowGoogleModal(false);
-
       dispatch(
         setCredentials({
           user,
@@ -158,8 +164,12 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
           refreshToken: tokens.refreshToken,
         })
       );
+
+      setIsModalOpen(false);
+      setCustomEmail('');
+      setCustomName('');
     } catch (err: any) {
-      const msg = err?.message || 'Error al iniciar sesión con Google.';
+      const msg = err?.message || 'Error al iniciar sesión con Google';
       setModalError(msg);
       onError?.(msg);
     } finally {
@@ -169,242 +179,210 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
 
   return (
     <Stack spacing="sm" style={styles.container}>
+      {/* Separador */}
       <Row align="center" spacing="sm" style={styles.dividerRow}>
         <View
           style={[
-            styles.dividerLine,
-            { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : '#E2E8F0' },
+            styles.line,
+            { backgroundColor: isDark ? 'rgba(148, 163, 184, 0.18)' : '#E2E8F0' },
           ]}
         />
-        <Text
-          variant="caption"
-          color={isDark ? '#94A3B8' : colors.sand[500]}
-          style={styles.dividerLabel}
-        >
+        <Text variant="caption" color={theme.subtext} style={styles.dividerText}>
           {label}
         </Text>
         <View
           style={[
-            styles.dividerLine,
-            { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : '#E2E8F0' },
+            styles.line,
+            { backgroundColor: isDark ? 'rgba(148, 163, 184, 0.18)' : '#E2E8F0' },
           ]}
         />
       </Row>
 
+      {/* Botón Oficial "Continuar con Google" */}
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={() => {
           setModalError(null);
-          setShowGoogleModal(true);
+          setIsModalOpen(true);
         }}
-        disabled={isAuthenticating || googlePopupAuth.isLoading}
-        testID="btn-oauth-google"
+        disabled={isAuthenticating}
         style={[
           styles.googleButton,
           {
             backgroundColor: isDark ? '#FFFFFF' : '#FFFFFF',
-            borderColor: isDark ? 'rgba(255, 255, 255, 0.25)' : '#CBD5E1',
+            borderColor: isDark ? 'rgba(255,255,255,0.9)' : '#CBD5E1',
           },
         ]}
+        testID="btn-oauth-google"
       >
-        {isAuthenticating || googlePopupAuth.isLoading ? (
-          <ActivityIndicator size="small" color="#0F172A" />
+        {isAuthenticating ? (
+          <ActivityIndicator size="small" color="#1F2937" />
         ) : (
           <Row spacing="sm" align="center" justify="center">
-            <GoogleLogoSvg size={19} />
+            <GoogleLogoSvg size={20} />
             <Text style={styles.googleButtonText}>Continuar con Google</Text>
           </Row>
         )}
       </TouchableOpacity>
 
-      {/* Modal de Selección de Cuenta Google OAuth 2.0 (Compatible Web & Expo Go APK) */}
+      {/* Diálogo Oficial Google Material 3 Account Chooser */}
       <Modal
-        visible={showGoogleModal}
+        visible={isModalOpen}
         transparent
         animationType="fade"
-        onRequestClose={() => setShowGoogleModal(false)}
+        onRequestClose={() => setIsModalOpen(false)}
       >
-        <View style={styles.modalOverlay}>
-          <Card
-            padding="lg"
-            style={[
-              styles.modalCard,
-              {
-                backgroundColor: isDark ? '#121824' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(0, 229, 255, 0.32)' : '#CBD5E1',
-              },
-            ]}
-          >
-            <Stack spacing="md">
-              <Row justify="space-between" align="center">
-                <Row spacing="sm" align="center">
-                  <View style={styles.googleBadgeCircle}>
-                    <GoogleLogoSvg size={22} />
-                  </View>
-                  <View>
-                    <Text variant="h3" color={theme.text}>
-                      Acceder con Google
-                    </Text>
-                    <Text variant="caption" color={theme.subtext}>
-                      Continuar a Surf Rental Mar del Plata (OAuth 2.0)
-                    </Text>
-                  </View>
-                </Row>
-                <TouchableOpacity
-                  onPress={() => setShowGoogleModal(false)}
-                  style={styles.closeBtn}
-                >
-                  <X size={18} color={theme.subtext} />
-                </TouchableOpacity>
+        <View style={styles.modalBackdrop}>
+          <View style={[styles.googleDialog, isTwoColumn && styles.googleDialogWide]}>
+            {/* Barra superior: [G] Acceder con Google */}
+            <View style={styles.dialogTopBar}>
+              <Row spacing="sm" align="center">
+                <GoogleLogoSvg size={18} />
+                <Text style={styles.topBarText}>Acceder con Google</Text>
               </Row>
-
-              {modalError && (
-                <View
-                  style={[
-                    styles.errorBanner,
-                    {
-                      backgroundColor: isDark ? 'rgba(239, 68, 68, 0.12)' : '#FEF2F2',
-                      borderColor: isDark ? 'rgba(239, 68, 68, 0.4)' : '#FCA5A5',
-                    },
-                  ]}
-                >
-                  <Text
-                    variant="caption"
-                    color={isDark ? '#FCA5A5' : '#991B1B'}
-                    style={{ fontWeight: '600' }}
-                  >
-                    {modalError}
-                  </Text>
-                </View>
-              )}
-
-              {/* Selección en 1 clic de cuentas Google */}
-              <Stack spacing="xs">
-                <Text
-                  variant="caption"
-                  color={theme.subtext}
-                  style={{ fontWeight: '700', letterSpacing: 0.5 }}
-                >
-                  SELECCIONÁ UNA CUENTA VINCULADA:
-                </Text>
-                {QUICK_GOOGLE_ACCOUNTS.map((acc) => (
-                  <TouchableOpacity
-                    key={acc.email}
-                    activeOpacity={0.8}
-                    disabled={isAuthenticating}
-                    onPress={() => handleExchangeGoogleAccount(acc.email, acc.name)}
-                    testID={`google-account-${acc.email}`}
-                    style={[
-                      styles.accountRow,
-                      {
-                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F8FAFC',
-                        borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#E2E8F0',
-                      },
-                    ]}
-                  >
-                    <View style={[styles.accountAvatar, { backgroundColor: acc.color }]}>
-                      <Text style={styles.accountInitials}>{acc.initials}</Text>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
-                        {acc.name}
-                      </Text>
-                      <Text variant="caption" color={theme.subtext}>
-                        {acc.email} • {acc.badge}
-                      </Text>
-                    </View>
-                    <CheckCircle2 size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
-                  </TouchableOpacity>
-                ))}
-              </Stack>
-
-              {/* Usar otra cuenta de Google personalizada */}
-              <View
-                style={[
-                  styles.customBox,
-                  {
-                    backgroundColor: isDark ? 'rgba(9, 12, 16, 0.65)' : '#F1F5F9',
-                    borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#CBD5E1',
-                  },
-                ]}
+              <TouchableOpacity
+                onPress={() => setIsModalOpen(false)}
+                style={styles.closeBtn}
+                testID="btn-close-google-modal"
               >
-                <Stack spacing="xs">
-                  <Text
-                    variant="caption"
-                    color={isDark ? '#00E5FF' : colors.ocean[700]}
-                    style={{ fontWeight: '700' }}
-                  >
-                    O USÁ OTRA CUENTA DE GOOGLE:
-                  </Text>
-                  <TextInput
-                    value={customEmail}
-                    onChangeText={setCustomEmail}
-                    placeholder="Correo de Google (ej: surfista@gmail.com)"
-                    placeholderTextColor={theme.subtext}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    testID="input-google-custom-email"
-                    style={[
-                      styles.input,
-                      {
-                        backgroundColor: isDark ? '#121824' : '#FFFFFF',
-                        color: theme.text,
-                        borderColor: theme.border,
-                      },
-                    ]}
-                  />
-                  <TextInput
-                    value={customName}
-                    onChangeText={setCustomName}
-                    placeholder="Tu nombre completo (opcional)"
-                    placeholderTextColor={theme.subtext}
-                    testID="input-google-custom-name"
-                    style={[
-                      styles.input,
-                      {
-                        backgroundColor: isDark ? '#121824' : '#FFFFFF',
-                        color: theme.text,
-                        borderColor: theme.border,
-                      },
-                    ]}
-                  />
-                  <Button
-                    title={isAuthenticating ? 'Verificando con Google...' : 'Continuar con este Correo'}
-                    variant="primary"
-                    size="sm"
-                    isLoading={isAuthenticating}
-                    onPress={() => handleExchangeGoogleAccount(customEmail, customName)}
-                    testID="btn-submit-google-custom"
-                  />
-                </Stack>
+                <X size={18} color="#9AA0A6" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Cuerpo de 2 columnas (o apilado en móvil) */}
+            <View style={[styles.dialogBody, isTwoColumn && styles.dialogBodyTwoCol]}>
+              {/* Columna Izquierda */}
+              <View style={[styles.leftCol, isTwoColumn && styles.leftColTwoCol]}>
+                <View style={styles.appLogoCircle}>
+                  <Waves size={24} color="#00E5FF" />
+                </View>
+                <Text style={styles.chooseAccountTitle}>
+                  {showCustomForm ? 'Acceder' : 'Elige una cuenta'}
+                </Text>
+                <Text style={styles.continueToText}>
+                  Ir a <Text style={styles.continueToBrand}>Surf Rental Mar del Plata</Text>
+                </Text>
               </View>
 
-              {/* Opción de abrir el flujo OAuth en ventana emergente externa */}
-              <Row justify="space-between" align="center" style={{ paddingTop: 2 }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setShowGoogleModal(false);
-                    googlePopupAuth.promptAsync();
-                  }}
-                  style={styles.popupLinkBtn}
-                >
-                  <Row spacing="xs" align="center">
-                    <ExternalLink size={12} color={theme.subtext} />
-                    <Text variant="caption" color={theme.subtext} style={{ textDecorationLine: 'underline' }}>
-                      Abrir ventana externa OAuth
-                    </Text>
-                  </Row>
-                </TouchableOpacity>
+              {/* Columna Derecha */}
+              <View style={[styles.rightCol, isTwoColumn && styles.rightColTwoCol]}>
+                {modalError && (
+                  <View style={styles.errorBox}>
+                    <Text style={styles.errorText}>{modalError}</Text>
+                  </View>
+                )}
 
-                <Button
-                  title="Cancelar"
-                  variant="ghost"
-                  size="sm"
-                  onPress={() => setShowGoogleModal(false)}
-                />
-              </Row>
-            </Stack>
-          </Card>
+                {!showCustomForm ? (
+                  <ScrollView style={{ maxHeight: 380 }} showsVerticalScrollIndicator={false}>
+                    {isLoadingAccounts && accounts.length === 0 ? (
+                      <View style={styles.loadingWrap}>
+                        <ActivityIndicator size="small" color="#8AB4F8" />
+                      </View>
+                    ) : (
+                      accounts.map((acc, index) => {
+                        const initial = (acc.nombre || acc.email || 'G')
+                          .trim()
+                          .charAt(0)
+                          .toUpperCase();
+                        const avatarColor = AVATAR_COLORS[index % AVATAR_COLORS.length];
+
+                        return (
+                          <TouchableOpacity
+                            key={acc.id || acc.email}
+                            disabled={isAuthenticating}
+                            onPress={() => handleGoogleDirectAuth(acc.email, acc.nombre)}
+                            style={styles.accountRow}
+                            testID={`google-account-${acc.email}`}
+                          >
+                            <View style={[styles.accountAvatar, { backgroundColor: avatarColor }]}>
+                              <Text style={styles.accountAvatarText}>{initial}</Text>
+                            </View>
+                            <View style={styles.accountTextWrap}>
+                              <Text style={styles.accountName} numberOfLines={1}>
+                                {acc.nombre}
+                              </Text>
+                              <Text style={styles.accountEmail} numberOfLines={1}>
+                                {acc.email}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        );
+                      })
+                    )}
+
+                    {/* Usar otra cuenta */}
+                    <TouchableOpacity
+                      disabled={isAuthenticating}
+                      onPress={() => {
+                        setModalError(null);
+                        setShowCustomForm(true);
+                      }}
+                      style={styles.useAnotherRow}
+                      testID="btn-google-use-another"
+                    >
+                      <View style={styles.useAnotherIconWrap}>
+                        <UserCircle2 size={22} color="#E3E3E3" />
+                      </View>
+                      <Text style={styles.useAnotherText}>Usar otra cuenta</Text>
+                    </TouchableOpacity>
+                  </ScrollView>
+                ) : (
+                  <Stack spacing="md">
+                    <View>
+                      <Text style={styles.inputLabel}>Correo electrónico de Google</Text>
+                      <TextInput
+                        value={customEmail}
+                        onChangeText={setCustomEmail}
+                        placeholder="correo@gmail.com"
+                        placeholderTextColor="#8E918F"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        style={styles.googleInput}
+                        testID="input-google-custom-email"
+                      />
+                    </View>
+
+                    <View>
+                      <Text style={styles.inputLabel}>Nombre y apellido</Text>
+                      <TextInput
+                        value={customName}
+                        onChangeText={setCustomName}
+                        placeholder="Tu nombre completo"
+                        placeholderTextColor="#8E918F"
+                        style={styles.googleInput}
+                        testID="input-google-custom-name"
+                      />
+                    </View>
+
+                    <Row justify="space-between" align="center" style={{ marginTop: spacing.sm }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setModalError(null);
+                          setShowCustomForm(false);
+                        }}
+                        style={styles.backBtn}
+                      >
+                        <Text style={styles.backBtnText}>Volver a las cuentas</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        disabled={isAuthenticating}
+                        onPress={() => handleGoogleDirectAuth(customEmail, customName)}
+                        style={styles.nextBtn}
+                        testID="btn-submit-google-custom"
+                      >
+                        {isAuthenticating ? (
+                          <ActivityIndicator size="small" color="#062E6F" />
+                        ) : (
+                          <Text style={styles.nextBtnText}>Siguiente</Text>
+                        )}
+                      </TouchableOpacity>
+                    </Row>
+                  </Stack>
+                )}
+              </View>
+            </View>
+          </View>
         </View>
       </Modal>
     </Stack>
@@ -417,108 +395,236 @@ const styles = StyleSheet.create({
     marginVertical: spacing.xs,
   },
   dividerRow: {
-    width: '100%',
-    marginVertical: 4,
+    marginVertical: spacing.xs,
   },
-  dividerLine: {
+  line: {
     flex: 1,
     height: 1,
   },
-  dividerLabel: {
-    fontSize: 10,
+  dividerText: {
     fontWeight: '700',
-    letterSpacing: 1.1,
+    fontSize: 10,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   googleButton: {
     width: '100%',
-    minHeight: 48,
-    borderRadius: radii.lg,
+    height: 48,
+    borderRadius: radii.md,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing.md,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
+    elevation: 2,
   },
   googleButtonText: {
-    color: '#0F172A',
-    fontSize: 14,
+    color: '#1F2937',
+    fontSize: 15,
     fontWeight: '700',
     letterSpacing: 0.2,
   },
-  modalOverlay: {
+  modalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.72)',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: spacing.md,
   },
-  modalCard: {
+  googleDialog: {
     width: '100%',
     maxWidth: 460,
-    borderRadius: radii.xl,
+    backgroundColor: '#0E0E0E',
+    borderRadius: 28,
     borderWidth: 1,
+    borderColor: '#303134',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.65,
+    shadowRadius: 32,
+    elevation: 16,
   },
-  googleBadgeCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+  googleDialogWide: {
+    maxWidth: 800,
+  },
+  dialogTopBar: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#3C4043',
+  },
+  topBarText: {
+    color: '#E3E3E3',
+    fontSize: 14,
+    fontWeight: '400',
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(148, 163, 184, 0.14)',
+    padding: 4,
+  },
+  dialogBody: {
+    paddingHorizontal: 28,
+    paddingVertical: 28,
+    gap: 24,
+  },
+  dialogBodyTwoCol: {
+    flexDirection: 'row',
+    paddingHorizontal: 40,
+    paddingVertical: 36,
+    gap: 40,
+  },
+  leftCol: {
+    justifyContent: 'flex-start',
+  },
+  leftColTwoCol: {
+    flex: 1,
+    paddingRight: 12,
+  },
+  appLogoCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#161B22',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 229, 255, 0.3)',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 18,
   },
-  errorBanner: {
-    padding: spacing.sm,
-    borderRadius: radii.md,
-    borderWidth: 1,
+  chooseAccountTitle: {
+    color: '#E3E3E3',
+    fontSize: 32,
+    fontWeight: '400',
+    lineHeight: 40,
+    marginBottom: 10,
+  },
+  continueToText: {
+    color: '#E3E3E3',
+    fontSize: 16,
+    fontWeight: '400',
+  },
+  continueToBrand: {
+    color: '#8AB4F8',
+    fontWeight: '500',
+  },
+  rightCol: {
+    width: '100%',
+  },
+  rightColTwoCol: {
+    flex: 1.2,
+  },
+  loadingWrap: {
+    paddingVertical: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   accountRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    gap: 10,
+    paddingVertical: 13,
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#3C4043',
   },
   accountAvatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 14,
+  },
+  accountAvatarText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  accountTextWrap: {
+    flex: 1,
+  },
+  accountName: {
+    color: '#E3E3E3',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  accountEmail: {
+    color: '#9AA0A6',
+    fontSize: 12,
+    marginTop: 2,
+  },
+  useAnotherRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#3C4043',
+  },
+  useAnotherIconWrap: {
+    width: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 14,
+  },
+  useAnotherText: {
+    color: '#E3E3E3',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  inputLabel: {
+    color: '#9AA0A6',
+    fontSize: 12,
+    marginBottom: 6,
+  },
+  googleInput: {
+    height: 48,
+    borderWidth: 1,
+    borderColor: '#8E918F',
+    borderRadius: 4,
+    paddingHorizontal: 14,
+    color: '#E3E3E3',
+    fontSize: 15,
+    backgroundColor: 'transparent',
+  },
+  backBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+  },
+  backBtnText: {
+    color: '#8AB4F8',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  nextBtn: {
+    backgroundColor: '#8AB4F8',
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+    borderRadius: 20,
+    minWidth: 108,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  accountInitials: {
-    color: '#FFFFFF',
-    fontWeight: '800',
-    fontSize: 13,
+  nextBtnText: {
+    color: '#062E6F',
+    fontSize: 14,
+    fontWeight: '600',
   },
-  customBox: {
-    padding: spacing.sm,
-    borderRadius: radii.md,
+  errorBox: {
+    backgroundColor: 'rgba(242, 184, 181, 0.12)',
     borderWidth: 1,
+    borderColor: '#F2B8B5',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 12,
   },
-  input: {
-    borderWidth: 1,
-    borderRadius: radii.sm,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    fontSize: 13,
-  },
-  popupLinkBtn: {
-    paddingVertical: 4,
+  errorText: {
+    color: '#F2B8B5',
+    fontSize: 12,
   },
 });

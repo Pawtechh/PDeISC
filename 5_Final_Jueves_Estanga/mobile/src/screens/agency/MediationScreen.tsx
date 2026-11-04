@@ -20,7 +20,10 @@ import {
 } from '../../api/claimsApi';
 
 export const MediationScreen: React.FC = () => {
-  const { data, isLoading, isFetching, refetch } = useGetClaimsQuery();
+  const { data, isLoading, isFetching, refetch } = useGetClaimsQuery(undefined, {
+    pollingInterval: 6000,
+    refetchOnMountOrArgChange: true,
+  });
   const [agencyMediate, { isLoading: isMediating }] = useAgencyMediateMutation();
 
   const [selectedClaim, setSelectedClaim] = useState<InsuranceClaimItem | null>(null);

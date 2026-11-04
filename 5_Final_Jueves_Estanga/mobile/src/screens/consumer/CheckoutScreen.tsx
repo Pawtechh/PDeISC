@@ -396,10 +396,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
       setIsProcessing(true);
       setGlobalBannerError(null);
 
-      // Simular delay de procesamiento bancario (2000ms)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Comprobar huella digital si el modo biométrico está activo
+      // Comprobar rúbrica digital si el modo biométrico/digital está activo
       let activeBioSig = biometricSignature;
       if (signatureMode === 'biometric' && !activeBioSig) {
         try {
@@ -409,7 +406,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           });
           setBiometricSignature(activeBioSig);
         } catch {
-          setGlobalBannerError('Se requiere verificar tu huella digital para rubricar el contrato.');
+          setGlobalBannerError('Se requiere rubricar el contrato antes de confirmar.');
           setIsProcessing(false);
           return;
         }
@@ -425,8 +422,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
       const [h, min] = horaRetiro.split(':').map(Number);
       const fechaInicio = new Date(y, m - 1, d, h, min).toISOString();
 
+      let createdRentalId = '';
       try {
-        await createRentalApi({
+        const created = await createRentalApi({
           boardId: board.id.startsWith('b-') ? 'board-seed-1' : board.id,
           horas: selectedHoras,
           fechaInicio,
@@ -437,6 +435,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           versionTerminos: '1.0',
           biometricSignature: activeBioSig || undefined,
         }).unwrap();
+        createdRentalId = created?.data?.rental?.id || '';
       } catch (err: any) {
         console.error('createRentalApi error:', err);
         const errMsg =
@@ -448,7 +447,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
       }
 
       setReceiptData({
-        reciboId: `MDP-${Date.now().toString().slice(-6)}`,
+        reciboId: createdRentalId
+          ? `MDP-${createdRentalId.slice(-6).toUpperCase()}`
+          : `MDP-${Date.now().toString().slice(-6)}`,
         ultimos4,
         marca: marcaFinal,
         total: totalAPagar,
@@ -490,7 +491,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 <Text style={{ fontSize: 36, color: colors.white }}>✓</Text>
               </View>
 
-              <Badge label="PAGO SIMULADO — MODO DEV" variant="ocean" />
+              <Badge label="RESERVA REGISTRADA EN BASE DE DATOS" variant="success" />
 
               <Text variant="h1" color={titleColor} style={{ textAlign: 'center' }}>
                 ¡Reserva y Pago Confirmados!

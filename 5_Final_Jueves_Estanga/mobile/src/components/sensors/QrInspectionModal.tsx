@@ -34,20 +34,6 @@ interface QrInspectionModalProps {
   onScanSuccess?: (board: ScannedBoardData) => void;
 }
 
-const FALLBACK_BOARDS: ScannedBoardData[] = [
-  {
-    code: 'SRMDP-BOARD-001',
-    id: 'board-1',
-    rentalId: 'rent-1',
-    titulo: 'Shortboard Pro Carbon 6\'0"',
-    shaper: 'Martín Shaper MDP',
-    medidas: '6\'0" x 18 3/4" x 2 5/16" • 27.4L',
-    estadoFisico: 'Óptimo — Sin deslaminaciones ni fisuras en rieles',
-    ultimaInspeccion: 'Verificada en Sede Playa Grande ( Agua dulce OK)',
-    garantiaActiva: '$30.000 ARS (Pre-autorización activa)',
-  },
-];
-
 export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
   visible,
   onClose,
@@ -110,7 +96,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
       });
     }
 
-    return items.length > 0 ? items : FALLBACK_BOARDS;
+    return items;
   }, [scheduleData, boardsData]);
 
   useEffect(() => {
@@ -118,7 +104,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
       setScannedBoard(null);
       setCameraActive(true);
       setManualCode('');
-      if (!permission?.granted) {
+      if (Platform.OS !== 'web' && !permission?.granted) {
         requestPermission().catch(() => {});
       }
     }
@@ -196,60 +182,60 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                 </TouchableOpacity>
               </Row>
 
-              {/* Visor de Cámara Real o Resultado Escaneado */}
+              {/* Visor de Cámara Real (Sólo Móvil) o Resultado Escaneado */}
               {!scannedBoard ? (
                 <Stack spacing="md">
-                  <View style={styles.cameraContainer}>
-                    {permission?.granted && cameraActive ? (
-                      <CameraView
-                        style={styles.camera}
-                        facing="back"
-                        barcodeScannerSettings={{
-                          barcodeTypes: ['qr'],
-                        }}
-                        onBarcodeScanned={handleBarcodeScanned}
-                      />
-                    ) : (
-                      <View style={styles.cameraFallback}>
-                        <ScanLine size={40} color="#00E5FF" style={{ marginBottom: 8 }} />
-                        <Text
-                          variant="body"
-                          color="#F8FAFC"
-                          style={{ textAlign: 'center', fontWeight: '700' }}
-                        >
-                          {Platform.OS === 'web'
-                            ? 'Lector Óptico Web / Cámara QR Activa'
-                            : 'Cámara Óptica Lista para Escanear'}
-                        </Text>
-                        <Text
-                          variant="caption"
-                          color="#94A3B8"
-                          style={{ textAlign: 'center', marginTop: 4 }}
-                        >
-                          Apuntá al código QR del pase del surfista o seleccioná un pase activo de la base de datos debajo.
-                        </Text>
-                        {!permission?.granted && (
-                          <Button
-                            title="Habilitar Permiso de Cámara"
-                            variant="primary"
-                            size="sm"
-                            onPress={() => requestPermission()}
-                            style={{ marginTop: 12 }}
-                          />
-                        )}
-                      </View>
-                    )}
+                  {Platform.OS !== 'web' && (
+                    <View style={styles.cameraContainer}>
+                      {permission?.granted && cameraActive ? (
+                        <CameraView
+                          style={styles.camera}
+                          facing="back"
+                          barcodeScannerSettings={{
+                            barcodeTypes: ['qr'],
+                          }}
+                          onBarcodeScanned={handleBarcodeScanned}
+                        />
+                      ) : (
+                        <View style={styles.cameraFallback}>
+                          <ScanLine size={40} color="#00E5FF" style={{ marginBottom: 8 }} />
+                          <Text
+                            variant="body"
+                            color="#F8FAFC"
+                            style={{ textAlign: 'center', fontWeight: '700' }}
+                          >
+                            Cámara Óptica Lista para Escanear
+                          </Text>
+                          <Text
+                            variant="caption"
+                            color="#94A3B8"
+                            style={{ textAlign: 'center', marginTop: 4 }}
+                          >
+                            Habilitá el permiso de cámara de tu teléfono para escanear el QR físico del surfista.
+                          </Text>
+                          {!permission?.granted && (
+                            <Button
+                              title="Habilitar Permiso de Cámara"
+                              variant="primary"
+                              size="sm"
+                              onPress={() => requestPermission()}
+                              style={{ marginTop: 12 }}
+                            />
+                          )}
+                        </View>
+                      )}
 
-                    {/* Retícula de enfoque QR */}
-                    <View style={styles.reticleOverlay} pointerEvents="none">
-                      <View style={styles.reticleBox}>
-                        <View style={[styles.corner, styles.cornerTL]} />
-                        <View style={[styles.corner, styles.cornerTR]} />
-                        <View style={[styles.corner, styles.cornerBL]} />
-                        <View style={[styles.corner, styles.cornerBR]} />
+                      {/* Retícula de enfoque QR en Cámara Móvil */}
+                      <View style={styles.reticleOverlay} pointerEvents="none">
+                        <View style={styles.reticleBox}>
+                          <View style={[styles.corner, styles.cornerTL]} />
+                          <View style={[styles.corner, styles.cornerTR]} />
+                          <View style={[styles.corner, styles.cornerBL]} />
+                          <View style={[styles.corner, styles.cornerBR]} />
+                        </View>
                       </View>
                     </View>
-                  </View>
+                  )}
 
                   {/* Ingreso manual rápido de código QR */}
                   <Row spacing="xs" align="center">

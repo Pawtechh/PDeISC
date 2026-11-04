@@ -191,23 +191,56 @@ export const exchangeOAuthToken: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const renderConsentScreen: RequestHandler = (req, res) => {
+export const listGoogleAccounts: RequestHandler = async (_req, res, next) => {
+  try {
+    const accounts = await oauthService.listGoogleAccounts();
+    res.status(200).json({
+      data: accounts,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const renderConsentScreen: RequestHandler = async (req, res) => {
   const provider = (req.params.provider?.toLowerCase() || 'google') as SupportedOAuthProvider;
-  const redirectUri = (req.query.redirectUri as string) || `${OAUTH_CONFIG.callbackBaseUrl}/auth/oauth/${provider}/callback`;
+  const proto = (req.headers['x-forwarded-proto'] as string)?.split(',')[0]?.trim() || req.protocol || 'http';
+  const host = (req.headers['x-forwarded-host'] as string)?.split(',')[0]?.trim() || req.get('host');
+  const dynamicBaseUrl = host ? `${proto}://${host}/api` : OAUTH_CONFIG.callbackBaseUrl;
+  const redirectUri = (req.query.redirectUri as string) || `${dynamicBaseUrl}/auth/oauth/${provider}/callback`;
 
   if (provider === 'google') {
+    const dbAccounts = await oauthService.listGoogleAccounts();
+    const avatarColors = ['#78909C', '#E57373', '#0097A7', '#F4511E', '#E64A19', '#5C6BC0', '#00897B'];
+    const accountsHtml = dbAccounts
+      .map((acc, idx) => {
+        const initial = (acc.nombre || acc.email || 'G').trim().charAt(0).toUpperCase();
+        const color = avatarColors[idx % avatarColors.length];
+        const safeEmail = acc.email.replace(/"/g, '&quot;');
+        const safeName = (acc.nombre || acc.email.split('@')[0] || 'Usuario').replace(/"/g, '&quot;');
+        return `
+        <div class="account-item" onclick="submitAuth('${safeEmail}', '${safeName}')">
+          <div class="avatar" style="background:${color}">${initial}</div>
+          <div class="account-info">
+            <div class="account-name">${safeName}</div>
+            <div class="account-email">${safeEmail}</div>
+          </div>
+        </div>`;
+      })
+      .join('');
+
     const html = `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acceder con Google — Surf Rental MDP</title>
+  <title>Acceder con Google — Surf Rental Mar del Plata</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #f0f4f9;
-      color: #1f1f1f;
+      font-family: "Google Sans", Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #1e1f20;
+      color: #e3e3e3;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -215,180 +248,243 @@ export const renderConsentScreen: RequestHandler = (req, res) => {
       justify-content: center;
       padding: 16px;
     }
-    .google-card {
-      background: #ffffff;
-      border: 1px solid #dadce0;
+    .google-dialog {
+      background: #0e0e0e;
       border-radius: 28px;
-      max-width: 440px;
+      max-width: 820px;
       width: 100%;
-      padding: 36px 32px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+      border: 1px solid #303134;
     }
-    .google-header {
+    .dialog-topbar {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 16px;
-    }
-    .google-logo {
-      width: 32px;
-      height: 32px;
-    }
-    h1 {
-      font-size: 22px;
-      font-weight: 500;
-      color: #1f1f1f;
-      line-height: 1.3;
-    }
-    p.sub {
-      color: #444746;
+      padding: 14px 24px;
+      border-bottom: 1px solid #3c4043;
       font-size: 14px;
-      margin-top: 4px;
-      margin-bottom: 24px;
+      color: #e3e3e3;
     }
-    .form-group {
-      margin-bottom: 16px;
-      text-align: left;
+    .dialog-body {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 36px 40px 44px;
+      gap: 36px;
     }
-    label {
-      display: block;
-      font-size: 13px;
+    .col-left {
+      flex: 1 1 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .app-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #0d1826;
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .col-left h1 {
+      font-size: 32px;
+      font-weight: 400;
+      color: #e3e3e3;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .col-left p {
+      font-size: 16px;
+      color: #e3e3e3;
+    }
+    .col-left p span {
+      color: #8ab4f8;
       font-weight: 500;
-      color: #444746;
-      margin-bottom: 6px;
+    }
+    .col-right {
+      flex: 1.2 1 320px;
+      display: flex;
+      flex-direction: column;
+    }
+    .account-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 12px;
+      border-bottom: 1px solid #3c4043;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      border-radius: 8px;
+    }
+    .account-item:hover {
+      background: rgba(255,255,255,0.06);
+    }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 500;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+    .account-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .account-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #e3e3e3;
+    }
+    .account-email {
+      font-size: 12px;
+      color: #9aa0a6;
+      margin-top: 2px;
+    }
+    .use-another {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 12px;
+      border-bottom: 1px solid #3c4043;
+      cursor: pointer;
+      border-radius: 8px;
+      color: #e3e3e3;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .use-another:hover {
+      background: rgba(255,255,255,0.06);
+    }
+    #customForm {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      padding-top: 4px;
     }
     .input-field {
       width: 100%;
-      padding: 12px 14px;
-      border: 1px solid #747775;
-      border-radius: 6px;
-      font-size: 14px;
+      padding: 14px 16px;
+      background: transparent;
+      border: 1px solid #8e918f;
+      border-radius: 4px;
+      color: #e3e3e3;
+      font-size: 15px;
       outline: none;
-      transition: border-color 0.15s ease;
-      background: #ffffff;
-      color: #1f1f1f;
     }
     .input-field:focus {
-      border-color: #0b57d0;
-      box-shadow: 0 0 0 1px #0b57d0;
+      border-color: #8ab4f8;
+      box-shadow: 0 0 0 1px #8ab4f8;
     }
-    .disclaimer {
-      font-size: 12px;
-      color: #444746;
-      line-height: 1.45;
-      margin-top: 20px;
-      margin-bottom: 24px;
-    }
-    .btn-actions {
+    .btn-row {
       display: flex;
-      justify-content: flex-end;
-      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
     }
-    .btn-google-primary {
-      background: #0b57d0;
-      color: #ffffff;
+    .btn-link {
+      background: transparent;
+      border: none;
+      color: #8ab4f8;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 18px;
+    }
+    .btn-next {
+      background: #8ab4f8;
+      color: #062e6f;
       border: none;
       border-radius: 20px;
       padding: 10px 24px;
-      font-weight: 500;
       font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s ease;
-    }
-    .btn-google-primary:hover {
-      background: #0842a0;
-    }
-    .btn-google-cancel {
-      background: transparent;
-      color: #0b57d0;
-      border: 1px solid #747775;
-      border-radius: 20px;
-      padding: 10px 20px;
-      font-weight: 500;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
-    .btn-google-cancel:hover {
-      background: #f0f4f9;
-    }
-    .footer-links {
-      margin-top: 24px;
-      font-size: 12px;
-      color: #747775;
-      text-align: center;
-      display: flex;
-      gap: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="google-card">
-    <div class="google-header">
-      <svg class="google-logo" viewBox="0 0 48 48">
+  <div class="google-dialog">
+    <div class="dialog-topbar">
+      <svg width="18" height="18" viewBox="0 0 48 48">
         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
         <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
         <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
         <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
       </svg>
-      <h1>Acceder con Google</h1>
+      <span>Acceder con Google</span>
     </div>
-    <p class="sub">para continuar a <strong>Surf Rental Mar del Plata</strong></p>
-
-    <form id="googleForm" onsubmit="handleGoogleSubmit(event)">
-      <div class="form-group">
-        <label for="googleEmail">Correo electrónico de Google:</label>
-        <input type="email" id="googleEmail" class="input-field" placeholder="tunombre@gmail.com" required autofocus>
+    <div class="dialog-body">
+      <div class="col-left">
+        <div class="app-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+            <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+            <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+          </svg>
+        </div>
+        <h1 id="leftTitle">Elige una cuenta</h1>
+        <p>Ir a <span>Surf Rental Mar del Plata</span></p>
       </div>
-
-      <div class="form-group">
-        <label for="googleName">Nombre completo (opcional):</label>
-        <input type="text" id="googleName" class="input-field" placeholder="Tu nombre real">
+      <div class="col-right">
+        <div id="accountList">
+          ${accountsHtml}
+          <div class="use-another" onclick="showCustomForm()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e3e3e3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;margin-right:6px;">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="10" r="3"/>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
+            </svg>
+            <span>Usar otra cuenta</span>
+          </div>
+        </div>
+        <form id="customForm" onsubmit="handleGoogleSubmit(event)">
+          <input type="email" id="googleEmail" class="input-field" placeholder="Correo electrónico o teléfono" required>
+          <input type="text" id="googleName" class="input-field" placeholder="Nombre y apellido">
+          <div class="btn-row">
+            <button type="button" class="btn-link" onclick="showAccountList()">Volver a las cuentas</button>
+            <button type="submit" class="btn-next">Siguiente</button>
+          </div>
+        </form>
       </div>
-
-      <p class="disclaimer">
-        Para continuar, Google compartirá tu nombre, dirección de correo electrónico y foto de perfil con Surf Rental Mar del Plata.
-      </p>
-
-      <div class="btn-actions">
-        <button type="button" class="btn-google-cancel" onclick="cancelAuth()">Cancelar</button>
-        <button type="submit" class="btn-google-primary">Continuar</button>
-      </div>
-    </form>
+    </div>
   </div>
-
-  <div class="footer-links">
-    <span>Español (Latinoamérica)</span>
-    <span>Ayuda</span>
-    <span>Privacidad</span>
-    <span>Condiciones</span>
-  </div>
-
   <script>
     const redirectUri = "${redirectUri}";
     const provider = "google";
-
+    function showCustomForm() {
+      document.getElementById('accountList').style.display = 'none';
+      document.getElementById('customForm').style.display = 'flex';
+      document.getElementById('leftTitle').textContent = 'Acceder';
+      document.getElementById('googleEmail').focus();
+    }
+    function showAccountList() {
+      document.getElementById('customForm').style.display = 'none';
+      document.getElementById('accountList').style.display = 'block';
+      document.getElementById('leftTitle').textContent = 'Elige una cuenta';
+    }
     function handleGoogleSubmit(e) {
       e.preventDefault();
       const email = document.getElementById('googleEmail').value.trim();
       let name = document.getElementById('googleName').value.trim();
-      if (!name) {
-        name = email.split('@')[0];
-      }
+      if (!name) name = email.split('@')[0];
       submitAuth(email, name);
     }
-
     function submitAuth(email, name) {
       const payload = JSON.stringify({ email, name });
       const encoded = btoa(encodeURIComponent(payload));
       const code = 'sandbox-oauth-' + provider + '-' + encoded;
       const delimiter = redirectUri.includes('?') ? '&' : '?';
       window.location.href = redirectUri + delimiter + 'code=' + encodeURIComponent(code);
-    }
-
-    function cancelAuth() {
-      const delimiter = redirectUri.includes('?') ? '&' : '?';
-      window.location.href = redirectUri + delimiter + 'error=access_denied&error_description=Cancelado+por+el+usuario';
     }
   </script>
 </body>

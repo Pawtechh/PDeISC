@@ -35,9 +35,9 @@ import { RatingStars } from '../../components/reviews/RatingStars';
 export const PointsScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
   const { data: loyaltyData, isLoading: loadingLoyalty, isFetching: fetchingLoyalty, refetch: refetchLoyalty } =
-    useGetLoyaltyBalanceQuery();
+    useGetLoyaltyBalanceQuery(undefined, { pollingInterval: 6000, refetchOnMountOrArgChange: true });
   const { data: pendingData, isFetching: fetchingPending, refetch: refetchPending } =
-    useGetPendingReviewsQuery();
+    useGetPendingReviewsQuery(undefined, { pollingInterval: 6000, refetchOnMountOrArgChange: true });
   const [createReview, { isLoading: isSubmittingReview }] = useCreateReviewMutation();
   const [calculateDiscount, { isLoading: isCalculatingDiscount }] = useCalculateDiscountMutation();
 

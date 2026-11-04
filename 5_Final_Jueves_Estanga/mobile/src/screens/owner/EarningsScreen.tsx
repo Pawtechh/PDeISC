@@ -19,7 +19,10 @@ import {
 
 export const EarningsScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
-  const { data, isLoading, isFetching, refetch } = useGetOwnerEarningsQuery();
+  const { data, isLoading, isFetching, refetch } = useGetOwnerEarningsQuery(undefined, {
+    pollingInterval: 6000,
+    refetchOnMountOrArgChange: true,
+  });
   const [requestPayout, { isLoading: isRequesting }] = useRequestPayoutMutation();
 
   const [showPayoutModal, setShowPayoutModal] = useState(false);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { ShieldCheck, Fingerprint } from 'lucide-react-native';
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { ShieldCheck, Fingerprint, FileCheck2 } from 'lucide-react-native';
 import { Card, Stack, Row, Text } from '../ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -22,8 +22,11 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
   signedPayload,
 }) => {
   const { theme, isDark } = useTheme();
+  const isPcWeb = Platform.OS === 'web';
   const { capabilities, isAuthenticating, signContractWithBiometrics, error } =
     useBiometricSignature();
+
+  const useNativeBiometrics = !isPcWeb && capabilities.hasHardware && capabilities.isEnrolled;
 
   const handlePressScan = async () => {
     try {
@@ -59,9 +62,15 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
       <Stack spacing="sm">
         <Row justify="space-between" align="center">
           <Row spacing="xs" align="center">
-            <Text style={{ fontSize: 20 }}></Text>
+            {useNativeBiometrics ? (
+              <Fingerprint size={18} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+            ) : (
+              <FileCheck2 size={18} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+            )}
             <Text variant="h3" color={theme.text}>
-              Firma por Huella Digital
+              {useNativeBiometrics
+                ? `Firma Biométrica (${capabilities.biometricType})`
+                : 'Rúbrica Digital Criptográfica'}
             </Text>
           </Row>
           <View
@@ -93,8 +102,9 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
         </Row>
 
         <Text variant="caption" color={theme.subtext}>
-          Sustituto biométrico legal de firma manuscrita. Se genera un certificado criptográfico
-          sin registrar datos biométricos sensibles de tu cuerpo.
+          {useNativeBiometrics
+            ? 'Validación mediante el sensor biométrico físico de tu teléfono. Genera un sello SHA-256 sin almacenar tu huella.'
+            : 'Genera un certificado criptográfico SHA-256 de conformidad legal vinculado a tu cuenta y reserva.'}
         </Text>
 
         {isSigned ? (
@@ -103,7 +113,9 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
               <Row spacing="xs" align="center">
                 <ShieldCheck size={18} color={colors.semantic.success} />
                 <Text variant="body" color={colors.semantic.success} style={{ fontWeight: '700' }}>
-                  Huella Digital Verificada con Éxito
+                  {useNativeBiometrics
+                    ? 'Identidad Biométrica Verificada con Éxito'
+                    : 'Contrato Rubricado Digitalmente con Éxito'}
                 </Text>
               </Row>
               <Text variant="caption" color={theme.subtext}>
@@ -141,18 +153,26 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
                     color={isDark ? '#090C10' : '#FFFFFF'}
                     style={{ fontWeight: '700' }}
                   >
-                    Escaneando sensor biométrico...
+                    {useNativeBiometrics
+                      ? 'Leyendo sensor biométrico...'
+                      : 'Generando sello criptográfico SHA-256...'}
                   </Text>
                 </>
               ) : (
                 <>
-                  <Text style={{ fontSize: 22 }}></Text>
+                  {useNativeBiometrics ? (
+                    <Fingerprint size={18} color={isDark ? '#090C10' : '#FFFFFF'} />
+                  ) : (
+                    <FileCheck2 size={18} color={isDark ? '#090C10' : '#FFFFFF'} />
+                  )}
                   <Text
                     variant="button"
                     color={isDark ? '#090C10' : '#FFFFFF'}
                     style={{ fontWeight: '700' }}
                   >
-                    {`Escanear ${capabilities.biometricType} para Firmar`}
+                    {useNativeBiometrics
+                      ? `Escanear ${capabilities.biometricType} para Firmar`
+                      : 'Confirmar y Rubricar Contrato Digitalmente'}
                   </Text>
                 </>
               )}

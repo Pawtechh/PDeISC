@@ -25,6 +25,7 @@ router.post('/forgot-password', validateBody(forgotPasswordSchema), authControll
 router.post('/reset-password', validateBody(resetPasswordSchema), authController.resetPassword);
 
 // Rutas OAuth (Google, GitHub, Facebook, Apple)
+router.get('/oauth/google/accounts', oauthController.listGoogleAccounts);
 router.get('/oauth/:provider/consent', oauthController.renderConsentScreen);
 router.get('/oauth/:provider', oauthController.initiateOAuth);
 router.get('/oauth/:provider/callback', oauthController.handleCallback);

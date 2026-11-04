@@ -380,6 +380,27 @@ export class OAuthService {
     const tokens = await this.generateTokens(user);
     return { user, tokens, merged: false, isNew: true };
   }
+
+  /**
+   * Lista las cuentas de Google registradas en MariaDB
+   */
+  async listGoogleAccounts() {
+    const users = await prisma.user.findMany({
+      where: {
+        authProvider: AuthProvider.GOOGLE,
+        activo: true,
+      },
+      orderBy: { createdAt: 'asc' },
+      select: {
+        id: true,
+        email: true,
+        nombre: true,
+        role: true,
+        dniFotoUrl: true,
+      },
+    });
+    return users;
+  }
 }
 
 export const oauthService = new OAuthService();
