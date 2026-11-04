@@ -13,6 +13,7 @@ import { setCredentials, UserRole } from '../../store/slices/authSlice';
 import { useLoginMutation } from '../../api/authApi';
 import { tokenStorage } from '../../utils/storage';
 import { loginSchema, LoginFormData } from '../../schemas/auth.schema';
+import { OAuthButtons } from '../../components/auth/OAuthButtons';
 
 export interface LoginScreenProps {
   navigation?: any;
@@ -298,6 +299,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                   testID="btn-biometric-login"
                 />
               )}
+
+              <OAuthButtons onError={(msg) => setErrorMessage(msg)} />
 
               <Row justify="center" spacing="xs">
                 <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[500]}>

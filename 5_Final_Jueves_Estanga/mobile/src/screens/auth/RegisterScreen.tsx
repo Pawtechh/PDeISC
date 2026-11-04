@@ -234,9 +234,10 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
               </TouchableOpacity>
             </Row>
 
-            {/* Deshabilitado temporalmente a pedido del usuario: logeo con cuentas Google / GitHub */}
-            {/* <Divider marginVertical="sm" />
-            <OAuthButtons label="O registrate directamente con:" /> */}
+            <OAuthButtons
+              label="O REGISTRATE CON GOOGLE"
+              onError={(msg) => setServerError(msg)}
+            />
           </Stack>
         </Card>
       </Stack>

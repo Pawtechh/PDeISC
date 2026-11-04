@@ -18,7 +18,10 @@ export const initiateOAuth: RequestHandler = (req, res, next) => {
     }
 
     const redirectUri = req.query.redirectUri as string | undefined;
-    const authUrl = oauthService.getAuthorizationUrl(provider, redirectUri);
+    const proto = (req.headers['x-forwarded-proto'] as string)?.split(',')[0]?.trim() || req.protocol || 'http';
+    const host = (req.headers['x-forwarded-host'] as string)?.split(',')[0]?.trim() || req.get('host');
+    const dynamicBaseUrl = host ? `${proto}://${host}/api` : undefined;
+    const authUrl = oauthService.getAuthorizationUrl(provider, redirectUri, dynamicBaseUrl);
 
     // Si el cliente pide JSON
     if (req.headers.accept?.includes('application/json')) {
@@ -120,6 +123,9 @@ export const handleCallback: RequestHandler = async (req, res, next) => {
         var tokens = ${tokensJson};
         var user = ${userJson};
         if (tokens && tokens.accessToken) {
+          localStorage.setItem('surf_access_token', tokens.accessToken);
+          localStorage.setItem('surf_refresh_token', tokens.refreshToken || '');
+          localStorage.setItem('surf_user_session', JSON.stringify(user));
           localStorage.setItem('auth_access_token', tokens.accessToken);
           localStorage.setItem('auth_refresh_token', tokens.refreshToken || '');
           localStorage.setItem('auth_user', JSON.stringify(user));

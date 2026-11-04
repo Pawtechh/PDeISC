@@ -57,14 +57,19 @@ export class OAuthService {
   /**
    * Construye la URL de autorización para el proveedor
    */
-  getAuthorizationUrl(provider: SupportedOAuthProvider, customRedirectUri?: string): string {
-    const defaultRedirect = `${OAUTH_CONFIG.callbackBaseUrl}/auth/oauth/${provider}/callback`;
+  getAuthorizationUrl(
+    provider: SupportedOAuthProvider,
+    customRedirectUri?: string,
+    dynamicBaseUrl?: string
+  ): string {
+    const baseApiUrl = dynamicBaseUrl || OAUTH_CONFIG.callbackBaseUrl;
+    const defaultRedirect = `${baseApiUrl}/auth/oauth/${provider}/callback`;
     const redirectUri = customRedirectUri || defaultRedirect;
 
     // Si no cuenta con Client ID real de producción y no estamos en entorno de testing unitario,
     // redirigir a la pantalla de consentimiento del Sandbox
     if (process.env.NODE_ENV !== 'test' && !this.isRealProviderConfigured(provider)) {
-      return `${OAUTH_CONFIG.callbackBaseUrl}/auth/oauth/${provider}/consent?redirectUri=${encodeURIComponent(redirectUri)}`;
+      return `${baseApiUrl}/auth/oauth/${provider}/consent?redirectUri=${encodeURIComponent(redirectUri)}`;
     }
 
     switch (provider) {
