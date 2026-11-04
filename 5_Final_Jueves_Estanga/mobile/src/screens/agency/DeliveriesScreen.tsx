@@ -61,12 +61,12 @@ export const DeliveriesScreen: React.FC = () => {
       setModalError(null);
       setFeedbackBanner({
         type: 'success',
-        text: `🎯 Pase de retiro detectado por QR: ${match.board?.titulo} (Surfista: ${match.consumer?.nombre || 'Verificado'}).`,
+        text: `Pase de retiro detectado por QR: ${match.board?.titulo} (Surfista: ${match.consumer?.nombre || 'Verificado'}).`,
       });
     } else {
       setFeedbackBanner({
         type: 'error',
-        text: `⚠️ Código QR escaneado: "${scanned.code}". No se encontró ninguna entrega pendiente vinculada.`,
+        text: `Código QR escaneado: "${scanned.code}". No se encontró ninguna entrega pendiente vinculada.`,
       });
     }
   };
@@ -120,20 +120,20 @@ export const DeliveriesScreen: React.FC = () => {
 
     const { isEarly, horaPactada, fechaPactada } = getEarlyStatus(selectedRental);
     if (isEarly) {
-      setModalError(`❗ Retiro anticipado bloqueado: El horario pactado es el ${fechaPactada} a las ${horaPactada} hs (se habilita con un máximo de 15 minutos de anticipación).`);
+      setModalError(`Retiro anticipado bloqueado: El horario pactado es el ${fechaPactada} a las ${horaPactada} hs (se habilita con un máximo de 15 minutos de anticipación).`);
       return;
     }
 
     if (!dniChecked) {
-      setModalError('❗ Es obligatorio verificar DNI y ser mayor de 18 años.');
+      setModalError('Es obligatorio verificar DNI y ser mayor de 18 años.');
       return;
     }
     if (!hasPhotos) {
-      setModalError('❗ Es obligatorio documentar las 4 fotos de inspección inicial.');
+      setModalError('Es obligatorio documentar las 4 fotos de inspección inicial.');
       return;
     }
     if (!signatureSigned) {
-      setModalError('❗ El surfista debe firmar en el recuadro digital antes de retirar la tabla.');
+      setModalError('El surfista debe firmar en el recuadro digital antes de retirar la tabla.');
       return;
     }
 
@@ -154,13 +154,13 @@ export const DeliveriesScreen: React.FC = () => {
       setSelectedRental(null);
       setFeedbackBanner({
         type: 'success',
-        text: `✅ La tabla "${currentRental.board?.titulo}" fue entregada al surfista y pasa a estado "EN EL AGUA".`,
+        text: `La tabla "${currentRental.board?.titulo}" fue entregada al surfista y pasa a estado "EN EL AGUA".`,
       });
       refetch();
     } catch (err: any) {
       refetch();
       const msg = err?.data?.message || err?.message || 'Error al procesar la entrega en mostrador.';
-      setModalError(`❗ ${msg}`);
+      setModalError(`${msg}`);
     }
   };
 
@@ -220,13 +220,13 @@ export const DeliveriesScreen: React.FC = () => {
         <Row spacing="sm" align="center" style={{ width: '100%' }}>
           <View style={{ flex: 1 }}>
             <Input
-              placeholder="🔍 Buscar por código QR o tabla..."
+              placeholder="Buscar por código QR o tabla..."
               value={qrSearch}
               onChangeText={setQrSearch}
             />
           </View>
           <Button
-            title="📷 Escanear QR"
+            title="Escanear QR"
             variant="primary"
             size="md"
             onPress={() => setIsScanningDeliveryQr(true)}
@@ -238,7 +238,7 @@ export const DeliveriesScreen: React.FC = () => {
           <EmptyState
             title="Sin retiros pendientes"
             description="No hay reservas activas esperando retiro en la sede en este momento."
-            icon="🏖️"
+            icon=""
           />
         ) : (
           <View style={[styles.gridContainer, numColumns > 1 && styles.gridMultiColumn]}>
@@ -256,7 +256,7 @@ export const DeliveriesScreen: React.FC = () => {
                     <Stack spacing="sm">
                       <Row justify="space-between" align="center">
                         <Badge
-                          label={isEarly ? `⏰ PROGRAMADO (${horaPactada} hs)` : 'LISTA PARA RETIRO'}
+                          label={isEarly ? `PROGRAMADO (${horaPactada} hs)` : 'LISTA PARA RETIRO'}
                           variant={isEarly ? 'warning' : 'success'}
                         />
                         <Text variant="caption" color={theme.subtext}>
@@ -283,7 +283,7 @@ export const DeliveriesScreen: React.FC = () => {
                             color={isDark ? '#FDE68A' : '#92400E'}
                             style={{ fontWeight: '600', fontSize: 11 }}
                           >
-                            ⚠️ Retiro anticipado no permitido: Horario pactado el {fechaPactada} a las {horaPactada} hs (se habilita 15 min antes, faltan {tiempoFaltanteStr}).
+                            Retiro anticipado no permitido: Horario pactado el {fechaPactada} a las {horaPactada} hs (se habilita 15 min antes, faltan {tiempoFaltanteStr}).
                           </Text>
                         </Card>
                       )}
@@ -298,7 +298,7 @@ export const DeliveriesScreen: React.FC = () => {
                           />
                         )}
                         <Button
-                          title={isEarly ? `⏰ Bloqueado (${horaPactada} hs)` : 'Procesar Entrega'}
+                          title={isEarly ? `Bloqueado (${horaPactada} hs)` : 'Procesar Entrega'}
                           size="sm"
                           variant={isEarly ? 'secondary' : 'primary'}
                           disabled={isEarly}
@@ -307,7 +307,7 @@ export const DeliveriesScreen: React.FC = () => {
                             if (isEarly) {
                               setFeedbackBanner({
                                 type: 'error',
-                                text: `❗ Retiro anticipado bloqueado: Horario pactado el ${fechaPactada} a las ${horaPactada} hs. Se habilita con 15 minutos de anticipación.`,
+                                text: `Retiro anticipado bloqueado: Horario pactado el ${fechaPactada} a las ${horaPactada} hs. Se habilita con 15 minutos de anticipación.`,
                               });
                               return;
                             }
@@ -355,7 +355,7 @@ export const DeliveriesScreen: React.FC = () => {
               <Row justify="space-between" align="center">
                 <View style={{ flex: 1, paddingRight: spacing.xs }}>
                   <Text variant="h2" color={theme.text}>
-                    ✍️ Firma de Retiro en Mostrador
+                    Firma de Retiro en Mostrador
                   </Text>
                   <Text variant="caption" color={theme.subtext}>
                     Tabla:{' '}
@@ -470,7 +470,7 @@ export const DeliveriesScreen: React.FC = () => {
                     color={signMethod === 'biometric' ? (isDark ? '#A7F3D0' : colors.ocean[700]) : theme.subtext}
                     style={{ fontWeight: '700', fontSize: 11 }}
                   >
-                    👆 Huella Digital {isMobile ? '(Recomendado)' : ''}
+                    Huella Digital {isMobile ? '(Recomendado)' : ''}
                   </Text>
                 </TouchableOpacity>
 
@@ -490,7 +490,7 @@ export const DeliveriesScreen: React.FC = () => {
                     color={signMethod === 'pad' ? (isDark ? '#A7F3D0' : colors.ocean[700]) : theme.subtext}
                     style={{ fontWeight: '700', fontSize: 11 }}
                   >
-                    ✍️ Firma Manuscrita {!isMobile ? '(Recomendado en PC)' : ''}
+                    Firma Manuscrita {!isMobile ? '(Recomendado en PC)' : ''}
                   </Text>
                 </TouchableOpacity>
               </Row>

@@ -9,6 +9,17 @@ import {
   RefreshControl,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
+import {
+  Award,
+  Sparkles,
+  Clock,
+  AlertCircle,
+  CheckCircle2,
+  Calculator,
+  X,
+  TrendingUp,
+} from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -46,7 +57,6 @@ export const PointsScreen: React.FC = () => {
   } | null>(null);
   const [calculatorError, setCalculatorError] = useState<string | null>(null);
 
-  // Modal para reseña verificada
   const [selectedRental, setSelectedRental] = useState<PendingReviewItem | null>(null);
   const [rating, setRating] = useState<number>(5);
   const [reviewComment, setReviewComment] = useState<string>('');
@@ -62,7 +72,7 @@ export const PointsScreen: React.FC = () => {
     const pts = parseInt(rawPoints, 10);
     if (isNaN(pts) || pts < 50) {
       setCalculatedDiscount(null);
-      setCalculatorError('❗ El mínimo de canje es de 50 puntos (equivalente a $500 ARS).');
+      setCalculatorError('El mínimo de canje es de 50 puntos (equivalente a $500 ARS).');
       return;
     }
 
@@ -70,7 +80,6 @@ export const PointsScreen: React.FC = () => {
     const alcanza = saldoPuntosActual >= pts;
     const faltantes = Math.max(0, pts - saldoPuntosActual);
 
-    // Mostramos el resultado de inmediato para que el botón siempre responda al instante
     setCalculatedDiscount({
       puntos: pts,
       descuentoArs: localDescuentoArs,
@@ -90,7 +99,7 @@ export const PointsScreen: React.FC = () => {
           });
         }
       } catch {
-        // Mantenemos el cálculo local si el endpoint falla o está offline
+        // Fallback local
       }
     }
   };
@@ -110,7 +119,7 @@ export const PointsScreen: React.FC = () => {
     if (!selectedRental) return;
     setReviewModalError(null);
     if (!reviewComment.trim() || reviewComment.trim().length < 5) {
-      setReviewModalError('❗ Por favor ingresá un comentario de al menos 5 caracteres.');
+      setReviewModalError('Por favor ingresá un comentario de al menos 5 caracteres.');
       return;
     }
 
@@ -123,13 +132,13 @@ export const PointsScreen: React.FC = () => {
 
       setSelectedRental(null);
       setFeedbackBanner(
-        '✅ ¡Gracias por tu reseña verificada! Se acreditaron +20 puntos de fidelización a tu cuenta.'
+        '¡Gracias por tu reseña verificada! Se acreditaron +20 puntos de fidelización a tu cuenta.'
       );
       refetchLoyalty();
       refetchPending();
     } catch (err: any) {
       setReviewModalError(
-        `❗ ${err?.data?.message || 'No se pudo publicar la reseña.'}`
+        err?.data?.message || 'No se pudo publicar la reseña.'
       );
     }
   };
@@ -151,6 +160,12 @@ export const PointsScreen: React.FC = () => {
         {/* Header */}
         <Row justify="space-between" align="center">
           <View>
+            <Row spacing="xs" align="center">
+              <Award size={15} color="#D4AF37" />
+              <Text variant="caption" style={styles.eyebrowText}>
+                PROGRAMA DE FIDELIDAD • PLAYA GRANDE
+              </Text>
+            </Row>
             <Text variant="h1" color={theme.text}>
               Club Surf MDP
             </Text>
@@ -168,27 +183,24 @@ export const PointsScreen: React.FC = () => {
           <Card
             padding="md"
             style={{
-              backgroundColor: isDark ? '#064E3B' : '#D1FAE5',
+              backgroundColor: isDark ? 'rgba(6, 78, 59, 0.45)' : '#D1FAE5',
               borderColor: '#34D399',
               borderWidth: 1,
             }}
           >
             <Row justify="space-between" align="center">
-              <Text
-                variant="body"
-                color={isDark ? '#D1FAE5' : '#065F46'}
-                style={{ flex: 1, fontWeight: '600' }}
-              >
-                {feedbackBanner}
-              </Text>
-              <TouchableOpacity onPress={() => setFeedbackBanner(null)}>
+              <Row spacing="xs" align="center" style={{ flex: 1 }}>
+                <CheckCircle2 size={16} color={isDark ? '#34D399' : '#065F46'} />
                 <Text
                   variant="body"
                   color={isDark ? '#D1FAE5' : '#065F46'}
-                  style={{ fontWeight: '700', paddingLeft: spacing.sm }}
+                  style={{ flex: 1, fontWeight: '600' }}
                 >
-                  ✕
+                  {feedbackBanner}
                 </Text>
+              </Row>
+              <TouchableOpacity onPress={() => setFeedbackBanner(null)}>
+                <X size={18} color={isDark ? '#D1FAE5' : '#065F46'} />
               </TouchableOpacity>
             </Row>
           </Card>
@@ -199,55 +211,62 @@ export const PointsScreen: React.FC = () => {
         ) : (
           <>
             {/* Card Principal: Puntos y Nivel de Rider */}
-            <Card
-              padding="xl"
-              style={[
-                styles.heroCard,
-                {
-                  backgroundColor: isDark ? '#1E293B' : colors.white,
-                  borderColor: isDark ? '#F59E0B' : colors.sunset[400],
-                },
-              ]}
-            >
-              <Stack spacing="md" align="center">
-                <Badge
-                  label={`RIDER ${loyalty?.nivel?.nombre?.toUpperCase() || 'PRINCIPIANTE'}`}
-                  variant="warning"
-                />
-                <Text variant="display" color={isDark ? '#FBBF24' : colors.sunset[500]}>
-                  {loyalty?.puntos ?? 0} pts
-                </Text>
-                <Text variant="h3" color={theme.text}>
-                  Equivale a ${loyalty?.equivalenciaArs ? loyalty.equivalenciaArs.toLocaleString('es-AR') : '0'} ARS de descuento
-                </Text>
-                <Text variant="caption" color={theme.subtext} align="center">
-                  {loyalty?.nivel?.beneficio || '10 puntos por cada hora de uso completada en sede'}
-                </Text>
-
-                {/* Barra de Progreso al Siguiente Nivel */}
-                <View style={styles.progressContainer}>
-                  <View style={[styles.progressTrack, { backgroundColor: isDark ? '#334155' : colors.sand[200] }]}>
-                    <View
-                      style={[
-                        styles.progressBar,
-                        {
-                          width: `${loyalty?.nivel?.progresoPorcentaje || 0}%`,
-                          backgroundColor: isDark ? '#F59E0B' : colors.sunset[500],
-                        },
-                      ]}
+            <View style={styles.heroCardWrapper}>
+              <LinearGradient
+                colors={isDark ? ['#0D1626', '#090E18', '#141B2D'] : ['#FFFFFF', '#F8FAFC']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.heroGradient}
+              >
+                <Stack spacing="md" align="center">
+                  <Row spacing="xs" align="center">
+                    <Sparkles size={14} color="#D4AF37" />
+                    <Badge
+                      label={`RIDER ${loyalty?.nivel?.nombre?.toUpperCase() || 'PRINCIPIANTE'}`}
+                      variant="warning"
                     />
-                  </View>
-                  <Row justify="space-between" style={{ width: '100%', marginTop: 4 }}>
-                    <Text variant="caption" color={theme.subtext}>
-                      Nivel {loyalty?.nivel?.nivel || 1}
-                    </Text>
-                    <Text variant="caption" color={theme.subtext}>
-                      Próximo: {loyalty?.nivel?.proximoNivelPuntos || 100} pts
-                    </Text>
                   </Row>
-                </View>
-              </Stack>
-            </Card>
+                  <Text
+                    variant="display"
+                    color={isDark ? '#00E5FF' : colors.sunset[500]}
+                    style={{ fontSize: 44, fontWeight: '900' }}
+                  >
+                    {loyalty?.puntos ?? 0} pts
+                  </Text>
+                  <Text variant="h3" color={theme.text}>
+                    Equivale a ${loyalty?.equivalenciaArs ? loyalty.equivalenciaArs.toLocaleString('es-AR') : '0'} ARS de descuento
+                  </Text>
+                  <Text variant="caption" color={theme.subtext} align="center">
+                    {loyalty?.nivel?.beneficio || '10 puntos por cada hora de uso completada en sede'}
+                  </Text>
+
+                  {/* Barra de Progreso al Siguiente Nivel */}
+                  <View style={styles.progressContainer}>
+                    <View style={[styles.progressTrack, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : colors.sand[200] }]}>
+                      <LinearGradient
+                        colors={['#00E5FF', '#D4AF37']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={[
+                          styles.progressBar,
+                          {
+                            width: `${Math.max(5, loyalty?.nivel?.progresoPorcentaje || 0)}%`,
+                          },
+                        ]}
+                      />
+                    </View>
+                    <Row justify="space-between" style={{ width: '100%', marginTop: 6 }}>
+                      <Text variant="caption" color={theme.subtext}>
+                        Nivel {loyalty?.nivel?.nivel || 1}
+                      </Text>
+                      <Text variant="caption" color="#D4AF37" style={{ fontWeight: '700' }}>
+                        Próximo: {loyalty?.nivel?.proximoNivelPuntos || 100} pts
+                      </Text>
+                    </Row>
+                  </View>
+                </Stack>
+              </LinearGradient>
+            </View>
 
             {/* Tarjeta de Vencimiento a 12 Meses */}
             <Card
@@ -255,22 +274,25 @@ export const PointsScreen: React.FC = () => {
               style={[
                 styles.expirationCard,
                 {
-                  backgroundColor: isDark ? '#082F49' : colors.ocean[50],
-                  borderColor: isDark ? '#0284C7' : colors.ocean[200],
+                  backgroundColor: isDark ? 'rgba(0, 229, 255, 0.06)' : colors.ocean[50],
+                  borderColor: isDark ? 'rgba(0, 229, 255, 0.28)' : colors.ocean[200],
                 },
               ]}
             >
               <Row justify="space-between" align="center">
-                <View style={{ flex: 1 }}>
-                  <Text variant="button" color={isDark ? '#E0F2FE' : colors.ocean[900]}>
-                    Vigencia de Puntos (12 Meses)
-                  </Text>
-                  <Text variant="caption" color={isDark ? '#BAE6FD' : colors.sand[700]}>
-                    Tus puntos tienen una validez de 12 meses desde la última actividad.
-                  </Text>
-                </View>
+                <Row spacing="sm" align="center" style={{ flex: 1 }}>
+                  <Clock size={18} color="#00E5FF" />
+                  <View style={{ flex: 1 }}>
+                    <Text variant="button" color={isDark ? '#E0F2FE' : colors.ocean[900]}>
+                      Vigencia de Puntos (12 Meses)
+                    </Text>
+                    <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[700]}>
+                      Tus puntos tienen una validez de 12 meses desde la última actividad.
+                    </Text>
+                  </View>
+                </Row>
                 <Badge
-                  label={`⏳ ${loyalty?.vencimiento.diasRestantes || 365}d restantes`}
+                  label={`${loyalty?.vencimiento.diasRestantes || 365}d restantes`}
                   variant="ocean"
                 />
               </Row>
@@ -283,8 +305,8 @@ export const PointsScreen: React.FC = () => {
                 style={[
                   styles.sanctionCard,
                   {
-                    backgroundColor: isDark ? '#450a0a' : '#FEF2F2',
-                    borderColor: isDark ? '#991B1B' : '#FECACA',
+                    backgroundColor: isDark ? 'rgba(127, 29, 29, 0.3)' : '#FEF2F2',
+                    borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FECACA',
                   },
                 ]}
               >
@@ -305,19 +327,15 @@ export const PointsScreen: React.FC = () => {
             )}
 
             {/* Simulador de Canje de Puntos */}
-            <Card
-              padding="lg"
-              style={{
-                backgroundColor: theme.card,
-                borderColor: theme.border,
-                borderWidth: 1,
-              }}
-            >
+            <Card padding="lg">
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
-                  <Text variant="h3" color={theme.text}>
-                    Calculadora de Canje
-                  </Text>
+                  <Row spacing="xs" align="center">
+                    <Calculator size={16} color="#00E5FF" />
+                    <Text variant="h3" color={theme.text}>
+                      Calculadora de Canje
+                    </Text>
+                  </Row>
                   <Badge label="1 PTO = $10 ARS" variant="ocean" />
                 </Row>
                 <Text variant="caption" color={theme.subtext}>
@@ -336,21 +354,23 @@ export const PointsScreen: React.FC = () => {
                           runCalculation(preset);
                         }}
                         style={{
-                          paddingHorizontal: spacing.sm,
-                          paddingVertical: 5,
+                          paddingHorizontal: spacing.sm + 2,
+                          paddingVertical: 6,
                           borderRadius: radii.full,
                           backgroundColor: isSelected
-                            ? colors.ocean[500]
+                            ? (isDark ? 'rgba(0, 229, 255, 0.18)' : colors.ocean[500])
                             : isDark
-                            ? '#0F172A'
+                            ? 'rgba(18, 24, 36, 0.8)'
                             : colors.sand[100],
                           borderWidth: 1,
-                          borderColor: isSelected ? colors.ocean[500] : theme.border,
+                          borderColor: isSelected
+                            ? (isDark ? '#00E5FF' : colors.ocean[500])
+                            : (isDark ? 'rgba(255,255,255,0.12)' : theme.border),
                         }}
                       >
                         <Text
                           variant="caption"
-                          color={isSelected ? colors.white : theme.text}
+                          color={isSelected ? (isDark ? '#00E5FF' : colors.white) : theme.text}
                           style={{ fontWeight: isSelected ? '700' : '500' }}
                         >
                           {preset} pts (${(parseInt(preset, 10) * 10).toLocaleString('es-AR')})
@@ -365,8 +385,8 @@ export const PointsScreen: React.FC = () => {
                     style={[
                       styles.input,
                       {
-                        backgroundColor: theme.inputBg,
-                        borderColor: calculatorError ? colors.semantic.danger : theme.border,
+                        backgroundColor: isDark ? 'rgba(11, 16, 26, 0.85)' : theme.inputBg,
+                        borderColor: calculatorError ? colors.semantic.danger : (isDark ? 'rgba(255,255,255,0.12)' : theme.border),
                         color: theme.text,
                       },
                     ]}
@@ -391,17 +411,21 @@ export const PointsScreen: React.FC = () => {
                 {calculatorError && (
                   <View
                     style={{
-                      backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
+                      backgroundColor: isDark ? 'rgba(127, 29, 29, 0.35)' : '#FEE2E2',
                       borderColor: '#F87171',
                       borderWidth: 1,
                       borderRadius: radii.sm,
                       padding: spacing.sm,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
                     }}
                   >
+                    <AlertCircle size={14} color={isDark ? '#FECACA' : '#991B1B'} />
                     <Text
                       variant="caption"
                       color={isDark ? '#FECACA' : '#991B1B'}
-                      style={{ fontWeight: '600' }}
+                      style={{ fontWeight: '600', flex: 1 }}
                     >
                       {calculatorError}
                     </Text>
@@ -415,10 +439,10 @@ export const PointsScreen: React.FC = () => {
                       {
                         backgroundColor: calculatedDiscount.alcanzaSaldo
                           ? isDark
-                            ? '#064E3B'
+                            ? 'rgba(6, 78, 59, 0.4)'
                             : '#F0FDF4'
                           : isDark
-                          ? '#451A03'
+                          ? 'rgba(69, 26, 3, 0.45)'
                           : '#FEF3C7',
                         borderColor: calculatedDiscount.alcanzaSaldo
                           ? isDark
@@ -428,22 +452,36 @@ export const PointsScreen: React.FC = () => {
                       },
                     ]}
                   >
-                    <Text
-                      variant="body"
-                      color={
-                        calculatedDiscount.alcanzaSaldo
-                          ? isDark
-                            ? '#6EE7B7'
-                            : colors.semantic.success
-                          : isDark
-                          ? '#FDE68A'
-                          : '#92400E'
-                      }
-                      style={{ fontWeight: '700' }}
-                    >
-                      ✓ {calculatedDiscount.puntos} puntos equivalen a -$
-                      {calculatedDiscount.descuentoArs.toLocaleString('es-AR')} ARS de descuento
-                    </Text>
+                    <Row spacing="xs" align="center">
+                      <CheckCircle2
+                        size={15}
+                        color={
+                          calculatedDiscount.alcanzaSaldo
+                            ? isDark
+                              ? '#6EE7B7'
+                              : colors.semantic.success
+                            : isDark
+                            ? '#FDE68A'
+                            : '#92400E'
+                        }
+                      />
+                      <Text
+                        variant="body"
+                        color={
+                          calculatedDiscount.alcanzaSaldo
+                            ? isDark
+                              ? '#6EE7B7'
+                              : colors.semantic.success
+                            : isDark
+                            ? '#FDE68A'
+                            : '#92400E'
+                        }
+                        style={{ fontWeight: '700' }}
+                      >
+                        {calculatedDiscount.puntos} puntos equivalen a -$
+                        {calculatedDiscount.descuentoArs.toLocaleString('es-AR')} ARS de descuento
+                      </Text>
+                    </Row>
                     <Text
                       variant="caption"
                       color={
@@ -455,7 +493,7 @@ export const PointsScreen: React.FC = () => {
                           ? '#FEF3C7'
                           : '#78350F'
                       }
-                      style={{ marginTop: 2 }}
+                      style={{ marginTop: 4 }}
                     >
                       {calculatedDiscount.alcanzaSaldo
                         ? `¡Tenés saldo suficiente (${saldoPuntosActual} pts disponibles)! Podés aplicarlo directamente al reservar una tabla.`
@@ -502,9 +540,12 @@ export const PointsScreen: React.FC = () => {
 
             {/* Historial de Puntos */}
             <Stack spacing="sm">
-              <Text variant="h2" color={theme.text}>
-                Historial de Actividad
-              </Text>
+              <Row spacing="xs" align="center">
+                <TrendingUp size={16} color="#D4AF37" />
+                <Text variant="h2" color={theme.text}>
+                  Historial de Actividad
+                </Text>
+              </Row>
               {loyalty?.historial && loyalty.historial.length > 0 ? (
                 loyalty.historial.map((h) => (
                   <Card key={h.rentalId} padding="md">
@@ -516,7 +557,7 @@ export const PointsScreen: React.FC = () => {
                         </Text>
                       </View>
                       <View style={{ alignItems: 'flex-end' }}>
-                        <Text variant="h3" color={colors.semantic.success}>
+                        <Text variant="h3" color="#34D399">
                           +{h.puntosGanados} pts
                         </Text>
                         {h.puntosUsados > 0 && (
@@ -554,19 +595,17 @@ export const PointsScreen: React.FC = () => {
                 Reseña 100% Verificada
               </Text>
               <TouchableOpacity onPress={() => setSelectedRental(null)}>
-                <Text variant="body" color={colors.ocean[500]}>
-                  Cerrar
-                </Text>
+                <X size={20} color={theme.subtext} />
               </TouchableOpacity>
             </Row>
 
             {selectedRental && (
-              <Card padding="md" style={[styles.modalBoardCard, { backgroundColor: isDark ? '#1E293B' : colors.sand[50], borderColor: theme.border }]}>
+              <Card padding="md" style={[styles.modalBoardCard, { backgroundColor: isDark ? '#111824' : colors.sand[50], borderColor: theme.border }]}>
                 <Text variant="h3" color={theme.text}>{selectedRental.board.titulo}</Text>
                 <Text variant="caption" color={theme.subtext}>
                   Alquiler completado en Sede Central • {selectedRental.horas} hs de uso
                 </Text>
-                <Badge label="✓ ALQUILER VERIFICADO" variant="success" style={{ marginTop: 6 }} />
+                <Badge label="ALQUILER VERIFICADO" variant="success" style={{ marginTop: 6 }} />
               </Card>
             )}
 
@@ -595,18 +634,21 @@ export const PointsScreen: React.FC = () => {
               <Card
                 padding="sm"
                 style={{
-                  backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
+                  backgroundColor: isDark ? 'rgba(127, 29, 29, 0.35)' : '#FEE2E2',
                   borderColor: '#F87171',
                   borderWidth: 1,
                 }}
               >
-                <Text
-                  variant="body"
-                  color={isDark ? '#FECACA' : '#991B1B'}
-                  style={{ fontWeight: '600' }}
-                >
-                  {reviewModalError}
-                </Text>
+                <Row spacing="xs" align="center">
+                  <AlertCircle size={15} color={isDark ? '#FECACA' : '#991B1B'} />
+                  <Text
+                    variant="body"
+                    color={isDark ? '#FECACA' : '#991B1B'}
+                    style={{ fontWeight: '600' }}
+                  >
+                    {reviewModalError}
+                  </Text>
+                </Row>
               </Card>
             )}
 
@@ -653,14 +695,20 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: spacing.md,
   },
-  heroCard: {
-    backgroundColor: colors.white,
-    borderColor: colors.sunset[400],
+  eyebrowText: {
+    color: '#D4AF37',
+    fontWeight: '800',
+    letterSpacing: 1.5,
+    fontSize: 10.5,
+  },
+  heroCardWrapper: {
+    borderRadius: 24,
+    overflow: 'hidden',
     borderWidth: 1,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
+    borderColor: 'rgba(212, 175, 55, 0.35)',
+  },
+  heroGradient: {
+    padding: spacing.xl,
   },
   progressContainer: {
     width: '100%',
@@ -675,51 +723,37 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: '100%',
-    backgroundColor: colors.sunset[500],
     borderRadius: radii.full,
   },
   expirationCard: {
-    backgroundColor: colors.ocean[50],
-    borderColor: colors.ocean[200],
     borderWidth: 1,
   },
   sanctionCard: {
-    backgroundColor: '#FEF2F2',
-    borderColor: '#FECACA',
     borderWidth: 1,
   },
   input: {
     flex: 1,
-    backgroundColor: colors.sand[50],
-    borderColor: colors.sand[200],
     borderWidth: 1,
-    borderRadius: radii.sm,
-    padding: spacing.sm,
-    color: colors.sand[900],
+    borderRadius: radii.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     fontSize: 16,
   },
   discountResult: {
-    backgroundColor: '#F0FDF4',
-    padding: spacing.sm,
-    borderRadius: radii.sm,
+    padding: spacing.md,
+    borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
   },
   modalContent: {
     paddingVertical: spacing.lg,
   },
   modalBoardCard: {
-    backgroundColor: colors.sand[50],
-    borderColor: colors.sand[200],
     borderWidth: 1,
   },
   textArea: {
-    backgroundColor: colors.sand[50],
-    borderColor: colors.sand[200],
     borderWidth: 1,
-    borderRadius: radii.sm,
+    borderRadius: radii.md,
     padding: spacing.sm,
-    color: colors.sand[900],
     minHeight: 100,
     textAlignVertical: 'top',
   },

@@ -175,7 +175,7 @@ export const ShowcaseScreen: React.FC = () => {
           <Text variant="h2">6. Firma Digital Ley 25.506</Text>
           <SignaturePad
             testID="showcase-signature-pad"
-            title="✍️ Firma Táctil / Digital"
+            title="Firma Táctil / Digital"
             helperText="Recuadro de firma interactivo de alta precisión con trazado vectorial SVG y soporte Web/Mobile."
             height={180}
           />

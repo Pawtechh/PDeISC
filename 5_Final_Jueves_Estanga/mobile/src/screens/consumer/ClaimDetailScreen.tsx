@@ -147,7 +147,7 @@ export const ClaimDetailScreen: React.FC = () => {
           <EmptyState
             title="Sin reclamos activos"
             description="No tenés reclamos por daños ni retenciones de garantía pendientes de resolución."
-            icon="🛡️"
+            icon=""
           />
         </Stack>
       </Screen>
@@ -181,7 +181,7 @@ export const ClaimDetailScreen: React.FC = () => {
                 PLAZO PERENTORIO DE 24 HORAS
               </Text>
               <Badge
-                label={`⏳ ${claim.horasRestantesDisputa || 24}h restantes`}
+                label={`${claim.horasRestantesDisputa || 24}h restantes`}
                 variant="danger"
               />
             </Row>

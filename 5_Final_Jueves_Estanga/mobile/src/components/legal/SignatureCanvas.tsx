@@ -168,7 +168,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
       <Stack spacing="xs">
         <Row justify="space-between" align="center">
           <Text variant="button" style={{ fontWeight: '700', color: colors.ocean[900], fontSize: 15 }}>
-            ✍️ Recuadro de Firma Digital
+            Recuadro de Firma Digital
           </Text>
           <View style={styles.lawPill}>
             <Text variant="caption" style={styles.lawText}>
@@ -228,7 +228,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
             <View style={styles.placeholderContainer} pointerEvents="none">
               <View style={styles.watermarkBadge}>
                 <Text variant="caption" style={styles.watermarkBadgeText}>
-                  ✍️ TODA EL ÁREA ES FIRMABLE
+                  TODA EL ÁREA ES FIRMABLE
                 </Text>
               </View>
               <Text variant="bodySmall" style={styles.placeholderMain}>
@@ -255,7 +255,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
                   fontSize: 12,
                 }}
               >
-                🗑️ Borrar lienzo
+                Borrar lienzo
               </Text>
             </TouchableOpacity>
 
@@ -266,7 +266,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
                 testID="legal-signature-btn-quick"
               >
                 <Text variant="caption" style={{ color: colors.ocean[700], fontWeight: '600', fontSize: 12 }}>
-                  ⚡ Firma Rápida
+                  Firma Rápida
                 </Text>
               </TouchableOpacity>
             )}
@@ -290,7 +290,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
                 ? `✓ ${paths.length + (currentPath ? 1 : 0)} trazo${
                     paths.length > 1 ? 's' : ''
                   } capturado${paths.length > 1 ? 's' : ''}`
-                : '⚪ Pendiente'}
+                : 'Pendiente'}
             </Text>
           </View>
         </Row>

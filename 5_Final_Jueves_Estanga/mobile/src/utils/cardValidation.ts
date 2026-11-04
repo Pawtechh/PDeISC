@@ -131,7 +131,7 @@ export const diagnosticarVencimiento = (mmYY: string): ExpirationValidationResul
     return { esValido: false, error: 'Fecha inválida (máximo 10 años en el futuro)' };
   }
   if (anio === anioActual && mes === mesActual) {
-    return { esValido: true, advertencia: '⚠️ Vence este mes' };
+    return { esValido: true, advertencia: 'Vence este mes' };
   }
 
   return { esValido: true };

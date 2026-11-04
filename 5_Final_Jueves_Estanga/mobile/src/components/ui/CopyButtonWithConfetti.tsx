@@ -92,7 +92,7 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
       accessibilityRole="button"
     >
       <Text style={{ fontSize: isSmall ? 12 : 14 }}>
-        {copied ? '✨' : '📋'}
+        {copied ? '' : ''}
       </Text>
       <Text
         variant="caption"

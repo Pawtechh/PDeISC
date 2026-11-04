@@ -79,7 +79,7 @@ export const MyRentalsScreen: React.FC = () => {
         setSuccessBanner('✓ Reserva cancelada exitosamente (Modo Demostración). Reembolso: 100%');
       } else {
         setCancelError(
-          `❗ ${err?.data?.message || 'No se pudo cancelar el alquiler. Verificá el estado de la reserva.'}`
+          `${err?.data?.message || 'No se pudo cancelar el alquiler. Verificá el estado de la reserva.'}`
         );
       }
     }

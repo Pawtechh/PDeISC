@@ -26,7 +26,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        {icon || <Waves size={36} color={isDark ? '#00E5FF' : '#0284C7'} strokeWidth={1.75} />}
+        {icon && typeof icon !== 'string' ? (
+          icon
+        ) : (
+          <Waves size={36} color={isDark ? '#00E5FF' : '#0284C7'} strokeWidth={1.75} />
+        )}
       </View>
       <Text
         variant="h3"

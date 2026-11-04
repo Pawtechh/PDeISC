@@ -225,7 +225,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
           <View style={styles.placeholderBox} pointerEvents="none">
             <View style={styles.watermarkBadge}>
               <Text variant="caption" style={styles.watermarkBadgeText}>
-                ✍️ TODA EL ÁREA ES FIRMABLE
+                TODA EL ÁREA ES FIRMABLE
               </Text>
             </View>
             <Text variant="bodySmall" style={styles.placeholderMain}>
@@ -249,7 +249,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
               color={hasSignature ? colors.semantic.danger : colors.sand[500]}
               style={{ fontWeight: '600', fontSize: 12 }}
             >
-              🗑️ Borrar Firma
+              Borrar Firma
             </Text>
           </TouchableOpacity>
 
@@ -260,7 +260,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
               testID={`${testID}-btn-quick`}
             >
               <Text variant="caption" color={colors.ocean[700]} style={{ fontWeight: '600', fontSize: 12 }}>
-                ⚡ Firma Rápida
+                Firma Rápida
               </Text>
             </TouchableOpacity>
           )}
@@ -280,7 +280,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
           >
             {hasSignature
               ? `✓ Firma registrada (${paths.length + (currentPath ? 1 : 0)} trazos)`
-              : '⚪ Pendiente de firma'}
+              : 'Pendiente de firma'}
           </Text>
         </View>
       </Row>

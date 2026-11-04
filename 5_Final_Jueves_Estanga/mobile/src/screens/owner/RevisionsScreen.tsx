@@ -98,7 +98,7 @@ export const RevisionsScreen: React.FC = () => {
       setConfirmApprovalRev(null);
       setFeedbackBanner({
         type: 'success',
-        message: `✅ Tabla "${rev.board?.titulo || 'Tabla'}" ratificada conforme. Los fondos han sido liberados a tu saldo disponible.`,
+        message: `Tabla "${rev.board?.titulo || 'Tabla'}" ratificada conforme. Los fondos han sido liberados a tu saldo disponible.`,
       });
       refetch();
       refetchClaims();
@@ -107,7 +107,7 @@ export const RevisionsScreen: React.FC = () => {
       setConfirmApprovalRev(null);
       setFeedbackBanner({
         type: 'error',
-        message: `❌ ${errorMsg}`,
+        message: `${errorMsg}`,
       });
     }
   };
@@ -147,7 +147,7 @@ export const RevisionsScreen: React.FC = () => {
       setClaimDescription('');
       setFeedbackBanner({
         type: 'success',
-        message: `⚠️ Reclamo por $${monto.toLocaleString(
+        message: `Reclamo por $${monto.toLocaleString(
           'es-AR'
         )} ARS registrado contra la garantía de $30.000 ARS. Surfista notificado (24 hs para responder o disputar).`,
         actionLabel: 'Ver Seguimiento de Mediación',
@@ -168,14 +168,14 @@ export const RevisionsScreen: React.FC = () => {
         if (horasRestantes !== undefined && horasRestantes <= 0) {
           return (
             <Badge
-              label="⏰ PLAZO 24H VENCIDO (SILENCIO ACEPTADO)"
+              label="PLAZO 24H VENCIDO (SILENCIO ACEPTADO)"
               variant="warning"
             />
           );
         }
         return (
           <Badge
-            label={`⏳ NOTIFICADO (${horasRestantes ?? 24}h restantes)`}
+            label={`NOTIFICADO (${horasRestantes ?? 24}h restantes)`}
             variant="warning"
           />
         );
@@ -243,7 +243,7 @@ export const RevisionsScreen: React.FC = () => {
               color={activeSection === 'PENDIENTES' ? theme.primaryText : theme.text}
               style={{ fontWeight: activeSection === 'PENDIENTES' ? '700' : '500' }}
             >
-              📥 Inspecciones Pendientes ({revisions.length})
+              Inspecciones Pendientes ({revisions.length})
             </Text>
           </TouchableOpacity>
 
@@ -261,7 +261,7 @@ export const RevisionsScreen: React.FC = () => {
               color={activeSection === 'RECLAMOS' ? theme.primaryText : theme.text}
               style={{ fontWeight: activeSection === 'RECLAMOS' ? '700' : '500' }}
             >
-              ⚖️ Reclamos y Mediación ({claims.length})
+              Reclamos y Mediación ({claims.length})
             </Text>
           </TouchableOpacity>
         </Row>
@@ -308,7 +308,7 @@ export const RevisionsScreen: React.FC = () => {
                       color={isDark ? colors.ocean[300] : colors.ocean[700]}
                       style={{ fontWeight: '700', textDecorationLine: 'underline' }}
                     >
-                      ➔ {feedbackBanner.actionLabel}
+                      {feedbackBanner.actionLabel}
                     </Text>
                   </TouchableOpacity>
                 )}
@@ -379,7 +379,7 @@ export const RevisionsScreen: React.FC = () => {
               <EmptyState
                 title="Sin revisiones pendientes"
                 description="No tenés tablas devueltas pendientes de inspección técnica o reporte de daño."
-                icon="✅"
+                icon=""
               />
             ) : (
               <Stack spacing="lg">
@@ -405,7 +405,7 @@ export const RevisionsScreen: React.FC = () => {
                           </Text>
                         </View>
                         <Badge
-                          label={`⏳ ${rev.horasRestantes ?? 24}h restantes`}
+                          label={`${rev.horasRestantes ?? 24}h restantes`}
                           variant={(rev.horasRestantes ?? 24) <= 6 ? 'danger' : 'warning'}
                         />
                       </Row>
@@ -470,7 +470,7 @@ export const RevisionsScreen: React.FC = () => {
                           testID={`btn-approve-${rev.rentalId}`}
                         />
                         <Button
-                          title={rev.descripcionDanio ? '⚠️ Aprobar con Daños' : '⚠️ Reportar Daño'}
+                          title={rev.descripcionDanio ? 'Aprobar con Daños' : 'Reportar Daño'}
                           variant="danger"
                           size="sm"
                           onPress={() => handleOpenClaim(rev)}
@@ -573,7 +573,7 @@ export const RevisionsScreen: React.FC = () => {
               <EmptyState
                 title="Sin reclamos ni mediaciones activas"
                 description="Cuando reportes un daño con solicitud de garantía en una devolución, podrás seguir el estado de la notificación, la respuesta del surfista y el arbitraje de la Agencia aquí."
-                icon="⚖️"
+                icon=""
               />
             ) : (
               <Stack spacing="lg">
@@ -734,7 +734,7 @@ export const RevisionsScreen: React.FC = () => {
                           <Text variant="body" color={isDark ? '#FEF3C7' : '#78350F'}>
                             {(claim.horasRestantesDisputa ?? 24) <= 0 ? (
                               <>
-                                ⏰{' '}
+                                {' '}
                                 <Text
                                   variant="body"
                                   color={isDark ? '#FDE68A' : '#78350F'}
@@ -754,7 +754,7 @@ export const RevisionsScreen: React.FC = () => {
                               </>
                             ) : (
                               <>
-                                ⏳{' '}
+                                {' '}
                                 <Text
                                   variant="body"
                                   color={isDark ? '#FDE68A' : '#78350F'}
@@ -781,7 +781,7 @@ export const RevisionsScreen: React.FC = () => {
 
                         {(claim.estado === 'EN_MEDIACION' || claim.estado === 'DISPUTADO') && (
                           <Text variant="body" color={isDark ? '#DBEAFE' : '#1E3A8A'}>
-                            ⚖️{' '}
+                            {' '}
                             <Text
                               variant="body"
                               color={isDark ? '#93C5FD' : '#1E3A8A'}
@@ -798,7 +798,7 @@ export const RevisionsScreen: React.FC = () => {
 
                         {claim.estado === 'RESUELTO_OWNER' && (
                           <Text variant="body" color={isDark ? '#D1FAE5' : '#065F46'}>
-                            🛡️{' '}
+                            {' '}
                             <Text
                               variant="body"
                               color={isDark ? '#6EE7B7' : '#065F46'}
@@ -817,7 +817,7 @@ export const RevisionsScreen: React.FC = () => {
 
                         {claim.estado === 'RESUELTO_CONSUMER' && (
                           <Text variant="body" color={isDark ? '#FEE2E2' : '#991B1B'}>
-                            ❌{' '}
+                            {' '}
                             <Text
                               variant="body"
                               color={isDark ? '#FCA5A5' : '#991B1B'}
@@ -835,7 +835,7 @@ export const RevisionsScreen: React.FC = () => {
 
                         {(claim.estado === 'ACEPTADO' || claim.estado === 'COBRADO') && (
                           <Text variant="body" color={isDark ? '#D1FAE5' : '#065F46'}>
-                            ✅{' '}
+                            {' '}
                             <Text
                               variant="body"
                               color={isDark ? '#6EE7B7' : '#065F46'}
@@ -972,7 +972,7 @@ export const RevisionsScreen: React.FC = () => {
                       color={isDark ? '#FECACA' : '#991B1B'}
                       style={{ fontWeight: '600' }}
                     >
-                      ❗ {modalError}
+                      {modalError}
                     </Text>
                   </View>
                 )}
@@ -1134,8 +1134,8 @@ export const RevisionsScreen: React.FC = () => {
                       isReporting
                         ? 'Procesando Reclamo...'
                         : selectedRevision?.descripcionDanio
-                        ? '⚠️ Confirmar y Aprobar con Daños'
-                        : '⚠️ Enviar Reclamo al Surfista'
+                        ? 'Confirmar y Aprobar con Daños'
+                        : 'Enviar Reclamo al Surfista'
                     }
                     variant="danger"
                     size="lg"

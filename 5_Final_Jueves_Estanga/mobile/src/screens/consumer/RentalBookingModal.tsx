@@ -148,7 +148,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
         <Card padding="xl" style={{ width: '100%', maxWidth: 450, alignItems: 'center' }}>
           <Stack spacing="md" align="center">
             <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: '#DCFCE7', alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ fontSize: 32 }}>🎉</Text>
+              <Text style={{ fontSize: 32 }}></Text>
             </View>
             <Text variant="h1" color={colors.semantic.success} style={{ textAlign: 'center' }}>
               ¡Reserva Confirmada!
@@ -505,7 +505,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                 color={signMethod === 'biometric' ? (theme.isDark ? theme.champagne : colors.ocean[700]) : theme.subtext}
                 style={signMethod === 'biometric' ? styles.bold : undefined}
               >
-                👆 Huella Digital {isPhone ? '(Teléfono)' : ''}
+                Huella Digital {isPhone ? '(Teléfono)' : ''}
               </Text>
             </TouchableOpacity>
             {!isPhone && (
@@ -522,7 +522,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                   color={signMethod === 'digital' ? (theme.isDark ? theme.champagne : colors.ocean[700]) : theme.subtext}
                   style={signMethod === 'digital' ? styles.bold : undefined}
                 >
-                  ✍️ Firma PC
+                  Firma PC
                 </Text>
               </TouchableOpacity>
             )}
@@ -546,7 +546,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
           >
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 18 }}>✍️</Text>
+                <Text style={{ fontSize: 18 }}></Text>
                 <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                   Firma Digital Certificada en PC (Ley 25.506)
                 </Text>
@@ -564,7 +564,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
       {bookingError ? (
         <Card padding="md" style={styles.bookingErrorCard}>
           <Row spacing="xs" align="center">
-            <Text style={{ fontSize: 18 }}>❗</Text>
+            <Text style={{ fontSize: 18 }}></Text>
             <Text variant="body" color={colors.semantic.danger} style={{ fontWeight: '600', flex: 1 }}>
               {bookingError}
             </Text>

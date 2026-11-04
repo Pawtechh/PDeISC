@@ -366,7 +366,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
     } catch {}
 
-    setGlobalBannerError('⚠️ Revisá los campos marcados en rojo para continuar.');
+    setGlobalBannerError('Revisá los campos marcados en rojo para continuar.');
 
     // Scroll hacia el formulario
     scrollRef.current?.scrollTo({ y: 380, animated: true });
@@ -381,7 +381,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
     // Re-validación del slot en el front antes del request (Bloque 3.7)
     const slotCheck = availableSlots.find((s) => s.label === horaRetiro);
     if (!slotCheck || !slotCheck.disponible) {
-      setGlobalBannerError('⚠️ Ese horario acaba de pasar o ya no está disponible. Elegí otro.');
+      setGlobalBannerError('Ese horario acaba de pasar o ya no está disponible. Elegí otro.');
       try {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       } catch {}
@@ -409,7 +409,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           });
           setBiometricSignature(activeBioSig);
         } catch {
-          setGlobalBannerError('⚠️ Se requiere verificar tu huella digital para rubricar el contrato.');
+          setGlobalBannerError('Se requiere verificar tu huella digital para rubricar el contrato.');
           setIsProcessing(false);
           return;
         }
@@ -441,7 +441,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         console.error('createRentalApi error:', err);
         const errMsg =
           err?.data?.message || err?.message || 'Error al procesar la reserva';
-        setGlobalBannerError(`⚠️ ${errMsg}`);
+        setGlobalBannerError(`${errMsg}`);
         setIsProcessing(false);
         scrollRef.current?.scrollTo({ y: 0, animated: true });
         return;
@@ -533,7 +533,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               </Stack>
 
               <Button
-                title="📲 Ver Pase de Retiro en Mis Alquileres"
+                title="Ver Pase de Retiro en Mis Alquileres"
                 variant="primary"
                 size="lg"
                 style={{ width: '100%', marginTop: spacing.md }}
@@ -568,7 +568,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               testID="btn-checkout-debug"
             >
               <Text variant="caption" color={colors.ocean[700]} style={styles.bold}>
-                🔍 Debug
+                Debug
               </Text>
             </TouchableOpacity>
             {onClose && <Button title="✕" variant="ghost" size="sm" onPress={onClose} />}
@@ -617,7 +617,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 {board.marca} • {board.medidas}
               </Text>
               <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[700]} style={styles.bold}>
-                📍 Sede Central Playa Grande
+                Sede Central Playa Grande
               </Text>
             </Stack>
           </Row>
@@ -665,7 +665,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           <View ref={scheduleSectionRef}>
             <Stack spacing="md">
               <Text variant="h3" color={titleColor}>
-                📅 Programar Retiro en Sede
+                Programar Retiro en Sede
               </Text>
 
               {/* Fecha con DatePickerInput */}
@@ -748,7 +748,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                           slotPeriodFilter === 'TODOS' && styles.filterPeriodTextActive,
                         ]}
                       >
-                        📋 Todos ({availableSlots.length})
+                        Todos ({availableSlots.length})
                       </Text>
                     </TouchableOpacity>
 
@@ -766,7 +766,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                           slotPeriodFilter === 'MANANA' && styles.filterPeriodTextActive,
                         ]}
                       >
-                        🌅 Mañana (06 - 12h)
+                        Mañana (06 - 12h)
                       </Text>
                     </TouchableOpacity>
 
@@ -784,7 +784,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                           slotPeriodFilter === 'TARDE' && styles.filterPeriodTextActive,
                         ]}
                       >
-                        ☀️ Tarde (12 - 18h)
+                        Tarde (12 - 18h)
                       </Text>
                     </TouchableOpacity>
 
@@ -802,7 +802,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                           slotPeriodFilter === 'NOCHE' && styles.filterPeriodTextActive,
                         ]}
                       >
-                        🌙 Noche (18 - 21h)
+                        Noche (18 - 21h)
                       </Text>
                     </TouchableOpacity>
                   </Row>
@@ -812,7 +812,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 {horaRetiro ? (
                   <View style={styles.selectedSlotNotice}>
                     <Row align="center" spacing="xs">
-                      <Text style={{ fontSize: 13 }}>⏰</Text>
+                      <Text style={{ fontSize: 13 }}></Text>
                       <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[700]} style={{ fontWeight: '600' }}>
                         Horario de retiro seleccionado: <Text style={{ fontWeight: '800' }}>{horaRetiro} hs</Text>
                       </Text>
@@ -823,7 +823,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 {availableSlots.every((s) => !s.disponible) ? (
                   <Card padding="sm" style={styles.warningCard} testID="banner-slots-agotados">
                     <Text variant="caption" color={colors.sunset[600]}>
-                      ⚠️ No quedan horarios disponibles para hoy. Elegí otra fecha en el calendario.
+                      No quedan horarios disponibles para hoy. Elegí otra fecha en el calendario.
                     </Text>
                   </Card>
                 ) : timeSlotViewMode === 'wrap' ? (
@@ -1184,7 +1184,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 >
                   <Row justify="space-between" align="center">
                     <Row spacing="xs" align="center">
-                      <Text style={{ fontSize: 14 }}>🧪</Text>
+                      <Text style={{ fontSize: 14 }}></Text>
                       <Text variant="caption" color={isDark ? '#93C5FD' : colors.ocean[800]} style={styles.bold}>
                         Números de prueba válidos (Sandbox DEV)
                       </Text>
@@ -1247,7 +1247,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               {/* Advertencia si la marca es desconocida (Bloque 2.5) */}
               {digits.length >= 6 && marca === 'desconocida' && (
                 <Text variant="caption" color={colors.sunset[600]}>
-                  ⚠️ No pudimos detectar la marca. Verificá que el número esté bien escrito.
+                  No pudimos detectar la marca. Verificá que el número esté bien escrito.
                 </Text>
               )}
 
@@ -1275,7 +1275,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   />
                   {touched.numeroTarjeta && (
                     <Text style={{ fontSize: 16 }}>
-                      {isCardNumberValid ? '✅' : '❌'}
+                      {isCardNumberValid ? '' : ''}
                     </Text>
                   )}
                 </View>
@@ -1287,8 +1287,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     testID="feedback-card-number"
                   >
                     {isCardNumberValid
-                      ? '✅ Válido (Luhn checksum superado)'
-                      : `❌ ${cardDiag.error || 'Número inválido'}`}
+                      ? 'Válido (Luhn checksum superado)'
+                      : `${cardDiag.error || 'Número inválido'}`}
                   </Text>
                 )}
               </Stack>
@@ -1319,7 +1319,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   />
                   {touched.nombreTitular && (
                     <Text style={{ fontSize: 16 }}>
-                      {isNameValid ? '✅' : '❌'}
+                      {isNameValid ? '' : ''}
                     </Text>
                   )}
                 </View>
@@ -1329,7 +1329,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     color={isNameValid ? colors.semantic.success : colors.semantic.danger}
                     testID="feedback-card-name"
                   >
-                    {isNameValid ? '✅ Válido' : `❌ ${fieldErrors.nombreTitular}`}
+                    {isNameValid ? 'Válido' : `${fieldErrors.nombreTitular}`}
                   </Text>
                 )}
               </Stack>
@@ -1359,7 +1359,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     />
                     {touched.vencimiento && (
                       <Text style={{ fontSize: 14 }}>
-                        {isExpValid ? '✅' : '❌'}
+                        {isExpValid ? '' : ''}
                       </Text>
                     )}
                   </View>
@@ -1370,8 +1370,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       testID="feedback-card-exp"
                     >
                       {isExpValid
-                        ? expDiag.advertencia || '✅ Válido'
-                        : `❌ ${expDiag.error || 'Vencimiento inválido'}`}
+                        ? expDiag.advertencia || 'Válido'
+                        : `${expDiag.error || 'Vencimiento inválido'}`}
                     </Text>
                   )}
                 </Stack>
@@ -1400,7 +1400,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     />
                     {touched.cvv && (
                       <Text style={{ fontSize: 14 }}>
-                        {isCvvValid ? '✅' : '❌'}
+                        {isCvvValid ? '' : ''}
                       </Text>
                     )}
                   </View>
@@ -1410,7 +1410,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       color={isCvvValid ? colors.semantic.success : colors.semantic.danger}
                       testID="feedback-card-cvv"
                     >
-                      {isCvvValid ? '✅ Válido' : `❌ ${maxCvvLen} dígitos requeridos`}
+                      {isCvvValid ? 'Válido' : `${maxCvvLen} dígitos requeridos`}
                     </Text>
                   )}
                 </Stack>
@@ -1440,7 +1440,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   />
                   {touched.dniTitular && (
                     <Text style={{ fontSize: 16 }}>
-                      {isDniValid ? '✅' : '❌'}
+                      {isDniValid ? '' : ''}
                     </Text>
                   )}
                 </View>
@@ -1450,7 +1450,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     color={isDniValid ? colors.semantic.success : colors.semantic.danger}
                     testID="feedback-card-dni"
                   >
-                    {isDniValid ? '✅ Válido' : '❌ DNI debe tener 7 u 8 dígitos'}
+                    {isDniValid ? 'Válido' : 'DNI debe tener 7 u 8 dígitos'}
                   </Text>
                 )}
               </Stack>
@@ -1500,7 +1500,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           <Stack spacing="sm">
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 20 }}>📜</Text>
+                <Text style={{ fontSize: 20 }}></Text>
                 <Text variant="h3" color={titleColor}>
                   Rúbrica Legal del Contrato
                 </Text>
@@ -1522,7 +1522,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   color={signatureMode === 'biometric' ? (isDark ? theme.champagne : colors.ocean[700]) : subtextColor}
                   style={signatureMode === 'biometric' ? styles.bold : undefined}
                 >
-                  👆 Huella Digital {isPhone ? '(Teléfono)' : ''}
+                  Huella Digital {isPhone ? '(Teléfono)' : ''}
                 </Text>
               </TouchableOpacity>
 
@@ -1540,7 +1540,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     color={signatureMode === 'digital' ? (isDark ? theme.champagne : colors.ocean[700]) : subtextColor}
                     style={signatureMode === 'digital' ? styles.bold : undefined}
                   >
-                    ✍️ Firma Digital PC
+                    Firma Digital PC
                   </Text>
                 </TouchableOpacity>
               )}
@@ -1563,7 +1563,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               >
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center">
-                    <Text style={{ fontSize: 16 }}>✍️</Text>
+                    <Text style={{ fontSize: 16 }}></Text>
                     <Text variant="caption" color={titleColor} style={{ fontWeight: '700' }}>
                       Firma Digital Registrada en PC (Ley 25.506)
                     </Text>
@@ -1593,7 +1593,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           <Stack spacing="xs">
             <Row justify="space-between" align="center">
               <Text variant="button" color={isFormValid ? colors.semantic.success : titleColor}>
-                {isFormValid ? '✓ Todo Listo para Confirmar' : '📋 Estado de Validación:'}
+                {isFormValid ? '✓ Todo Listo para Confirmar' : 'Estado de Validación:'}
               </Text>
               <Badge
                 label={`${camposCompletados} de ${totalCampos} completados`}
@@ -1604,31 +1604,31 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             {/* Checklist Visual (Bloque 4.1) */}
             <Stack spacing="xs" style={{ marginTop: 4 }}>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{biometricSignature || signatureMode === 'digital' ? '✅' : '⏳'}</Text>
+                <Text style={{ fontSize: 13 }}>{biometricSignature || signatureMode === 'digital' ? '' : ''}</Text>
                 <Text variant="caption" color={labelColor}>
                   Rúbrica de contrato: {biometricSignature ? 'Huella Digital Validada' : signatureMode === 'digital' ? 'Firma PC Lista' : 'Pendiente escanear huella'}
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{board ? '✅' : '❌'}</Text>
+                <Text style={{ fontSize: 13 }}>{board ? '' : ''}</Text>
                 <Text variant="caption" color={labelColor}>
                   Tabla seleccionada: {board.titulo}
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{fechaRetiro && isSlotValid ? '✅' : '❌'}</Text>
+                <Text style={{ fontSize: 13 }}>{fechaRetiro && isSlotValid ? '' : ''}</Text>
                 <Text variant="caption" color={labelColor}>
                   Fecha y horario: {fechaRetiro} a las {horaRetiro || '---'} hs
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{isCardNumberValid && isNameValid && isExpValid && isCvvValid && isDniValid ? '✅' : '❌'}</Text>
+                <Text style={{ fontSize: 13 }}>{isCardNumberValid && isNameValid && isExpValid && isCvvValid && isDniValid ? '' : ''}</Text>
                 <Text variant="caption" color={labelColor}>
                   Datos de tarjeta: {isCardNumberValid ? `Luhn OK (${marca.toUpperCase()})` : 'Pendiente o erróneo'}
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{aceptaGarantia ? '✅' : '❌'}</Text>
+                <Text style={{ fontSize: 13 }}>{aceptaGarantia ? '' : ''}</Text>
                 <Text variant="caption" color={labelColor}>
                   Pre-autorización de garantía ($50.000): {aceptaGarantia ? 'Aceptada' : 'Pendiente'}
                 </Text>
@@ -1709,7 +1709,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
                   <Text variant="h3" color={titleColor}>
-                    🔍 Debug Estado del Formulario
+                    Debug Estado del Formulario
                   </Text>
                   <Button title="✕" variant="ghost" size="sm" onPress={() => setShowDebugModal(false)} />
                 </Row>

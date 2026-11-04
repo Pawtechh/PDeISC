@@ -292,7 +292,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
           ]}
         >
           <Text variant="caption" color={theme.subtext}>
-            💡{' '}
+            {' '}
             <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
               Consejo de peritaje:
             </Text>{' '}

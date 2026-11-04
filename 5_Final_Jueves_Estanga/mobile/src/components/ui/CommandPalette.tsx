@@ -43,7 +43,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const defaultActions: CommandItem[] = [
     {
       id: 'nav-catalog',
-      icon: '🏄',
+      icon: '',
       title: 'Catálogo de Tablas de Surf',
       category: 'Navegación',
       description: 'Ver todas las tablas disponibles en Sede Playa Grande',
@@ -55,7 +55,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
     {
       id: 'nav-agency-dashboard',
-      icon: '📊',
+      icon: '',
       title: 'Panel de Agencia & Operaciones',
       category: 'Sede Central',
       description: 'Métricas de sede, cronograma y despacho en mostrador',
@@ -66,7 +66,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
     {
       id: 'agency-commission',
-      icon: '⚙️',
+      icon: '',
       title: 'Modificar % de Comisión de Agencia',
       category: 'Finanzas',
       description: 'Ajustar la retención de sede con contraseña especial',
@@ -78,7 +78,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
     {
       id: 'nav-owner-earnings',
-      icon: '💰',
+      icon: '',
       title: 'Billetera y Liquidaciones Owner',
       category: 'Propietarios',
       description: 'Ver desglose neto, facturación bruta y pedir retiros',
@@ -89,7 +89,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
     {
       id: 'nav-legal',
-      icon: '📜',
+      icon: '',
       title: 'Documentos Legales & Auditoría SHA-256',
       category: 'Legal',
       description: '13 documentos formales y certificados de firma digital Ley 25.506',
@@ -100,7 +100,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
     {
       id: 'toggle-theme',
-      icon: isDark ? '☀️' : '🌙',
+      icon: isDark ? '' : '',
       title: isDark ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro',
       category: 'Preferencias',
       description: 'Alternar tema visual de la plataforma',
@@ -112,7 +112,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
     {
       id: 'system-health',
-      icon: '🔍',
+      icon: '',
       title: 'Verificar Estado del Sistema (/api/health)',
       category: 'Monitoreo',
       description: 'Latencia de red y conexión activa a base de datos MySQL',
@@ -155,7 +155,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         >
           {/* Header con Buscador */}
           <View style={styles.searchRow}>
-            <Text style={{ fontSize: 16 }}>🔍</Text>
+            <Text style={{ fontSize: 16 }}></Text>
             <TextInput
               style={[
                 styles.searchInput,
@@ -241,7 +241,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           <View style={[styles.footer, { backgroundColor: isDark ? '#090C10' : colors.sand[100] }]}>
             <Row justify="space-between" align="center">
               <Text variant="caption" color={theme.subtext} style={{ fontSize: 11 }}>
-                💡 Tip: Navegá con el teclado o tocá una acción
+                Tip: Navegá con el teclado o tocá una acción
               </Text>
               <Text variant="caption" color={isDark ? '#D4AF37' : colors.ocean[700]} style={{ fontSize: 11, fontWeight: '700' }}>
                 SURF RENTAL MDP • TITANIUM 6.0

@@ -269,7 +269,7 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
                           signatureMode === 'biometric' && styles.methodTabTextActive,
                         ]}
                       >
-                        👆 Huella Digital {isPhone ? '(Recomendado en Teléfono)' : ''}
+                        Huella Digital {isPhone ? '(Recomendado en Teléfono)' : ''}
                       </Text>
                     </TouchableOpacity>
 
@@ -287,7 +287,7 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
                           signatureMode === 'manual' && styles.methodTabTextActive,
                         ]}
                       >
-                        ✍️ Trazo Manual / Firma PC
+                        Trazo Manual / Firma PC
                       </Text>
                     </TouchableOpacity>
                   </Row>

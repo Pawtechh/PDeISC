@@ -68,11 +68,11 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const getIcon = (type: ToastType) => {
     switch (type) {
       case 'success':
-        return '✨';
+        return '';
       case 'error':
-        return '⛔';
+        return '';
       case 'warning':
-        return '⚠️';
+        return '';
       case 'info':
       default:
         return 'ℹ️';

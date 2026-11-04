@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Modal, RefreshControl, Linking } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { Moon, Sun, BookOpen, Download, ShieldCheck, Users, LogOut } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge } from '../../components/ui';
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -58,23 +59,25 @@ export const ProfileScreen: React.FC = () => {
     }
   };
 
-  const cardStyle = {
-    backgroundColor: theme.card,
-    borderColor: theme.border,
-    borderWidth: 1,
-  };
-
   return (
     <Screen
       scrollable
       refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} />}
     >
       <Stack spacing="lg" style={{ paddingVertical: spacing.md }}>
-        <Text variant="h1" color={theme.text}>
-          Mi Perfil
-        </Text>
+        <View>
+          <Row spacing="xs" align="center">
+            <ShieldCheck size={14} color="#D4AF37" />
+            <Text variant="caption" style={styles.eyebrowText}>
+              CUENTA VERIFICADA • PLAYA GRANDE
+            </Text>
+          </Row>
+          <Text variant="h1" color={theme.text}>
+            Mi Perfil
+          </Text>
+        </View>
 
-        <Card padding="lg" style={cardStyle}>
+        <Card padding="lg">
           <Stack spacing="md" align="center">
             <Avatar name={user?.nombre || 'Surfista'} size="xl" />
             <Text variant="h2" color={theme.text}>
@@ -88,22 +91,31 @@ export const ProfileScreen: React.FC = () => {
                 Tel: {user.telefono}
               </Text>
             )}
-            <Badge label={`ROL: ${user?.role || user?.rol || 'CONSUMER'}`} variant="ocean" />
-            {user?.puntos !== undefined && (
-              <Badge label={`Puntos: ${user.puntos} pts`} variant="warning" />
-            )}
+            <Row spacing="xs" align="center">
+              <Badge label={`ROL: ${user?.role || user?.rol || 'CONSUMER'}`} variant="ocean" />
+              {user?.puntos !== undefined && (
+                <Badge label={`Puntos: ${user.puntos} pts`} variant="warning" />
+              )}
+            </Row>
           </Stack>
         </Card>
 
         {/* Selector de Modo Claro / Modo Oscuro */}
-        <Card padding="lg" style={cardStyle}>
+        <Card padding="lg">
           <Stack spacing="md">
             <Row justify="space-between" align="center">
-              <Text variant="h3" color={theme.text}>
-                Tema de la Aplicación
-              </Text>
+              <Row spacing="xs" align="center">
+                {isDark ? (
+                  <Moon size={16} color="#D4AF37" />
+                ) : (
+                  <Sun size={16} color="#D4AF37" />
+                )}
+                <Text variant="h3" color={theme.text}>
+                  Tema de la Aplicación
+                </Text>
+              </Row>
               <Badge
-                label={isDark ? '🌙 MODO OSCURO' : '☀️ MODO CLARO'}
+                label={isDark ? 'MODO OSCURO' : 'MODO CLARO'}
                 variant={isDark ? 'warning' : 'ocean'}
               />
             </Row>
@@ -112,16 +124,18 @@ export const ProfileScreen: React.FC = () => {
             </Text>
             <Row spacing="sm">
               <Button
-                title="☀️ Modo Claro"
+                title="Modo Claro"
                 size="sm"
                 variant={!isDark ? 'primary' : 'secondary'}
+                iconLeft={<Sun size={14} color={!isDark ? '#090C10' : theme.text} />}
                 style={styles.flexBtn}
                 onPress={() => setMode('light')}
               />
               <Button
-                title="🌙 Modo Oscuro"
+                title="Modo Oscuro"
                 size="sm"
                 variant={isDark ? 'primary' : 'secondary'}
+                iconLeft={<Moon size={14} color={isDark ? '#090C10' : theme.text} />}
                 style={styles.flexBtn}
                 onPress={() => setMode('dark')}
               />
@@ -133,16 +147,18 @@ export const ProfileScreen: React.FC = () => {
         <Card
           padding="lg"
           style={{
-            backgroundColor: theme.card,
-            borderColor: colors.ocean[500],
+            borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : colors.ocean[500],
             borderWidth: 1,
           }}
         >
           <Stack spacing="md">
             <Row justify="space-between" align="center">
-              <Text variant="h3" color={theme.text}>
-                Manual Operativo & Guía
-              </Text>
+              <Row spacing="xs" align="center">
+                <BookOpen size={16} color="#00E5FF" />
+                <Text variant="h3" color={theme.text}>
+                  Manual Operativo & Guía
+                </Text>
+              </Row>
               <Badge label="DOCUMENTACIÓN OFICIAL" variant="info" />
             </Row>
             <Text variant="caption" color={theme.subtext}>
@@ -150,9 +166,10 @@ export const ProfileScreen: React.FC = () => {
             </Text>
             <Row spacing="sm">
               <Button
-                title="📖 Ver Manual Web"
+                title="Ver Manual Web"
                 size="sm"
                 variant="secondary"
+                iconLeft={<BookOpen size={14} color={isDark ? '#00E5FF' : colors.ocean[700]} />}
                 style={styles.flexBtn}
                 onPress={() => {
                   let url = '/manual';
@@ -165,9 +182,10 @@ export const ProfileScreen: React.FC = () => {
                 }}
               />
               <Button
-                title="📥 Descargar PDF"
+                title="Descargar PDF"
                 size="sm"
                 variant="primary"
+                iconLeft={<Download size={14} color={isDark ? '#090C10' : '#FFFFFF'} />}
                 style={styles.flexBtn}
                 onPress={() => {
                   let url = '/manual/manual-operativo-surf-rental-mdp.pdf';
@@ -183,11 +201,14 @@ export const ProfileScreen: React.FC = () => {
           </Stack>
         </Card>
 
-        <Card padding="lg" style={cardStyle}>
+        <Card padding="lg">
           <Stack spacing="md">
-            <Text variant="h3" color={theme.text}>
-              Cambiar Rol (Modo Desarrollo)
-            </Text>
+            <Row spacing="xs" align="center">
+              <Users size={16} color="#D4AF37" />
+              <Text variant="h3" color={theme.text}>
+                Cambiar Rol (Modo Desarrollo)
+              </Text>
+            </Row>
             <Text variant="caption" color={theme.subtext}>
               Probá la navegación y vistas de los 3 roles del TP:
             </Text>
@@ -224,6 +245,7 @@ export const ProfileScreen: React.FC = () => {
           title="Cerrar Sesión"
           variant="danger"
           size="lg"
+          iconLeft={<LogOut size={16} color="#FFFFFF" />}
           onPress={() => setShowLogoutModal(true)}
         />
       </Stack>
@@ -278,12 +300,19 @@ export const ProfileScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  eyebrowText: {
+    color: '#D4AF37',
+    fontWeight: '800',
+    letterSpacing: 1.5,
+    fontSize: 10.5,
+    marginBottom: 2,
+  },
   flexBtn: {
     flex: 1,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.65)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.md,

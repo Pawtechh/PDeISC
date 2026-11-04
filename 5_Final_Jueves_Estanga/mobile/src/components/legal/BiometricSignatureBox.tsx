@@ -59,7 +59,7 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
       <Stack spacing="sm">
         <Row justify="space-between" align="center">
           <Row spacing="xs" align="center">
-            <Text style={{ fontSize: 20 }}>👆</Text>
+            <Text style={{ fontSize: 20 }}></Text>
             <Text variant="h3" color={theme.text}>
               Firma por Huella Digital
             </Text>
@@ -146,7 +146,7 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
                 </>
               ) : (
                 <>
-                  <Text style={{ fontSize: 22 }}>🔏</Text>
+                  <Text style={{ fontSize: 22 }}></Text>
                   <Text
                     variant="button"
                     color={isDark ? '#090C10' : '#FFFFFF'}

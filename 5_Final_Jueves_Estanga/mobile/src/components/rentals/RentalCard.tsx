@@ -6,6 +6,7 @@ import { Card, Text, Badge, Button, Row, Stack, LightboxViewer } from '../ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { Rental } from '../../api/rentalsApi';
+import { resolveCuratedBoardPhoto } from '../../utils/curatedBoardImages';
 
 export interface RentalCardProps {
   rental: Rental;
@@ -35,10 +36,10 @@ export const RentalCard: React.FC<RentalCardProps> = ({
   const { theme, isDark } = useTheme();
   const [lightboxOpen, setLightboxOpen] = React.useState(false);
   const statusInfo = statusMap[rental.estado] || { label: rental.estado, variant: 'sand' };
-  const rawBoardPhoto =
-    rental.board?.fotos?.[0] ||
-    'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?w=600&q=80';
-  const boardPhoto = String(rawBoardPhoto).replace(/^https?:\/\/localhost:3000/i, '');
+  const boardPhoto = resolveCuratedBoardPhoto(
+    rental.board?.fotos?.[0],
+    rental.board?.tipoTabla
+  );
 
   const formatDate = (iso: string) => {
     try {

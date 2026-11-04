@@ -130,7 +130,7 @@ export const MediationScreen: React.FC = () => {
           <EmptyState
             title="Sin disputas en mediación"
             description="No hay reclamos de daño disputados pendientes de arbitraje en sede."
-            icon="⚖️"
+            icon=""
           />
         ) : (
           <Stack spacing="lg">

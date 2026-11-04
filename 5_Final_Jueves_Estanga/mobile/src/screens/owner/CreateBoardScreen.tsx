@@ -61,24 +61,24 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
     const cleanVol = volumenLitros.trim();
 
     if (!precioHora.trim()) {
-      newErrors.precioHora = '❗ Ingresá el precio por hora';
+      newErrors.precioHora = 'Ingresá el precio por hora';
     } else if (!/^\d+(\.\d+)?$/.test(cleanPrecio) || parseFloat(cleanPrecio) <= 0) {
-      newErrors.precioHora = '❗ Debe ser un número válido mayor a 0 (sin letras)';
+      newErrors.precioHora = 'Debe ser un número válido mayor a 0 (sin letras)';
     }
 
     if (!valorTasadoUsd.trim()) {
-      newErrors.valorTasadoUsd = '❗ Ingresá el valor en USD para la póliza';
+      newErrors.valorTasadoUsd = 'Ingresá el valor en USD para la póliza';
     } else if (!/^\d+(\.\d+)?$/.test(cleanValor) || parseFloat(cleanValor) <= 0) {
-      newErrors.valorTasadoUsd = '❗ Debe ser un valor numérico mayor a 0 (sin letras)';
+      newErrors.valorTasadoUsd = 'Debe ser un valor numérico mayor a 0 (sin letras)';
     }
 
     if (cleanVol && (!/^\d+(\.\d+)?$/.test(cleanVol) || parseFloat(cleanVol) <= 0)) {
-      newErrors.volumenLitros = '❗ El volumen debe ser un número válido (ej: 34 o 74.5)';
+      newErrors.volumenLitros = 'El volumen debe ser un número válido (ej: 34 o 74.5)';
     }
 
     if (Object.keys(newErrors).length > 0) {
       setFieldErrors(newErrors);
-      setErrorMsg('Por favor revisá los campos obligatorios marcados con signo de exclamación ❗');
+      setErrorMsg('Por favor revisá los campos obligatorios marcados con signo de exclamación ');
       return;
     }
 
@@ -332,7 +332,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
             {errorMsg ? (
               <Card padding="md" style={styles.errorCard}>
                 <Row spacing="xs" align="center">
-                  <Text style={{ fontSize: 18 }}>❗</Text>
+                  <Text style={{ fontSize: 18 }}></Text>
                   <Text variant="body" color={colors.semantic.danger} style={{ fontWeight: '600', flex: 1 }}>
                     {errorMsg}
                   </Text>

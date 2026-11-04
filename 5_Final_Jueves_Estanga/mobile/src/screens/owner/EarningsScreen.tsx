@@ -78,19 +78,19 @@ export const EarningsScreen: React.FC = () => {
     setModalError(null);
     const monto = parseFloat(payoutAmount);
     if (isNaN(monto) || monto < 1000) {
-      setModalError('❗ El monto mínimo de extracción es $1.000 ARS.');
+      setModalError('El monto mínimo de extracción es $1.000 ARS.');
       return;
     }
 
     if (monto > resumen.saldoDisponible) {
       setModalError(
-        `❗ Saldo insuficiente. Tu saldo disponible actual es $${resumen.saldoDisponible.toLocaleString('es-AR')} ARS.`
+        `Saldo insuficiente. Tu saldo disponible actual es $${resumen.saldoDisponible.toLocaleString('es-AR')} ARS.`
       );
       return;
     }
 
     if (!cbuAlias.trim() || cbuAlias.trim().length < 6) {
-      setModalError('❗ Ingresá un CBU o Alias válido (mínimo 6 caracteres).');
+      setModalError('Ingresá un CBU o Alias válido (mínimo 6 caracteres).');
       return;
     }
 
@@ -103,12 +103,12 @@ export const EarningsScreen: React.FC = () => {
       setShowPayoutModal(false);
       setPayoutFeedback({
         type: 'success',
-        message: `✅ Liquidación solicitada (ID: ${res.data.transferId}) por $${res.data.monto.toLocaleString('es-AR')} ARS a ${res.data.cbuAlias}. Acreditación en 24hs hábiles.`,
+        message: `Liquidación solicitada (ID: ${res.data.transferId}) por $${res.data.monto.toLocaleString('es-AR')} ARS a ${res.data.cbuAlias}. Acreditación en 24hs hábiles.`,
       });
       refetch();
     } catch (err: any) {
       setModalError(
-        `❗ ${err?.data?.message || 'No se pudo procesar la liquidación.'}`
+        `${err?.data?.message || 'No se pudo procesar la liquidación.'}`
       );
     }
   };
@@ -334,7 +334,7 @@ export const EarningsScreen: React.FC = () => {
 
               {allPayouts.length > 0 && (
                 <Input
-                  placeholder="🔍 Buscar retiros por ID (#PAY-...), CBU, Alias o estado..."
+                  placeholder="Buscar retiros por ID (#PAY-...), CBU, Alias o estado..."
                   value={payoutSearchQuery}
                   onChangeText={setPayoutSearchQuery}
                   containerStyle={{ marginBottom: spacing.xs }}
@@ -397,7 +397,7 @@ export const EarningsScreen: React.FC = () => {
                 <EmptyState
                   title="Aún no tenés alquileres liquidados"
                   description="Cuando los surfistas devuelvan tus tablas en Sede Central, verás tus acreditaciones al 95% aquí."
-                  icon="💰"
+                  icon=""
                 />
               ) : (
                 alquileresRecientes.map((alq) => (

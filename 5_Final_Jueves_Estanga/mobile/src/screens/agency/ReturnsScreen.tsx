@@ -97,7 +97,7 @@ export const ReturnsScreen: React.FC = () => {
       const trimmedDesc = damageDescription.trim();
       if (!trimmedDesc || trimmedDesc.length < 5) {
         setModalError(
-          '❗ Cuando se reporta un daño o detalle, es obligatorio ingresar una descripción detallada (mínimo 5 caracteres).'
+          'Cuando se reporta un daño o detalle, es obligatorio ingresar una descripción detallada (mínimo 5 caracteres).'
         );
         return;
       }
@@ -105,7 +105,7 @@ export const ReturnsScreen: React.FC = () => {
       const hasLetters = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(trimmedDesc);
       if (!hasLetters) {
         setModalError(
-          '❗ La descripción no puede contener sólo números. Detallá el problema con letras y números (ejemplo: "Golpe de 5cm en proa y quilla fisurada").'
+          'La descripción no puede contener sólo números. Detallá el problema con letras y números (ejemplo: "Golpe de 5cm en proa y quilla fisurada").'
         );
         return;
       }
@@ -113,7 +113,7 @@ export const ReturnsScreen: React.FC = () => {
       const activePhoto = customPhotoInput.trim() || damagePhotoUrl.trim();
       if (!activePhoto) {
         setModalError(
-          '❗ Es obligatorio capturar o adjuntar una fotografía del daño para peritaje del propietario.'
+          'Es obligatorio capturar o adjuntar una fotografía del daño para peritaje del propietario.'
         );
         return;
       }
@@ -144,19 +144,19 @@ export const ReturnsScreen: React.FC = () => {
       setSelectedRental(null);
       refetch();
 
-      let msg = `✅ La tabla "${currentRental.board?.titulo || 'de surf'}" fue recibida en sede.`;
+      let msg = `La tabla "${currentRental.board?.titulo || 'de surf'}" fue recibida en sede.`;
       if (!isWashed) {
-        msg += ` ⚠️ MULTA APLICADA: Se debitó $${res.data?.multaLavado?.toLocaleString('es-AR') || '10.000'} ARS por salitre.`;
+        msg += ` MULTA APLICADA: Se debitó $${res.data?.multaLavado?.toLocaleString('es-AR') || '10.000'} ARS por salitre.`;
       }
       if (hasDamage) {
-        msg += ` 🔍 REVISIÓN ACTIVA: Pasa a peritaje de dueño (24h).`;
+        msg += ` REVISIÓN ACTIVA: Pasa a peritaje de dueño (24h).`;
       }
 
       setFeedbackBanner({ type: 'success', text: msg });
     } catch (err: any) {
       refetch();
       const msg = err?.data?.message || err?.message || 'Error al procesar la devolución en mostrador.';
-      setModalError(`❗ ${msg}`);
+      setModalError(`${msg}`);
     }
   };
 
@@ -242,7 +242,7 @@ export const ReturnsScreen: React.FC = () => {
 
         {/* Buscador de Tabla o Código QR */}
         <Input
-          placeholder="🔍 Escanear o buscar por código QR de tabla..."
+          placeholder="Escanear o buscar por código QR de tabla..."
           value={qrSearch}
           onChangeText={setQrSearch}
         />
@@ -264,7 +264,7 @@ export const ReturnsScreen: React.FC = () => {
           <EmptyState
             title="Sin tablas en el agua"
             description="No hay alquileres en curso pendientes de devolución en la sede central."
-            icon="🌊"
+            icon=""
           />
         ) : (
           <View style={[styles.gridContainer, numColumns > 1 && styles.gridMultiColumn]}>

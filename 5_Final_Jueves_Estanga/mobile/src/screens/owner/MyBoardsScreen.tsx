@@ -50,17 +50,17 @@ export const MyBoardsScreen: React.FC = () => {
 
     if (inspectorType === 'DELEGATED') {
       if (!technicianName.trim()) {
-        setInspectionError('❗ Ingresá el nombre completo del técnico o encargado designado.');
+        setInspectionError('Ingresá el nombre completo del técnico o encargado designado.');
         return;
       }
       if (!technicianDni.trim()) {
-        setInspectionError('❗ Ingresá el DNI del técnico designado.');
+        setInspectionError('Ingresá el DNI del técnico designado.');
         return;
       }
     }
 
     if (!inspectionSigned) {
-      setInspectionError('❗ Debés marcar la firma y declaración jurada técnica antes de confirmar.');
+      setInspectionError('Debés marcar la firma y declaración jurada técnica antes de confirmar.');
       return;
     }
 
@@ -92,7 +92,7 @@ export const MyBoardsScreen: React.FC = () => {
     } catch (err: any) {
       setBannerMsg({
         type: 'error',
-        text: `❗ ${err?.data?.message || 'No se pudo actualizar el mantenimiento.'}`,
+        text: `${err?.data?.message || 'No se pudo actualizar el mantenimiento.'}`,
       });
       setInspectingBoard(null);
     }
@@ -111,7 +111,7 @@ export const MyBoardsScreen: React.FC = () => {
     } catch (err: any) {
       setBannerMsg({
         type: 'error',
-        text: `❗ ${err?.data?.message || 'No se pudo retirar la tabla. Puede tener un alquiler activo en curso.'}`,
+        text: `${err?.data?.message || 'No se pudo retirar la tabla. Puede tener un alquiler activo en curso.'}`,
       });
       setDecommissioningBoard(null);
     }
@@ -343,9 +343,9 @@ export const MyBoardsScreen: React.FC = () => {
                                 style={{ fontWeight: '700' }}
                               >
                                 {isOverdue
-                                  ? '⚠️ Mantenimiento VENCIDO'
+                                  ? 'Mantenimiento VENCIDO'
                                   : needsSoon
-                                  ? '⏳ Mantenimiento Próximo'
+                                  ? 'Mantenimiento Próximo'
                                   : '✓ Ciclo 45 Días al Día'}
                               </Text>
                               <Text
@@ -437,7 +437,7 @@ export const MyBoardsScreen: React.FC = () => {
                 <Row justify="space-between" align="center">
                   <View style={{ flex: 1 }}>
                     <Text variant="h2" color={theme.text}>
-                      🛠️ Inspección Técnica Preventiva
+                      Inspección Técnica Preventiva
                     </Text>
                     <Text variant="caption" color={theme.subtext}>
                       Certificación obligatoria de estado (Máximo 45 días)
@@ -498,7 +498,7 @@ export const MyBoardsScreen: React.FC = () => {
                         color={inspectorType === 'SELF' ? (isDark ? '#7DD3FC' : colors.ocean[700]) : theme.subtext}
                         style={{ fontWeight: inspectorType === 'SELF' ? '700' : '500', textAlign: 'center' }}
                       >
-                        👤 Yo mismo (Dueño / Shaper)
+                        Yo mismo (Dueño / Shaper)
                       </Text>
                     </TouchableOpacity>
 
@@ -520,7 +520,7 @@ export const MyBoardsScreen: React.FC = () => {
                         color={inspectorType === 'DELEGATED' ? (isDark ? '#7DD3FC' : colors.ocean[700]) : theme.subtext}
                         style={{ fontWeight: inspectorType === 'DELEGATED' ? '700' : '500', textAlign: 'center' }}
                       >
-                        👷 Técnico / Encargado
+                        Técnico / Encargado
                       </Text>
                     </TouchableOpacity>
                   </Row>
@@ -554,7 +554,7 @@ export const MyBoardsScreen: React.FC = () => {
                     onPress={() => setCheckQuillas(!checkQuillas)}
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}
                   >
-                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkQuillas ? '☑️' : '⬜'}</Text>
+                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkQuillas ? '' : '⬜'}</Text>
                     <Text variant="caption" color={theme.subtext} style={{ flex: 1 }}>
                       Quillas, tapones FCS/Futures y cajón central ajustados y sin fisuras.
                     </Text>
@@ -564,7 +564,7 @@ export const MyBoardsScreen: React.FC = () => {
                     onPress={() => setCheckDeckFibra(!checkDeckFibra)}
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}
                   >
-                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkDeckFibra ? '☑️' : '⬜'}</Text>
+                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkDeckFibra ? '' : '⬜'}</Text>
                     <Text variant="caption" color={theme.subtext} style={{ flex: 1 }}>
                       Deck, cantos y tail sin filtraciones de agua, grietas o delaminación.
                     </Text>
@@ -574,7 +574,7 @@ export const MyBoardsScreen: React.FC = () => {
                     onPress={() => setCheckParafina(!checkParafina)}
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}
                   >
-                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkParafina ? '☑️' : '⬜'}</Text>
+                    <Text style={{ fontSize: 16, marginRight: 8 }}>{checkParafina ? '' : '⬜'}</Text>
                     <Text variant="caption" color={theme.subtext} style={{ flex: 1 }}>
                       Superficie antideslizante (parafina o grip de tracción) en condiciones aptas.
                     </Text>
@@ -593,7 +593,7 @@ export const MyBoardsScreen: React.FC = () => {
                   }}
                 >
                   <Row spacing="xs" align="center">
-                    <Text style={{ fontSize: 18 }}>{inspectionSigned ? '✍️' : '📝'}</Text>
+                    <Text style={{ fontSize: 18 }}>{inspectionSigned ? '' : ''}</Text>
                     <View style={{ flex: 1 }}>
                       <Text
                         variant="caption"
@@ -693,7 +693,7 @@ export const MyBoardsScreen: React.FC = () => {
                 }}
               >
                 <Text variant="caption" color={isDark ? '#FECACA' : colors.semantic.danger}>
-                  ⚠️ La tabla ya no estará disponible para nuevas reservas. Si tiene alquileres en curso, deberás esperar a su devolución en recepción.
+                  La tabla ya no estará disponible para nuevas reservas. Si tiene alquileres en curso, deberás esperar a su devolución en recepción.
                 </Text>
               </Card>
               <Row spacing="md" justify="flex-end" style={{ marginTop: spacing.sm }}>

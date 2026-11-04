@@ -256,7 +256,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
           >
             {formattedDisplay || placeholder}
           </Text>
-          <Text style={styles.calendarIcon}>📅</Text>
+          <Text style={styles.calendarIcon}></Text>
         </Row>
       </TouchableOpacity>
 
@@ -273,7 +273,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
             </Text>
           ) : (
             <Text variant="caption" color={colors.semantic.danger} testID={`${testID}-edad`}>
-              ⚠️ Tenés {edadActual} años. Debés ser mayor de 18 años para registrarte.
+              Tenés {edadActual} años. Debés ser mayor de 18 años para registrarte.
             </Text>
           )}
         </Row>

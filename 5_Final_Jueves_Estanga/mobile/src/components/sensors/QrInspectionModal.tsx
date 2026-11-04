@@ -299,7 +299,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
           {/* Header */}
           <Row justify="space-between" align="center" style={styles.header}>
             <Row spacing="xs" align="center">
-              <Text style={{ fontSize: 22 }}>📷</Text>
+              <Text style={{ fontSize: 22 }}></Text>
               <View>
                 <Text variant="h3" color={theme.text}>
                   Escáner QR en Vivo
@@ -319,7 +319,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
             <Stack spacing="md" style={styles.resultContainer}>
               <View style={[styles.successBanner, { backgroundColor: isDark ? '#12251B' : '#ECFDF5' }]}>
                 <Row spacing="sm" align="center">
-                  <Text style={{ fontSize: 24 }}>✅</Text>
+                  <Text style={{ fontSize: 24 }}></Text>
                   <View style={{ flex: 1 }}>
                     <Text variant="body" color={colors.semantic.success} style={{ fontWeight: '700' }}>
                       {scannedResult.isRentalPass
@@ -442,7 +442,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     />
                     {!cameraActive && (
                       <div style={{ color: '#94A3B8', textAlign: 'center', padding: '16px' }}>
-                        <div style={{ fontSize: '32px', marginBottom: '8px' }}>📷</div>
+                        <div style={{ fontSize: '32px', marginBottom: '8px' }}></div>
                         <div style={{ fontSize: '13px', fontWeight: 600 }}>Cámara en Espera</div>
                         <div style={{ fontSize: '11px', color: '#64748B' }}>
                           Apuntá tu cámara a cualquier código QR de tabla o pase
@@ -489,7 +489,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       />
                     ) : (
                       <View style={styles.cameraPlaceholder}>
-                        <Text style={{ fontSize: 32 }}>📷</Text>
+                        <Text style={{ fontSize: 32 }}></Text>
                         <Text variant="caption" color={theme.subtext}>
                           Iniciando sensor óptico...
                         </Text>
@@ -529,7 +529,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     style={styles.uploadBtn}
                   >
                     <Row spacing="xs" align="center">
-                      <Text style={{ fontSize: 13 }}>📁</Text>
+                      <Text style={{ fontSize: 13 }}></Text>
                       <Text variant="caption" color={theme.primary} style={{ fontWeight: '700' }}>
                         Subir Imagen con Código QR para Escanear
                       </Text>
@@ -549,7 +549,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     onPress={() => handleProcessCode('SRMDP-RENTAL-ACTIVO-1')}
                   >
                     <Text variant="caption" color={colors.semantic.success} style={{ fontWeight: '700' }}>
-                      ⚡ Pase Retiro: #ACTIVO-1
+                      Pase Retiro: #ACTIVO-1
                     </Text>
                   </TouchableOpacity>
 
@@ -558,7 +558,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     onPress={() => handleProcessCode('SRMDP-SEED-1')}
                   >
                     <Text variant="caption" color={theme.primary} style={{ fontWeight: '700' }}>
-                      ⚡ Tabla: FishBeard 5'8
+                      Tabla: FishBeard 5'8
                     </Text>
                   </TouchableOpacity>
 
@@ -567,7 +567,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     onPress={() => handleProcessCode('SRMDP-SEED-7')}
                   >
                     <Text variant="caption" color={theme.champagne} style={{ fontWeight: '700' }}>
-                      ⚡ Tabla: Happy Everyday
+                      Tabla: Happy Everyday
                     </Text>
                   </TouchableOpacity>
                 </Row>

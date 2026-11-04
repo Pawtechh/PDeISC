@@ -88,7 +88,7 @@ describe('Card Validation and Utilities (Bloque 2 & 3)', () => {
       const anioStr = String(hoy.getFullYear() % 100).padStart(2, '0');
       const res = diagnosticarVencimiento(`${mesStr}/${anioStr}`);
       expect(res.esValido).toBe(true);
-      expect(res.advertencia).toBe('⚠️ Vence este mes');
+      expect(res.advertencia).toBe('Vence este mes');
     });
 
     it('debe aprobar fechas válidas en el futuro próximo', () => {
