@@ -6,9 +6,19 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  ActivityIndicator,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import {
+  Waves,
+  CalendarCheck,
+  Percent,
+  Sliders,
+  AlertTriangle,
+  Lock,
+  X,
+  Edit3,
+  Clock,
+} from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -99,7 +109,7 @@ export const AgencyDashboardScreen: React.FC = () => {
         type: 'success',
         message:
           res.data?.mensaje ||
-          `¡Comisión actualizada con éxito al ${parsedPct}%! Se actualizaron todos los % en la plataforma.`,
+          `Comisión actualizada con éxito al ${parsedPct}%. Se actualizaron todos los % en la plataforma.`,
       });
 
       refetchMetrics();
@@ -141,13 +151,18 @@ export const AgencyDashboardScreen: React.FC = () => {
       <Stack spacing="lg" style={styles.container}>
         <Stack spacing="xs">
           <Row justify="space-between" align="center">
-            <Text variant="h1" color={theme.text}>
-              Mostrador Playa Grande
-            </Text>
-            <Badge label="ABIERTO (6-21 hs)" variant="success" />
+            <View>
+              <Text variant="caption" style={styles.eyebrowText}>
+                CENTRO DE CONTROL OPERATIVO • MAR DEL PLATA
+              </Text>
+              <Text variant="h1" color={theme.text}>
+                Mostrador Playa Grande
+              </Text>
+            </View>
+            <Badge label="ABIERTO (6-21 HS)" variant="success" />
           </Row>
           <Text variant="body" color={theme.subtext}>
-            Sede Central Mar del Plata • Operación de entrega y custodia
+            Sede Central Mar del Plata • Operación de entrega, peritaje y custodia
           </Text>
         </Stack>
 
@@ -155,10 +170,11 @@ export const AgencyDashboardScreen: React.FC = () => {
         <Row spacing="sm">
           <Card padding="md" style={styles.metricCard}>
             <Stack spacing="xs" align="center">
-              <Text variant="h1" color={isDark ? colors.ocean[300] : colors.ocean[600]}>
+              <Waves size={18} color="#00E5FF" />
+              <Text variant="h1" color={isDark ? '#00E5FF' : colors.ocean[600]}>
                 {metrics.enElAguaCount}
               </Text>
-              <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center' }}>
+              <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center', fontWeight: '600' }}>
                 En el Agua
               </Text>
             </Stack>
@@ -166,10 +182,11 @@ export const AgencyDashboardScreen: React.FC = () => {
 
           <Card padding="md" style={styles.metricCard}>
             <Stack spacing="xs" align="center">
+              <CalendarCheck size={18} color="#D4AF37" />
               <Text variant="h1" color={isDark ? '#FBBF24' : colors.sunset[500]}>
                 {metrics.reservasHoyCount}
               </Text>
-              <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center' }}>
+              <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center', fontWeight: '600' }}>
                 Retiros Hoy
               </Text>
             </Stack>
@@ -192,16 +209,20 @@ export const AgencyDashboardScreen: React.FC = () => {
               ]}
             >
               <Stack spacing="xs" align="center">
+                <Percent size={18} color="#34D399" />
                 <Text variant="h1" color={isDark ? '#34D399' : colors.semantic.success}>
                   {metrics.comisionAgenciaPorcentaje}%
                 </Text>
-                <Text
-                  variant="caption"
-                  color={isDark ? colors.ocean[300] : colors.ocean[700]}
-                  style={{ textAlign: 'center', fontWeight: '700' }}
-                >
-                  Comisión Sede ✎
-                </Text>
+                <Row spacing="xs" align="center">
+                  <Text
+                    variant="caption"
+                    color={isDark ? '#00E5FF' : colors.ocean[700]}
+                    style={{ textAlign: 'center', fontWeight: '700' }}
+                  >
+                    Comisión Sede
+                  </Text>
+                  <Edit3 size={11} color={isDark ? '#00E5FF' : colors.ocean[700]} />
+                </Row>
               </Stack>
             </Card>
           </TouchableOpacity>
@@ -209,12 +230,12 @@ export const AgencyDashboardScreen: React.FC = () => {
 
         {/* Panel de Configuración de Comisión de la Agencia */}
         <Card
-          padding="md"
+          padding="lg"
           style={[
             styles.commissionCard,
             {
               backgroundColor: isDark ? 'rgba(0, 229, 255, 0.05)' : colors.ocean[50],
-              borderColor: isDark ? 'rgba(0, 229, 255, 0.25)' : colors.ocean[200],
+              borderColor: isDark ? 'rgba(0, 229, 255, 0.28)' : colors.ocean[200],
             },
           ]}
         >
@@ -222,11 +243,12 @@ export const AgencyDashboardScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <View style={{ flex: 1, marginRight: spacing.sm }}>
                 <Row spacing="xs" align="center">
+                  <Sliders size={16} color="#00E5FF" />
                   <Text variant="h3" color={theme.text}>
-                    ⚙️ Política de Retención de Sede
+                    Política de Retención de Sede
                   </Text>
                 </Row>
-                <Text variant="caption" color={theme.subtext}>
+                <Text variant="caption" color={theme.subtext} style={{ marginTop: 2 }}>
                   Split actual: {metrics.comisionAgenciaPorcentaje}% Agencia /{' '}
                   {100 - metrics.comisionAgenciaPorcentaje}% Owners
                 </Text>
@@ -247,26 +269,29 @@ export const AgencyDashboardScreen: React.FC = () => {
 
         {/* Alerta de Protocolo de Lavado */}
         <Card
-          padding="md"
+          padding="lg"
           style={[
             styles.washNoticeCard,
             {
-              backgroundColor: isDark ? '#450A0A' : '#FEF2F2',
-              borderColor: isDark ? '#EF4444' : '#FECACA',
+              backgroundColor: isDark ? 'rgba(127, 29, 29, 0.25)' : '#FEF2F2',
+              borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FECACA',
             },
           ]}
         >
           <Stack spacing="xs">
             <Row justify="space-between" align="center">
-              <Text variant="button" color={isDark ? '#FECACA' : colors.semantic.danger}>
-                ⚠️ Protocolo de Salitre ($10.000 ARS)
-              </Text>
+              <Row spacing="xs" align="center">
+                <AlertTriangle size={16} color={isDark ? '#F87171' : colors.semantic.danger} />
+                <Text variant="button" color={isDark ? '#FECACA' : colors.semantic.danger}>
+                  Protocolo de Salitre ($10.000 ARS)
+                </Text>
+              </Row>
               <Badge label={`${metrics.cantidadMultas} multas cobradas`} variant="danger" />
             </Row>
             <Text variant="caption" color={isDark ? '#FCA5A5' : colors.sand[700]}>
               El operador debe verificar que cada tabla sea enjuagada en las duchas de la sede con agua dulce antes de reingresar al inventario.
             </Text>
-            <Text variant="caption" color={isDark ? '#FECACA' : colors.sand[500]}>
+            <Text variant="caption" color={isDark ? '#FECACA' : colors.sand[500]} style={{ fontWeight: '700' }}>
               Recaudación por multas este mes: ${metrics.totalMultasRecaudadas.toLocaleString('es-AR')} ARS
             </Text>
           </Stack>
@@ -274,9 +299,12 @@ export const AgencyDashboardScreen: React.FC = () => {
 
         {/* Grilla Operativa del Día */}
         <Stack spacing="sm">
-          <Text variant="h2" color={theme.text}>
-            Cronograma de Sede
-          </Text>
+          <Row spacing="xs" align="center">
+            <Clock size={16} color="#D4AF37" />
+            <Text variant="h2" color={theme.text}>
+              Cronograma de Sede
+            </Text>
+          </Row>
           {schedule.length === 0 ? (
             <Card padding="md">
               <Text variant="caption" color={theme.subtext}>
@@ -342,9 +370,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                   onPress={() => setShowCommissionModal(false)}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Text variant="h2" color={theme.subtext}>
-                    ✕
-                  </Text>
+                  <X size={20} color={theme.subtext} />
                 </TouchableOpacity>
               </Row>
 
@@ -401,7 +427,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                   testID="input-commission-percent"
                 />
                 <Row justify="space-between" style={{ marginTop: 2 }}>
-                  <Text variant="caption" color={isDark ? colors.ocean[300] : colors.ocean[600]}>
+                  <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[600]}>
                     Agencia: {parsedNewPct}%
                   </Text>
                   <Text variant="caption" color={isDark ? '#34D399' : colors.semantic.success}>
@@ -411,9 +437,12 @@ export const AgencyDashboardScreen: React.FC = () => {
               </Stack>
 
               <Stack spacing="xs">
-                <Text variant="label" color={theme.text}>
-                  🔒 Contraseña Especial de Autorización:
-                </Text>
+                <Row spacing="xs" align="center">
+                  <Lock size={14} color="#D4AF37" />
+                  <Text variant="label" color={theme.text}>
+                    Contraseña Especial de Autorización:
+                  </Text>
+                </Row>
                 <TextInput
                   style={[
                     styles.input,
@@ -467,6 +496,13 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: spacing.md,
   },
+  eyebrowText: {
+    color: '#D4AF37',
+    fontWeight: '800',
+    letterSpacing: 1.5,
+    fontSize: 10.5,
+    marginBottom: 2,
+  },
   metricCard: {
     flex: 1,
     alignItems: 'center',
@@ -474,15 +510,15 @@ const styles = StyleSheet.create({
   },
   commissionCard: {
     borderWidth: 1,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
   },
   washNoticeCard: {
     borderWidth: 1,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.md,

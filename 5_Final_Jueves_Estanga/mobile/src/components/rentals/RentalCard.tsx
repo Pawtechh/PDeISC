@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
-import { Card, Stack, Row, Text, Badge, Button } from '../ui';
+import { MapPin, QrCode, Clock, Calendar } from 'lucide-react-native';
+import { Card, Text, Badge, Button, Row, Stack, LightboxViewer } from '../ui';
 import { colors, radii, spacing } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { Rental } from '../../api/rentalsApi';
 
 export interface RentalCardProps {
@@ -12,152 +14,177 @@ export interface RentalCardProps {
   onPressDetail?: () => void;
 }
 
+const statusMap: Record<
+  Rental['estado'],
+  { label: string; variant: 'ocean' | 'success' | 'warning' | 'danger' | 'sand' }
+> = {
+  PENDIENTE: { label: 'PENDIENTE', variant: 'warning' },
+  ACTIVA: { label: 'CONFIRMADA (SEDE)', variant: 'ocean' },
+  EN_CURSO: { label: 'EN EL AGUA', variant: 'success' },
+  PENDIENTE_REVISION: { label: 'EN REVISIÓN', variant: 'warning' },
+  RECLAMO: { label: 'RECLAMO ABIERTO', variant: 'danger' },
+  DEVUELTA: { label: 'FINALIZADA', variant: 'sand' },
+  CANCELADA: { label: 'CANCELADA', variant: 'danger' },
+};
+
 export const RentalCard: React.FC<RentalCardProps> = ({
   rental,
   onPressQR,
   onPressCancel,
-  onPressDetail,
 }) => {
-  const rawPhotoUrl =
+  const { theme, isDark } = useTheme();
+  const [lightboxOpen, setLightboxOpen] = React.useState(false);
+  const statusInfo = statusMap[rental.estado] || { label: rental.estado, variant: 'sand' };
+  const rawBoardPhoto =
     rental.board?.fotos?.[0] ||
-    'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80';
-  const photoUrl = String(rawPhotoUrl).replace(/^https?:\/\/localhost:3000/i, '');
+    'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?w=600&q=80';
+  const boardPhoto = String(rawBoardPhoto).replace(/^https?:\/\/localhost:3000/i, '');
 
-  const blurhash = 'L6PZfSi_.AyE_3t7t7R**0o#DgR4';
-
-  const getStatusBadge = () => {
-    switch (rental.estado) {
-      case 'ACTIVA':
-        return <Badge label="CONFIRMADA" variant="success" />;
-      case 'EN_CURSO':
-        return <Badge label="EN EL AGUA" variant="ocean" />;
-      case 'DEVUELTA':
-        return <Badge label="DEVUELTA" variant="sand" />;
-      case 'CANCELADA':
-        return <Badge label="CANCELADA" variant="danger" />;
-      default:
-        return <Badge label={rental.estado} variant="warning" />;
-    }
-  };
-
-  const formatDate = (isoString: string) => {
+  const formatDate = (iso: string) => {
     try {
-      const d = new Date(isoString);
-      return `${d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })} • ${d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs`;
+      const d = new Date(iso);
+      return d.toLocaleDateString('es-AR', {
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
     } catch {
-      return isoString;
+      return iso;
     }
   };
-
-  const isCancellable = rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE';
 
   return (
-    <Card padding="md" style={styles.card} onPress={onPressDetail}>
-      <Stack spacing="sm">
-        <Row justify="space-between" align="center">
-          {getStatusBadge()}
-          <Text variant="caption" color={colors.sand[500]}>
-            ID: #{rental.id.slice(0, 8)}
-          </Text>
-        </Row>
-
+    <Card padding="md" elevated style={styles.card}>
+      <Stack spacing="md">
         <Row spacing="md" align="center">
-          <View style={styles.imageContainer}>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => setLightboxOpen(true)}
+            accessibilityLabel="Ampliar foto de tabla"
+            style={[
+              styles.imageFrame,
+              {
+                backgroundColor: isDark ? '#111824' : colors.sand[100],
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : colors.sand[200],
+              },
+            ]}
+          >
             <Image
-              source={{ uri: photoUrl }}
-              placeholder={{ blurhash }}
-              contentFit="cover"
+              source={{ uri: boardPhoto }}
               style={styles.image}
+              contentFit="cover"
             />
-          </View>
-
-          <Stack spacing="xs" style={{ flex: 1 }}>
-            <Text variant="h3" numberOfLines={1}>
+          </TouchableOpacity>
+          <Stack spacing="xs" style={styles.info}>
+            <Row justify="space-between" align="center">
+              <Badge label={statusInfo.label} variant={statusInfo.variant} />
+              <Text variant="caption" color={theme.subtext} style={{ fontFamily: 'monospace' }}>
+                #{rental.id.slice(-6).toUpperCase()}
+              </Text>
+            </Row>
+            <Text variant="h3" color={theme.text} numberOfLines={1}>
               {rental.board?.titulo || 'Tabla de Surf'}
             </Text>
-            <Text variant="caption" color={colors.sand[500]}>
-              {rental.board?.tipoTabla || 'Tabla'} • {rental.horas} hs de alquiler
-            </Text>
-            <Text variant="caption" color={colors.sand[700]}>
-              📍 Sede Central Playa Grande
-            </Text>
+            <Row spacing="xs" align="center">
+              <Calendar size={12} color={isDark ? '#94A3B8' : colors.sand[500]} />
+              <Text variant="caption" color={theme.subtext}>
+                {formatDate(rental.fechaInicio)}
+              </Text>
+              <Clock size={12} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+              <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[600]} style={{ fontWeight: '700' }}>
+                ({rental.horas}h)
+              </Text>
+            </Row>
+            <Row spacing="xs" align="center">
+              <MapPin size={12} color={isDark ? '#D4AF37' : colors.ocean[700]} />
+              <Text variant="caption" color={isDark ? '#D4AF37' : colors.ocean[700]} style={styles.locationText}>
+                Sede Central Playa Grande
+              </Text>
+            </Row>
           </Stack>
         </Row>
 
-        <View style={styles.divider} />
-
-        <Row justify="space-between" align="center">
+        <Row
+          justify="space-between"
+          align="center"
+          style={[
+            styles.footer,
+            {
+              borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : colors.sand[200],
+            },
+          ]}
+        >
           <View>
-            <Text variant="caption" color={colors.sand[500]}>
-              Retiro: {formatDate(rental.fechaInicio)}
+            <Text variant="caption" color={theme.subtext}>
+              Total pagado
             </Text>
-            {rental.descuento > 0 && (
-              <Text variant="caption" color={colors.semantic.success} style={{ fontWeight: '600' }}>
-                Ahorraste ${rental.descuento} ARS en descuentos
-              </Text>
-            )}
+            <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[600]}>
+              ${Number(rental.precioTotal || 0).toLocaleString('es-AR')} ARS
+            </Text>
           </View>
 
-          <Text variant="h3" color={colors.ocean[600]}>
-            ${rental.precioTotal} ARS
-          </Text>
-        </Row>
-
-        <Row justify="flex-end" spacing="sm" style={styles.actions}>
-          {isCancellable && onPressCancel && (
-            <Button
-              title="Cancelar"
-              variant="ghost"
-              size="sm"
-              onPress={onPressCancel}
-              testID="btn-cancelar-alquiler"
-            />
-          )}
-
-          {rental.estado === 'ACTIVA' && onPressQR && (
-            <Button
-              title="📲 Ver QR Retiro"
-              variant="primary"
-              size="sm"
-              onPress={onPressQR}
-            />
-          )}
-
-          {onPressDetail && (
-            <Button
-              title="Detalle"
-              variant="secondary"
-              size="sm"
-              onPress={onPressDetail}
-            />
-          )}
+          <Row spacing="xs">
+            {(rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE') && (
+              <>
+                {onPressCancel && (
+                  <Button
+                    title="Cancelar"
+                    variant="ghost"
+                    size="sm"
+                    onPress={onPressCancel}
+                    testID={`btn-cancel-rental-${rental.id}`}
+                  />
+                )}
+                {onPressQR && (
+                  <Button
+                    title="Ver QR Retiro"
+                    variant="primary"
+                    size="sm"
+                    iconLeft={<QrCode size={14} color={isDark ? '#090C10' : '#FFFFFF'} />}
+                    onPress={onPressQR}
+                    testID={`btn-qr-rental-${rental.id}`}
+                  />
+                )}
+              </>
+            )}
+          </Row>
         </Row>
       </Stack>
+
+      <LightboxViewer
+        visible={lightboxOpen}
+        imageUrl={boardPhoto}
+        title={rental.board?.titulo}
+        onClose={() => setLightboxOpen(false)}
+      />
     </Card>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: spacing.xs,
+    width: '100%',
   },
-  imageContainer: {
-    width: 64,
-    height: 64,
+  imageFrame: {
+    width: 82,
+    height: 82,
     borderRadius: radii.md,
+    borderWidth: 1,
     overflow: 'hidden',
-    backgroundColor: colors.sand[100],
   },
   image: {
     width: '100%',
     height: '100%',
   },
-  divider: {
-    height: 1,
-    backgroundColor: colors.sand[100],
-    marginVertical: spacing.xs,
+  info: {
+    flex: 1,
   },
-  actions: {
-    marginTop: spacing.xs,
+  locationText: {
+    fontWeight: '700',
+  },
+  footer: {
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
   },
 });

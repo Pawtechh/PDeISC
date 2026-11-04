@@ -15,6 +15,7 @@ import { Star, Award } from 'lucide-react-native';
 import { Board } from '../../api/boardsApi';
 import { Badge } from '../ui/Badge';
 import { useTheme } from '../../theme/ThemeContext';
+import { resolveCuratedBoardPhoto } from '../../utils/curatedBoardImages';
 
 export interface SurfboardCardProps {
   board: Board;
@@ -48,10 +49,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
   testID,
 }) => {
   const { isDark } = useTheme();
-  const rawPhotoUrl =
-    board.fotos?.[0] ||
-    'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80';
-  const photoUrl = String(rawPhotoUrl).replace(/^https?:\/\/localhost:3000/i, '');
+  const photoUrl = resolveCuratedBoardPhoto(board.fotos?.[0], board.tipoTabla);
   const blurhash = 'L6PZfSi_.AyE_3t7t7R**0o#DgR4';
 
   const handleCardPress = useCallback(() => {

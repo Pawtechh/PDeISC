@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,17 +6,29 @@ import {
   TouchableOpacity,
   Platform,
   useWindowDimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Waves, LogOut, Compass, Shield } from 'lucide-react-native';
+import { Waves, LogOut, Compass, Shield, Users } from 'lucide-react-native';
 import { useTheme } from '../../theme/ThemeContext';
-import { logout } from '../../store/slices/authSlice';
+import { setCredentials } from '../../store/slices/authSlice';
+import { logout, resetAllApis } from '../../store/auth/thunks';
+import { tokenStorage } from '../../utils/storage';
+import { useLoginMutation } from '../../api/authApi';
+
+const QUICK_ROLES = [
+  { role: 'CONSUMER' as const, label: 'Surfista', email: 'consumer@surf.com', nombre: 'Gonzalo Surf' },
+  { role: 'OWNER' as const, label: 'Shaper / Owner', email: 'owner@surf.com', nombre: 'Martín Shaper' },
+  { role: 'AGENCIA' as const, label: 'Agencia Sede', email: 'mostrador@surf.com', nombre: 'Operador Playa Grande' },
+];
 
 export const DesktopHeader: React.FC = () => {
   const { width } = useWindowDimensions();
   const { isDark } = useTheme();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth?.user);
+  const [login] = useLoginMutation();
+  const [switchingRole, setSwitchingRole] = useState<string | null>(null);
 
   if (width < 768) {
     return null;
@@ -26,19 +38,37 @@ export const DesktopHeader: React.FC = () => {
     dispatch(logout() as any);
   };
 
-  const roleLabel =
-    user?.role === 'AGENCIA'
-      ? 'AGENCIA PLAYA GRANDE'
-      : user?.role === 'OWNER'
-      ? 'SHAPER / OWNER'
-      : 'SURFISTA PRO';
+  const handleQuickRoleSwitch = async (item: typeof QUICK_ROLES[number]) => {
+    if (user?.role === item.role || switchingRole) return;
+    setSwitchingRole(item.role);
+    try {
+      const response = await login({ email: item.email, password: 'Password123!' }).unwrap();
+      const { user: newUser, tokens } = response.data;
+      await tokenStorage.save({
+        access: tokens.accessToken,
+        refresh: tokens.refreshToken,
+      });
+      resetAllApis(dispatch as any);
+      dispatch(
+        setCredentials({
+          user: newUser,
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        }) as any
+      );
+    } catch {
+      // Fallback if offline
+    } finally {
+      setSwitchingRole(null);
+    }
+  };
 
   return (
     <View
       style={[
         styles.headerContainer,
         {
-          backgroundColor: isDark ? 'rgba(9, 12, 16, 0.90)' : 'rgba(255, 255, 255, 0.92)',
+          backgroundColor: isDark ? 'rgba(9, 12, 16, 0.92)' : 'rgba(255, 255, 255, 0.94)',
           borderBottomColor: isDark ? 'rgba(212, 175, 55, 0.22)' : 'rgba(0, 0, 0, 0.08)',
         },
         Platform.OS === 'web'
@@ -67,21 +97,52 @@ export const DesktopHeader: React.FC = () => {
         </View>
 
         {/* Center: Live Coastal Telemetry Pill */}
-        <View style={styles.telemetryPill}>
-          <View style={styles.livePulseDot} />
-          <Compass size={13} color="#00E5FF" />
-          <Text style={styles.telemetryText}>
-            PLAYA GRANDE • OLA 1.3M • 14KT OFFSHORE • AGUA 16.5°C
-          </Text>
-        </View>
+        {width >= 1120 && (
+          <View style={styles.telemetryPill}>
+            <View style={styles.livePulseDot} />
+            <Compass size={13} color="#00E5FF" />
+            <Text style={styles.telemetryText}>
+              PLAYA GRANDE • OLA 1.3M • 14KT OFFSHORE • AGUA 16.5°C
+            </Text>
+          </View>
+        )}
 
-        {/* Right: Active Role & User Capsule */}
+        {/* Right: Quick Role Switcher + Active User Capsule */}
         {user ? (
           <View style={styles.userSection}>
-            <View style={styles.roleBadge}>
-              <Shield size={11} color="#D4AF37" />
-              <Text style={styles.roleText}>{roleLabel}</Text>
+            <View style={styles.roleSwitcherGroup}>
+              <Users size={12} color="#D4AF37" style={{ marginLeft: 6 }} />
+              {QUICK_ROLES.map((item) => {
+                const isActive = user?.role === item.role;
+                const isLoadingThis = switchingRole === item.role;
+                return (
+                  <TouchableOpacity
+                    key={item.role}
+                    activeOpacity={0.8}
+                    onPress={() => handleQuickRoleSwitch(item)}
+                    testID={`header-switch-role-${item.role.toLowerCase()}`}
+                    style={[
+                      styles.roleSwitchPill,
+                      isActive && styles.roleSwitchPillActive,
+                    ]}
+                  >
+                    {isLoadingThis ? (
+                      <ActivityIndicator size="small" color="#00E5FF" />
+                    ) : (
+                      <Text
+                        style={[
+                          styles.roleSwitchText,
+                          isActive && styles.roleSwitchTextActive,
+                        ]}
+                      >
+                        {item.label}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
             </View>
+
             <View style={styles.userCapsule}>
               <View style={styles.userAvatar}>
                 <Text style={styles.avatarLetter}>
@@ -97,12 +158,14 @@ export const DesktopHeader: React.FC = () => {
               onPress={handleLogout}
               style={styles.logoutBtn}
               accessibilityLabel="Cerrar sesión"
+              testID="desktop-header-logout"
             >
               <LogOut size={15} color="#94A3B8" />
             </TouchableOpacity>
           </View>
         ) : (
           <View style={styles.guestPill}>
+            <Shield size={12} color="#D4AF37" />
             <Text style={styles.guestText}>SEDE CENTRAL • BALNEARIO PLAYA GRANDE</Text>
           </View>
         )}
@@ -114,7 +177,7 @@ export const DesktopHeader: React.FC = () => {
 const styles = StyleSheet.create({
   headerContainer: {
     width: '100%',
-    height: 60,
+    height: 62,
     borderBottomWidth: 1,
     paddingHorizontal: 28,
     justifyContent: 'center',
@@ -161,7 +224,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 20,
     backgroundColor: 'rgba(0, 229, 255, 0.06)',
@@ -175,32 +238,44 @@ const styles = StyleSheet.create({
     backgroundColor: '#10B981',
   },
   telemetryText: {
-    fontSize: 11,
+    fontSize: 10.5,
     fontWeight: '600',
     color: '#94A3B8',
-    letterSpacing: 1.2,
+    letterSpacing: 1.1,
   },
   userSection: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
   },
-  roleBadge: {
+  roleSwitcherGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    backgroundColor: 'rgba(212, 175, 55, 0.12)',
+    gap: 4,
+    padding: 3,
+    borderRadius: 18,
+    backgroundColor: 'rgba(18, 24, 36, 0.85)',
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.3)',
+    borderColor: 'rgba(212, 175, 55, 0.25)',
   },
-  roleText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#D4AF37',
-    letterSpacing: 1,
+  roleSwitchPill: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 14,
+  },
+  roleSwitchPillActive: {
+    backgroundColor: 'rgba(0, 229, 255, 0.16)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 229, 255, 0.45)',
+  },
+  roleSwitchText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#94A3B8',
+  },
+  roleSwitchTextActive: {
+    color: '#00E5FF',
+    fontWeight: '800',
   },
   userCapsule: {
     flexDirection: 'row',
@@ -225,7 +300,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 13,
     fontWeight: '600',
-    maxWidth: 120,
+    maxWidth: 110,
   },
   logoutBtn: {
     width: 32,
@@ -238,6 +313,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   guestPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 14,

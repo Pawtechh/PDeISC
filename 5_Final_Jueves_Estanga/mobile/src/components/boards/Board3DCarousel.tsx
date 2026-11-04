@@ -5,9 +5,9 @@ import {
   Text,
   TouchableOpacity,
   useWindowDimensions,
-  Platform,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -42,6 +42,7 @@ interface CarouselCardItemProps {
   index: number;
   scrollX: SharedValue<number>;
   cardWidth: number;
+  isDesktop: boolean;
   onPressDetail: (board: Board) => void;
   onPressReserve: (board: Board) => void;
 }
@@ -51,11 +52,18 @@ const CarouselCardItem: React.FC<CarouselCardItemProps> = ({
   index,
   scrollX,
   cardWidth,
+  isDesktop,
   onPressDetail,
   onPressReserve,
 }) => {
-  // Centered Peek-Carousel: smooth scale (0.92 to 1.0) and opacity (0.55 to 1.0)
   const animatedStyle = useAnimatedStyle(() => {
+    if (isDesktop) {
+      return {
+        opacity: 1,
+        transform: [{ scale: 1 }],
+      };
+    }
+
     const inputRange = [
       (index - 1) * cardWidth,
       index * cardWidth,
@@ -65,14 +73,14 @@ const CarouselCardItem: React.FC<CarouselCardItemProps> = ({
     const scale = interpolate(
       scrollX.value,
       inputRange,
-      [0.92, 1.0, 0.92],
+      [0.93, 1.0, 0.93],
       Extrapolation.CLAMP
     );
 
     const opacity = interpolate(
       scrollX.value,
       inputRange,
-      [0.55, 1.0, 0.55],
+      [0.65, 1.0, 0.65],
       Extrapolation.CLAMP
     );
 
@@ -87,7 +95,7 @@ const CarouselCardItem: React.FC<CarouselCardItemProps> = ({
       style={[
         {
           width: cardWidth,
-          paddingHorizontal: 6,
+          paddingHorizontal: 7,
         },
         animatedStyle,
       ]}
@@ -121,21 +129,21 @@ const PaginationDot: React.FC<PaginationDotProps> = ({ index, scrollX, cardWidth
     const width = interpolate(
       scrollX.value,
       inputRange,
-      [6, 22, 6],
+      [6, 24, 6],
       Extrapolation.CLAMP
     );
 
     const opacity = interpolate(
       scrollX.value,
       inputRange,
-      [0.3, 1, 0.3],
+      [0.35, 1, 0.35],
       Extrapolation.CLAMP
     );
 
     return {
       width,
       opacity,
-      backgroundColor: opacity > 0.65 ? '#00B4D8' : '#D4AF37',
+      backgroundColor: opacity > 0.65 ? '#00E5FF' : '#D4AF37',
     };
   });
 
@@ -161,38 +169,42 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
   const [isInteracting, setIsInteracting] = useState(false);
   const interactionTimerRef = useRef<any>(null);
 
-  // Peek-carousel geometry:
-  // Card occupies 84% on mobile, max width 440px on desktop
-  const CARD_WIDTH = Math.min(width * 0.84, 440);
-  const SPACING = (width - CARD_WIDTH) / 2;
+  const isDesktop = width >= 900;
+  // On desktop, show 3 balanced featured cards side-by-side without a blank left void
+  const effectiveWidth = Math.min(width - 32, 1248);
+  const CARD_WIDTH = isDesktop
+    ? Math.floor(effectiveWidth / 3)
+    : Math.min(width * 0.84, 420);
+  const SPACING = isDesktop ? 0 : (width - CARD_WIDTH) / 2;
 
   const scrollX = useSharedValue(0);
   const flatListRef = useRef<any>(null);
 
-  // Reset scroll position to beginning whenever the list of boards changes (e.g. filter by category)
   useEffect(() => {
     flatListRef.current?.scrollToOffset({ offset: 0, animated: false });
     scrollX.value = 0;
     setCurrentIndex(0);
   }, [boards]);
 
-  // Autoplay Effect: el carrusel se mueve solo automáticamente cada 3.5 segundos
   useEffect(() => {
     if (boards.length <= 1 || isInteracting) return;
 
+    const maxIndex = isDesktop ? Math.max(0, boards.length - 3) : boards.length - 1;
+    if (maxIndex <= 0) return;
+
     const timer = setInterval(() => {
       setCurrentIndex((prev) => {
-        const next = (prev + 1) % boards.length;
+        const next = prev >= maxIndex ? 0 : prev + 1;
         flatListRef.current?.scrollToOffset({
           offset: next * CARD_WIDTH,
           animated: true,
         });
         return next;
       });
-    }, 3500);
+    }, 4500);
 
     return () => clearInterval(timer);
-  }, [boards.length, isInteracting, CARD_WIDTH]);
+  }, [boards.length, isInteracting, CARD_WIDTH, isDesktop]);
 
   const onUserInteractionStart = useCallback(() => {
     setIsInteracting(true);
@@ -205,10 +217,9 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
     if (interactionTimerRef.current) {
       clearTimeout(interactionTimerRef.current);
     }
-    // Reanudar el movimiento automático tras 4 segundos sin interacción
     interactionTimerRef.current = setTimeout(() => {
       setIsInteracting(false);
-    }, 4000);
+    }, 5000);
   }, []);
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -217,7 +228,6 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
     },
   });
 
-  // Track active index and trigger tactile haptic tick
   useAnimatedReaction(
     () => Math.round(scrollX.value / CARD_WIDTH),
     (current, previous) => {
@@ -264,11 +274,12 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
   }
 
   const isFirst = currentIndex === 0;
-  const isLast = currentIndex === boards.length - 1;
+  const isLast = isDesktop
+    ? currentIndex >= Math.max(0, boards.length - 3)
+    : currentIndex === boards.length - 1;
 
   return (
     <View style={styles.carouselContainer}>
-      {/* Horizontal Carousel */}
       <View style={styles.carouselTrackWrapper}>
         <Animated.FlatList
           ref={flatListRef}
@@ -297,6 +308,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               index={index}
               scrollX={scrollX}
               cardWidth={CARD_WIDTH}
+              isDesktop={isDesktop}
               onPressDetail={onPressDetail}
               onPressReserve={onPressReserve}
             />
@@ -308,48 +320,44 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           })}
         />
 
-        {/* Floating Side Arrow: Previous (Desktop / Tablet / Wide) */}
         {!isFirst && width >= 600 && (
           <TouchableOpacity
             style={[
               styles.floatingArrow,
               styles.floatingArrowLeft,
               {
-                backgroundColor: isDark ? 'rgba(9, 12, 16, 0.75)' : 'rgba(255, 255, 255, 0.9)',
-                borderColor: isDark ? 'rgba(212, 175, 55, 0.3)' : '#CBD5E1',
+                backgroundColor: isDark ? 'rgba(9, 12, 16, 0.85)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : '#CBD5E1',
               },
             ]}
             onPress={handlePrev}
             activeOpacity={0.8}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <Text style={[styles.floatingArrowText, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>‹</Text>
+            <ChevronLeft size={20} color={isDark ? '#F8FAFC' : '#0F172A'} />
           </TouchableOpacity>
         )}
 
-        {/* Floating Side Arrow: Next (Desktop / Tablet / Wide) */}
         {!isLast && width >= 600 && (
           <TouchableOpacity
             style={[
               styles.floatingArrow,
               styles.floatingArrowRight,
               {
-                backgroundColor: isDark ? 'rgba(9, 12, 16, 0.75)' : 'rgba(255, 255, 255, 0.9)',
-                borderColor: isDark ? 'rgba(212, 175, 55, 0.3)' : '#CBD5E1',
+                backgroundColor: isDark ? 'rgba(9, 12, 16, 0.85)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : '#CBD5E1',
               },
             ]}
             onPress={handleNext}
             activeOpacity={0.8}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <Text style={[styles.floatingArrowText, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>›</Text>
+            <ChevronRight size={20} color={isDark ? '#F8FAFC' : '#0F172A'} />
           </TouchableOpacity>
         )}
       </View>
 
-      {/* Intuitive Navigation Bar (Prev / Dots / Next) */}
       <View style={styles.bottomNavContainer}>
-        {/* Prev Arrow Button */}
         <TouchableOpacity
           style={[
             styles.navArrowBtn,
@@ -364,10 +372,9 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Text style={[styles.navArrowText, isFirst && styles.navArrowTextDisabled]}>‹</Text>
+          <ChevronLeft size={15} color={isFirst ? '#64748B' : '#00E5FF'} />
         </TouchableOpacity>
 
-        {/* Pagination Dots / Counter */}
         {boards.length <= 10 ? (
           <View style={styles.paginationRow}>
             {boards.map((board, idx) => (
@@ -398,7 +405,6 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           </View>
         )}
 
-        {/* Next Arrow Button */}
         <TouchableOpacity
           style={[
             styles.navArrowBtn,
@@ -413,7 +419,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Text style={[styles.navArrowText, isLast && styles.navArrowTextDisabled]}>›</Text>
+          <ChevronRight size={15} color={isLast ? '#64748B' : '#00E5FF'} />
         </TouchableOpacity>
       </View>
     </View>
@@ -436,10 +442,10 @@ const styles = StyleSheet.create({
   floatingArrow: {
     position: 'absolute',
     top: '45%',
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(9, 12, 16, 0.75)',
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: 'rgba(9, 12, 16, 0.85)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.15)',
     alignItems: 'center',
@@ -452,16 +458,10 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   floatingArrowLeft: {
-    left: 16,
+    left: 12,
   },
   floatingArrowRight: {
-    right: 16,
-  },
-  floatingArrowText: {
-    color: '#F8FAFC',
-    fontSize: 26,
-    fontWeight: '300',
-    marginTop: -2,
+    right: 12,
   },
   bottomNavContainer: {
     flexDirection: 'row',
@@ -484,15 +484,6 @@ const styles = StyleSheet.create({
     opacity: 0.25,
     borderColor: 'rgba(255, 255, 255, 0.05)',
   },
-  navArrowText: {
-    color: '#00B4D8',
-    fontSize: 20,
-    fontWeight: '700',
-    marginTop: -2,
-  },
-  navArrowTextDisabled: {
-    color: '#64748B',
-  },
   paginationRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -513,7 +504,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   counterHighlight: {
-    color: '#00B4D8',
+    color: '#00E5FF',
     fontSize: 13,
     fontWeight: '800',
   },

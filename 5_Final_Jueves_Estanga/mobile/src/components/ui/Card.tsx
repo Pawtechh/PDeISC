@@ -9,6 +9,7 @@ export interface CardProps {
   shadow?: ShadowKey;
   onPress?: () => void;
   padding?: keyof typeof spacing;
+  elevated?: boolean;
   testID?: string;
 }
 
@@ -20,7 +21,7 @@ export const Card: React.FC<CardProps> = ({
   padding = 'lg',
   testID,
 }) => {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
 
   const content = (
     <View
@@ -28,13 +29,13 @@ export const Card: React.FC<CardProps> = ({
       style={[
         styles.card,
         {
-          backgroundColor: theme.card,
-          borderColor: theme.border,
+          backgroundColor: isDark ? 'rgba(13, 19, 29, 0.88)' : theme.card,
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : theme.border,
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
+              backdropFilter: 'blur(18px)',
+              WebkitBackdropFilter: 'blur(18px)',
               transition: 'border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease',
             } as any)
           : null,
@@ -65,7 +66,7 @@ export const Card: React.FC<CardProps> = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.white,
-    borderRadius: radii.lg,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: colors.sand[200],
     overflow: 'hidden',

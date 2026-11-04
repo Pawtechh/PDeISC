@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Platform, ActivityIndicator } from 'react-native';
+import { Map, CheckCircle2, AlertTriangle, Radio, Navigation } from 'lucide-react-native';
 import { Card, Stack, Row, Text, Badge } from '../ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -34,7 +35,6 @@ export const GoogleMapSedeCard: React.FC = () => {
     sensorService.openGoogleMapsDirections(gpsData?.latitude, gpsData?.longitude);
   };
 
-  // URL del iframe interactivo de Google Maps enfocado en la Sede Playa Grande
   const mapEmbedUrl = `https://maps.google.com/maps?q=${PLAYA_GRANDE_COORDS.latitude},${PLAYA_GRANDE_COORDS.longitude}&hl=es&z=16&output=embed`;
 
   const distanceMts = gpsData?.distanceToPlayaGrande ?? 50;
@@ -47,15 +47,17 @@ export const GoogleMapSedeCard: React.FC = () => {
         styles.container,
         {
           backgroundColor: isDark ? '#0D1420' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(212, 175, 55, 0.4)' : colors.ocean[300],
+          borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : colors.ocean[300],
         },
       ]}
     >
       <Stack spacing="sm">
         {/* Encabezado */}
         <Row justify="space-between" align="center">
-          <Row spacing="xs" align="center">
-            <Text style={{ fontSize: 22 }}>🗺️</Text>
+          <Row spacing="sm" align="center">
+            <View style={styles.iconCircle}>
+              <Map size={16} color="#00E5FF" />
+            </View>
             <View>
               <Text variant="h3" color={theme.text}>
                 Mapa Google & Sensor de Proximidad
@@ -76,8 +78,8 @@ export const GoogleMapSedeCard: React.FC = () => {
           style={[
             styles.distanceBanner,
             {
-              backgroundColor: isDark ? '#142033' : '#F0F9FF',
-              borderColor: isDark ? theme.champagne : colors.ocean[400],
+              backgroundColor: isDark ? '#111A2B' : '#F0F9FF',
+              borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : colors.ocean[400],
             },
           ]}
         >
@@ -88,16 +90,23 @@ export const GoogleMapSedeCard: React.FC = () => {
               </Text>
               <Text
                 variant="display"
-                color={isDark ? theme.primary : colors.ocean[700]}
+                color={isDark ? '#00E5FF' : colors.ocean[700]}
                 style={styles.distanceValue}
               >
                 {distanceMts < 1000 ? `${distanceMts} metros` : `${(distanceMts / 1000).toFixed(2)} km`}
               </Text>
-              <Text variant="caption" color={theme.subtext}>
-                {isClose
-                  ? '✅ Estás dentro del perímetro habilitado para retiros y devoluciones en mostrador.'
-                  : '⚠️ Te encontrás fuera del radio de entrega inmediata.'}
-              </Text>
+              <Row spacing="xs" align="center">
+                {isClose ? (
+                  <CheckCircle2 size={13} color="#34D399" />
+                ) : (
+                  <AlertTriangle size={13} color="#FBBF24" />
+                )}
+                <Text variant="caption" color={theme.subtext}>
+                  {isClose
+                    ? 'Dentro del perímetro habilitado para retiros y devoluciones en mostrador.'
+                    : 'Fuera del radio de entrega inmediata.'}
+                </Text>
+              </Row>
             </View>
 
             <TouchableOpacity
@@ -105,14 +114,14 @@ export const GoogleMapSedeCard: React.FC = () => {
               disabled={isLocating}
               style={[
                 styles.refreshBtn,
-                { backgroundColor: isDark ? theme.champagne : colors.ocean[600] },
+                { backgroundColor: isDark ? '#D4AF37' : colors.ocean[600] },
               ]}
             >
               {isLocating ? (
                 <ActivityIndicator size="small" color={isDark ? '#090C10' : '#FFFFFF'} />
               ) : (
                 <Row spacing="xs" align="center">
-                  <Text style={{ fontSize: 14 }}>📡</Text>
+                  <Radio size={13} color={isDark ? '#090C10' : '#FFFFFF'} />
                   <Text
                     variant="caption"
                     color={isDark ? '#090C10' : '#FFFFFF'}
@@ -144,7 +153,7 @@ export const GoogleMapSedeCard: React.FC = () => {
             />
           ) : (
             <View style={styles.nativeMapPlaceholder}>
-              <Text style={{ fontSize: 32 }}>🗺️</Text>
+              <Map size={28} color="#00E5FF" />
               <Text variant="body" color={theme.text} style={{ fontWeight: '700', marginTop: 4 }}>
                 Sede Central Playa Grande
               </Text>
@@ -163,8 +172,8 @@ export const GoogleMapSedeCard: React.FC = () => {
 
           <TouchableOpacity onPress={handleOpenDirections} style={styles.directionsBtn}>
             <Row spacing="xs" align="center">
-              <Text style={{ fontSize: 14 }}>🧭</Text>
-              <Text variant="caption" color={isDark ? theme.primary : colors.ocean[600]} style={{ fontWeight: '700' }}>
+              <Navigation size={13} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+              <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[600]} style={{ fontWeight: '700' }}>
                 Cómo Llegar en Google Maps
               </Text>
             </Row>
@@ -177,8 +186,18 @@ export const GoogleMapSedeCard: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderRadius: radii.lg,
+  },
+  iconCircle: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: 'rgba(0, 229, 255, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 229, 255, 0.32)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   distanceBanner: {
     padding: spacing.md,
@@ -192,8 +211,8 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   refreshBtn: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs + 2,
+    paddingHorizontal: spacing.md,
     borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',

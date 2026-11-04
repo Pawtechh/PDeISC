@@ -117,9 +117,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
   const handleDevLogin = async (role: UserRole) => {
     const creds: Record<UserRole, { email: string; pass: string }> = {
-      CONSUMER: { email: 'gonzalo@surfmdp.com', pass: 'gonzalo123' },
-      OWNER: { email: 'martin@shaper.com', pass: 'shaper123' },
-      AGENCIA: { email: 'operador@playagrande.com', pass: 'operador123' },
+      CONSUMER: { email: 'consumer@surf.com', pass: 'Password123!' },
+      OWNER: { email: 'owner@surf.com', pass: 'Password123!' },
+      AGENCIA: { email: 'mostrador@surf.com', pass: 'Password123!' },
     };
 
     const target = creds[role];

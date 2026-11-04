@@ -7,6 +7,7 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import { AlertCircle } from 'lucide-react-native';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { Text } from './Text';
@@ -37,7 +38,7 @@ export const Input: React.FC<InputProps> = ({
   const getBorderColor = (): string => {
     if (error) return colors.semantic.danger;
     if (isFocused) return theme.primary;
-    return theme.border;
+    return isDark ? 'rgba(255, 255, 255, 0.12)' : theme.border;
   };
 
   return (
@@ -48,9 +49,12 @@ export const Input: React.FC<InputProps> = ({
             {label}
           </Text>
           {error && (
-            <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '700' }}>
-              ❗ Requerido
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <AlertCircle size={12} color={colors.semantic.danger} />
+              <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '700' }}>
+                Requerido
+              </Text>
+            </View>
           )}
         </View>
       )}
@@ -62,9 +66,9 @@ export const Input: React.FC<InputProps> = ({
             borderColor: getBorderColor(),
             borderWidth: error ? 1.5 : 1,
             backgroundColor: error
-              ? (isDark ? '#3b0d0d' : '#FEF2F2')
+              ? (isDark ? 'rgba(127, 29, 29, 0.35)' : '#FEF2F2')
               : editable
-              ? theme.inputBg
+              ? (isDark ? 'rgba(11, 16, 26, 0.85)' : theme.inputBg)
               : theme.surface,
           },
         ]}
@@ -82,15 +86,18 @@ export const Input: React.FC<InputProps> = ({
           <View style={styles.icon}>{iconRight}</View>
         ) : error ? (
           <View style={styles.icon}>
-            <Text style={{ fontSize: 16 }}>❗</Text>
+            <AlertCircle size={16} color={colors.semantic.danger} />
           </View>
         ) : null}
       </View>
 
       {error ? (
-        <Text variant="caption" color={colors.semantic.danger} style={[styles.helper, { fontWeight: '600' }]}>
-          ❗ {error}
-        </Text>
+        <View style={[styles.helper, { flexDirection: 'row', alignItems: 'center', gap: 4 }]}>
+          <AlertCircle size={12} color={colors.semantic.danger} />
+          <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '600' }}>
+            {error}
+          </Text>
+        </View>
       ) : helperText ? (
         <Text variant="caption" color={colors.sand[500]} style={styles.helper}>
           {helperText}

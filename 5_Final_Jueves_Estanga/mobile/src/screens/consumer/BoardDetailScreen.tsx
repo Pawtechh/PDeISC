@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Modal, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
-import { Star } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Star, ShieldCheck, MapPin, Ruler, Droplets, DollarSign } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, Divider, LightboxViewer } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { Board, useGetBoardQuery } from '../../api/boardsApi';
 import { useGetBoardReviewsQuery } from '../../api/loyaltyApi';
 import { CheckoutScreen } from './CheckoutScreen';
+import { resolveCuratedBoardPhoto } from '../../utils/curatedBoardImages';
 
 export interface BoardDetailScreenProps {
   route?: { params?: { board?: Board; boardId?: string } };
@@ -16,6 +18,7 @@ export interface BoardDetailScreenProps {
 
 export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, navigation }) => {
   const { theme, isDark } = useTheme();
+  const { width } = useWindowDimensions();
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [selectedLightboxPhoto, setSelectedLightboxPhoto] = useState<string | null>(null);
 
@@ -47,84 +50,108 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
   const fotos = (
     board.fotos && board.fotos.length > 0
       ? board.fotos
-      : ['https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800']
-  ).map((f) => String(f).replace(/^https?:\/\/localhost:3000/i, ''));
+      : ['https://images.unsplash.com/photo-1531722569936-825d3dd91b15?w=1000&q=85']
+  ).map((f) => resolveCuratedBoardPhoto(String(f), board.tipoTabla));
+
+  const heroHeight = width >= 768 ? 360 : 260;
 
   return (
     <Screen scrollable safeBottom={false}>
       <Stack spacing="lg" style={styles.container}>
-        {/* Galería Horizontal de Fotos (patrón Airbnb) */}
-        <View style={styles.galleryContainer}>
-          <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
-            {fotos.map((foto, index) => (
-              <TouchableOpacity
-                key={index}
-                activeOpacity={0.9}
-                onPress={() => setSelectedLightboxPhoto(foto)}
-                accessibilityLabel="Ver foto ampliada"
-              >
-                <Image
-                  source={{ uri: foto }}
-                  style={styles.galleryImage}
-                  contentFit="cover"
-                />
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+        {/* Galería Hero de Alta Resolución */}
+        <View style={[styles.galleryContainer, { height: heroHeight, backgroundColor: isDark ? '#0B101B' : colors.sand[100] }]}>
+          <TouchableOpacity
+            activeOpacity={0.92}
+            onPress={() => setSelectedLightboxPhoto(fotos[0])}
+            accessibilityLabel="Ver foto ampliada"
+            style={{ width: '100%', height: '100%' }}
+          >
+            <Image
+              source={{ uri: fotos[0] }}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="cover"
+            />
+            <LinearGradient
+              colors={['transparent', 'rgba(9, 12, 16, 0.75)']}
+              locations={[0.55, 1]}
+              style={StyleSheet.absoluteFillObject}
+            />
+          </TouchableOpacity>
           <View style={styles.badgeOverlay}>
-            <Badge label={board.tipoTabla} variant="ocean" />
+            <Badge label={board.tipoTabla.toUpperCase()} variant="ocean" />
           </View>
         </View>
 
         {/* Título y Precio */}
         <Stack spacing="xs">
           <Row justify="space-between" align="center">
-            <Text variant="h1" style={{ flex: 1 }}>
-              {board.titulo}
-            </Text>
-            <Text variant="display" color={isDark ? colors.ocean[300] : colors.ocean[600]}>
-              ${board.precioHora}
-              <Text variant="caption" color={theme.subtext}>
-                /h
+            <View style={{ flex: 1, paddingRight: spacing.md }}>
+              <Text variant="caption" style={{ color: '#D4AF37', fontWeight: '800', letterSpacing: 1.5 }}>
+                {board.marca.toUpperCase()} • SHAPER OFICIAL MAR DEL PLATA
               </Text>
-            </Text>
+              <Text variant="h1" color={theme.text}>
+                {board.titulo}
+              </Text>
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text variant="display" color={isDark ? '#00E5FF' : colors.ocean[600]}>
+                ${board.precioHora}
+              </Text>
+              <Text variant="caption" color={theme.subtext}>
+                ARS / hora
+              </Text>
+            </View>
           </Row>
-          <Text variant="body" color={theme.subtext}>
-            Fabricada por {board.marca} • Shaper Oficial Mar del Plata
-          </Text>
         </Stack>
 
         <Divider />
 
         {/* Especificaciones Técnicas */}
-        <Card padding="md">
+        <Card padding="lg">
           <Stack spacing="sm">
-            <Text variant="h3">Especificaciones Técnicas</Text>
-            <Row justify="space-between">
-              <Text variant="body" color={theme.subtext}>Medidas:</Text>
-              <Text variant="body" style={styles.bold}>{board.medidas}</Text>
+            <Text variant="h3" color={theme.text}>
+              Especificaciones Técnicas
+            </Text>
+            <Row justify="space-between" align="center">
+              <Row spacing="xs" align="center">
+                <Ruler size={14} color="#00E5FF" />
+                <Text variant="body" color={theme.subtext}>Medidas:</Text>
+              </Row>
+              <Text variant="body" color={theme.text} style={styles.bold}>{board.medidas}</Text>
             </Row>
-            <Row justify="space-between">
-              <Text variant="body" color={theme.subtext}>Volumen:</Text>
-              <Text variant="body" style={styles.bold}>{board.volumenLitros || '-'} Litros</Text>
+            <Row justify="space-between" align="center">
+              <Row spacing="xs" align="center">
+                <Droplets size={14} color="#00E5FF" />
+                <Text variant="body" color={theme.subtext}>Volumen:</Text>
+              </Row>
+              <Text variant="body" color={theme.text} style={styles.bold}>{board.volumenLitros || '-'} Litros</Text>
             </Row>
-            <Row justify="space-between">
-              <Text variant="body" color={theme.subtext}>Valor tasado (Agencia):</Text>
-              <Text variant="body" style={styles.bold}>${board.valorTasadoUsd} USD</Text>
+            <Row justify="space-between" align="center">
+              <Row spacing="xs" align="center">
+                <DollarSign size={14} color="#D4AF37" />
+                <Text variant="body" color={theme.subtext}>Valor tasado (Agencia):</Text>
+              </Row>
+              <Text variant="body" color={theme.text} style={styles.bold}>${board.valorTasadoUsd} USD</Text>
             </Row>
-            <Row justify="space-between">
-              <Text variant="body" color={theme.subtext}>Sede de retiro:</Text>
-              <Text variant="body" style={styles.bold}>Playa Grande (Sede Central)</Text>
+            <Row justify="space-between" align="center">
+              <Row spacing="xs" align="center">
+                <MapPin size={14} color="#D4AF37" />
+                <Text variant="body" color={theme.subtext}>Sede de retiro:</Text>
+              </Row>
+              <Text variant="body" color={theme.text} style={styles.bold}>Playa Grande (Sede Central)</Text>
             </Row>
           </Stack>
         </Card>
 
         {/* Disponibilidad Próximos 7 Días */}
-        <Card padding="md">
+        <Card padding="lg">
           <Stack spacing="sm">
-            <Text variant="h3">Disponibilidad en Sede (7 Días)</Text>
+            <Row justify="space-between" align="center">
+              <Text variant="h3" color={theme.text}>Disponibilidad en Sede (7 Días)</Text>
+              <Badge label={board.estado === 'DISPONIBLE' ? 'DISPONIBLE HOY' : board.estado} variant="success" />
+            </Row>
             <Text variant="caption" color={theme.subtext}>
-              Horario de atención: 6:00 AM a 21:00 PM. Sin delivery.
+              Horario de atención: 6:00 AM a 21:00 PM. Retiro y devolución presencial en Playa Grande.
             </Text>
             <Row spacing="xs" justify="space-between" style={{ marginTop: spacing.xs }}>
               {['Hoy', 'Mañ', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((dia, idx) => (
@@ -133,12 +160,12 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                   style={[
                     styles.dayBox,
                     {
-                      backgroundColor: isDark ? '#0F172A' : colors.sand[50],
-                      borderColor: theme.border,
+                      backgroundColor: isDark ? '#0B101B' : colors.sand[50],
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : theme.border,
                     },
                   ]}
                 >
-                  <Text variant="caption" color={theme.text}>{dia}</Text>
+                  <Text variant="caption" color={theme.text} style={{ fontWeight: '600' }}>{dia}</Text>
                   <View style={board.estado === 'DISPONIBLE' ? styles.dotAvailable : styles.dotBusy} />
                 </View>
               ))}
@@ -147,12 +174,15 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         </Card>
 
         {/* Reseñas 100% Verificadas */}
-        <Card padding="md">
+        <Card padding="lg">
           <Stack spacing="sm">
             <Row justify="space-between" align="center">
-              <Text variant="h3">Reseñas de Surfistas</Text>
+              <Row spacing="xs" align="center">
+                <ShieldCheck size={16} color="#34D399" />
+                <Text variant="h3" color={theme.text}>Reseñas Verificadas</Text>
+              </Row>
               <Row align="center" spacing="xs">
-                <Star size={13} color="#D4AF37" fill="#D4AF37" />
+                <Star size={14} color="#D4AF37" fill="#D4AF37" />
                 <Text variant="button" color={isDark ? '#D4AF37' : colors.sunset[500]}>
                   {averageRating} ({totalReviews})
                 </Text>
@@ -181,20 +211,20 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         style={[
           styles.bottomBar,
           {
-            backgroundColor: theme.card,
-            borderTopColor: theme.border,
+            backgroundColor: isDark ? 'rgba(9, 12, 16, 0.94)' : theme.card,
+            borderTopColor: isDark ? 'rgba(212, 175, 55, 0.25)' : theme.border,
           },
         ]}
       >
-        <Row justify="space-between" align="center">
+        <Row justify="space-between" align="center" style={{ maxWidth: 1200, width: '100%', alignSelf: 'center' }}>
           <View>
             <Text variant="caption" color={theme.subtext}>Tarifa base (2h)</Text>
-            <Text variant="h2" color={isDark ? colors.ocean[300] : colors.ocean[600]}>
-              ${Number(board.precioHora) * 2} ARS
+            <Text variant="h2" color={isDark ? '#00E5FF' : colors.ocean[600]}>
+              ${(Number(board.precioHora) * 2).toLocaleString('es-AR')} ARS
             </Text>
           </View>
           <Button
-            title={board.estado === 'DISPONIBLE' ? "Reservar Tabla" : "No disponible"}
+            title={board.estado === 'DISPONIBLE' ? 'Reservar Tabla' : 'No disponible'}
             disabled={board.estado !== 'DISPONIBLE'}
             variant="primary"
             size="lg"
@@ -232,19 +262,15 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 100,
+    paddingBottom: 120,
   },
   galleryContainer: {
     width: '100%',
-    height: 260,
     borderRadius: radii.xl,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: colors.sand[100],
-  },
-  galleryImage: {
-    width: 360,
-    height: 260,
+    borderWidth: 1,
+    borderColor: 'rgba(212, 175, 55, 0.25)',
   },
   badgeOverlay: {
     position: 'absolute',
@@ -256,8 +282,8 @@ const styles = StyleSheet.create({
   },
   dayBox: {
     alignItems: 'center',
-    padding: spacing.xs,
-    borderRadius: radii.sm,
+    padding: spacing.xs + 2,
+    borderRadius: radii.md,
     borderWidth: 1,
     flex: 1,
     marginHorizontal: 2,
@@ -266,15 +292,15 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.semantic.success,
-    marginTop: 4,
+    backgroundColor: '#34D399',
+    marginTop: 5,
   },
   dotBusy: {
     width: 8,
     height: 8,
     borderRadius: 4,
     backgroundColor: colors.sand[500],
-    marginTop: 4,
+    marginTop: 5,
   },
   bottomBar: {
     position: 'absolute',
