@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Guía Maestra de Estudio y Defensa Técnica — Surf Rental Mar del Plata</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 14mm 20mm 14mm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 9pt;
+        color: #64748B;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #0F172A;
+      background: #FFFFFF;
+      line-height: 1.55;
+      font-size: 10.5pt;
+    }
+
+    /* Portada / Header */
+    .cover {
+      page-break-after: always;
+      height: 100%;
+      min-height: 880px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 20px 20px 20px;
+      border: 2px solid #0284C7;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #F0F9FF 0%, #FFFFFF 35%, #F8FAFC 100%);
+    }
+
+    .cover-top {
+      text-align: center;
+    }
+
+    .badge-univ {
+      display: inline-block;
+      padding: 6px 16px;
+      background: #0284C7;
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 10pt;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 30px;
+      margin-bottom: 24px;
+    }
+
+    .cover-title {
+      font-size: 28pt;
+      font-weight: 900;
+      color: #0C4A6E;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .cover-subtitle {
+      font-size: 14pt;
+      color: #0369A1;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    .cover-divider {
+      width: 80px;
+      height: 4px;
+      background: #D97706;
+      margin: 0 auto 30px auto;
+      border-radius: 2px;
+    }
+
+    .cover-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      text-align: left;
+      margin: 20px 0;
+    }
+
+    .cover-feature-card {
+      background: #FFFFFF;
+      border: 1px solid #BAE6FD;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .cover-feature-card h4 {
+      font-size: 11pt;
+      color: #0369A1;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .cover-feature-card p {
+      font-size: 9.5pt;
+      color: #475569;
+    }
+
+    .cover-footer {
+      border-top: 1px solid #E2E8F0;
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 9pt;
+      color: #64748B;
+    }
+
+    /* Secciones */
+    .chapter {
+      page-break-before: always;
+      margin-bottom: 24px;
+    }
+
+    .chapter-header {
+      border-bottom: 2.5px solid #0284C7;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .chapter-num {
+      font-size: 9pt;
+      font-weight: 800;
+      color: #D97706;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .chapter-title {
+      font-size: 17pt;
+      font-weight: 800;
+      color: #0C4A6E;
+    }
+
+    h3 {
+      font-size: 12.5pt;
+      font-weight: 700;
+      color: #0F172A;
+      margin: 18px 0 8px 0;
+    }
+
+    p {
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 8px 0 14px 24px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    strong {
+      color: #0C4A6E;
+      font-weight: 700;
+    }
+
+    /* Cajas y Alertas */
+    .callout {
+      background: #F0F9FF;
+      border-left: 4px solid #0284C7;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+
+    .callout-warning {
+      background: #FFFBEB;
+      border-left-color: #D97706;
+    }
+
+    .callout-success {
+      background: #F0FDF4;
+      border-left-color: #16A34A;
+    }
+
+    .callout-title {
+      font-weight: 800;
+      margin-bottom: 4px;
+      display: block;
+      color: #0C4A6E;
+    }
+
+    .callout-warning .callout-title {
+      color: #92400E;
+    }
+
+    .callout-success .callout-title {
+      color: #166534;
+    }
+
+    /* Tablas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 18px 0;
+      font-size: 9.5pt;
+    }
+
+    th, td {
+      border: 1px solid #CBD5E1;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #F1F5F9;
+      color: #0F172A;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) {
+      background: #F8FAFC;
+    }
+
+    /* Código */
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      background: #F1F5F9;
+      color: #B91C1C;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 9pt;
+    }
+
+    pre {
+      background: #0F172A;
+      color: #F8FAFC;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 8.5pt;
+      line-height: 1.45;
+      margin: 12px 0 16px 0;
+      overflow-x: auto;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* Diagrama de Flujo en Texto */
+    .diagram-box {
+      background: #0B132B;
+      color: #38BDF8;
+      border: 1px solid #1E293B;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: Consolas, monospace;
+      font-size: 8.5pt;
+      line-height: 1.35;
+      margin: 14px 0;
+      white-space: pre;
+    }
+
+    /* Tarjetas de Pregunta y Respuesta (FAQ) */
+    .qa-card {
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .qa-q {
+      background: #F1F5F9;
+      padding: 10px 14px;
+      font-weight: 700;
+      color: #0F172A;
+      border-bottom: 1px solid #E2E8F0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10.5pt;
+    }
+
+    .qa-q-badge {
+      background: #0284C7;
+      color: #FFFFFF;
+      font-size: 8pt;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+
+    .qa-a {
+      padding: 12px 14px;
+      background: #FFFFFF;
+      font-size: 10pt;
+      color: #334155;
+    }
+
+    .qa-a p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight-term {
+      color: #D97706;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PORTADA -->
+  <div class="cover">
+    <div class="cover-top">
+      <div class="badge-univ">DEFENSA TÉCNICA DE PROYECTO FINAL • TRABAJO PRÁCTICO INTEGRADOR</div>
+      <h1 class="cover-title">SURF RENTAL MDP</h1>
+      <h2 class="cover-subtitle">Manual Maestro de Arquitectura, Fundamentación y Defensa Oral</h2>
+      <div class="cover-divider"></div>
+      <p style="text-align: center; max-width: 650px; margin: 0 auto; color: #475569; font-size: 11pt;">
+        Guía exhaustiva con respuestas estructuradas ante preguntas críticas de mesa examinadora: interacción entre base de datos y clientes, arquitectura universal móvil/web, generación nativa de códigos QR vectoriales, sincronización tripartita de comisiones, peritaje fotográfico y sensórica de hardware.
+      </p>
+    </div>
+
+    <div class="cover-features">
+      <div class="cover-feature-card">
+        <h4>1. ¿Por qué Universal React Native?</h4>
+        <p>Fundamentación rigurosa de por qué se eligió un monorepo universal con Expo SDK 52 en lugar de React tradicional de navegador web.</p>
+      </div>
+      <div class="cover-feature-card">
+        <h4>2. Base de Datos & Web en Tiempo Real</h4>
+        <p>Ciclo completo de vida de un dato: MariaDB, Prisma ORM, Pool de Conexiones, API REST Express y Redux RTK Query con auto-polling e invalidación de caché.</p>
+      </div>
+      <div class="cover-feature-card">
+        <h4>3. Generación y Validación de QR</h4>
+        <p>Solución vectorial pura sin Canvas HTML con react-native-svg, verificación de ventanas horarias y bloqueo de retiros anticipados.</p>
+      </div>
+      <div class="cover-feature-card">
+        <h4>4. Banco de Preguntas Clave</h4>
+        <p>Más de 20 preguntas directas de examen con respuestas fundamentadas a nivel de código, seguridad y negocio.</p>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div><strong>Proyecto:</strong> Surf Rental Mar del Plata (PDeISC)</div>
+      <div><strong>Sede Operativa:</strong> Balneario Playa Grande, Mar del Plata</div>
+      <div><strong>Versión:</strong> 2.4.0 Estable Producción</div>
+    </div>
+  </div>
+
+  <!-- CAPÍTULO 1 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <div>
+        <div class="chapter-num">Capítulo 1</div>
+        <div class="chapter-title">Arquitectura del Stack y Fundamentación Tecnológica</div>
+      </div>
+    </div>
+
+    <h3>1.1. ¿Por qué no usamos "React clásico de web"? La gran pregunta de los profesores</h3>
+    <p>
+      Una de las primeras preguntas que realizará el tribunal evaluador es: <em>"¿Por qué el proyecto está estructurado con React Native y Expo si también corre en la web? ¿Por qué no crearon una aplicación web estándar con React.js (Vite o Next.js) y otra aplicación separada para celular?"</em>
+    </p>
+
+    <div class="callout callout-warning">
+      <span class="callout-title">Respuesta Maestra para la Defensa:</span>
+      "Elegimos una <strong>Arquitectura Universal Monorepo basada en React Native con Expo SDK 52 y React Native for Web</strong> porque el modelo de negocio de Surf Rental MDP requería que el personal de playa y los surfistas utilicen exactamente las mismas funciones operativas (cámara pericial, escaneo QR de mostrador, geolocalización de seguridad en el agua y rúbrica de firma/biometría) tanto desde un teléfono móvil en la arena como desde una computadora de escritorio en el mostrador de la sede."
+    </div>
+
+    <p>Las razones técnicas fundamentales para defender esta decisión son cuatro:</p>
+
+    <ol>
+      <li>
+        <strong>Reutilización del 100% de la lógica de negocio y estado:</strong> Si hubiéramos hecho una web con React puro y una app móvil con Kotlin, Swift o Flutter, habríamos tenido que duplicar los modelos TypeScript, los clientes de API, las reglas de validación de tarjetas de débito, la lógica de reembolso por franjas horarias y el cálculo de comisiones. Al usar React Native Universal, <strong>el 100% de los slices de Redux Toolkit, las consultas de RTK Query, los temas visuales (ThemeContext) y las interfaces de datos se comparten idénticamente</strong> entre Web y Android.
+      </li>
+      <li>
+        <strong>Acceso directo a APIs Nativas de Hardware:</strong> React tradicional de navegador no tiene acceso a hardware nativo como el sensor biométrico de huellas dactilares (<code>expo-local-authentication</code>), el magnetómetro de brújula (<code>expo-sensors</code>), el podómetro o la cámara fotográfica de alta resolución con control de enfoque para peritaje. React Native nos permite compilar a código nativo en Android y utilizar adaptaciones elegantes en Web.
+      </li>
+      <li>
+        <strong>Optimización para dispositivos reales de gama media/baja (Moto E22 - 4GB RAM):</strong> Las aplicaciones híbridas basadas en WebView empaquetado (como Cordova o Ionic antiguo) consumen cientos de megabytes de RAM porque corren una instancia completa de Chromium dentro del celular. Nuestra aplicación en Android compila con el <strong>motor Hermes</strong>, el motor de JavaScript de alto rendimiento de Meta diseñado específicamente para React Native:
+        <ul>
+          <li>Realiza compilación <strong>Ahead-of-Time (AOT)</strong>: el código JavaScript se pre-compila en bytecode binario en la PC del desarrollador durante el build, eliminando el parseo en caliente en el celular.</li>
+          <li>Tiempo de inicio (Time to Interactive - TTI) instantáneo.</li>
+          <li>Consumo de memoria reducido en más de un 60%, ideal para el Moto E22 con 4GB de RAM y 2GB de almacenamiento disponible.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Cero desincronización entre versiones:</strong> Una actualización en el flujo de pagos, en la tarifa horaria o en la política de salitre se refleja instantáneamente en la web y en la app móvil sin discrepancias de compatibilidad.
+      </li>
+    </ol>
+
+    <h3>1.2. Tabla Comparativa de Arquitectura</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Criterio Técnico</th>
+          <th>React Clásico (Vite / CRA)</th>
+          <th>App Separada (Flutter / Swift)</th>
+          <th>Nuestra Solución: Universal React Native</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Base de Código</strong></td>
+          <td>Solo Web (HTML/DOM)</td>
+          <td>Dos proyectos aislados</td>
+          <td><strong>1 Monorepo Universal (Web + Android APK)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Lógica Compartida</strong></td>
+          <td>0% con Mobile</td>
+          <td>0% (duplicada en 2 lenguajes)</td>
+          <td><strong>100% (Redux, RTK Query, TypeScript, Reglas)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Sensores de Hardware</strong></td>
+          <td>Limitado a APIs del navegador</td>
+          <td>Nativo</td>
+          <td><strong>Nativo en móvil + Fallback inteligente en PC</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Rendimiento en Android</strong></td>
+          <td>Inviable como APK real</td>
+          <td>Alto</td>
+          <td><strong>Alto (Motor Hermes con Bytecode AOT)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CAPÍTULO 2 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <div>
+        <div class="chapter-num">Capítulo 2</div>
+        <div class="chapter-title">Interacción entre la Base de Datos (MariaDB) y la Web/Móvil</div>
+      </div>
+    </div>
+
+    <h3>2.1. El Ciclo de Vida de una Operación de Datos (Cadena de Extremo a Extremo)</h3>
+    <p>
+      Otra de las preguntas fundamentales que los docentes exigirán responder con precisión es: <em>"¿Cómo interactúa tu frontend con tu base de datos? Describí paso a paso qué ocurre cuando un usuario confirma un alquiler o cuando la agencia cambia la comisión."</em>
+    </p>
+
+    <div class="diagram-box">
+┌────────────────────────────────────────────────────────────────────────┐
+│                   ARQUITECTURA CLIENTE - SERVIDOR                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+ [ FRONTEND UNIVERSAL (Web PC / Android APK Moto E22) ]
+   │
+   │ 1. Evento de Usuario (Ej: CheckoutScreen -> handleConfirmarPago)
+   │ 2. Despacho Redux Mutation: useCreateRentalMutation({ boardId, horas... })
+   │ 3. Inyección de Headers: Authorization: Bearer <accessToken>
+   ▼
+ [ RED Y CAPA DE SEGURIDAD (Túnel HTTPS / Reverse Proxy Cloudflare / Express) ]
+   │
+   │ 4. Rate Limiting (express-rate-limit): 100 req/min anti brute-force
+   │ 5. Helmet: Protección de cabeceras HTTP (XSS, Clickjacking, MIME-Sniffing)
+   │ 6. Auth Middleware (authenticateToken): Valida firma criptográfica de JWT
+   ▼
+ [ CAPA CONTROLADOR Y VALIDACIÓN (rentalsController.ts) ]
+   │
+   │ 7. Esquema Zod: Valida tipos, horas positivas, fechas ISO y UUIDs
+   │ 8. Servicio de Negocio (rentalsService.ts):
+   │    - Comprueba que la tabla no tenga superposición horaria
+   │    - Aplica split financiero (95% Owner / 5% Agencia)
+   ▼
+ [ CAPA PERSISTENCIA Y TRANSACCIONAL (Prisma ORM & MariaDB Engine) ]
+   │
+   │ 9. prisma.$transaction([ ... ]): Bloqueo atómico ACID
+   │    a. INSERT INTO Alquiler (...)
+   │    b. UPDATE Tabla SET estado = 'RESERVADA'
+   │    c. INSERT INTO Transaccion (...)
+   │    d. UPDATE Owner SET saldo = saldo + ganancia
+   ▼
+ [ BASE DE DATOS FÍSICA (MariaDB 10.4 en Puerto 3306) ]
+   │
+   │ 10. Confirmación de COMMIT (ACID) y retorno de Payload JSON
+   ▼
+ [ RESPUESTA & SINCRONIZACIÓN REACTIVA (RTK Query Cache Tags) ]
+   │
+   │ 11. Backend responde HTTP 201 Created con { success: true, data: { ... } }
+   │ 12. RTK Query detecta invalidatesTags: ['Rental', 'Board', 'Metrics']
+   │ 13. Toda la aplicación (Dashboard Agencia, Mis Alquileres, Grilla) se re-renderiza
+        automáticamente sin requerir F5 ni recargas manuales.
+    </div>
+
+    <h3>2.2. ¿Por qué usamos una Base Relacional (MariaDB) y no NoSQL (MongoDB / Firebase)?</h3>
+    <p>
+      Esta es una clásica trampa de examen. Si te preguntan <em>"¿Por qué no usaste Firebase o MongoDB que es más rápido de configurar?"</em>, la respuesta correcta es:
+    </p>
+    <ul>
+      <li><strong>Propiedades ACID estrictas:</strong> En un sistema donde hay <strong>dinero en custodia, depósitos de garantía ($50.000 ARS), multas por salitre ($10.000 ARS) y liquidaciones a propietarios</strong>, no se puede tolerar la <em>"consistencia eventual"</em> de NoSQL. Una transacción debe ser Atómica, Consistente, Aislada y Duradera.</li>
+      <li><strong>Prevención de reservas duplicadas (Overbooking):</strong> Mediante restricciones relacionales y transacciones de MariaDB, se garantiza que dos surfistas no puedan reservar la misma tabla en el mismo rango de horas.</li>
+      <li><strong>Integridad Referencial con Claves Foráneas (FK):</strong> Si se elimina o modifica un usuario o una tabla, las claves foráneas garantizan que no queden alquileres huérfanos ni reclamos de siniestros inconsistentes.</li>
+    </ul>
+
+    <h3>2.3. Sincronización en Tiempo Real: RTK Query, Invalidation Tags & Polling</h3>
+    <p>
+      Para que la aplicación web y la aplicación móvil vean los mismos datos en todo momento sin implementar WebSockets pesados que consuman la batería del Moto E22, implementamos una estrategia dual de sincronización:
+    </p>
+    <ul>
+      <li><strong>Invalidación por Tags (Event-Driven Cache):</strong> Cuando se ejecuta una mutación (por ejemplo, <code>updateCommission</code>), RTK Query invalida los tags <code>['AgencyMetrics', 'AgencySchedule', 'OwnerEarnings']</code>. Esto provoca que todos los componentes montados en pantalla refrezquen sus datos inmediatamente.</li>
+      <li><strong>Polling Operativo en Mostrador (8 segundos):</strong> En pantallas operativas críticas como <code>AgencyDashboardScreen.tsx</code> y <code>DeliveriesScreen.tsx</code>, se activa un sondeo periódico de 8 segundos (<code>pollingInterval: 8000</code>). De este modo, si un surfista reserva desde su celular en la playa, la reserva aparece automáticamente en la pantalla de la agencia en menos de 8 segundos.</li>
+      <li><strong>Refetch al Enfocar Pantalla (<code>useFocusEffect</code>):</strong> Cada vez que el usuario cambia de pestaña en la app (ej: vuelve a "Mis Alquileres" o a "Mis Tablas"), se dispara un <code>refetch()</code> automático que lee el estado fresco de MariaDB.</li>
+    </ul>
+  </div>
+
+  <!-- CAPÍTULO 3 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <div>
+        <div class="chapter-num">Capítulo 3</div>
+        <div class="chapter-title">Generación y Verificación de Códigos QR Vectoriales</div>
+      </div>
+    </div>
+
+    <h3>3.1. ¿Cómo se generan los Códigos QR? (Y por qué fallaba el método tradicional)</h3>
+    <p>
+      El sistema cuenta con códigos QR para dos funciones vitales:
+    </p>
+    <ol>
+      <li><strong>Pase de Retiro del Surfista:</strong> Token único criptográfico que habilita al cliente a retirar su tabla en el mostrador de Playa Grande.</li>
+      <li><strong>Chapa QR de la Tabla:</strong> Identificador físico adherido al alma de la tabla de surf para inventario, peritaje y control de custodia.</li>
+    </ol>
+
+    <div class="callout callout-warning">
+      <span class="callout-title">Problema Crítico de Ingeniería Solucionado:</span>
+      Inicialmente, muchas librerías de QR (incluyendo <code>qrcode.toDataURL()</code>) dependen del elemento HTML <code>&lt;canvas&gt;</code> para pintar los píxeles y exportar una imagen en base64. En el navegador web esto funciona, pero en <strong>React Native Android (el APK real instalado en el Moto E22)</strong> no existe el motor DOM ni la API Canvas nativa de HTML5. El resultado era que en el celular los códigos QR se mostraban como cuadros en blanco.
+    </div>
+
+    <p><strong>Nuestra Solución Definitiva (100% Vectorial Nube/Nativa):</strong></p>
+    <p>
+      Reescribimos el componente <code>QrCodeView.tsx</code> utilizando la función matemática <code>QRCode.create(value)</code>. Esta función no dibuja nada en pantalla, sino que calcula una matriz booleana bidimensional de módulos (ceros y unos) según la especificación ISO/IEC 18004 con corrección de errores nivel M (15%).
+    </p>
+    <p>
+      Luego, tomamos esa matriz y generamos elementos vectoriales nativos mediante la biblioteca <strong><code>react-native-svg</code></strong> (componentes <code>&lt;Svg&gt;</code>, <code>&lt;Rect&gt;</code> y <code>&lt;Path&gt;</code>).
+    </p>
+
+    <pre><code>// Implementación en mobile/src/components/ui/QrCodeView.tsx
+const qr = QRCode.create(value, { errorCorrectionLevel: 'M' });
+const modules = qr.modules; // Matriz booleana de módulos (true = negro, false = blanco)
+const size = modules.size;
+
+// Construcción de la ruta vectorial SVG (Path)
+let pathData = '';
+for (let row = 0; row < size; row++) {
+  for (let col = 0; col < size; col++) {
+    if (modules.get(row, col)) {
+      pathData += `M${col * cellSize},${row * cellSize}h${cellSize}v${cellSize}h-${cellSize}z `;
+    }
+  }
+}
+
+// Renderizado nativo: funciona con nitidez matemática infinita en Android, iOS y Web
+return (
+  &lt;Svg width={dimension} height={dimension} viewBox={`0 0 ${totalSize} ${totalSize}`}&gt;
+    &lt;Rect width={totalSize} height={totalSize} fill="#FFFFFF" /&gt;
+    &lt;Path d={pathData} fill="#000000" /&gt;
+  &lt;/Svg&gt;
+);</code></pre>
+
+    <p><strong>Ventajas para defender en el examen:</strong></p>
+    <ul>
+      <li><strong>Resolución infinita:</strong> Al ser un vector SVG, no se pixela jamás independientemente de la densidad de pantalla (DPI) del celular.</li>
+      <li><strong>Cero llamadas a red:</strong> El QR se calcula de forma sincrónica en el dispositivo sin enviar datos a servidores externos de imágenes.</li>
+      <li><strong>Multiplataforma real:</strong> Compila a vectores nativos en Android y a etiquetas SVG estándar en el DOM de la web.</li>
+    </ul>
+
+    <h3>3.2. Lógica de Verificación Horaria en Mostrador (Time-Window Security)</h3>
+    <p>
+      Un problema común en plataformas de alquiler es que los clientes intentan retirar equipos horas antes de lo acordado, desorganizando los turnos de desinfección y secado de trajes y tablas.
+    </p>
+    <p>
+      Implementamos el algoritmo <strong><code>getRentalTimingInfo(rental)</code></strong> en <code>RentalCard.tsx</code> y en el modal de escaneo de la agencia <code>QrInspectionModal.tsx</code>:
+    </p>
+
+    <ul>
+      <li>Se calcula la diferencia en milisegundos: <code>diffMs = new Date(rental.fechaInicio).getTime() - 15 * 60 * 1000 - Date.now()</code>.</li>
+      <li><strong>Si faltan más de 15 minutos (<code>isEarly === true</code>):</strong>
+        <ul>
+          <li>En la vista del cliente: La tarjeta muestra la etiqueta <strong>RESERVA PROGRAMADA (PENDIENTE DE RETIRO)</strong> en color ámbar y un contador dinámico: <em>"Faltan Xh Ym para el horario de retiro"</em>.</li>
+          <li>En el escáner de la agencia: Si el operador de mostrador escanea el QR antes de tiempo, el sistema <strong>bloquea la entrega</strong> y muestra una advertencia en rojo: <strong>⚠️ RETIRO ANTICIPADO BLOQUEADO POR HORARIO</strong>, impidiendo despachar la tabla hasta que empiece la ventana de 15 minutos previa al turno.</li>
+        </ul>
+      </li>
+      <li><strong>Dentro de los 15 minutos previos:</strong> El estado cambia a <strong>HABILITADA PARA RETIRAR EN SEDE</strong>, y al escanear el QR se habilita la pantalla de firma de entrega y registro fotográfico inicial.</li>
+      <li><strong>Una vez retirada:</strong> Pasa a estado <strong>RETIRADA EN SEDE • EN EL AGUA</strong>.</li>
+    </ul>
+  </div>
+
+  <!-- CAPÍTULO 4 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <div>
+        <div class="chapter-num">Capítulo 4</div>
+        <div class="chapter-title">Seguridad, Autenticación y Esquema de Roles (RBAC)</div>
+      </div>
+    </div>
+
+    <h3>4.1. Esquema de Doble Token JWT (Access + Refresh Token)</h3>
+    <p>
+      La autenticación de la plataforma no utiliza cookies de sesión tradicionales vulnerables a ataques CSRF entre dominios, sino una arquitectura de <strong>Tokens Web JSON (JWT)</strong> de doble factor:
+    </p>
+    <ul>
+      <li><strong>Access Token (Corta duración - 15 minutos):</strong> Firmado con el secreto <code>JWT_SECRET</code> mediante el algoritmo HMAC-SHA256. Contiene el ID del usuario, su email y su rol (<code>rol</code>). Se adjunta en el encabezado <code>Authorization: Bearer &lt;token&gt;</code> de cada petición HTTP.</li>
+      <li><strong>Refresh Token (Larga duración - 7 días):</strong> Firmado con <code>JWT_REFRESH_SECRET</code> y almacenado de forma persistente en MariaDB en la tabla de sesiones. Permite renovar el <code>accessToken</code> de forma transparente en segundo plano cuando este expira, sin obligar al surfista a reingresar sus credenciales en medio de la playa.</li>
+      <li><strong>Almacenamiento seguro por plataforma:</strong> En la web se guarda en <code>localStorage</code>; en el APK de Android se almacena cifrado en hardware mediante <code>expo-secure-store</code> (Keystore en Android).</li>
+    </ul>
+
+    <h3>4.2. Control de Acceso Basado en Roles (RBAC Tripartito)</h3>
+    <p>
+      El sistema cuenta con tres roles estrictamente separados a nivel de base de datos y protegidos en el backend mediante el middleware <code>requireRole(['AGENCIA', ...])</code>:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Rol</th>
+          <th>Permisos en la Plataforma</th>
+          <th>Rutas Protegidas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CONSUMER</strong><br>(Surfista)</td>
+          <td>Explorar catálogo de tablas en tiempo real, filtrar por tipo/volumen, reservar por horas, realizar checkout con tarjeta de débito y rúbrica legal, ver pase QR de retiro, sumar puntos de fidelidad y calificar tablas.</td>
+          <td><code>/api/rentals/my-rentals</code><br><code>/api/loyalty/*</code><br><code>/api/reviews/*</code></td>
+        </tr>
+        <tr>
+          <td><strong>OWNER</strong><br>(Propietario / Shaper)</td>
+          <td>Publicar tablas en custodia de la sede, consultar historial de alquileres de sus tablas, certificar inspecciones técnicas cada 45 días, visualizar liquidaciones de ganancias (95%) y solicitar extracciones a su CBU/Alias.</td>
+          <td><code>/api/owner/boards</code><br><code>/api/owner/earnings</code><br><code>/api/owner/maintenance</code><br><code>/api/owner/payout</code></td>
+        </tr>
+        <tr>
+          <td><strong>AGENCIA</strong><br>(Staff de Mostrador)</td>
+          <td>Acceso al Centro de Control de Playa Grande: cronograma del día, escaneo y verificación de pases QR, inspección fotográfica pericial de retiro y devolución (3 zonas), control de lavado con agua dulce (salitre), y modificación del % de comisión general con clave de seguridad.</td>
+          <td><code>/api/agency/metrics</code><br><code>/api/agency/schedule</code><br><code>/api/agency/check-in</code><br><code>/api/agency/check-out</code><br><code>/api/agency/commission</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>4.3. Inicio de Sesión con Google (Material 3 Multi-Cuenta)</h3>
+    <p>
+      Para brindar una experiencia idéntica a las aplicaciones móviles comerciales modernas, se implementó el flujo de <strong>Google Identity Services con Selector de Cuentas Material 3</strong>:
+    </p>
+    <ul>
+      <li>Permite elegir entre perfiles verificados de Google vinculados en MariaDB (ej: <code>POCORENA Luis</code>, <code>Gabriela POCORENA</code>, <code>Torcuato5 Tato</code>, <code>Percha</code>, <code>Hernan</code>).</li>
+      <li>El backend valida la identidad, recupera el usuario correspondiente o provisiona uno nuevo con datos verificados de avatar y nombre, y emite el par de tokens JWT propios de la plataforma.</li>
+    </ul>
+
+    <h3>4.4. Rúbrica Legal del Contrato (Ley Nacional 25.506 de Firma Digital)</h3>
+    <p>
+      El contrato de alquiler de equipamiento deportivo de riesgo requiere validez jurídica probatoria:
+    </p>
+    <ul>
+      <li><strong>En Dispositivos Móviles (APK Android):</strong> Utiliza el sensor biométrico nativo (huella dactilar / reconocimiento facial) mediante <code>expo-local-authentication</code>, registrando un hash criptográfico de consentimiento biométrico.</li>
+      <li><strong>En Computadora (PC / Web):</strong> Dado que una PC de escritorio no posee sensor de huella dactilar, se presenta la aceptación explícita de términos con pre-autorización de garantía de $50.000 ARS y firma digital registrada con usuario autenticado, dirección IP y sello de tiempo (timestamp) en base de datos conforme a la Ley 24.240 y Ley 25.506.</li>
+    </ul>
+  </div>
+
+  <!-- CAPÍTULO 5 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <div>
+        <div class="chapter-num">Capítulo 5</div>
+        <div class="chapter-title">Sensores de Hardware y Adaptabilidad Multiplataforma</div>
+      </div>
+    </div>
+
+    <h3>5.1. Sensórica Nativa en el Teléfono Celular (Expo Go / Android APK)</h3>
+    <p>
+      El proyecto aprovecha los sensores físicos del dispositivo móvil mediante las librerías oficiales de Expo:
+    </p>
+    <ol>
+      <li>
+        <strong>Geofencing y Geolocalización (<code>expo-location</code>):</strong>
+        <ul>
+          <li>Coordenadas de la Sede Central Playa Grande: Latitud <code>-38.0315</code>, Longitud <code>-57.5323</code>.</li>
+          <li>Calcula en tiempo real la distancia euclidiana y Harversine entre la posición del surfista y la sede.</li>
+          <li>Define un radio de custodia de 200 metros. Si el surfista se aleja más allá de la zona de cobertura costera, la aplicación emite una advertencia de seguridad marítima.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Brújula y Magnetómetro (<code>expo-sensors</code>):</strong>
+        <ul>
+          <li>Lee los vectores de campo magnético en los ejes X, Y y Z.</li>
+          <li>Calcula el ángulo de azimut (orientación en grados de 0° a 360°) respecto al norte magnético y guía al usuario con una aguja náutica visual orientada hacia el mostrador de entrega en Playa Grande.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Acelerómetro y Podómetro:</strong>
+        <ul>
+          <li>Registra las variaciones de aceleración en el teléfono para estimar los pasos caminados en la arena antes de entrar al agua y medir la actividad física del rider para otorgar puntos de fidelidad adicionales.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Cámara Pericial con Captura de 3 Zonas:</strong>
+        <ul>
+          <li>En la entrega y en la devolución, el mostrador de agencia captura y coteja tres zonas críticas de la tabla: <strong>Deck (Frente)</strong>, <strong>Bottom (Fondo)</strong> y <strong>Quillas / Tail</strong>, almacenando la evidencia en el servidor para dirimir reclamos de daños con el propietario.</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>5.2. Adaptabilidad en PC: "Cómo llegar con Google Maps" en lugar de sensores ciegos</h3>
+    <div class="callout callout-success">
+      <span class="callout-title">Criterio de Diseño UI/UX Sobresaliente:</span>
+      En una computadora de escritorio con navegador web (<code>Platform.OS === 'web'</code>), una aplicación que intente leer el magnetómetro o la brújula mostrará ceros o errores en consola. En nuestra aplicación, el código detecta la plataforma: <strong>oculta los sensores móviles que no tienen sentido en PC y en su lugar renderiza un mapa satelital interactivo centrado en Playa Grande con un botón de acción rápida "Cómo Llegar con Google Maps"</strong>, abriendo la ruta de navegación GPS en tiempo real.
+    </div>
+  </div>
+
+  <!-- CAPÍTULO 6 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <div>
+        <div class="chapter-num">Capítulo 6</div>
+        <div class="chapter-title">Reglas de Negocio, Finanzas y Operación en Sede</div>
+      </div>
+    </div>
+
+    <h3>6.1. La Comisión Dinámica Tripartita (Split 95% / 5% y Clave Maestra)</h3>
+    <p>
+      El modelo de negocio de Surf Rental MDP es una plataforma colaborativa tripartita:
+    </p>
+    <ul>
+      <li><strong>El Surfista (Consumer):</strong> Alquila una tabla por horas a una tarifa transparente en pesos argentinos (ARS).</li>
+      <li><strong>El Propietario (Owner):</strong> Deja su tabla en custodia de la sede y recibe el <strong>95%</strong> del valor bruto del alquiler.</li>
+      <li><strong>La Agencia (Sede Mostrador):</strong> Custodia la tabla, la entrega, la perita, la lava y retiene una comisión administrativa del <strong>5%</strong>.</li>
+    </ul>
+
+    <p><strong>Configuración Segura de la Comisión:</strong></p>
+    <p>
+      En <code>AgencyDashboardScreen.tsx</code>, la agencia puede modificar el porcentaje de retención (ej: aumentarlo al 8% en temporada alta). Esta operación está blindada por seguridad: requiere ingresar una <strong>Contraseña Especial de Autorización</strong> en el servidor. Una vez confirmada, MariaDB actualiza el split general y recalcula en cascada todas las nuevas liquidaciones, informando al Owner su nuevo porcentaje de ganancia neta.
+    </p>
+
+    <h3>6.2. Protocolo Anti-Salitre (Multa de $10.000 ARS por Lavado con Agua Dulce)</h3>
+    <p>
+      El agua de mar de Mar del Plata posee alta salinidad que degrada la fibra de vidrio, corroe las cajas de quillas y arruina los trajes de neoprene si el equipo se guarda seco con salitre:
+    </p>
+    <ul>
+      <li>Al recibir la tabla en <code>ReturnsScreen.tsx</code>, el operador de agencia debe verificar que haya sido enjuagada en las duchas de la sede con agua dulce.</li>
+      <li>Si el operador marca que la tabla <strong>NO fue lavada</strong>, el sistema debita automáticamente una <strong>Multa de Salitre de $10.000 ARS</strong> de la garantía pre-autorizada del surfista, acredita el dinero a la recaudación de mantenimiento de la sede y descuenta puntos del Club de Fidelidad.</li>
+    </ul>
+
+    <h3>6.3. Ciclo de Mantenimiento Preventivo Obligatorio (Regla de los 45 Días)</h3>
+    <p>
+      Para evitar accidentes por quillas flojas o roturas de fibra en el agua:
+    </p>
+    <ul>
+      <li>Toda tabla publicada en la plataforma cuenta con un ciclo de vigencia técnica de <strong>45 días</strong> gestionado en MariaDB.</li>
+      <li>El propietario puede realizar una inspección directa o <strong>delegar la inspección técnica en un shaper o técnico especializado</strong> indicando Nombre completo y DNI del profesional actuante.</li>
+      <li>Al certificar la inspección con declaración jurada técnica en <code>MyBoardsScreen.tsx</code>, el contador se renueva inmediatamente a <strong>45 días reglamentarios</strong>, habilitando la tabla en el catálogo público para nuevos alquileres.</li>
+    </ul>
+
+    <h3>6.4. Club Surf MDP: Programa de Puntos y Fidelización</h3>
+    <p>
+      Cada hora de uso completada en sede acredita 10 puntos al surfista. Publicar una reseña verificada con calificación otorga +20 puntos adicionales. La calculadora de canje aplica un valor de <strong>1 Punto = $10 ARS de descuento</strong> directo en el checkout, con vigencia de 12 meses desde la última actividad.
+    </p>
+  </div>
+
+  <!-- CAPÍTULO 7 -->
+  <div class="chapter">
+    <div class="chapter-header">
+      <div>
+        <div class="chapter-num">Capítulo 7</div>
+        <div class="chapter-title">Banco Maestro de Preguntas y Respuestas para el Examen</div>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P1</span>
+        ¿Qué ocurre si dos usuarios intentan alquilar la misma tabla exactamente al mismo tiempo?
+      </div>
+      <div class="qa-a">
+        <p>
+          En el backend, la creación de la reserva está envuelta en una transacción atómica <code>prisma.$transaction</code> con nivel de aislamiento de MariaDB. Antes de insertar el registro, el servicio ejecuta una consulta que verifica la disponibilidad: <code>WHERE tablaId = :id AND estado IN ('CONFIRMADA', 'EN_CURSO') AND fechaFin > :inicio AND fechaInicio < :fin</code>. Si hay solapamiento, la transacción aborta con <code>HTTP 409 Conflict</code> (Tabla no disponible en la franja horaria seleccionada) y realiza un <em>ROLLBACK</em> inmediato, impidiendo reservas duplicadas.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P2</span>
+        ¿Por qué los códigos QR se dibujan con SVG y no con imágenes tradicionales en formato PNG o Canvas?
+      </div>
+      <div class="qa-a">
+        <p>
+          Porque la API Canvas de HTML5 no existe de forma nativa en React Native Android (en el APK compilado para el Moto E22). Si usáramos <code>qrcode.toDataURL()</code>, la aplicación crashearía o mostraría un recuadro blanco en el celular. Al usar <code>QRCode.create()</code> con <code>react-native-svg</code>, calculamos matemáticamente la matriz de módulos (0 y 1) y dibujamos un vector SVG sincrónico que funciona en Android, iOS y Web, con resolución infinita y sin depender de conexión a internet para descargar una imagen externa.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P3</span>
+        ¿Cómo sabe el teléfono de la agencia que un cliente pagó un alquiler en la web si no hay recarga de página?
+      </div>
+      <div class="qa-a">
+        <p>
+          Mediante una estrategia combinada de <strong>RTK Query</strong>: 1) Polling en segundo plano cada 8 segundos (<code>pollingInterval: 8000</code>) en las vistas operativas de agencia; 2) Invalidación de tags de caché (<code>invalidatesTags: ['Rental', 'Metrics']</code>); y 3) Disparo de <code>refetch()</code> automático cada vez que la pantalla recupera el foco con el hook <code>useFocusEffect</code> de React Navigation.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P4</span>
+        ¿Cómo se protege la aplicación contra robo de sesiones o tokens adulterados?
+      </div>
+      <div class="qa-a">
+        <p>
+          Utilizamos un esquema de <strong>Doble Token JWT</strong>. El <code>accessToken</code> expira rápidamente (15 minutos) y está firmado criptográficamente con una clave secreta en el servidor. Si alguien intenta adulterar el payload (por ejemplo, cambiar su rol de <code>CONSUMER</code> a <code>AGENCIA</code>), la firma HMAC-SHA256 se rompe y el middleware rechaza la petición con <code>HTTP 403 Forbidden</code>. Para continuar navegando, el cliente debe presentar un <code>refreshToken</code> válido que se contrasta contra la base de datos MariaDB.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P5</span>
+        ¿Por qué no se guardan los números de tarjeta de crédito/débito completos en la base de datos?
+      </div>
+      <div class="qa-a">
+        <p>
+          Por estricto cumplimiento del estándar internacional <strong>PCI-DSS (Payment Card Industry Data Security Standard)</strong> y la Ley Nacional 25.326 de Protección de Datos Personales. En la base de datos MariaDB solo se almacena la marca detectada mediante el algoritmo de Luhn (ej: VISA DÉBITO) y los <strong>últimos 4 dígitos</strong> (ej: <code>**** 4532</code>) a efectos de comprobante legal. El código de seguridad (CVV) y la fecha de vencimiento jamás tocan el disco ni la base de datos.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P6</span>
+        ¿Qué pasa si el cliente escanea o presenta su QR antes de la hora acordada?
+      </div>
+      <div class="qa-a">
+        <p>
+          El sistema implementa validación de ventana horaria (<code>isEarly</code>). Si la hora actual es previa a los 15 minutos antes del turno de retiro pactado, el escáner de la agencia bloquea la entrega y emite la alerta destacada: <strong>"⚠️ RETIRO ANTICIPADO BLOQUEADO POR HORARIO"</strong>, indicando cuántas horas y minutos faltan para habilitar el despacho de la tabla.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P7</span>
+        ¿Por qué en PC no se muestran los sensores de magnetómetro ni huella dactilar?
+      </div>
+      <div class="qa-a">
+        <p>
+          Por coherencia técnica y honestidad de ingeniería de software. Las computadoras de escritorio no poseen magnetómetro ni sensor dactilar. En lugar de simular valores ficticios o generar errores en consola, el sistema detecta <code>Platform.OS === 'web'</code> y adapta la interfaz: en PC oculta la brújula y muestra un mapa interactivo con botón directo a Google Maps, y en el checkout reemplaza la huella dactilar por una firma digital legal respaldada por la Ley 25.506 con IP y timestamp.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P8</span>
+        ¿Cómo se calculó y optimizó la aplicación para el teléfono Moto E22?
+      </div>
+      <div class="qa-a">
+        <p>
+          El Motorola Moto E22 cuenta con un procesador MediaTek Helio G37 y 4GB de RAM. Para garantizar fluidez a 60 FPS: 1) Se habilitó el motor <strong>Hermes</strong> de React Native para ejecutar bytecode pre-compilado; 2) Se utilizaron imágenes optimizadas con <code>expo-image</code> que gestiona memoria caché nativa en disco y memoria; 3) Se deshabilitaron sombras excesivas de GPU reemplazándolas por bordes limpios de 1px; y 4) Se evitó el re-renderizado innecesario mediante selectores normalizados en Redux Toolkit.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P9</span>
+        ¿Qué ocurre en caso de siniestro o rotura de una tabla durante un alquiler?
+      </div>
+      <div class="qa-a">
+        <p>
+          Al devolver la tabla en el mostrador, la agencia realiza la inspección de 3 zonas. Si se detecta un daño estructural (deck fisurado, cajón de quillas arrancado), se adjunta la fotografía en alta resolución con descripción técnica del operador y se genera un <strong>Reclamo Tripartito (Claim)</strong>. La garantía de $50.000 ARS queda retenida en custodia y el propietario (Owner) puede revisar el reclamo desde su panel de <code>Revisiones</code> para aprobar el presupuesto de reparación o solicitar mediación de la sede.
+        </p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-q">
+        <span class="qa-q-badge">P10</span>
+        ¿Cómo se garantiza que las tablas en el catálogo estén en condiciones seguras de uso?
+      </div>
+      <div class="qa-a">
+        <p>
+          Mediante el protocolo de <strong>Mantenimiento Preventivo Obligatorio de 45 Días</strong>. Si una tabla supera los 45 días sin una inspección técnica aprobada (con verificación de quillas, fibra de deck y parafina), su estado pasa a requerir mantenimiento urgente. El propietario o un shaper profesional con DNI registrado debe firmar la certificación técnica para renovar la vigencia a 45 días y mantener la tabla disponible para alquiler.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

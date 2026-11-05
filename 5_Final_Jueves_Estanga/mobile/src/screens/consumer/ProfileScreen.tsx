@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Modal, RefreshControl, Linking } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Moon, Sun, BookOpen, Download, ShieldCheck, Users, LogOut } from 'lucide-react-native';
+import { Moon, Sun, BookOpen, Download, ShieldCheck, Users, LogOut, GraduationCap } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge } from '../../components/ui';
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -181,8 +181,22 @@ export const ProfileScreen: React.FC = () => {
               <Badge label="DOCUMENTACIÓN OFICIAL" variant="info" />
             </Row>
             <Text variant="caption" color={theme.subtext}>
-              Instrucciones completas para los 3 perfiles (Surfista, Dueño de Tabla, Mostrador de Sede) y variables de despliegue Docker/Producción:
+              Instrucciones completas para los 3 perfiles (Surfista, Dueño de Tabla, Mostrador de Sede), arquitectura y guía de defensa de examen:
             </Text>
+            <Button
+              title="🎓 Descargar PDF de Estudio / Defensa"
+              size="sm"
+              variant="primary"
+              iconLeft={<GraduationCap size={16} color={isDark ? '#090C10' : '#FFFFFF'} />}
+              style={{ backgroundColor: isDark ? '#D4AF37' : '#D97706' }}
+              onPress={() => {
+                if (typeof window !== 'undefined' && window.location) {
+                  window.open(`${window.location.origin}/manual/guia-estudio-defensa.pdf`, '_blank');
+                } else {
+                  Linking.openURL(`${getServerOrigin()}/manual/guia-estudio-defensa.pdf`);
+                }
+              }}
+            />
             <Row spacing="sm">
               <Button
                 title="Ver Manual Web"
@@ -199,10 +213,10 @@ export const ProfileScreen: React.FC = () => {
                 }}
               />
               <Button
-                title="Descargar PDF"
+                title="Manual Operativo (PDF)"
                 size="sm"
-                variant="primary"
-                iconLeft={<Download size={14} color={isDark ? '#090C10' : '#FFFFFF'} />}
+                variant="secondary"
+                iconLeft={<Download size={14} color={isDark ? '#F1F5F9' : colors.sand[900]} />}
                 style={styles.flexBtn}
                 onPress={() => {
                   if (typeof window !== 'undefined' && window.location) {
