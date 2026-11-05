@@ -7,7 +7,7 @@ import {
   Modal,
   TextInput,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
   Waves,
   CalendarCheck,
@@ -18,6 +18,7 @@ import {
   X,
   Edit3,
   Clock,
+  QrCode,
 } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
@@ -27,10 +28,15 @@ import {
   useGetScheduleQuery,
   useUpdateCommissionMutation,
 } from '../../api/agencyApi';
+import { Board } from '../../api/boardsApi';
+import { BoardQrModal } from '../../components/boards/BoardQrModal';
+import { QrInspectionModal, ScannedBoardData } from '../../components/sensors/QrInspectionModal';
+import { getRentalTimingInfo } from '../../components/rentals/RentalCard';
 import { NativeSensorsCard } from '../../components/sensors';
 
 export const AgencyDashboardScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
+  const navigation = useNavigation<any>();
   const {
     data: metricsData,
     isFetching: fetchingMetrics,
@@ -52,6 +58,45 @@ export const AgencyDashboardScreen: React.FC = () => {
     type: 'success' | 'error';
     message: string;
   } | null>(null);
+  const [selectedQrBoard, setSelectedQrBoard] = useState<Board | null>(null);
+  const [isScanningQr, setIsScanningQr] = useState(false);
+  const [qrBanner, setQrBanner] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleDashboardQrScanned = (scanned: ScannedBoardData) => {
+    setIsScanningQr(false);
+    if (!scanned) return;
+
+    if (scanned.isEarly) {
+      setQrBanner({
+        type: 'error',
+        text: `Retiro anticipado bloqueado para QR ${scanned.code} (${scanned.titulo}): La reserva está programada para el ${scanned.fechaPactada} a las ${scanned.horaPactada} hs (faltan ${scanned.tiempoFaltanteStr}). El retiro en sede solo se habilita 15 minutos antes.`,
+      });
+      return;
+    }
+
+    if (scanned.rentalEstado === 'EN_CURSO') {
+      setQrBanner({
+        type: 'success',
+        text: `QR ${scanned.code} verificado: ${scanned.titulo} en el agua. Redirigiendo a Devoluciones...`,
+      });
+      navigation.navigate('Devoluciones');
+      return;
+    }
+
+    if (scanned.rentalId) {
+      setQrBanner({
+        type: 'success',
+        text: `QR ${scanned.code} habilitado para entrega: ${scanned.titulo}. Redirigiendo a Entregas...`,
+      });
+      navigation.navigate('Entregas');
+      return;
+    }
+
+    setQrBanner({
+      type: 'success',
+      text: `Tabla en custodia verificada por QR (${scanned.code}): ${scanned.titulo}.`,
+    });
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -299,12 +344,67 @@ export const AgencyDashboardScreen: React.FC = () => {
 
         {/* Grilla Operativa del Día */}
         <Stack spacing="sm">
-          <Row spacing="xs" align="center">
-            <Clock size={16} color="#D4AF37" />
-            <Text variant="h2" color={theme.text}>
-              Cronograma de Sede
-            </Text>
+          <Row justify="space-between" align="center">
+            <Row spacing="xs" align="center">
+              <Clock size={16} color="#D4AF37" />
+              <Text variant="h2" color={theme.text}>
+                Cronograma de Sede
+              </Text>
+            </Row>
+            <Button
+              title="Escanear QR"
+              variant="primary"
+              size="sm"
+              iconLeft={<QrCode size={14} color={isDark ? '#090C10' : '#FFFFFF'} />}
+              onPress={() => setIsScanningQr(true)}
+              testID="btn-dashboard-scan-qr"
+            />
           </Row>
+
+          {qrBanner && (
+            <Card
+              padding="md"
+              style={{
+                backgroundColor:
+                  qrBanner.type === 'success'
+                    ? isDark
+                      ? 'rgba(16, 185, 129, 0.12)'
+                      : '#ECFDF5'
+                    : isDark
+                    ? 'rgba(239, 68, 68, 0.14)'
+                    : '#FEF2F2',
+                borderColor:
+                  qrBanner.type === 'success'
+                    ? isDark
+                      ? 'rgba(16, 185, 129, 0.4)'
+                      : '#34D399'
+                    : isDark
+                    ? 'rgba(239, 68, 68, 0.45)'
+                    : '#F87171',
+                borderWidth: 1,
+              }}
+            >
+              <Row justify="space-between" align="center">
+                <Text
+                  variant="caption"
+                  color={
+                    qrBanner.type === 'success'
+                      ? isDark
+                        ? '#A7F3D0'
+                        : '#065F46'
+                      : isDark
+                      ? '#FCA5A5'
+                      : '#991B1B'
+                  }
+                  style={{ flex: 1, fontWeight: '700' }}
+                >
+                  {qrBanner.text}
+                </Text>
+                <Button title="✕" variant="ghost" size="sm" onPress={() => setQrBanner(null)} />
+              </Row>
+            </Card>
+          )}
+
           {schedule.length === 0 ? (
             <Card padding="md">
               <Text variant="caption" color={theme.subtext}>
@@ -312,36 +412,65 @@ export const AgencyDashboardScreen: React.FC = () => {
               </Text>
             </Card>
           ) : (
-            schedule.map((item) => (
-              <Card key={item.id} padding="md">
-                <Row justify="space-between" align="center">
-                  <View style={{ flex: 1 }}>
-                    <Text variant="button" color={theme.text}>
-                      {item.board?.titulo || 'Tabla de surf'}
-                    </Text>
-                    <Text variant="caption" color={theme.subtext}>
-                      Pase #{item.id.slice(0, 8)} • {item.horas} hs
-                    </Text>
-                  </View>
-                  <Badge
-                    label={item.estado}
-                    variant={
-                      item.estado === 'EN_CURSO'
-                        ? 'warning'
-                        : item.estado === 'ACTIVA'
-                        ? 'success'
-                        : 'ocean'
-                    }
-                  />
-                </Row>
-              </Card>
-            ))
+            schedule.map((item) => {
+              const t = getRentalTimingInfo(item);
+              const shortQr = `SRMDP-${item.id.slice(-6).toUpperCase()}`;
+              return (
+                <Card key={item.id} padding="md">
+                  <Stack spacing="xs">
+                    <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
+                      <View style={{ flex: 1 }}>
+                        <Text variant="button" color={theme.text}>
+                          {item.board?.titulo || 'Tabla de surf'}
+                        </Text>
+                        <Text variant="caption" color={theme.subtext}>
+                          Código QR: {shortQr} • {item.consumer?.nombre || 'Surfista'} • {item.horas} hs ({t.fechaPactada} {t.horaPactada} hs)
+                        </Text>
+                      </View>
+                      <Row spacing="xs" align="center">
+                        <Badge label={t.badgeLabel} variant={t.badgeVariant} />
+                        {item.board && (
+                          <Button
+                            title="Ver QR"
+                            variant="secondary"
+                            size="sm"
+                            onPress={() =>
+                              setSelectedQrBoard({
+                                ...(item.board as any),
+                                id: item.id,
+                              })
+                            }
+                          />
+                        )}
+                      </Row>
+                    </Row>
+                    {t.isEarly && (
+                      <Text variant="caption" color={isDark ? '#FBBF24' : '#B45309'} style={{ fontWeight: '600' }}>
+                        Faltan {t.tiempoFaltanteStr} para el horario de retiro (se habilita 15 min antes).
+                      </Text>
+                    )}
+                  </Stack>
+                </Card>
+              );
+            })
           )}
         </Stack>
 
         {/* Sensórica Nativa Expo Go */}
         <NativeSensorsCard />
       </Stack>
+
+      <BoardQrModal
+        board={selectedQrBoard}
+        visible={Boolean(selectedQrBoard)}
+        onClose={() => setSelectedQrBoard(null)}
+      />
+
+      <QrInspectionModal
+        visible={isScanningQr}
+        onClose={() => setIsScanningQr(false)}
+        onScanSuccess={handleDashboardQrScanned}
+      />
 
       {/* Modal de Modificación de Comisión */}
       <Modal

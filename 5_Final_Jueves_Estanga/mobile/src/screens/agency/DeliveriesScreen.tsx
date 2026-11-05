@@ -51,33 +51,42 @@ export const DeliveriesScreen: React.FC = () => {
       (r) => r.estado === 'ACTIVA' || r.estado === 'PENDIENTE'
     );
 
-    const match =
-      pendingList.find((r) => {
-        if (scanned.rentalId && r.id === scanned.rentalId) return true;
-        if (scanned.id && (r.boardId === scanned.id || r.board?.id === scanned.id || r.id === scanned.id)) return true;
-        if (cleanCode && (r.id.toLowerCase().includes(cleanCode) || r.id.slice(-6).toLowerCase() === cleanCode)) return true;
-        if (cleanCode && r.board?.id && r.board.id.slice(-6).toLowerCase() === cleanCode) return true;
-        if (scanned.titulo && r.board?.titulo?.toLowerCase() === scanned.titulo.toLowerCase()) return true;
-        return false;
-      }) || pendingList[0];
+    const match = pendingList.find((r) => {
+      if (scanned.rentalId && r.id === scanned.rentalId) return true;
+      if (scanned.id && (r.boardId === scanned.id || r.board?.id === scanned.id || r.id === scanned.id)) return true;
+      if (cleanCode && (r.id.toLowerCase().includes(cleanCode) || r.id.slice(-6).toLowerCase() === cleanCode)) return true;
+      if (cleanCode && r.board?.id && r.board.id.slice(-6).toLowerCase() === cleanCode) return true;
+      if (scanned.titulo && r.board?.titulo?.toLowerCase() === scanned.titulo.toLowerCase()) return true;
+      return false;
+    });
 
     if (match) {
+      const { isEarly, horaPactada, fechaPactada, tiempoFaltanteStr } = getEarlyStatus(match);
+      if (isEarly) {
+        setSelectedRental(null);
+        setFeedbackBanner({
+          type: 'error',
+          text: `Retiro anticipado bloqueado para QR ${scanned.code} (${match.board?.titulo} • ${match.consumer?.nombre || 'Surfista'}): El turno pactado es el ${fechaPactada} a las ${horaPactada} hs (faltan ${tiempoFaltanteStr}). La entrega en sede solo se habilita 15 minutos antes de la hora pactada.`,
+        });
+        return;
+      }
+
       setSelectedRental(match);
       setDniChecked(true);
       setHasPhotos(true);
       setSignatureSigned(false);
       setSignatureData('');
       setBiometricPayload(null);
-      setSignMethod(isMobile ? 'biometric' : 'pad');
+      setSignMethod(Platform.OS !== 'web' && isMobile ? 'biometric' : 'pad');
       setModalError(null);
       setFeedbackBanner({
         type: 'success',
-        text: `Pase de retiro verificado por QR (${scanned.code}): ${match.board?.titulo} • Surfista: ${match.consumer?.nombre || 'Verificado'}.`,
+        text: `Pase de retiro habilitado (${scanned.code}): ${match.board?.titulo} • Surfista: ${match.consumer?.nombre || 'Verificado'}. Completá la firma para despachar.`,
       });
     } else {
       setFeedbackBanner({
         type: 'error',
-        text: `Código QR "${scanned.code}" verificado, pero no hay retiros pendientes en este momento.`,
+        text: `Código QR "${scanned.code}" escaneado, pero no corresponde a ningún retiro pendiente en sede.`,
       });
     }
   };
@@ -485,50 +494,52 @@ export const DeliveriesScreen: React.FC = () => {
                 </View>
               </Row>
 
-              {/* Selector de Método: Huella Digital (Teléfono) vs Firma Manuscrita (PC / Tableta) */}
-              <Row spacing="xs" style={{ marginVertical: 4 }}>
-                <TouchableOpacity
-                  onPress={() => setSignMethod('biometric')}
-                  style={[
-                    styles.methodTab,
-                    {
-                      borderColor: signMethod === 'biometric' ? colors.ocean[500] : theme.border,
-                      backgroundColor: signMethod === 'biometric' ? (isDark ? '#064E3B' : '#E0F2FE') : (isDark ? '#0F172A' : '#F1F5F9'),
-                    },
-                  ]}
-                  testID="tab-sign-biometric"
-                >
-                  <Text
-                    variant="caption"
-                    color={signMethod === 'biometric' ? (isDark ? '#A7F3D0' : colors.ocean[700]) : theme.subtext}
-                    style={{ fontWeight: '700', fontSize: 11 }}
+              {/* Selector de Método: en Móvil permite Huella o Firma; en PC sólo Firma Manuscrita */}
+              {Platform.OS !== 'web' && (
+                <Row spacing="xs" style={{ marginVertical: 4 }}>
+                  <TouchableOpacity
+                    onPress={() => setSignMethod('biometric')}
+                    style={[
+                      styles.methodTab,
+                      {
+                        borderColor: signMethod === 'biometric' ? colors.ocean[500] : theme.border,
+                        backgroundColor: signMethod === 'biometric' ? (isDark ? '#064E3B' : '#E0F2FE') : (isDark ? '#0F172A' : '#F1F5F9'),
+                      },
+                    ]}
+                    testID="tab-sign-biometric"
                   >
-                    Huella Digital {isMobile ? '(Recomendado)' : ''}
-                  </Text>
-                </TouchableOpacity>
+                    <Text
+                      variant="caption"
+                      color={signMethod === 'biometric' ? (isDark ? '#A7F3D0' : colors.ocean[700]) : theme.subtext}
+                      style={{ fontWeight: '700', fontSize: 11 }}
+                    >
+                      Huella Digital (Teléfono)
+                    </Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => setSignMethod('pad')}
-                  style={[
-                    styles.methodTab,
-                    {
-                      borderColor: signMethod === 'pad' ? colors.ocean[500] : theme.border,
-                      backgroundColor: signMethod === 'pad' ? (isDark ? '#064E3B' : '#E0F2FE') : (isDark ? '#0F172A' : '#F1F5F9'),
-                    },
-                  ]}
-                  testID="tab-sign-pad"
-                >
-                  <Text
-                    variant="caption"
-                    color={signMethod === 'pad' ? (isDark ? '#A7F3D0' : colors.ocean[700]) : theme.subtext}
-                    style={{ fontWeight: '700', fontSize: 11 }}
+                  <TouchableOpacity
+                    onPress={() => setSignMethod('pad')}
+                    style={[
+                      styles.methodTab,
+                      {
+                        borderColor: signMethod === 'pad' ? colors.ocean[500] : theme.border,
+                        backgroundColor: signMethod === 'pad' ? (isDark ? '#064E3B' : '#E0F2FE') : (isDark ? '#0F172A' : '#F1F5F9'),
+                      },
+                    ]}
+                    testID="tab-sign-pad"
                   >
-                    Firma Manuscrita {!isMobile ? '(Recomendado en PC)' : ''}
-                  </Text>
-                </TouchableOpacity>
-              </Row>
+                    <Text
+                      variant="caption"
+                      color={signMethod === 'pad' ? (isDark ? '#A7F3D0' : colors.ocean[700]) : theme.subtext}
+                      style={{ fontWeight: '700', fontSize: 11 }}
+                    >
+                      Firma Manuscrita en Pantalla
+                    </Text>
+                  </TouchableOpacity>
+                </Row>
+              )}
 
-              {signMethod === 'biometric' ? (
+              {Platform.OS !== 'web' && signMethod === 'biometric' ? (
                 <BiometricSignatureBox
                   rentalId={selectedRental?.id}
                   signedPayload={biometricPayload}

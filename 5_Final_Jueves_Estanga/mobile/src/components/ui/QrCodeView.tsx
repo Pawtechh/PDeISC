@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, StyleSheet } from 'react-native';
+import Svg, { Path, Rect } from 'react-native-svg';
 import QRCode from 'qrcode';
 
 export interface QrCodeViewProps {
@@ -17,52 +18,61 @@ export const QrCodeView: React.FC<QrCodeViewProps> = ({
   backgroundColor = '#FFFFFF',
   style,
 }) => {
-  const [dataUrl, setDataUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-
-    QRCode.toDataURL(value || 'SRMDP-EMPTY', {
-      width: size * 2, // 2x for retina sharpness
-      margin: 1,
-      color: {
-        dark: color,
-        light: backgroundColor,
-      },
-    })
-      .then((url) => {
-        if (isMounted) {
-          setDataUrl(url);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.warn('Error al generar QR Code:', err);
-        if (isMounted) {
-          setLoading(false);
-        }
+  const qrSvgData = useMemo(() => {
+    try {
+      const safeValue = (value || 'SRMDP-PASS').trim();
+      const qr = QRCode.create(safeValue, {
+        errorCorrectionLevel: 'M',
       });
+      const count = qr.modules.size;
+      const data = qr.modules.data;
+      let pathStr = '';
 
-    return () => {
-      isMounted = false;
-    };
-  }, [value, size, color, backgroundColor]);
+      for (let r = 0; r < count; r++) {
+        for (let c = 0; c < count; c++) {
+          if (data[r * count + c]) {
+            pathStr += `M${c},${r}h1v1h-1z`;
+          }
+        }
+      }
+
+      return { count, pathStr };
+    } catch (err) {
+      console.warn('Error generando matriz QR:', err);
+      return null;
+    }
+  }, [value]);
+
+  const quietZone = 2;
+  const totalViewBox = qrSvgData ? qrSvgData.count + quietZone * 2 : 25;
 
   return (
-    <View style={[styles.container, { width: size, height: size }, style]}>
-      {loading && (
-        <View style={StyleSheet.absoluteFillObject}>
-          <ActivityIndicator size="small" color="#0077B6" />
-        </View>
-      )}
-      {dataUrl && (
-        <Image
-          source={{ uri: dataUrl }}
-          style={{ width: size, height: size, borderRadius: 8 }}
-          resizeMode="contain"
-        />
+    <View
+      style={[
+        styles.container,
+        { width: size, height: size, backgroundColor },
+        style,
+      ]}
+    >
+      {qrSvgData && (
+        <Svg
+          width={size - 12}
+          height={size - 12}
+          viewBox={`0 0 ${totalViewBox} ${totalViewBox}`}
+        >
+          <Rect
+            x="0"
+            y="0"
+            width={totalViewBox}
+            height={totalViewBox}
+            fill={backgroundColor}
+          />
+          <Path
+            d={qrSvgData.pathStr}
+            fill={color}
+            transform={`translate(${quietZone}, ${quietZone})`}
+          />
+        </Svg>
       )}
     </View>
   );
@@ -72,9 +82,8 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     overflow: 'hidden',
-    padding: 4,
+    padding: 6,
   },
 });

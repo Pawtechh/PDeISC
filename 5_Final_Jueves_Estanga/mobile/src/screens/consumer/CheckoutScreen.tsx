@@ -396,9 +396,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
       setIsProcessing(true);
       setGlobalBannerError(null);
 
-      // Comprobar rúbrica digital si el modo biométrico/digital está activo
+      // Comprobar rúbrica digital solo en dispositivos móviles con sensor biométrico
       let activeBioSig = biometricSignature;
-      if (signatureMode === 'biometric' && !activeBioSig) {
+      if (isPhone && signatureMode === 'biometric' && !activeBioSig) {
         try {
           activeBioSig = await signContractWithBiometrics({
             rentalId: board.id,
@@ -1487,97 +1487,34 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           </View>
         </Card>
 
-        {/* Rúbrica Legal: Huella Digital (Prioritaria en Teléfono) vs Firma PC */}
-        <Card
-          padding="md"
-          style={[
-            styles.signatureSectionCard,
-            isDark && {
-              backgroundColor: theme.card,
-              borderColor: theme.border,
-            },
-          ]}
-        >
-          <Stack spacing="sm">
-            <Row justify="space-between" align="center">
-              <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 20 }}></Text>
+        {/* Rúbrica Biométrica: Exclusiva en Teléfono (oculta en PC donde ya existen los checkboxes de términos y garantías) */}
+        {isPhone && (
+          <Card
+            padding="md"
+            style={[
+              styles.signatureSectionCard,
+              isDark && {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <Stack spacing="sm">
+              <Row justify="space-between" align="center">
                 <Text variant="h3" color={titleColor}>
-                  Rúbrica Legal del Contrato
+                  Huella Digital (Verificación Biométrica)
                 </Text>
+                <Badge label="LEY 25.506" variant="success" />
               </Row>
-              <Badge label="LEY 25.506" variant="success" />
-            </Row>
 
-            <Row spacing="xs">
-              <TouchableOpacity
-                onPress={() => setSignatureMode('biometric')}
-                style={[
-                  styles.sigMethodPill,
-                  signatureMode === 'biometric' && styles.sigMethodPillActive,
-                  { borderColor: signatureMode === 'biometric' ? (isDark ? theme.champagne : colors.ocean[600]) : colors.sand[300] },
-                ]}
-              >
-                <Text
-                  variant="caption"
-                  color={signatureMode === 'biometric' ? (isDark ? theme.champagne : colors.ocean[700]) : subtextColor}
-                  style={signatureMode === 'biometric' ? styles.bold : undefined}
-                >
-                  Huella Digital {isPhone ? '(Teléfono)' : ''}
-                </Text>
-              </TouchableOpacity>
-
-              {!isPhone && (
-                <TouchableOpacity
-                  onPress={() => setSignatureMode('digital')}
-                  style={[
-                    styles.sigMethodPill,
-                    signatureMode === 'digital' && styles.sigMethodPillActive,
-                    { borderColor: signatureMode === 'digital' ? (isDark ? theme.champagne : colors.ocean[600]) : colors.sand[300] },
-                  ]}
-                >
-                  <Text
-                    variant="caption"
-                    color={signatureMode === 'digital' ? (isDark ? theme.champagne : colors.ocean[700]) : subtextColor}
-                    style={signatureMode === 'digital' ? styles.bold : undefined}
-                  >
-                    Firma Digital PC
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </Row>
-
-            {signatureMode === 'biometric' ? (
               <BiometricSignatureBox
                 rentalId={board.id}
                 onSigned={(sig) => setBiometricSignature(sig)}
                 signedPayload={biometricSignature}
               />
-            ) : (
-              <Card
-                padding="sm"
-                style={{
-                  backgroundColor: isDark ? '#0F1E36' : colors.ocean[50],
-                  borderColor: isDark ? '#1E3A5F' : colors.ocean[200],
-                  borderWidth: 1,
-                }}
-              >
-                <Row justify="space-between" align="center">
-                  <Row spacing="xs" align="center">
-                    <Text style={{ fontSize: 16 }}></Text>
-                    <Text variant="caption" color={titleColor} style={{ fontWeight: '700' }}>
-                      Firma Digital Registrada en PC (Ley 25.506)
-                    </Text>
-                  </Row>
-                  <Badge label="PC / WEB" variant="ocean" />
-                </Row>
-                <Text variant="caption" color={subtextColor} style={{ marginTop: 4 }}>
-                  Al presionar "Confirmar Pago" se registrará tu firma digital con tu usuario autenticado, IP y sello de tiempo.
-                </Text>
-              </Card>
-            )}
-          </Stack>
-        </Card>
+            </Stack>
+          </Card>
+        )}
 
         {/* Resumen Visual de Validación y Contador (Bloques 1.1, 1.3 y 4.1) */}
         <Card

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
-import { MapPin, QrCode, Clock, Calendar } from 'lucide-react-native';
+import { MapPin, QrCode, Clock, Calendar, AlertTriangle, CheckCircle2 } from 'lucide-react-native';
 import { Card, Text, Badge, Button, Row, Stack, LightboxViewer } from '../ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -15,18 +15,90 @@ export interface RentalCardProps {
   onPressDetail?: () => void;
 }
 
-const statusMap: Record<
-  Rental['estado'],
-  { label: string; variant: 'ocean' | 'success' | 'warning' | 'danger' | 'sand' }
-> = {
-  PENDIENTE: { label: 'PENDIENTE', variant: 'warning' },
-  ACTIVA: { label: 'CONFIRMADA (SEDE)', variant: 'ocean' },
-  EN_CURSO: { label: 'EN EL AGUA', variant: 'success' },
-  PENDIENTE_REVISION: { label: 'EN REVISIÓN', variant: 'warning' },
-  RECLAMO: { label: 'RECLAMO ABIERTO', variant: 'danger' },
-  DEVUELTA: { label: 'FINALIZADA', variant: 'sand' },
-  CANCELADA: { label: 'CANCELADA', variant: 'danger' },
-};
+export function getRentalTimingInfo(rental: Rental) {
+  if (!rental?.fechaInicio) {
+    return {
+      isEarly: false,
+      horaPactada: '',
+      fechaPactada: '',
+      tiempoFaltanteStr: '',
+      badgeLabel: rental?.estado || 'PENDIENTE',
+      badgeVariant: 'sand' as const,
+    };
+  }
+
+  const dInicio = new Date(rental.fechaInicio);
+  const now = new Date();
+  const diffMs = dInicio.getTime() - 15 * 60 * 1000 - now.getTime();
+  const horaPactada = dInicio.toLocaleTimeString('es-AR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  const fechaPactada = dInicio.toLocaleDateString('es-AR', {
+    day: '2-digit',
+    month: '2-digit',
+  });
+
+  let tiempoFaltanteStr = '';
+  const isEarly = diffMs > 0;
+  if (isEarly) {
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMin = Math.max(1, Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60)));
+    tiempoFaltanteStr = diffHours > 0 ? `${diffHours}h ${diffMin}m` : `${diffMin} min`;
+  }
+
+  if (rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE') {
+    if (isEarly) {
+      return {
+        isEarly: true,
+        horaPactada,
+        fechaPactada,
+        tiempoFaltanteStr,
+        badgeLabel: 'RESERVA PROGRAMADA (PENDIENTE DE RETIRO)',
+        badgeVariant: 'warning' as const,
+      };
+    }
+    return {
+      isEarly: false,
+      horaPactada,
+      fechaPactada,
+      tiempoFaltanteStr: '',
+      badgeLabel: 'HABILITADA PARA RETIRAR EN SEDE',
+      badgeVariant: 'ocean' as const,
+    };
+  }
+
+  if (rental.estado === 'EN_CURSO') {
+    return {
+      isEarly: false,
+      horaPactada,
+      fechaPactada,
+      tiempoFaltanteStr: '',
+      badgeLabel: 'RETIRADA EN SEDE • EN EL AGUA',
+      badgeVariant: 'success' as const,
+    };
+  }
+
+  const staticMap: Record<
+    string,
+    { label: string; variant: 'ocean' | 'success' | 'warning' | 'danger' | 'sand' }
+  > = {
+    PENDIENTE_REVISION: { label: 'EN REVISIÓN', variant: 'warning' },
+    RECLAMO: { label: 'RECLAMO ABIERTO', variant: 'danger' },
+    DEVUELTA: { label: 'FINALIZADA', variant: 'sand' },
+    CANCELADA: { label: 'CANCELADA', variant: 'danger' },
+  };
+
+  const mapped = staticMap[rental.estado] || { label: rental.estado, variant: 'sand' as const };
+  return {
+    isEarly: false,
+    horaPactada,
+    fechaPactada,
+    tiempoFaltanteStr: '',
+    badgeLabel: mapped.label,
+    badgeVariant: mapped.variant,
+  };
+}
 
 export const RentalCard: React.FC<RentalCardProps> = ({
   rental,
@@ -35,7 +107,8 @@ export const RentalCard: React.FC<RentalCardProps> = ({
 }) => {
   const { theme, isDark } = useTheme();
   const [lightboxOpen, setLightboxOpen] = React.useState(false);
-  const statusInfo = statusMap[rental.estado] || { label: rental.estado, variant: 'sand' };
+
+  const timing = getRentalTimingInfo(rental);
   const boardPhoto = resolveCuratedBoardPhoto(
     rental.board?.fotos?.[0],
     rental.board?.tipoTabla
@@ -71,15 +144,11 @@ export const RentalCard: React.FC<RentalCardProps> = ({
               },
             ]}
           >
-            <Image
-              source={{ uri: boardPhoto }}
-              style={styles.image}
-              contentFit="cover"
-            />
+            <Image source={{ uri: boardPhoto }} style={styles.image} contentFit="cover" />
           </TouchableOpacity>
           <Stack spacing="xs" style={styles.info}>
-            <Row justify="space-between" align="center">
-              <Badge label={statusInfo.label} variant={statusInfo.variant} />
+            <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 4 }}>
+              <Badge label={timing.badgeLabel} variant={timing.badgeVariant} />
               <Text variant="caption" color={theme.subtext} style={{ fontFamily: 'monospace' }}>
                 #{rental.id.slice(-6).toUpperCase()}
               </Text>
@@ -93,18 +162,76 @@ export const RentalCard: React.FC<RentalCardProps> = ({
                 {formatDate(rental.fechaInicio)}
               </Text>
               <Clock size={12} color={isDark ? '#00E5FF' : colors.ocean[600]} />
-              <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[600]} style={{ fontWeight: '700' }}>
+              <Text
+                variant="caption"
+                color={isDark ? '#00E5FF' : colors.ocean[600]}
+                style={{ fontWeight: '700' }}
+              >
                 ({rental.horas}h)
               </Text>
             </Row>
             <Row spacing="xs" align="center">
               <MapPin size={12} color={isDark ? '#D4AF37' : colors.ocean[700]} />
-              <Text variant="caption" color={isDark ? '#D4AF37' : colors.ocean[700]} style={styles.locationText}>
+              <Text
+                variant="caption"
+                color={isDark ? '#D4AF37' : colors.ocean[700]}
+                style={styles.locationText}
+              >
                 Sede Central Playa Grande
               </Text>
             </Row>
           </Stack>
         </Row>
+
+        {/* Aviso claro de ventana horaria de retiro */}
+        {(rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE') && (
+          <View
+            style={[
+              styles.windowBanner,
+              {
+                backgroundColor: timing.isEarly
+                  ? isDark
+                    ? 'rgba(245, 158, 11, 0.1)'
+                    : '#FFFBEB'
+                  : isDark
+                  ? 'rgba(16, 185, 129, 0.1)'
+                  : '#ECFDF5',
+                borderColor: timing.isEarly
+                  ? isDark
+                    ? 'rgba(245, 158, 11, 0.35)'
+                    : '#FDE68A'
+                  : isDark
+                  ? 'rgba(16, 185, 129, 0.35)'
+                  : '#A7F3D0',
+              },
+            ]}
+          >
+            <Row spacing="xs" align="center">
+              {timing.isEarly ? (
+                <AlertTriangle size={14} color={isDark ? '#FBBF24' : '#B45309'} />
+              ) : (
+                <CheckCircle2 size={14} color={isDark ? '#34D399' : '#047857'} />
+              )}
+              <Text
+                variant="caption"
+                color={
+                  timing.isEarly
+                    ? isDark
+                      ? '#FDE68A'
+                      : '#92400E'
+                    : isDark
+                    ? '#A7F3D0'
+                    : '#065F46'
+                }
+                style={{ flex: 1, fontWeight: '600', fontSize: 11 }}
+              >
+                {timing.isEarly
+                  ? `Faltan ${timing.tiempoFaltanteStr} para el horario de retiro (${timing.fechaPactada} ${timing.horaPactada} hs). El despacho en sede se habilita 15 min antes.`
+                  : 'Horario de retiro habilitado: Ya podés presentar tu código QR en el mostrador de la sede.'}
+              </Text>
+            </Row>
+          </View>
+        )}
 
         <Row
           justify="space-between"
@@ -183,6 +310,12 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontWeight: '700',
+  },
+  windowBanner: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: radii.md,
+    borderWidth: 1,
   },
   footer: {
     paddingTop: spacing.sm,

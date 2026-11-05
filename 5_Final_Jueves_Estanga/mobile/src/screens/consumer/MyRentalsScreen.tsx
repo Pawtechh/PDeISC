@@ -6,7 +6,7 @@ import { Screen, Stack, Row, Text, Card, Button, EmptyState, QrCodeView } from '
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useGetMyRentalsQuery, useCancelRentalMutation, Rental } from '../../api/rentalsApi';
-import { RentalCard } from '../../components/rentals/RentalCard';
+import { RentalCard, getRentalTimingInfo } from '../../components/rentals/RentalCard';
 import { useResponsive } from '../../hooks/useResponsive';
 
 const TABS = ['Todos', 'Activos', 'Finalizados', 'Cancelados'] as const;
@@ -280,6 +280,52 @@ export const MyRentalsScreen: React.FC = () => {
                   Reserva #{qrRental?.id}
                 </Text>
               </Stack>
+
+              {qrRental && (() => {
+                const t = getRentalTimingInfo(qrRental);
+                return (
+                  <View
+                    style={{
+                      width: '100%',
+                      padding: 10,
+                      borderRadius: 10,
+                      borderWidth: 1,
+                      backgroundColor: t.isEarly
+                        ? isDark
+                          ? 'rgba(245, 158, 11, 0.12)'
+                          : '#FFFBEB'
+                        : isDark
+                        ? 'rgba(16, 185, 129, 0.12)'
+                        : '#ECFDF5',
+                      borderColor: t.isEarly
+                        ? isDark
+                          ? 'rgba(245, 158, 11, 0.4)'
+                          : '#FDE68A'
+                        : isDark
+                        ? 'rgba(16, 185, 129, 0.4)'
+                        : '#A7F3D0',
+                    }}
+                  >
+                    <Text
+                      variant="caption"
+                      color={
+                        t.isEarly
+                          ? isDark
+                            ? '#FDE68A'
+                            : '#92400E'
+                          : isDark
+                          ? '#A7F3D0'
+                          : '#065F46'
+                      }
+                      style={{ textAlign: 'center', fontWeight: '700' }}
+                    >
+                      {t.isEarly
+                        ? `⚠️ RETIRO PROGRAMADO (${t.fechaPactada} ${t.horaPactada} hs): Faltan ${t.tiempoFaltanteStr}. La sede solo puede despachar la tabla 15 min antes del horario pactado.`
+                        : '✓ HORARIO HABILITADO: Ya podés retirar la tabla en el mostrador de la sede.'}
+                    </Text>
+                  </View>
+                );
+              })()}
 
               <Button
                 title="Entendido / Cerrar"
