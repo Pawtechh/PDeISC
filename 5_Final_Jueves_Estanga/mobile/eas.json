@@ -20,7 +20,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://sensitive-sized-duke-famous.trycloudflare.com/api",
+        "EXPO_PUBLIC_API_URL": "https://resolve-hair-chosen-postal.trycloudflare.com/api",
         "EXPO_PUBLIC_ENVIRONMENT": "production"
       }
     },
@@ -30,7 +30,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://sensitive-sized-duke-famous.trycloudflare.com/api",
+        "EXPO_PUBLIC_API_URL": "https://resolve-hair-chosen-postal.trycloudflare.com/api",
         "EXPO_PUBLIC_ENVIRONMENT": "production"
       }
     }
