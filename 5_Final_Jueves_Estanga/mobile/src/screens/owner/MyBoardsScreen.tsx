@@ -239,7 +239,7 @@ export const MyBoardsScreen: React.FC = () => {
                 Ciclo de Mantenimiento Obligatorio (45 Días)
               </Text>
               <Text variant="caption" color={isDark ? '#E2E8F0' : colors.sand[700]}>
-                Toda tabla debe inspeccionarse cada 45 días. Cada inspección aprobada suma +45 días al contador de vigencia.
+                Toda tabla debe inspeccionarse cada 45 días. Cada inspección técnica aprobada renueva la vigencia reglamentaria a 45 días.
               </Text>
             </View>
             <Badge label="REGLA AGENCIA" variant="warning" />

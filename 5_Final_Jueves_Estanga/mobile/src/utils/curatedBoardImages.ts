@@ -5,6 +5,8 @@
  * or off-topic textures.
  */
 
+import { resolveAssetUrl } from '../api/baseQueryWithAuth';
+
 const CURATED_SURF_GALLERY: Record<string, string> = {
   // Replace white-background cutouts & off-topic local files with editorial surfboard photography
   '/images/boards/longboard-3.jpg':
@@ -38,7 +40,8 @@ export function resolveCuratedBoardPhoto(
 ): string {
   if (!rawUrl) {
     const key = (tipoTabla || 'shortboard').toLowerCase();
-    return CATEGORY_FALLBACKS[key] || '/images/boards/shortboard-1.jpg';
+    const fallback = CATEGORY_FALLBACKS[key] || '/images/boards/shortboard-1.jpg';
+    return resolveAssetUrl(fallback);
   }
 
   const normalized = String(rawUrl).replace(/^https?:\/\/localhost:3000/i, '');
@@ -47,5 +50,5 @@ export function resolveCuratedBoardPhoto(
     return CURATED_SURF_GALLERY[normalized];
   }
 
-  return normalized;
+  return resolveAssetUrl(normalized);
 }

@@ -32,6 +32,19 @@ export const getBaseUrl = () => {
   return 'http://localhost:3000/api';
 };
 
+export const getServerOrigin = () => {
+  return getBaseUrl().replace(/\/api\/?$/, '');
+};
+
+export const resolveAssetUrl = (rawUrl?: string | null): string => {
+  if (!rawUrl) return '';
+  const cleaned = String(rawUrl).replace(/^https?:\/\/localhost:3000/i, '');
+  if (cleaned.startsWith('/') && Platform.OS !== 'web') {
+    return `${getServerOrigin()}${cleaned}`;
+  }
+  return cleaned;
+};
+
 const baseUrl = getBaseUrl();
 
 const rawBaseQuery = fetchBaseQuery({

@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, EmptyState, Divider } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
+import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import {
   useGetPendingRevisionsQuery,
   useReportDamageClaimMutation,
@@ -677,7 +678,7 @@ export const RevisionsScreen: React.FC = () => {
                           <Row spacing="xs" style={{ flexWrap: 'wrap', gap: spacing.xs }}>
                             {claim.fotosDano.map((foto, idx) => {
                               const rawUri = typeof foto === 'string' ? foto : String(foto);
-                              const safeUri = rawUri.replace(/^https?:\/\/localhost:3000/i, '');
+                              const safeUri = resolveAssetUrl(rawUri);
                               return (
                                 <View
                                   key={idx}

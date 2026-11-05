@@ -6,7 +6,6 @@ import { CatalogScreen } from '../screens/consumer/CatalogScreen';
 import { MyRentalsScreen } from '../screens/consumer/MyRentalsScreen';
 import { PointsScreen } from '../screens/consumer/PointsScreen';
 import { ProfileScreen } from '../screens/consumer/ProfileScreen';
-import { ShowcaseScreen } from '../screens/dev/ShowcaseScreen';
 import { colors } from '../theme';
 import { useTheme } from '../theme/ThemeContext';
 
@@ -109,14 +108,6 @@ export const ConsumerTabs: React.FC = () => {
           tabBarIcon: ({ color, focused }) => (
             <User size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
-        }}
-      />
-      <Tab.Screen
-        name="UI Primitives"
-        component={ShowcaseScreen}
-        options={{
-          tabBarItemStyle: { display: 'none' },
-          tabBarButton: () => null,
         }}
       />
     </Tab.Navigator>

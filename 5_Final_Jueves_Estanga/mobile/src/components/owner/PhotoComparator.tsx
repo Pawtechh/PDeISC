@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { Card, Stack, Row, Text, Badge } from '../ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
+import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 
 export interface PhotoComparatorProps {
   fotosRetiro?: string[];
@@ -32,7 +33,7 @@ const ZONES = [
 
 const sanitizeUrl = (f: any): string => {
   const raw = typeof f === 'string' ? f : String(f?.url || f || '');
-  return raw.replace(/^https?:\/\/localhost:3000/i, '');
+  return resolveAssetUrl(raw);
 };
 
 export const PhotoComparator: React.FC<PhotoComparatorProps> = ({

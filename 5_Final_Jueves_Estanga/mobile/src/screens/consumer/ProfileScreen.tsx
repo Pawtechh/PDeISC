@@ -1,14 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Modal, RefreshControl, Linking } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Moon, Sun, BookOpen, Download, ShieldCheck, Users, LogOut, Smartphone, RefreshCw } from 'lucide-react-native';
-import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge, QrCodeView } from '../../components/ui';
+import { Moon, Sun, BookOpen, Download, ShieldCheck, Users, LogOut } from 'lucide-react-native';
+import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge } from '../../components/ui';
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { setCredentials, setRole, UserRole } from '../../store/slices/authSlice';
 import { logout, resetAllApis } from '../../store/auth/thunks';
 import { useGetMeQuery, useLoginMutation } from '../../api/authApi';
+import { getServerOrigin } from '../../api/baseQueryWithAuth';
 import { tokenStorage } from '../../utils/storage';
 
 export const ProfileScreen: React.FC = () => {
@@ -161,65 +162,6 @@ export const ProfileScreen: React.FC = () => {
           </Stack>
         </Card>
 
-        {/* Sincronización en Vivo Web + App Móvil (Expo Go APK) */}
-        <Card
-          padding="lg"
-          style={{
-            backgroundColor: isDark ? 'rgba(0, 229, 255, 0.04)' : '#F8FAFC',
-            borderColor: isDark ? 'rgba(0, 229, 255, 0.25)' : '#BAE6FD',
-            borderWidth: 1,
-          }}
-        >
-          <Stack spacing="md">
-            <Row justify="space-between" align="center">
-              <Row spacing="xs" align="center">
-                <Smartphone size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
-                <Text variant="h3" color={theme.text}>
-                  Sincronización Web & Expo Go APK
-                </Text>
-              </Row>
-              <Badge label="DB SYNC EN VIVO" variant="success" />
-            </Row>
-
-            <Row spacing="md" align="center" style={{ flexWrap: 'wrap' }}>
-              <View
-                style={{
-                  padding: 10,
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: 14,
-                  borderWidth: 1.5,
-                  borderColor: isDark ? '#00E5FF' : colors.ocean[300],
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <QrCodeView
-                  value={
-                    typeof window !== 'undefined' && window.location?.origin
-                      ? window.location.origin
-                      : 'https://sensitive-sized-duke-famous.trycloudflare.com'
-                  }
-                  size={104}
-                />
-              </View>
-              <View style={{ flex: 1, minWidth: 210, gap: 6 }}>
-                <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
-                  Base de Datos MariaDB Unificada
-                </Text>
-                <Text variant="caption" color={theme.subtext}>
-                  Escaneá este código desde tu teléfono o abrí el proyecto en Expo Go APK. Todas las reservas, firmas biométricas, entregas QR y cambios de comisión se sincronizan en tiempo real entre la Web y el dispositivo móvil.
-                </Text>
-                <Row spacing="xs" align="center" style={{ marginTop: 4 }}>
-                  <RefreshCw size={12} color="#10B981" />
-                  <Text variant="caption" color={isDark ? '#34D399' : '#059669'} style={{ fontWeight: '700' }}>
-                    Auto-sync activo cada 8s • Túnel HTTPS conectado
-                  </Text>
-                </Row>
-              </View>
-            </Row>
-          </Stack>
-        </Card>
-
         {/* Manual Operativo Web & Descarga de PDF */}
         <Card
           padding="lg"
@@ -249,12 +191,10 @@ export const ProfileScreen: React.FC = () => {
                 iconLeft={<BookOpen size={14} color={isDark ? '#F1F5F9' : colors.sand[900]} />}
                 style={styles.flexBtn}
                 onPress={() => {
-                  let url = '/manual';
                   if (typeof window !== 'undefined' && window.location) {
-                    url = `${window.location.origin}/manual`;
-                    window.open(url, '_blank');
+                    window.open(`${window.location.origin}/manual`, '_blank');
                   } else {
-                    Linking.openURL('http://localhost:3000/manual');
+                    Linking.openURL(`${getServerOrigin()}/manual`);
                   }
                 }}
               />
@@ -265,12 +205,10 @@ export const ProfileScreen: React.FC = () => {
                 iconLeft={<Download size={14} color={isDark ? '#090C10' : '#FFFFFF'} />}
                 style={styles.flexBtn}
                 onPress={() => {
-                  let url = '/manual/manual-operativo-surf-rental-mdp.pdf';
                   if (typeof window !== 'undefined' && window.location) {
-                    url = `${window.location.origin}/manual/manual-operativo-surf-rental-mdp.pdf`;
-                    window.open(url, '_blank');
+                    window.open(`${window.location.origin}/manual/manual-operativo-surf-rental-mdp.pdf`, '_blank');
                   } else {
-                    Linking.openURL('http://localhost:3000/manual/manual-operativo-surf-rental-mdp.pdf');
+                    Linking.openURL(`${getServerOrigin()}/manual/manual-operativo-surf-rental-mdp.pdf`);
                   }
                 }}
               />

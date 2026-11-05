@@ -6,7 +6,6 @@ import { MyBoardsScreen } from '../screens/owner/MyBoardsScreen';
 import { RevisionsScreen } from '../screens/owner/RevisionsScreen';
 import { EarningsScreen } from '../screens/owner/EarningsScreen';
 import { ProfileScreen } from '../screens/consumer/ProfileScreen';
-import { ShowcaseScreen } from '../screens/dev/ShowcaseScreen';
 import { colors } from '../theme';
 import { useTheme } from '../theme/ThemeContext';
 
@@ -109,14 +108,6 @@ export const OwnerTabs: React.FC = () => {
           tabBarIcon: ({ color, focused }) => (
             <User size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
-        }}
-      />
-      <Tab.Screen
-        name="UI Primitives"
-        component={ShowcaseScreen}
-        options={{
-          tabBarItemStyle: { display: 'none' },
-          tabBarButton: () => null,
         }}
       />
     </Tab.Navigator>

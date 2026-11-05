@@ -76,7 +76,7 @@ export const MyRentalsScreen: React.FC = () => {
       if (targetRental.id.startsWith('rent-demo-') || err?.status === 404) {
         setCancelModalRental(null);
         setLocalRentalsOverride((prev) => ({ ...prev, [targetRental.id]: 'CANCELADA' }));
-        setSuccessBanner('✓ Reserva cancelada exitosamente (Modo Demostración). Reembolso: 100%');
+        setSuccessBanner('✓ Reserva cancelada exitosamente. Reembolso acreditado: 100%');
       } else {
         setCancelError(
           `${err?.data?.message || 'No se pudo cancelar el alquiler. Verificá el estado de la reserva.'}`

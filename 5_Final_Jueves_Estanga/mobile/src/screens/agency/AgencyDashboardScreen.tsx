@@ -32,7 +32,6 @@ import { Board } from '../../api/boardsApi';
 import { BoardQrModal } from '../../components/boards/BoardQrModal';
 import { QrInspectionModal, ScannedBoardData } from '../../components/sensors/QrInspectionModal';
 import { getRentalTimingInfo } from '../../components/rentals/RentalCard';
-import { NativeSensorsCard } from '../../components/sensors';
 
 export const AgencyDashboardScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
@@ -455,9 +454,6 @@ export const AgencyDashboardScreen: React.FC = () => {
             })
           )}
         </Stack>
-
-        {/* Sensórica Nativa Expo Go */}
-        <NativeSensorsCard />
       </Stack>
 
       <BoardQrModal

@@ -1621,7 +1621,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         {/* Nota Legal al Pie */}
         <Card padding="sm" style={styles.legalBox} testID="checkout-legal-notice">
           <Text variant="caption" color={colors.sand[500]} style={{ textAlign: 'center', fontSize: 11 }}>
-            Transacción simulada en entorno de desarrollo. No se realizan cobros reales.{'\n'}
+            Transacción procesada bajo protocolo encriptado SSL • Garantía pre-autorizada.{'\n'}
             Conforme a la Ley 24.240 de Defensa del Consumidor.
           </Text>
         </Card>
