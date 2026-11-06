@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import path from 'path';
+import fs from 'fs';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -78,20 +79,32 @@ export const createApp = (): Application => {
   // 8. Archivos estáticos y aplicación web de producción
   const publicPath = path.resolve(__dirname, '../public');
   const mobileDistPath = path.resolve(__dirname, '../../mobile/dist');
+  const distHtmlPath = path.join(mobileDistPath, 'index.html');
+  const publicHtmlPath = path.join(publicPath, 'index.html');
+  const activeStaticPath = fs.existsSync(distHtmlPath) ? mobileDistPath : publicPath;
+  const activeHtmlPath = fs.existsSync(distHtmlPath) ? distHtmlPath : publicHtmlPath;
 
   // Recursos del backend: imágenes de tablas, manual operativo y portal de desarrollo
   app.use('/images', express.static(path.join(publicPath, 'images')));
   app.use('/manual', express.static(path.join(publicPath, 'manual')));
   app.get('/portal', (_req: Request, res: Response) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
+    if (fs.existsSync(publicHtmlPath)) {
+      res.sendFile(publicHtmlPath);
+    } else {
+      res.status(200).send('Portal Surf Rental');
+    }
   });
 
   // Aplicación React Native Web compilada (SPA)
-  app.use(express.static(mobileDistPath));
+  app.use(express.static(activeStaticPath));
   app.use(express.static(publicPath));
 
   app.get('/', (_req: Request, res: Response) => {
-    res.sendFile(path.join(mobileDistPath, 'index.html'));
+    if (fs.existsSync(activeHtmlPath)) {
+      res.sendFile(activeHtmlPath);
+    } else {
+      res.status(200).send('Surf Rental API Live');
+    }
   });
 
   // Puente de Callback para Autenticación OAuth (Expo Web / Mobile Web)
@@ -213,7 +226,10 @@ export const createApp = (): Application => {
     ) {
       return next();
     }
-    res.sendFile(path.join(mobileDistPath, 'index.html'));
+    if (fs.existsSync(activeHtmlPath)) {
+      return res.sendFile(activeHtmlPath);
+    }
+    return next();
   });
 
   // Middleware global de errores

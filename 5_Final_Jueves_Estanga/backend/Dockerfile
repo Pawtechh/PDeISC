@@ -23,6 +23,7 @@ COPY package*.json ./
 COPY tsconfig*.json ./
 COPY prisma ./prisma/
 COPY src ./src
+COPY public ./public
 
 # Generate Prisma Client & Compile TypeScript
 RUN npx prisma generate
@@ -44,6 +45,7 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY package*.json ./
 COPY prisma ./prisma/
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 
 # Ensure permissions

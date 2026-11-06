@@ -16,12 +16,12 @@ export const OAUTH_CONFIG = {
     scope: ['read:user', 'user:email'],
   },
   facebook: {
-    clientId: process.env.FACEBOOK_APP_ID || 'mock-facebook-app-id',
-    clientSecret: process.env.FACEBOOK_APP_SECRET || 'mock-facebook-app-secret',
+    clientId: process.env.FACEBOOK_APP_ID || '3902726296552836',
+    clientSecret: process.env.FACEBOOK_APP_SECRET || 'e2fb63c3d22970bb3c8480f393d11cbb',
     authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
     tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
-    userInfoUrl: 'https://graph.facebook.com/me?fields=id,name,email,picture',
-    scope: ['public_profile', 'email'],
+    userInfoUrl: 'https://graph.facebook.com/me?fields=id,name,picture',
+    scope: ['public_profile'],
   },
   apple: {
     clientId: process.env.APPLE_CLIENT_ID || 'com.surfrental.mdp.web',

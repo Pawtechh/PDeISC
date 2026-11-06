@@ -51,7 +51,10 @@ export const handleCallback: RequestHandler = async (req, res, next) => {
     }
 
     const code = (req.query.code as string) || (req.body?.code as string);
-    const redirectUri = (req.query.redirectUri as string) || (req.body?.redirectUri as string);
+    const proto = (req.headers['x-forwarded-proto'] as string)?.split(',')[0]?.trim() || req.protocol || 'http';
+    const host = (req.headers['x-forwarded-host'] as string)?.split(',')[0]?.trim() || req.get('host');
+    const dynamicRedirectUri = host ? `${proto}://${host}/api/auth/oauth/${provider}/callback` : undefined;
+    const redirectUri = (req.query.redirectUri as string) || (req.body?.redirectUri as string) || dynamicRedirectUri;
 
     if (!code) {
       res.status(400).json({
