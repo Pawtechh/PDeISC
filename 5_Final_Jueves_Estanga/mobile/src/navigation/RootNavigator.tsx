@@ -3,7 +3,7 @@ import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Waves } from 'lucide-react-native';
 import { useAppSelector, useAppDispatch } from '../store';
-import { setCredentials } from '../store/slices/authSlice';
+import { setCredentials, updateUser } from '../store/slices/authSlice';
 import { tokenStorage } from '../utils/storage';
 import { getBaseUrl } from '../api/baseQueryWithAuth';
 import { AuthNavigator } from './AuthNavigator';
@@ -43,6 +43,21 @@ export function RootNavigator() {
                 refreshToken: isValidJwt(tokens.refresh) ? tokens.refresh! : '',
               })
             );
+
+            // Sincronizar inmediatamente desde base de datos TiDB por si el rol cambió en Prisma Studio
+            try {
+              const meRes = await fetch(`${getBaseUrl()}/auth/me`, {
+                headers: { Authorization: `Bearer ${tokens.access}` },
+              });
+              if (meRes.ok) {
+                const meJson = await meRes.json();
+                const freshUser = meJson?.data?.user;
+                if (freshUser && isMounted) {
+                  dispatch(updateUser(freshUser));
+                  await tokenStorage.saveUser({ ...user, ...freshUser, role: freshUser.role || freshUser.rol, rol: freshUser.role || freshUser.rol });
+                }
+              }
+            } catch {}
           } else {
             // Si había un token 'dev-' viejo en caché, obtener un JWT real silenciosamente antes de montar las pantallas
             const roleKey = user.role || user.rol || 'CONSUMER';
@@ -102,6 +117,62 @@ export function RootNavigator() {
       isMounted = false;
     };
   }, [dispatch]);
+
+  // Sincronizacin en vivo de rango/rol desde la base de datos (Polling cada 2.5s y al enfocar pestaa)
+  const currentToken = useAppSelector((s) => s.auth.accessToken);
+  const currentUser = useAppSelector((s) => s.auth.user);
+
+  useEffect(() => {
+    if (!isAuthenticated || !currentToken) return;
+
+    let isSubscribed = true;
+
+    const syncLiveRoleFromDatabase = async () => {
+      try {
+        const res = await fetch(`${getBaseUrl()}/auth/me`, {
+          headers: { Authorization: `Bearer ${currentToken}` },
+        });
+        if (res.ok && isSubscribed) {
+          const json = await res.json();
+          const serverUser = json?.data?.user;
+          if (serverUser) {
+            const serverRole = serverUser.role || serverUser.rol;
+            const clientRole = currentUser?.role || currentUser?.rol;
+            if (
+              serverRole !== clientRole ||
+              serverUser.puntos !== currentUser?.puntos ||
+              serverUser.nombre !== currentUser?.nombre ||
+              serverUser.dni !== currentUser?.dni
+            ) {
+              dispatch(updateUser(serverUser));
+              await tokenStorage.saveUser({ ...currentUser, ...serverUser, role: serverRole, rol: serverRole });
+            }
+          }
+        }
+      } catch {}
+    };
+
+    // 1. Polling peridico cada 2.5 segundos para reflejar cambios instantneos de Prisma Studio
+    const interval = setInterval(syncLiveRoleFromDatabase, 2500);
+
+    // 2. Al volver a enfocar la pestaa del navegador (ej. volver de Prisma Studio puerto 5000)
+    let removeListener: (() => void) | undefined;
+    if (typeof window !== 'undefined' && window.addEventListener) {
+      const onFocus = () => syncLiveRoleFromDatabase();
+      window.addEventListener('focus', onFocus);
+      document.addEventListener('visibilitychange', onFocus);
+      removeListener = () => {
+        window.removeEventListener('focus', onFocus);
+        document.removeEventListener('visibilitychange', onFocus);
+      };
+    }
+
+    return () => {
+      isSubscribed = false;
+      clearInterval(interval);
+      removeListener?.();
+    };
+  }, [isAuthenticated, currentToken, currentUser, dispatch]);
 
   const renderContent = () => {
     if (isGuest) return <ConsumerTabs />;

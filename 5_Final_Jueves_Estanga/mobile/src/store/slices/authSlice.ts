@@ -91,7 +91,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, setRole, setGuestMode, resetState } = authSlice.actions;
+export const { setCredentials, setRole, updateUser, setGuestMode, resetState } = authSlice.actions;
 
 // Re-export logout thunk para retrocompatibilidad
 export { logout } from '../auth/thunks';
