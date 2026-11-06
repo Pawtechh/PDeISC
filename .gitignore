@@ -9,6 +9,8 @@ dist/
 build/
 .expo/
 _expo/
+!**/public/_expo/
+!**/public/_expo/**
 web-build/
 coverage/
 test-results/

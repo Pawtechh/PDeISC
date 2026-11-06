@@ -13,7 +13,8 @@ dist/
 build/
 .expo/
 _expo/
-backend/public/_expo/
+!backend/public/_expo/
+!backend/public/_expo/**
 web-build/
 
 # Environment variables (strict protection: ignore all .env variants)
