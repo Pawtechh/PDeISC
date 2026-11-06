@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Modal, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Star, ShieldCheck, MapPin, Ruler, Droplets, DollarSign } from 'lucide-react-native';
+import { Star, ShieldCheck, MapPin, Ruler, Droplets, DollarSign, Briefcase, UserCheck } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, Divider, LightboxViewer } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -10,6 +10,8 @@ import { Board, useGetBoardQuery } from '../../api/boardsApi';
 import { useGetBoardReviewsQuery } from '../../api/loyaltyApi';
 import { CheckoutScreen } from './CheckoutScreen';
 import { resolveCuratedBoardPhoto } from '../../utils/curatedBoardImages';
+import { useAppSelector, useAppDispatch } from '../../store';
+import { setGuestMode } from '../../store/slices/authSlice';
 
 export interface BoardDetailScreenProps {
   route?: { params?: { board?: Board; boardId?: string } };
@@ -20,6 +22,9 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
   const { theme, isDark } = useTheme();
   const { width } = useWindowDimensions();
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showAuthRequiredModal, setShowAuthRequiredModal] = useState(false);
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
   const [selectedLightboxPhoto, setSelectedLightboxPhoto] = useState<string | null>(null);
 
   const boardParam = route?.params?.board;
@@ -43,7 +48,9 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
           </Text>
           <Button title="Volver al catálogo" onPress={() => navigation?.goBack?.()} />
         </Stack>
-      </Screen>
+      
+      
+    </Screen>
     );
   }
 
@@ -105,6 +112,60 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         </Stack>
 
         <Divider />
+
+        {/* Perfil del Comerciante / Shaper Oficial */}
+        <Card padding="lg">
+          <Stack spacing="md">
+            <Row justify="space-between" align="center">
+              <Row spacing="sm" align="center" style={{ flex: 1 }}>
+                <View
+                  style={[
+                    styles.merchantAvatar,
+                    {
+                      backgroundColor: isDark ? 'rgba(0, 229, 255, 0.15)' : '#E0F2FE',
+                      borderColor: isDark ? '#00E5FF' : colors.ocean[500],
+                    },
+                  ]}
+                >
+                  <Briefcase size={20} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text variant="caption" color={isDark ? '#D4AF37' : colors.ocean[600]} style={{ fontWeight: '800', letterSpacing: 1 }}>
+                    COMERCIANTE HABILITADO
+                  </Text>
+                  <Text variant="h3" color={theme.text}>
+                    {board.owner?.nombre || `${board.marca} Shaper Oficial`}
+                  </Text>
+                  <Text variant="caption" color={theme.subtext}>
+                    Shaper MDP • Custodia oficial en Mostrador Playa Grande
+                  </Text>
+                </View>
+              </Row>
+              <Badge label="VERIFICADO" variant="success" />
+            </Row>
+
+            <Divider />
+
+            <Row justify="space-between" align="center">
+              <Row spacing="xs" align="center">
+                <ShieldCheck size={15} color="#10B981" />
+                <Text variant="caption" color={theme.subtext}>
+                  Identidad y DNI auditados bajo Ley 25.506
+                </Text>
+              </Row>
+              <Row spacing="xs" align="center">
+                <Star size={14} color="#D4AF37" fill="#D4AF37" />
+                <Text variant="caption" color={isDark ? '#D4AF37' : colors.sunset[500]} style={{ fontWeight: '700' }}>
+                  5.0 ★ Reputación
+                </Text>
+              </Row>
+            </Row>
+
+            <Text variant="caption" color={theme.subtext}>
+              Este comerciante cuenta con habilitación oficial de la Sede Central Playa Grande. Todas sus tablas cuentan con póliza de seguro y protocolo de enjuague obligatorio.
+            </Text>
+          </Stack>
+        </Card>
 
         {/* Especificaciones Técnicas */}
         <Card padding="lg">
@@ -228,7 +289,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
             disabled={board.estado !== 'DISPONIBLE'}
             variant="primary"
             size="lg"
-            onPress={() => setShowBookingModal(true)}
+            onPress={() => { if (!isAuthenticated) { setShowAuthRequiredModal(true); } else { setShowBookingModal(true); } }}
             testID="btn-reservar-tabla"
           />
         </Row>
@@ -256,11 +317,101 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         title={board.titulo}
         onClose={() => setSelectedLightboxPhoto(null)}
       />
+    
+      {/* Modal: Interacción protegida - Registro requerido */}
+      <Modal
+        visible={showAuthRequiredModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowAuthRequiredModal(false)}
+      >
+        <View style={styles.authModalOverlay}>
+          <Card padding="xl" style={styles.authModalCard}>
+            <Stack spacing="md" align="center">
+              <View style={styles.authIconCircle}>
+                <UserCheck size={36} color="#00E5FF" />
+              </View>
+
+              <Text variant="h2" align="center">
+                Creá tu cuenta para interactuar
+              </Text>
+
+              <Text variant="body" color={theme.subtext} align="center">
+                Podés ver las tablas y los perfiles de los comerciantes libremente sin iniciar sesión. Para interactuar y reservar esta tabla de {board?.marca || 'Surf'} debés crear una cuenta verificada con tu DNI y foto conforme a la Ley 25.506.
+              </Text>
+
+              <Divider />
+
+              <Stack spacing="sm" style={{ width: '100%' }}>
+                <Button
+                  title="Crear Cuenta con DNI"
+                  variant="primary"
+                  size="lg"
+                  onPress={() => {
+                    setShowAuthRequiredModal(false);
+                    dispatch(setGuestMode(false));
+                    navigation?.navigate?.('Register');
+                  }}
+                  testID="btn-modal-create-account"
+                />
+                <Button
+                  title="Ya tengo cuenta (Iniciar Sesión)"
+                  variant="secondary"
+                  size="md"
+                  onPress={() => {
+                    setShowAuthRequiredModal(false);
+                    dispatch(setGuestMode(false));
+                    navigation?.navigate?.('Login');
+                  }}
+                  testID="btn-modal-login"
+                />
+                <Button
+                  title="Seguir Viendo Tablas"
+                  variant="ghost"
+                  size="sm"
+                  onPress={() => setShowAuthRequiredModal(false)}
+                />
+              </Stack>
+            </Stack>
+          </Card>
+        </View>
+      </Modal>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
+  merchantAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  authModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.lg,
+  },
+  authModalCard: {
+    maxWidth: 460,
+    width: '100%',
+    borderRadius: radii.xl,
+  },
+  authIconCircle: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: 'rgba(0, 229, 255, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 229, 255, 0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
   container: {
     paddingBottom: 120,
   },

@@ -127,7 +127,7 @@ export class BoardsService {
             select: { calificacion: true },
           },
           owner: {
-            select: { id: true, nombre: true },
+            select: { id: true, nombre: true, email: true, createdAt: true, dniFotoUrl: true },
           },
         },
       }),

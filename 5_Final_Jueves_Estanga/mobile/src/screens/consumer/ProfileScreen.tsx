@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
+  Waves,
   Moon,
   Sun,
   BookOpen,
@@ -36,7 +37,7 @@ import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge, Input } from '..
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { setCredentials, setRole } from '../../store/slices/authSlice';
+import { setCredentials, setRole, setGuestMode } from '../../store/slices/authSlice';
 import { logout, resetAllApis } from '../../store/auth/thunks';
 import {
   useGetMeQuery,
@@ -57,6 +58,37 @@ export const ProfileScreen: React.FC = () => {
   const { theme, isDark, setMode } = useTheme();
   const dispatch = useAppDispatch();
   const reduxUser = useAppSelector((s) => s.auth.user);
+  const isGuest = useAppSelector((s) => s.auth.isGuest);
+
+  if (isGuest || !reduxUser) {
+    return (
+      <Screen scrollable>
+        <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center', marginTop: 40 }}>
+          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE', alignItems: 'center', justifyContent: 'center' }}>
+            <Waves size={32} color={isDark ? '#00E5FF' : '#0284C7'} />
+          </View>
+          <Text variant="h2" align="center">Perfil de Usuario</Text>
+          <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 460 }}>
+            Estás explorando el catálogo de tablas y shapers de Playa Grande como invitado. Creá tu cuenta con DNI para alquilar tablas y gestionar tu perfil.
+          </Text>
+          <Row spacing="md" style={{ marginTop: spacing.md, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Button
+              title="Crear Cuenta con DNI"
+              variant="primary"
+              size="lg"
+              onPress={() => dispatch(setGuestMode(false))}
+            />
+            <Button
+              title="Iniciar Sesión"
+              variant="secondary"
+              size="lg"
+              onPress={() => dispatch(setGuestMode(false))}
+            />
+          </Row>
+        </Stack>
+      </Screen>
+    );
+  }
   const { data: meData, isFetching, refetch } = useGetMeQuery();
   const { data: vendorData, refetch: refetchVendor } = useGetVendorStatusQuery();
 
@@ -715,61 +747,6 @@ export const ProfileScreen: React.FC = () => {
                 }
                 style={styles.flexBtn}
                 onPress={() => setMode('dark')}
-              />
-            </Row>
-          </Stack>
-        </Card>
-
-        {/* Manual Operativo Web & Descarga de PDF */}
-        <Card
-          padding="lg"
-          style={{
-            borderColor: isDark ? 'rgba(0, 229, 255, 0.28)' : colors.ocean[300],
-            borderWidth: 1,
-          }}
-        >
-          <Stack spacing="md">
-            <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
-              <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                <BookOpen size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
-                <Text variant="h3" color={theme.text}>
-                  Manual Operativo & Guía
-                </Text>
-              </Row>
-              <Badge label="DOCUMENTACIÓN OFICIAL" variant="info" />
-            </Row>
-            <Text variant="caption" color={theme.subtext}>
-              Instrucciones completas para los 3 perfiles (Surfista, Dueño de Tabla, Mostrador de Sede), arquitectura y guía de defensa de examen:
-            </Text>
-
-            <Row spacing="sm">
-              <Button
-                title="Ver Manual Web"
-                size="sm"
-                variant="secondary"
-                iconLeft={<BookOpen size={14} color={isDark ? '#F1F5F9' : colors.sand[900]} />}
-                style={styles.flexBtn}
-                onPress={() => {
-                  if (typeof window !== 'undefined' && window.location) {
-                    window.open(`${window.location.origin}/manual`, '_blank');
-                  } else {
-                    Linking.openURL(`${getServerOrigin()}/manual`);
-                  }
-                }}
-              />
-              <Button
-                title="Manual Operativo (PDF)"
-                size="sm"
-                variant="secondary"
-                iconLeft={<Download size={14} color={isDark ? '#F1F5F9' : colors.sand[900]} />}
-                style={styles.flexBtn}
-                onPress={() => {
-                  if (typeof window !== 'undefined' && window.location) {
-                    window.open(`${window.location.origin}/manual/manual-operativo-surf-rental-mdp.pdf`, '_blank');
-                  } else {
-                    Linking.openURL(`${getServerOrigin()}/manual/manual-operativo-surf-rental-mdp.pdf`);
-                  }
-                }}
               />
             </Row>
           </Stack>

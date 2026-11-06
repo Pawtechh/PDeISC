@@ -5,11 +5,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Screen, Stack, Row, Text, Button, Card, FormInput } from '../../components/ui';
+import { Screen, Stack, Row, Text, Button, Card, FormInput, Divider } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppDispatch } from '../../store';
-import { setCredentials, UserRole } from '../../store/slices/authSlice';
+import { setCredentials, setGuestMode, UserRole } from '../../store/slices/authSlice';
 import { useLoginMutation } from '../../api/authApi';
 import { tokenStorage } from '../../utils/storage';
 import { loginSchema, LoginFormData } from '../../schemas/auth.schema';
@@ -315,6 +315,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                   </Text>
                 </TouchableOpacity>
               </Row>
+
+              <Divider />
+
+              <Button
+                title="🏄‍♂️ Ver Tablas y Shapers como Invitado"
+                variant="secondary"
+                size="md"
+                onPress={() => dispatch(setGuestMode(true))}
+                testID="btn-explore-as-guest"
+              />
             </Stack>
           </Card>
 

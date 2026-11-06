@@ -42,6 +42,7 @@ export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
+  isGuest: boolean;
 }
 
 export const initialState: AuthState = {
@@ -49,6 +50,7 @@ export const initialState: AuthState = {
   accessToken: null,
   refreshToken: null,
   isAuthenticated: false,
+  isGuest: false,
 };
 
 export const authSlice = createSlice({
@@ -73,6 +75,10 @@ export const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
+      state.isGuest = false;
+    },
+    setGuestMode: (state, action: PayloadAction<boolean>) => {
+      state.isGuest = action.payload;
     },
     setRole: (state, action: PayloadAction<UserRole>) => {
       if (state.user) {
@@ -84,7 +90,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, setRole, resetState } = authSlice.actions;
+export const { setCredentials, setRole, setGuestMode, resetState } = authSlice.actions;
 
 // Re-export logout thunk para retrocompatibilidad
 export { logout } from '../auth/thunks';

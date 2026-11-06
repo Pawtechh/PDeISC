@@ -21,6 +21,9 @@ export interface Board {
   owner?: {
     id: string;
     nombre: string;
+    email?: string;
+    createdAt?: string;
+    dniFotoUrl?: string;
   };
   rentals?: Array<{
     id: string;

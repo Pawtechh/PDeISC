@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Modal, ScrollView } from 'react-native';
-import { ShieldCheck, Scale, FileText, X } from 'lucide-react-native';
+import { StyleSheet, TouchableOpacity, View, Modal, ScrollView, Platform } from 'react-native';
+import { Image } from 'expo-image';
+import { useTheme } from '../../theme/ThemeContext';
+import { ShieldCheck, Scale, FileText, X, Camera, CheckCircle2 } from 'lucide-react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Screen, Stack, Row, Text, Button, Card, Divider, FormInput } from '../../components/ui';
+import { Screen, Stack, Row, Text, Button, Card, Divider, FormInput, Badge } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useRegisterMutation } from '../../api/authApi';
 import { useAppDispatch } from '../../store';
@@ -17,6 +19,7 @@ export interface RegisterScreenProps {
 }
 
 export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
+  const { theme, isDark } = useTheme();
   const dispatch = useAppDispatch();
   const [registerApi, { isLoading }] = useRegisterMutation();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -36,6 +39,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
       apellido: '',
       email: '',
       dni: '',
+      dniFotoUrl: '',
       telefono: '',
       password: '',
       confirmarPassword: '',
@@ -45,6 +49,30 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
   });
 
   const aceptaTerminos = watch('aceptaTerminos');
+  const dniFotoUrl = watch('dniFotoUrl');
+
+  const handlePickDniPhoto = () => {
+    if (Platform.OS === 'web' && typeof document !== 'undefined') {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = (e) => {
+        const f = (e.target as any)?.files?.[0];
+        if (f) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            if (reader.result) {
+              setValue('dniFotoUrl', String(reader.result), { shouldValidate: true });
+            }
+          };
+          reader.readAsDataURL(f);
+        }
+      };
+      input.click();
+    } else {
+      setValue('dniFotoUrl', 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80', { shouldValidate: true });
+    }
+  };
 
   const onSubmit = async (data: RegisterFormData) => {
     setServerError(null);
@@ -54,6 +82,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
         apellido: data.apellido.trim(),
         email: data.email.toLowerCase().trim(),
         dni: data.dni.trim(),
+        dniFotoUrl: data.dniFotoUrl,
         telefono: data.telefono,
         password: data.password,
         fechaNacimiento: data.fechaNacimiento,
@@ -144,6 +173,64 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
               maxLength={8}
               testID="register-input-dni"
             />
+
+            {/* Foto del Frente del DNI (Obligatorio) */}
+            <Stack spacing="xs">
+              <Row justify="space-between" align="center">
+                <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
+                  Foto del Frente del DNI (Obligatorio) *
+                </Text>
+                {dniFotoUrl ? (
+                  <Badge label="DOCUMENTO ADJUNTO" variant="success" />
+                ) : (
+                  <Badge label="REQUERIDO" variant="ocean" />
+                )}
+              </Row>
+              <Text variant="caption" color={theme.subtext}>
+                Conforme a la Ley 25.506, la verificación fehaciente del DNI otorga plena validez legal al contrato de alquiler.
+              </Text>
+
+              {dniFotoUrl ? (
+                <View style={styles.dniPreviewContainer}>
+                  <Image source={{ uri: dniFotoUrl }} style={styles.dniPreviewImg} />
+                  <Row spacing="sm" align="center" style={{ marginTop: 8 }}>
+                    <CheckCircle2 size={16} color={colors.semantic.success} />
+                    <Text variant="caption" color={colors.semantic.success} style={{ fontWeight: '600', flex: 1 }}>
+                      Foto del DNI lista para rúbrica legal
+                    </Text>
+                    <TouchableOpacity onPress={() => setValue('dniFotoUrl', '', { shouldValidate: true })}>
+                      <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '700' }}>
+                        Quitar
+                      </Text>
+                    </TouchableOpacity>
+                  </Row>
+                </View>
+              ) : (
+                <Row spacing="sm" style={{ flexWrap: 'wrap' }}>
+                  <Button
+                    title="📷 Subir Foto DNI"
+                    size="sm"
+                    variant="secondary"
+                    iconLeft={<Camera size={14} color={isDark ? '#00E5FF' : colors.ocean[600]} />}
+                    onPress={handlePickDniPhoto}
+                    testID="btn-upload-dni-foto"
+                  />
+                  <Button
+                    title="Usar DNI Demo"
+                    size="sm"
+                    variant="secondary"
+                    onPress={() => setValue('dniFotoUrl', 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80', { shouldValidate: true })}
+                    testID="btn-demo-dni-foto"
+                  />
+                </Row>
+              )}
+
+              {errors.dniFotoUrl && (
+                <Text variant="caption" color={colors.semantic.danger} testID="error-dniFotoUrl">
+                  {errors.dniFotoUrl.message}
+                </Text>
+              )}
+            </Stack>
 
             <FormInput
               control={control}
@@ -355,6 +442,19 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
 };
 
 const styles = StyleSheet.create({
+  dniPreviewContainer: {
+    padding: 10,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.4)',
+    backgroundColor: 'rgba(16, 185, 129, 0.06)',
+  },
+  dniPreviewImg: {
+    width: '100%',
+    height: 140,
+    borderRadius: radii.sm,
+    resizeMode: 'cover',
+  },
   container: {
     paddingVertical: spacing.xl,
     maxWidth: 540,

@@ -5,7 +5,7 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Star, Search, LayoutGrid, Award, Shield, Clock, Waves } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
-import { Screen, Stack, Row, Text, Input, Badge, Button, EmptyState, GlassCard } from '../../components/ui';
+import { Screen, Stack, Row, Text, Input, Badge, Button, EmptyState, GlassCard, Card } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useGetBoardsQuery, Board } from '../../api/boardsApi';
@@ -15,11 +15,16 @@ import { BoardDetailScreen } from './BoardDetailScreen';
 import { useResponsive } from '../../hooks/useResponsive';
 import { MarineForecastCard } from '../../components/marine/MarineForecastCard';
 import { GoogleMapSedeCard } from '../../components/sensors';
+import { useAppSelector, useAppDispatch } from '../../store';
+import { setGuestMode } from '../../store/slices/authSlice';
 
 const FILTER_TYPES = ['Todos', 'Longboard', 'Fish', 'Funboard', 'Shortboard', 'Bodyboard', 'SUP'];
 
 export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   const { theme, isDark } = useTheme();
+  const dispatch = useAppDispatch();
+  const isGuest = useAppSelector((s) => s.auth.isGuest);
+  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('Todos');
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
@@ -150,6 +155,43 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
 
         {/* Live Marine Weather Report (Playa Grande) */}
         <MarineForecastCard />
+
+        {/* Banner de Modo Invitado */}
+        {(!isAuthenticated || isGuest) && (
+          <Card
+            padding="md"
+            style={{
+              backgroundColor: isDark ? 'rgba(0, 229, 255, 0.08)' : '#F0F9FF',
+              borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#BAE6FD',
+              borderWidth: 1,
+            }}
+          >
+            <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
+              <View style={{ flex: 1, minWidth: 200 }}>
+                <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[600]} style={{ fontWeight: '800' }}>
+                  MODO INVITADO (SOLO LECTURA)
+                </Text>
+                <Text variant="caption" color={theme.text}>
+                  Podés explorar las tablas y perfiles de los comerciantes libremente. Para interactuar o alquilar, creá tu cuenta.
+                </Text>
+              </View>
+              <Row spacing="xs">
+                <Button
+                  title="Crear Cuenta"
+                  size="sm"
+                  variant="primary"
+                  onPress={() => dispatch(setGuestMode(false))}
+                />
+                <Button
+                  title="Iniciar Sesión"
+                  size="sm"
+                  variant="secondary"
+                  onPress={() => dispatch(setGuestMode(false))}
+                />
+              </Row>
+            </Row>
+          </Card>
+        )}
 
         {/* 1. SECCIÓN SUPERIOR: CARRUSEL DE SOLO LAS DESTACADAS */}
         {featuredBoards.length > 0 && (

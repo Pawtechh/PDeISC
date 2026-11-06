@@ -29,7 +29,7 @@ export const registerSchema = z.object({
   dni: z
     .string()
     .regex(/^\d{7,8}$/, 'El DNI debe tener 7 u 8 dígitos (sin puntos)'),
-  dniFotoUrl: z.string().url('La URL de la foto del DNI es inválida').optional(),
+  dniFotoUrl: z.string().min(1, 'La foto del DNI es obligatoria'),
   fechaNacimiento: z.string().optional(),
   aceptaTerminos: z.boolean().optional(),
 });

@@ -8,6 +8,9 @@ import { useTheme } from '../../theme/ThemeContext';
 import { useGetMyRentalsQuery, useCancelRentalMutation, Rental } from '../../api/rentalsApi';
 import { RentalCard, getRentalTimingInfo } from '../../components/rentals/RentalCard';
 import { useResponsive } from '../../hooks/useResponsive';
+import { useAppSelector, useAppDispatch } from '../../store';
+import { setGuestMode } from '../../store/slices/authSlice';
+import { Waves } from 'lucide-react-native';
 
 const TABS = ['Todos', 'Activos', 'Finalizados', 'Cancelados'] as const;
 
@@ -21,6 +24,39 @@ export const MyRentalsScreen: React.FC = () => {
   const [localRentalsOverride, setLocalRentalsOverride] = useState<Record<string, 'CANCELADA'>>({});
   const { numColumns } = useResponsive();
   const navigation = useNavigation<any>();
+  const isGuest = useAppSelector((s) => s.auth.isGuest);
+  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
+  const dispatch = useAppDispatch();
+
+  if (!isAuthenticated || isGuest) {
+    return (
+      <Screen scrollable>
+        <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center', marginTop: 40 }}>
+          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE', alignItems: 'center', justifyContent: 'center' }}>
+            <Waves size={32} color={isDark ? '#00E5FF' : '#0284C7'} />
+          </View>
+          <Text variant="h2" align="center">Alquileres de Tablas</Text>
+          <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 460 }}>
+            Para ver tus contratos activos, códigos QR de check-in y gestionar devoluciones debés crear tu cuenta verificada con DNI o iniciar sesión.
+          </Text>
+          <Row spacing="md" style={{ marginTop: spacing.md, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Button
+              title="Crear Cuenta con DNI"
+              variant="primary"
+              size="lg"
+              onPress={() => dispatch(setGuestMode(false))}
+            />
+            <Button
+              title="Iniciar Sesión"
+              variant="secondary"
+              size="lg"
+              onPress={() => dispatch(setGuestMode(false))}
+            />
+          </Row>
+        </Stack>
+      </Screen>
+    );
+  }
 
   const { data, refetch, isFetching, isLoading } = useGetMyRentalsQuery(undefined, { pollingInterval: 8000 });
   const [cancelRental, { isLoading: isCancelling }] = useCancelRentalMutation();

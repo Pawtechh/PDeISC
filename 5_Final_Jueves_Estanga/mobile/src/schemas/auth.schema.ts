@@ -79,6 +79,7 @@ export const registerSchema = z
     dni: z
       .string()
       .regex(/^\d{7,8}$/, 'El DNI debe tener 7 u 8 dígitos (sin puntos)'),
+    dniFotoUrl: z.string().min(1, 'La foto del DNI es obligatoria para verificar tu identidad legal'),
     telefono: z
       .string()
       .regex(/^(\+?54)?\d{10,11}$/, 'Teléfono inválido (ej: 2235123456)')

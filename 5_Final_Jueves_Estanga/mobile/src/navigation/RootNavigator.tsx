@@ -23,6 +23,7 @@ export function RootNavigator() {
   const [isInitializing, setIsInitializing] = useState(true);
 
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
+  const isGuest = useAppSelector((s) => s.auth.isGuest);
   const rol = useAppSelector((s) => s.auth.user?.rol || s.auth.user?.role);
 
   useEffect(() => {
@@ -102,6 +103,7 @@ export function RootNavigator() {
   }, [dispatch]);
 
   const renderContent = () => {
+    if (isGuest) return <ConsumerTabs />;
     if (!isAuthenticated) return <AuthNavigator />;
     if (rol === 'CONSUMER') return <ConsumerTabs />;
     if (rol === 'OWNER') return <OwnerTabs />;

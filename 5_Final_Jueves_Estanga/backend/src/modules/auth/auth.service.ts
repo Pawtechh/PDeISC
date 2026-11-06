@@ -67,7 +67,7 @@ export class AuthService {
 
     // Validar si el DNI ya está en uso
     const existingDni = await prisma.user.findUnique({
-      where: { dni: data.dni },
+      where: { dni: data.dni.replace(/\D/g, '') },
     });
 
     if (existingDni) {
@@ -77,17 +77,17 @@ export class AuthService {
     // Hash de contraseña con 12 rounds
     const passwordHash = await bcrypt.hash(data.password, JWT_CONFIG.bcryptRounds);
 
-    const nombreCompleto = data.apellido
-      ? `${data.nombre.trim()} ${data.apellido.trim()}`
-      : data.nombre.trim();
+    const dniLimpio = data.dni.replace(/\D/g, '');
+    const rawNombre = data.apellido ? data.nombre.trim() + ' ' + data.apellido.trim() : data.nombre.trim();
+    const nombreLegal = rawNombre.toLowerCase().split(/\s+/).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
     const user = await prisma.user.create({
       data: {
         email: data.email.toLowerCase(),
         passwordHash,
-        nombre: nombreCompleto,
-        telefono: data.telefono,
-        dni: data.dni,
+        nombre: nombreLegal,
+        telefono: data.telefono ? data.telefono.replace(/\D/g, '') : null,
+        dni: dniLimpio,
         dniFotoUrl: data.dniFotoUrl,
         role: Role.CONSUMER,
       },
