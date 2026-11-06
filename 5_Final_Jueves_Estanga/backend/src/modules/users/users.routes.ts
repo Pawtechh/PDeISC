@@ -59,6 +59,7 @@ router.get('/me', async (req, res, next) => {
         telefono: true,
         dni: true,
         dniFotoUrl: true,
+        avatarUrl: true,
         role: true,
         puntos: true,
         puntosSancion: true,
@@ -97,7 +98,7 @@ router.get('/me', async (req, res, next) => {
 
 router.patch('/me', async (req, res, next) => {
   try {
-    const { nombre, telefono, dni, dniFotoUrl } = req.body;
+    const { nombre, telefono, dni, dniFotoUrl, avatarUrl } = req.body;
     let cleanDni: string | undefined = undefined;
 
     if (dni !== undefined && dni !== null && String(dni).trim() !== '') {
@@ -132,6 +133,7 @@ router.patch('/me', async (req, res, next) => {
         telefono: telefono || undefined,
         dni: cleanDni || undefined,
         dniFotoUrl: dniFotoUrl ? (saveBase64Image(dniFotoUrl, 'dni', req.user!.id) || dniFotoUrl) : undefined,
+        avatarUrl: avatarUrl ? (saveBase64Image(avatarUrl, 'avatar', req.user!.id) || avatarUrl) : undefined,
       },
       select: {
         id: true,
@@ -140,6 +142,7 @@ router.patch('/me', async (req, res, next) => {
         telefono: true,
         dni: true,
         dniFotoUrl: true,
+        avatarUrl: true,
         role: true,
         puntos: true,
         puntosSancion: true,
@@ -209,6 +212,7 @@ router.post('/verify-identity', async (req, res, next) => {
         telefono: true,
         dni: true,
         dniFotoUrl: true,
+        avatarUrl: true,
         role: true,
         puntos: true,
         puntosSancion: true,

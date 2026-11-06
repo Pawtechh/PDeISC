@@ -44,10 +44,11 @@ import {
   useGetVendorStatusQuery,
   useSubmitVendorApplicationMutation,
   useSwitchUserRoleMutation,
+  useUpdateProfileMutation,
 } from '../../api/authApi';
 import { getServerOrigin } from '../../api/baseQueryWithAuth';
 import { tokenStorage } from '../../utils/storage';
-import { pickImagesFromDevice } from '../../utils/imagePicker';
+import { pickImagesFromDevice, takePhotoWithCamera, pickSingleImage } from '../../utils/imagePicker';
 import {
   useBiometricSignature,
   BiometricSignaturePayload,
@@ -121,6 +122,16 @@ export const ProfileScreen: React.FC = () => {
     useState<BiometricSignaturePayload | null>(null);
   const [switchPassword, setSwitchPassword] = useState('');
   const [switchError, setSwitchError] = useState<string | null>(null);
+
+  // Estado del Modal de Personalización de Perfil (Nombre, Teléfono y Foto de Perfil)
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const [editNombre, setEditNombre] = useState('');
+  const [editTelefono, setEditTelefono] = useState('');
+  const [editAvatarUrl, setEditAvatarUrl] = useState<string | null>(null);
+  const [editProfileError, setEditProfileError] = useState<string | null>(null);
+  const [editProfileSuccess, setEditProfileSuccess] = useState<string | null>(null);
+
+  const [updateProfileApi, { isLoading: isUpdatingProfile }] = useUpdateProfileMutation();
 
   useFocusEffect(
     useCallback(() => {
@@ -199,6 +210,76 @@ export const ProfileScreen: React.FC = () => {
     }
     setCustomPhotoUrl('');
     setVendorFormError(null);
+  };
+
+  const getFullAvatarUrl = (url?: string | null) => {
+    if (!url) return undefined;
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image/')) {
+      return url;
+    }
+    return `${getServerOrigin()}${url}`;
+  };
+
+  const openEditProfileModal = () => {
+    setEditNombre(user?.nombre || '');
+    setEditTelefono(user?.telefono || '');
+    setEditAvatarUrl(user?.avatarUrl || null);
+    setEditProfileError(null);
+    setEditProfileSuccess(null);
+    setShowEditProfileModal(true);
+  };
+
+  const handleTakePhoto = async () => {
+    setEditProfileError(null);
+    try {
+      const photo = await takePhotoWithCamera({ quality: 0.85, allowsEditing: true });
+      if (photo) {
+        setEditAvatarUrl(photo);
+      }
+    } catch {
+      setEditProfileError('No se pudo acceder a la cámara. Verifica los permisos de la aplicación.');
+    }
+  };
+
+  const handlePickFromGallery = async () => {
+    setEditProfileError(null);
+    try {
+      const photo = await pickSingleImage({ quality: 0.85, allowsEditing: true });
+      if (photo) {
+        setEditAvatarUrl(photo);
+      }
+    } catch {
+      setEditProfileError('No se pudo cargar la imagen desde la galería.');
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    const cleanNombre = editNombre.trim();
+    if (!cleanNombre || cleanNombre.length < 2) {
+      setEditProfileError('El nombre debe tener al menos 2 caracteres.');
+      return;
+    }
+
+    try {
+      setEditProfileError(null);
+      const res = await updateProfileApi({
+        nombre: cleanNombre,
+        telefono: editTelefono.trim() || undefined,
+        avatarUrl: editAvatarUrl || undefined,
+      }).unwrap();
+
+      const updatedUser = res.data;
+      dispatch(updateUser(updatedUser));
+      await tokenStorage.saveUser({ ...reduxUser, ...updatedUser });
+      setEditProfileSuccess('¡Perfil actualizado con éxito!');
+      refetch();
+      setTimeout(() => {
+        setShowEditProfileModal(false);
+        setEditProfileSuccess(null);
+      }, 900);
+    } catch (err: any) {
+      setEditProfileError(err?.data?.message || 'Error al actualizar el perfil.');
+    }
   };
 
   const handleSubmitVendorForm = async () => {
@@ -380,7 +461,19 @@ export const ProfileScreen: React.FC = () => {
         {/* Tarjeta Principal de Identidad del Usuario */}
         <Card padding="lg">
           <Stack spacing="md" align="center">
-            <Avatar name={user?.nombre || 'Surfista'} size="xl" />
+            <TouchableOpacity activeOpacity={0.85} onPress={openEditProfileModal}>
+              <View style={{ position: 'relative' }}>
+                <Avatar
+                  name={user?.nombre || 'Surfista'}
+                  uri={getFullAvatarUrl(user?.avatarUrl)}
+                  size="xl"
+                />
+                <View style={styles.avatarCameraBadge}>
+                  <Camera size={14} color="#FFFFFF" />
+                </View>
+              </View>
+            </TouchableOpacity>
+
             <Text variant="h2" color={theme.text} style={{ textAlign: 'center' }}>
               {user?.nombre || 'Usuario'}
             </Text>
@@ -392,6 +485,13 @@ export const ProfileScreen: React.FC = () => {
                 Tel: {user.telefono}
               </Text>
             )}
+
+            <Button
+              title="✏️ Personalizar Nombre y Foto"
+              variant="secondary"
+              size="sm"
+              onPress={openEditProfileModal}
+            />
             <Row
               spacing="xs"
               align="center"
@@ -1240,6 +1340,155 @@ export const ProfileScreen: React.FC = () => {
           </Card>
         </View>
       </Modal>
+
+      {/* Modal de Personalización de Perfil (Nombre, Teléfono y Foto de Perfil) */}
+      <Modal
+        visible={showEditProfileModal}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowEditProfileModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <Card
+            padding="lg"
+            style={[
+              styles.vendorModalCard,
+              {
+                backgroundColor: isDark ? '#131C2E' : '#FFFFFF',
+                borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#CBD5E1',
+              },
+            ]}
+          >
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Stack spacing="md">
+                <Row justify="space-between" align="center">
+                  <Text variant="h2" color={theme.text}>
+                    Personalizar Perfil
+                  </Text>
+                  <TouchableOpacity onPress={() => setShowEditProfileModal(false)}>
+                    <XCircle size={22} color={theme.subtext} />
+                  </TouchableOpacity>
+                </Row>
+
+                {/* Avatar Preview y Botones de Foto */}
+                <Stack align="center" spacing="sm">
+                  <Avatar
+                    name={editNombre || user?.nombre || 'Surfista'}
+                    uri={getFullAvatarUrl(editAvatarUrl)}
+                    size="xl"
+                  />
+                  <Row spacing="sm" style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <Button
+                      title="📸 Sacarse Foto (Cámara)"
+                      variant="primary"
+                      size="sm"
+                      onPress={handleTakePhoto}
+                    />
+                    <Button
+                      title="🖼️ De la Galería"
+                      variant="secondary"
+                      size="sm"
+                      onPress={handlePickFromGallery}
+                    />
+                    {Boolean(editAvatarUrl) && (
+                      <Button
+                        title="Quitar"
+                        variant="ghost"
+                        size="sm"
+                        onPress={() => setEditAvatarUrl(null)}
+                      />
+                    )}
+                  </Row>
+                  <Text variant="caption" color={theme.subtext} align="center">
+                    Podés tomarte una foto selfie con la cámara o elegir una imagen de tu dispositivo.
+                  </Text>
+                </Stack>
+
+                {/* Input Nombre */}
+                <Stack spacing="xs">
+                  <Text variant="label" color={theme.text}>
+                    Nombre y Apellido
+                  </Text>
+                  <Input
+                    value={editNombre}
+                    onChangeText={setEditNombre}
+                    placeholder="Ej. Gonzalo Surfista"
+                  />
+                </Stack>
+
+                {/* Input Teléfono */}
+                <Stack spacing="xs">
+                  <Text variant="label" color={theme.text}>
+                    Teléfono de Contacto (Opcional)
+                  </Text>
+                  <Input
+                    value={editTelefono}
+                    onChangeText={setEditTelefono}
+                    placeholder="Ej. +54 223 555-0101"
+                    keyboardType="phone-pad"
+                  />
+                </Stack>
+
+                {editProfileError && (
+                  <View
+                    style={[
+                      styles.statusNotice,
+                      {
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderColor: colors.semantic.danger,
+                      },
+                    ]}
+                  >
+                    <Text
+                      variant="caption"
+                      color={colors.semantic.danger}
+                      style={{ fontWeight: '600' }}
+                    >
+                      {editProfileError}
+                    </Text>
+                  </View>
+                )}
+
+                {editProfileSuccess && (
+                  <View
+                    style={[
+                      styles.statusNotice,
+                      {
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderColor: colors.semantic.success,
+                      },
+                    ]}
+                  >
+                    <Text
+                      variant="caption"
+                      color={colors.semantic.success}
+                      style={{ fontWeight: '600' }}
+                    >
+                      {editProfileSuccess}
+                    </Text>
+                  </View>
+                )}
+
+                <Row spacing="sm" justify="flex-end" style={{ marginTop: spacing.xs }}>
+                  <Button
+                    title="Cancelar"
+                    variant="ghost"
+                    size="md"
+                    onPress={() => setShowEditProfileModal(false)}
+                  />
+                  <Button
+                    title={isUpdatingProfile ? 'Guardando...' : 'Guardar Cambios'}
+                    variant="primary"
+                    size="md"
+                    disabled={isUpdatingProfile}
+                    onPress={handleSaveProfile}
+                  />
+                </Row>
+              </Stack>
+            </ScrollView>
+          </Card>
+        </View>
+      </Modal>
     </Screen>
   );
 };
@@ -1316,5 +1565,23 @@ const styles = StyleSheet.create({
     maxHeight: '92%',
     borderRadius: radii.xl,
     borderWidth: 1.5,
+  },
+  avatarCameraBadge: {
+    position: 'absolute',
+    bottom: -2,
+    right: -2,
+    backgroundColor: '#0284C7',
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
   },
 });

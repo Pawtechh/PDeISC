@@ -136,6 +136,18 @@ export const authApi = apiSlice.injectEndpoints({
       }),
     }),
 
+    updateProfile: builder.mutation<
+      { status: string; data: User },
+      { nombre?: string; telefono?: string; avatarUrl?: string }
+    >({
+      query: (body) => ({
+        url: '/users/me',
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['User'],
+    }),
+
     logoutApi: builder.mutation<{ data: { success: boolean } }, { refreshToken: string }>({
       query: (body) => ({
         url: '/auth/logout',
@@ -156,4 +168,5 @@ export const {
   useSwitchUserRoleMutation,
   useForgotPasswordMutation,
   useLogoutApiMutation,
+  useUpdateProfileMutation,
 } = authApi;

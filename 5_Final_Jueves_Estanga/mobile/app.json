@@ -35,7 +35,10 @@
         "USE_BIOMETRIC",
         "USE_FINGERPRINT",
         "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION"
+        "ACCESS_FINE_LOCATION",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES"
       ]
     },
     "web": {
@@ -50,6 +53,7 @@
       "eas": {
         "projectId": "bee0b9e7-2cc7-45d1-9f68-78e4db18c125"
       }
-    }
+    },
+    "owner": "surky"
   }
 }

@@ -32,6 +32,7 @@ export interface User {
   puntos: number;
   dni?: string;
   dniFotoUrl?: string;
+  avatarUrl?: string;
   telefono?: string;
   vendorStatus?: VendorStatus;
   canSwitchRole?: boolean;

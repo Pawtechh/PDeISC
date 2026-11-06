@@ -70,6 +70,7 @@ model User {
   telefono        String?
   dni             String?        @unique
   dniFotoUrl      String?        @db.MediumText
+  avatarUrl       String?        @db.MediumText
   authProvider    AuthProvider   @default(LOCAL)
   oauthId         String?
   puntos          Int            @default(0)

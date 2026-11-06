@@ -45,7 +45,8 @@ export function saveBase64Image(
   }
 
   try {
-    const uploadDir = path.resolve(__dirname, '../../public/uploads/dni');
+    const subfolder = prefix === 'avatar' ? 'avatars' : 'dni';
+    const uploadDir = path.resolve(__dirname, `../../public/uploads/${subfolder}`);
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -57,7 +58,7 @@ export function saveBase64Image(
     const buffer = Buffer.from(base64Data, 'base64');
     fs.writeFileSync(filePath, buffer);
 
-    return `/uploads/dni/${fileName}`;
+    return `/uploads/${subfolder}/${fileName}`;
   } catch (error) {
     console.error('[fileStorage] Error al guardar imagen base64:', error);
     // Si falla la escritura en disco, retornar el string original como fallback seguro

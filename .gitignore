@@ -80,3 +80,6 @@ Thumbs.db
 **/public/uploads/dni/*
 !**/public/uploads/dni/.gitkeep
 
+**/public/uploads/avatars/*
+!**/public/uploads/avatars/.gitkeep
+
