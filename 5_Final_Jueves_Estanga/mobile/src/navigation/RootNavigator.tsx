@@ -11,6 +11,7 @@ import { ConsumerTabs } from './ConsumerTabs';
 import { OwnerTabs } from './OwnerTabs';
 import { AgencyTabs } from './AgencyTabs';
 import { useTheme } from '../theme/ThemeContext';
+import { MandatoryKycModal } from '../components/auth/MandatoryKycModal';
 
 const isValidJwt = (token: string | null | undefined) => {
   if (!token || typeof token !== 'string' || token.startsWith('dev-')) return false;
@@ -158,7 +159,12 @@ export function RootNavigator() {
     );
   }
 
-  return <NavigationContainer>{renderContent()}</NavigationContainer>;
+  return (
+    <NavigationContainer>
+      {renderContent()}
+      <MandatoryKycModal />
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({

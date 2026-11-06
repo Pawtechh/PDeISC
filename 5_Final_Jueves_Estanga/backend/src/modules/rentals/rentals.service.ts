@@ -79,6 +79,19 @@ export class RentalsService {
    * Crea la reserva del alquiler con trazabilidad legal y contrato hash
    */
   async createRental(consumerId: string, input: CreateRentalInput) {
+    const renter = await prisma.user.findUnique({
+      where: { id: consumerId },
+      select: { id: true, dni: true, dniFotoUrl: true },
+    });
+
+    if (!renter || !renter.dni || renter.dni.startsWith('OAUTH-') || !renter.dniFotoUrl) {
+      throw new AppError(
+        'KYC_REQUIRED',
+        'Verificación de identidad obligatoria: Debes ingresar tu DNI y adjuntar la foto de tu documento para poder alquilar tablas en Mar del Plata.',
+        403
+      );
+    }
+
     const board = await prisma.board.findUnique({
       where: { id: input.boardId },
     });

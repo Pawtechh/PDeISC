@@ -96,12 +96,40 @@ router.get('/me', async (req, res, next) => {
 
 router.patch('/me', async (req, res, next) => {
   try {
-    const { nombre, telefono, dniFotoUrl } = req.body;
+    const { nombre, telefono, dni, dniFotoUrl } = req.body;
+    let cleanDni: string | undefined = undefined;
+
+    if (dni !== undefined && dni !== null && String(dni).trim() !== '') {
+      cleanDni = String(dni).trim();
+      if (!/^\d{7,8}$/.test(cleanDni)) {
+        res.status(400).json({
+          code: 'INVALID_DNI',
+          message: 'El DNI debe contener 7 u 8 dígitos numéricos sin puntos ni letras',
+        });
+        return;
+      }
+
+      const existing = await prisma.user.findFirst({
+        where: {
+          dni: cleanDni,
+          id: { not: req.user!.id },
+        },
+      });
+
+      if (existing) {
+        res.status(409).json({
+          code: 'DNI_ALREADY_EXISTS',
+          message: 'Este DNI ya se encuentra registrado por otro usuario',
+        });
+        return;
+      }
+    }
     const updated = await prisma.user.update({
       where: { id: req.user!.id },
       data: {
         nombre: nombre || undefined,
         telefono: telefono || undefined,
+        dni: cleanDni || undefined,
         dniFotoUrl: dniFotoUrl || undefined,
       },
       select: {
@@ -128,6 +156,76 @@ router.patch('/me', async (req, res, next) => {
 /**
  * Obtiene el estado del permiso de publicación (Perfil de Vendedor) del usuario actual
  */
+/**
+ * Endpoint estricto de verificación de identidad (DNI + Foto de documento)
+ */
+router.post('/verify-identity', async (req, res, next) => {
+  try {
+    const { dni, dniFotoUrl } = req.body;
+
+    if (!dni || !/^\d{7,8}$/.test(String(dni).trim())) {
+      res.status(400).json({
+        code: 'INVALID_DNI',
+        message: 'Debes ingresar un número de DNI válido de 7 u 8 dígitos',
+      });
+      return;
+    }
+
+    if (!dniFotoUrl || typeof dniFotoUrl !== 'string' || dniFotoUrl.trim().length < 10) {
+      res.status(400).json({
+        code: 'MISSING_DNI_PHOTO',
+        message: 'Debes adjuntar una foto legible de tu DNI (frente o documento completo)',
+      });
+      return;
+    }
+
+    const cleanDni = String(dni).trim();
+    const existing = await prisma.user.findFirst({
+      where: {
+        dni: cleanDni,
+        id: { not: req.user!.id },
+      },
+    });
+
+    if (existing) {
+      res.status(409).json({
+        code: 'DNI_ALREADY_EXISTS',
+        message: 'Este DNI ya se encuentra registrado por otro usuario',
+      });
+      return;
+    }
+
+    const updated = await prisma.user.update({
+      where: { id: req.user!.id },
+      data: {
+        dni: cleanDni,
+        dniFotoUrl: String(dniFotoUrl).trim(),
+      },
+      select: {
+        id: true,
+        email: true,
+        nombre: true,
+        telefono: true,
+        dni: true,
+        dniFotoUrl: true,
+        role: true,
+        puntos: true,
+        puntosSancion: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Identidad y DNI verificados con éxito',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/vendor-status', async (req, res, next) => {
   try {
     const user = await prisma.user.findUnique({
