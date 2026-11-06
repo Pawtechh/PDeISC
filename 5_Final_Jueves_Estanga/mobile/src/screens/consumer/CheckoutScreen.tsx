@@ -9,6 +9,7 @@ import {
   Modal,
 } from 'react-native';
 import { Image } from 'expo-image';
+import * as Haptics from 'expo-haptics';
 import { safeHaptic } from '../../utils/haptics';
 import { Screen, Stack, Row, Text, Card, Badge, Button, Divider } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';

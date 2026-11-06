@@ -45,7 +45,8 @@ export function saveBase64Image(
   }
 
   try {
-    const subfolder = prefix === 'avatar' ? 'avatars' : 'dni';
+    const subfolder =
+      prefix === 'avatar' ? 'avatars' : prefix === 'board' || prefix === 'boards' ? 'boards' : 'dni';
     const uploadDir = path.resolve(__dirname, `../../public/uploads/${subfolder}`);
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });

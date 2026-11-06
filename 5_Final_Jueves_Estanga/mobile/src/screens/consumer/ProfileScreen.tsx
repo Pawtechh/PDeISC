@@ -181,17 +181,47 @@ export const ProfileScreen: React.FC = () => {
 
   const handleUploadFromDevice = async () => {
     setVendorFormError(null);
-    setIsPickingPhotos(true);
     try {
       const picked = await pickImagesFromDevice({ multiple: true });
-      if (picked.length > 0) {
-        setFotosTablas((prev) => [...prev, ...picked]);
+      if (picked && picked.length > 0) {
+        setFotosTablas((prev) => {
+          const next = [...prev];
+          for (const item of picked) {
+            if (!next.includes(item)) next.push(item);
+          }
+          return next;
+        });
       }
     } catch {
       setVendorFormError('No se pudo cargar la imagen desde el dispositivo.');
-    } finally {
-      setIsPickingPhotos(false);
     }
+  };
+
+  const handleTakePhotoOfBoard = async () => {
+    setVendorFormError(null);
+    try {
+      const photo = await takePhotoWithCamera({ quality: 0.85, allowsEditing: false });
+      if (photo) {
+        setFotosTablas((prev) => [...prev, photo]);
+      }
+    } catch {
+      setVendorFormError('No se pudo acceder a la cámara. Verifica los permisos.');
+    }
+  };
+
+  const handleLoadDemoPhotos = () => {
+    setVendorFormError(null);
+    const demoPhotos = [
+      'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80',
+    ];
+    setFotosTablas((prev) => {
+      const next = [...prev];
+      for (const p of demoPhotos) {
+        if (!next.includes(p)) next.push(p);
+      }
+      return next;
+    });
   };
 
   const handleAddCustomPhoto = () => {
@@ -990,20 +1020,35 @@ export const ProfileScreen: React.FC = () => {
                       catálogo:
                     </Text>
 
-                    <Button
-                      title={
-                        isPickingPhotos
-                          ? 'Cargando fotos...'
-                          : 'Subir Fotos desde mi Dispositivo / Galería'
-                      }
-                      variant="primary"
-                      size="sm"
-                      isLoading={isPickingPhotos}
-                      iconLeft={
-                        <Upload size={15} color={isDark ? '#0B0F17' : '#FFFFFF'} />
-                      }
-                      onPress={handleUploadFromDevice}
-                    />
+                    <Row spacing="xs" style={{ flexWrap: 'wrap' }}>
+                      <Button
+                        title="📷 Tomar Foto (Cámara)"
+                        variant="primary"
+                        size="sm"
+                        iconLeft={
+                          <Camera size={14} color={isDark ? '#0B0F17' : '#FFFFFF'} />
+                        }
+                        onPress={handleTakePhotoOfBoard}
+                      />
+                      <Button
+                        title="🖼️ De Galería / Archivos"
+                        variant="secondary"
+                        size="sm"
+                        iconLeft={
+                          <Upload size={14} color={isDark ? '#F1F5F9' : colors.sand[900]} />
+                        }
+                        onPress={handleUploadFromDevice}
+                      />
+                      <Button
+                        title="🌊 Fotos Demo"
+                        variant="ghost"
+                        size="sm"
+                        iconLeft={
+                          <Sparkles size={14} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                        }
+                        onPress={handleLoadDemoPhotos}
+                      />
+                    </Row>
 
                     {/* Opción alternativa por URL */}
                     <Row spacing="xs" align="flex-end">

@@ -336,6 +336,11 @@ router.post('/vendor-application', async (req, res, next) => {
       );
     }
 
+    const fotosGuardadas = fotosArray.map((foto, idx) => {
+      const saved = saveBase64Image(foto, 'board', `${user.id}-${idx}`);
+      return saved || foto;
+    });
+
     const application = vendorRegistry.submitApplication({
       userId: user.id,
       userEmail: user.email,
@@ -344,7 +349,7 @@ router.post('/vendor-application', async (req, res, next) => {
       userTelefono: user.telefono,
       nombreVendedor,
       descripcion,
-      fotosTablas: fotosArray,
+      fotosTablas: fotosGuardadas,
       experienciaRubro,
     });
 

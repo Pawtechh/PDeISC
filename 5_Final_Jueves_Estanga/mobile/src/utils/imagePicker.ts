@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 /**
- * Abre el selector nativo de fotos / galería del dispositivo (Android, iOS o Web)
+ * Abre el selector nativo de fotos / galería del dispositivo (Android APK, iOS o Web)
  * y devuelve las imágenes seleccionadas en formato Data URI (JPEG base64) o URL.
  */
 export const pickImagesFromDevice = async (options?: {
@@ -10,17 +10,19 @@ export const pickImagesFromDevice = async (options?: {
   maxDimension?: number;
   quality?: number;
 }): Promise<string[]> => {
-  const { multiple = true, maxDimension = 1000, quality = 0.82 } = options || {};
+  const { multiple = true, maxDimension = 1200, quality = 0.85 } = options || {};
 
+  // Dispositivos móviles nativos (Android APK / iOS)
   if (Platform.OS !== 'web') {
     try {
-      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!perm.granted) {
-        return [];
+      try {
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      } catch {
+        // Ignorar si el sistema usa Photo Picker nativo sin permisos
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: multiple,
         quality,
         base64: true,
@@ -30,16 +32,21 @@ export const pickImagesFromDevice = async (options?: {
         return [];
       }
 
-      return result.assets.map((asset) =>
-        asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri
-      );
+      return result.assets
+        .map((asset) => {
+          if (asset.base64) {
+            return `data:image/jpeg;base64,${asset.base64}`;
+          }
+          return asset.uri;
+        })
+        .filter((uri): uri is string => Boolean(uri));
     } catch (error) {
-      console.error('[imagePicker] Error en launchImageLibraryAsync:', error);
+      console.warn('[imagePicker] Error en launchImageLibraryAsync nativo:', error);
       return [];
     }
   }
 
-  // Fallback para Web con elemento <input type="file"> y compresión Canvas
+  // Plataforma Web: crear input file accesible y ejecutar click directo
   return new Promise((resolve) => {
     if (typeof document === 'undefined') {
       resolve([]);
@@ -49,21 +56,30 @@ export const pickImagesFromDevice = async (options?: {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/jpeg,image/png,image/webp,image/*';
-    input.multiple = multiple;
-    input.style.display = 'none';
+    if (multiple) {
+      input.multiple = true;
+    }
+    input.style.position = 'fixed';
+    input.style.top = '-10000px';
+    input.style.left = '-10000px';
+    input.style.opacity = '0';
     document.body.appendChild(input);
 
-    const cleanup = () => {
-      if (input.parentNode) {
-        input.parentNode.removeChild(input);
+    let finished = false;
+    const finish = (results: string[]) => {
+      if (!finished) {
+        finished = true;
+        if (input.parentNode) {
+          input.parentNode.removeChild(input);
+        }
+        resolve(results);
       }
     };
 
     input.onchange = async () => {
       const files = input.files ? Array.from(input.files) : [];
-      cleanup();
       if (files.length === 0) {
-        resolve([]);
+        finish([]);
         return;
       }
 
@@ -78,39 +94,39 @@ export const pickImagesFromDevice = async (options?: {
           // Ignorar archivo corrupto
         }
       }
-      resolve(results);
+      finish(results);
     };
 
-    input.oncancel = () => {
-      cleanup();
-      resolve([]);
-    };
-
-    input.click();
+    // Disparar click en el input inmediatamente
+    try {
+      input.click();
+    } catch (e) {
+      finish([]);
+    }
   });
 };
 
 /**
- * Abre directamente la CÁMARA del dispositivo para tomarse una selfie o fotografía
+ * Abre directamente la CÁMARA del dispositivo para tomar una fotografía
  * (compatible con Android APK, iOS y Web)
  */
 export const takePhotoWithCamera = async (options?: {
   quality?: number;
   allowsEditing?: boolean;
 }): Promise<string | null> => {
-  const { quality = 0.85, allowsEditing = true } = options || {};
+  const { quality = 0.85, allowsEditing = false } = options || {};
 
   if (Platform.OS !== 'web') {
     try {
-      const perm = await ImagePicker.requestCameraPermissionsAsync();
-      if (!perm.granted) {
-        return null;
+      try {
+        await ImagePicker.requestCameraPermissionsAsync();
+      } catch {
+        // Ignorar
       }
 
       const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ['images'],
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing,
-        aspect: [1, 1],
         quality,
         base64: true,
       });
@@ -122,12 +138,12 @@ export const takePhotoWithCamera = async (options?: {
       const asset = result.assets[0];
       return asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
     } catch (error) {
-      console.error('[imagePicker] Error en launchCameraAsync:', error);
+      console.warn('[imagePicker] Error en launchCameraAsync:', error);
       return null;
     }
   }
 
-  // Web fallback con cámara frontal/trasera nativa del navegador
+  // Web fallback con cámara nativa del navegador
   return new Promise((resolve) => {
     if (typeof document === 'undefined') {
       resolve(null);
@@ -137,38 +153,44 @@ export const takePhotoWithCamera = async (options?: {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    input.setAttribute('capture', 'user');
-    input.style.display = 'none';
+    input.setAttribute('capture', 'environment');
+    input.style.position = 'fixed';
+    input.style.top = '-10000px';
+    input.style.left = '-10000px';
+    input.style.opacity = '0';
     document.body.appendChild(input);
 
-    const cleanup = () => {
-      if (input.parentNode) {
-        input.parentNode.removeChild(input);
+    let finished = false;
+    const finish = (result: string | null) => {
+      if (!finished) {
+        finished = true;
+        if (input.parentNode) {
+          input.parentNode.removeChild(input);
+        }
+        resolve(result);
       }
     };
 
     input.onchange = async () => {
       const files = input.files ? Array.from(input.files) : [];
-      cleanup();
       if (files.length === 0) {
-        resolve(null);
+        finish(null);
         return;
       }
 
       try {
-        const dataUrl = await compressImageFile(files[0], 800, quality);
-        resolve(dataUrl);
+        const dataUrl = await compressImageFile(files[0], 1200, quality);
+        finish(dataUrl);
       } catch {
-        resolve(null);
+        finish(null);
       }
     };
 
-    input.oncancel = () => {
-      cleanup();
-      resolve(null);
-    };
-
-    input.click();
+    try {
+      input.click();
+    } catch {
+      finish(null);
+    }
   });
 };
 
@@ -183,13 +205,14 @@ export const pickSingleImage = async (options?: {
 
   if (Platform.OS !== 'web') {
     try {
-      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!perm.granted) {
-        return null;
+      try {
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      } catch {
+        // Ignorar
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing,
         aspect: [1, 1],
         quality,
@@ -203,7 +226,7 @@ export const pickSingleImage = async (options?: {
       const asset = result.assets[0];
       return asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
     } catch (error) {
-      console.error('[imagePicker] Error en launchImageLibraryAsync:', error);
+      console.warn('[imagePicker] Error en launchImageLibraryAsync:', error);
       return null;
     }
   }

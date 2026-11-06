@@ -48,7 +48,14 @@
     },
     "plugins": [
       "expo-secure-store",
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Surf Rental MDP requiere acceso a tus fotos para que puedas seleccionar imágenes de tus tablas de surf.",
+          "cameraPermission": "Surf Rental MDP requiere acceso a tu cámara para que puedas tomar fotos de tus tablas y perfil."
+        }
+      ]
     ],
     "extra": {
       "eas": {

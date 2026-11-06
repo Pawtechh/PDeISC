@@ -6,7 +6,7 @@ import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useCreateBoardMutation } from '../../api/boardsApi';
 import { useGetVendorStatusQuery } from '../../api/authApi';
-import { pickImagesFromDevice } from '../../utils/imagePicker';
+import { pickImagesFromDevice, takePhotoWithCamera } from '../../utils/imagePicker';
 
 export interface CreateBoardScreenProps {
   onClose?: () => void;
@@ -62,19 +62,51 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
   };
 
   const handleUploadFromDevice = async () => {
-    setIsPickingPhotos(true);
     setErrorMsg('');
     try {
       const picked = await pickImagesFromDevice({ multiple: true });
-      if (picked.length > 0) {
-        setFotosSeleccionadas((prev) => [...prev, ...picked]);
+      if (picked && picked.length > 0) {
+        setFotosSeleccionadas((prev) => {
+          const next = [...prev];
+          for (const item of picked) {
+            if (!next.includes(item)) next.push(item);
+          }
+          return next;
+        });
         clearFieldError('fotos');
       }
     } catch {
       setErrorMsg('No se pudo cargar la fotografía desde el dispositivo.');
-    } finally {
-      setIsPickingPhotos(false);
     }
+  };
+
+  const handleTakePhoto = async () => {
+    setErrorMsg('');
+    try {
+      const photo = await takePhotoWithCamera({ quality: 0.85, allowsEditing: false });
+      if (photo) {
+        setFotosSeleccionadas((prev) => [...prev, photo]);
+        clearFieldError('fotos');
+      }
+    } catch {
+      setErrorMsg('No se pudo acceder a la cámara. Verifica los permisos.');
+    }
+  };
+
+  const handleLoadDemoPhotos = () => {
+    setErrorMsg('');
+    const demoPhotos = [
+      'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80',
+    ];
+    setFotosSeleccionadas((prev) => {
+      const next = [...prev];
+      for (const p of demoPhotos) {
+        if (!next.includes(p)) next.push(p);
+      }
+      return next;
+    });
+    clearFieldError('fotos');
   };
 
   const handleAddManualUrl = () => {
@@ -415,18 +447,28 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                   />
                 </Row>
 
-                <Button
-                  title={
-                    isPickingPhotos
-                      ? 'Cargando fotografía...'
-                      : 'Subir Foto de la Tabla desde Dispositivo / Galería'
-                  }
-                  variant="primary"
-                  size="sm"
-                  isLoading={isPickingPhotos}
-                  iconLeft={<Upload size={15} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
-                  onPress={handleUploadFromDevice}
-                />
+                <Row spacing="xs" style={{ flexWrap: 'wrap' }}>
+                  <Button
+                    title="📷 Tomar Foto (Cámara)"
+                    variant="primary"
+                    size="sm"
+                    iconLeft={<Camera size={14} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
+                    onPress={handleTakePhoto}
+                  />
+                  <Button
+                    title="🖼️ Galería / Archivos"
+                    variant="secondary"
+                    size="sm"
+                    iconLeft={<Upload size={14} color={isDark ? '#F1F5F9' : colors.sand[900]} />}
+                    onPress={handleUploadFromDevice}
+                  />
+                  <Button
+                    title="🌊 Fotos Demo"
+                    variant="ghost"
+                    size="sm"
+                    onPress={handleLoadDemoPhotos}
+                  />
+                </Row>
 
                 {vendorPhotos.length > 0 && (
                   <View>
