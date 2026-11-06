@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
-import { Waves } from 'lucide-react-native';
-import { Screen, Stack, Row, Text, Card, Input, Button } from '../../components/ui';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Waves, Upload, Camera, Trash2, CheckCircle2 } from 'lucide-react-native';
+import { Screen, Stack, Row, Text, Card, Input, Button, Badge } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useCreateBoardMutation } from '../../api/boardsApi';
+import { useGetVendorStatusQuery } from '../../api/authApi';
+import { pickImagesFromDevice } from '../../utils/imagePicker';
 
 export interface CreateBoardScreenProps {
   onClose?: () => void;
@@ -20,9 +22,12 @@ const BOARD_TYPES = [
   'SUP',
 ] as const;
 
-export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, onSuccess }) => {
+export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose }) => {
   const { theme, isDark } = useTheme();
   const [createBoard, { isLoading }] = useCreateBoardMutation();
+  const { data: vendorStatusData } = useGetVendorStatusQuery();
+
+  const vendorPhotos = vendorStatusData?.data?.application?.fotosTablas || [];
 
   const [titulo, setTitulo] = useState('');
   const [marca, setMarca] = useState('');
@@ -32,10 +37,19 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
   const [tipoTabla, setTipoTabla] = useState<typeof BOARD_TYPES[number]>('Shortboard');
   const [precioHora, setPrecioHora] = useState('');
   const [valorTasadoUsd, setValorTasadoUsd] = useState('');
-  const [fotoUrl, setFotoUrl] = useState('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800');
+  const [fotosSeleccionadas, setFotosSeleccionadas] = useState<string[]>([]);
+  const [fotoUrlManual, setFotoUrlManual] = useState('');
+  const [isPickingPhotos, setIsPickingPhotos] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isSuccessPublished, setIsSuccessPublished] = useState(false);
+
+  // Pre-cargar fotos subidas en el perfil de vendedor si aún no seleccionó ninguna
+  useEffect(() => {
+    if (vendorPhotos.length > 0 && fotosSeleccionadas.length === 0) {
+      setFotosSeleccionadas([vendorPhotos[0]]);
+    }
+  }, [vendorPhotos, fotosSeleccionadas.length]);
 
   const clearFieldError = (field: string) => {
     if (fieldErrors[field]) {
@@ -45,6 +59,42 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
         return next;
       });
     }
+  };
+
+  const handleUploadFromDevice = async () => {
+    setIsPickingPhotos(true);
+    setErrorMsg('');
+    try {
+      const picked = await pickImagesFromDevice({ multiple: true });
+      if (picked.length > 0) {
+        setFotosSeleccionadas((prev) => [...prev, ...picked]);
+        clearFieldError('fotos');
+      }
+    } catch {
+      setErrorMsg('No se pudo cargar la fotografía desde el dispositivo.');
+    } finally {
+      setIsPickingPhotos(false);
+    }
+  };
+
+  const handleAddManualUrl = () => {
+    const trimmed = fotoUrlManual.trim();
+    if (!trimmed) return;
+    if (!fotosSeleccionadas.includes(trimmed)) {
+      setFotosSeleccionadas((prev) => [...prev, trimmed]);
+      clearFieldError('fotos');
+    }
+    setFotoUrlManual('');
+  };
+
+  const handleToggleVendorPhoto = (uri: string) => {
+    setFotosSeleccionadas((prev) => {
+      if (prev.includes(uri)) {
+        return prev.filter((f) => f !== uri);
+      }
+      return [...prev, uri];
+    });
+    clearFieldError('fotos');
   };
 
   const handleSubmit = async () => {
@@ -76,9 +126,21 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
       newErrors.volumenLitros = 'El volumen debe ser un número válido (ej: 34 o 74.5)';
     }
 
+    const finalPhotos = [...fotosSeleccionadas];
+    if (fotoUrlManual.trim() && !finalPhotos.includes(fotoUrlManual.trim())) {
+      finalPhotos.push(fotoUrlManual.trim());
+    }
+
+    if (finalPhotos.length === 0) {
+      newErrors.fotos = 'Subí o seleccioná al menos una fotografía de tu tabla';
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setFieldErrors(newErrors);
-      setErrorMsg('Por favor revisá los campos obligatorios marcados con signo de exclamación ');
+      setErrorMsg(
+        newErrors.fotos ||
+          'Por favor revisá los campos obligatorios marcados antes de publicar.'
+      );
       return;
     }
 
@@ -98,7 +160,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
         tipoTabla,
         precioHora: pHora,
         valorTasadoUsd: vTasado,
-        fotos: [fotoUrl.trim()],
+        fotos: finalPhotos,
       }).unwrap();
 
       setIsSuccessPublished(true);
@@ -123,10 +185,10 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
               <Text variant="h1" color={colors.semantic.success} style={{ textAlign: 'center' }}>
                 ¡Tabla Publicada con Éxito!
               </Text>
-              <Text variant="body" color={colors.sand[700]} style={{ textAlign: 'center' }}>
+              <Text variant="body" color={theme.subtext} style={{ textAlign: 'center' }}>
                 Tu tabla <Text style={{ fontWeight: '700' }}>"{titulo}"</Text> ya está disponible en el catálogo oficial de la Sede Central Mar del Plata.
               </Text>
-              <Text variant="caption" color={colors.sand[500]} style={{ textAlign: 'center' }}>
+              <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center' }}>
                 Comisión transparente de sede central. Ciclo de mantenimiento preventivo inicializado (45 días).
               </Text>
               <Row spacing="md" style={{ width: '100%', marginTop: spacing.md }}>
@@ -165,7 +227,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
     <Screen scrollable>
       <Stack spacing="lg" style={styles.container}>
         <Row justify="space-between" align="center">
-          <View>
+          <View style={{ flex: 1 }}>
             <Text variant="h1" color={theme.text}>
               Publicar Nueva Tabla
             </Text>
@@ -180,7 +242,9 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
 
         <Card padding="lg">
           <Stack spacing="md">
-            <Text variant="h3">Información Principal</Text>
+            <Text variant="h3" color={theme.text}>
+              Información Principal
+            </Text>
 
             <Input
               label="Título de la publicación *"
@@ -285,7 +349,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
               </View>
             </View>
 
-            <Text variant="h3" style={{ marginTop: spacing.sm }}>
+            <Text variant="h3" color={theme.text} style={{ marginTop: spacing.sm }}>
               Precios y Seguro
             </Text>
 
@@ -318,21 +382,138 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
               </View>
             </Row>
 
-            <Text variant="caption" color={colors.sand[500]}>
+            <Text variant="caption" color={theme.subtext}>
               * El valor en USD determina la póliza asignada de cobertura de daños en la sede.
             </Text>
 
-            <Input
-              label="URL Fotografía Principal *"
-              placeholder="https://..."
-              value={fotoUrl}
-              onChangeText={setFotoUrl}
-            />
+            {/* Sección de Fotografías de la Tabla */}
+            <View
+              style={[
+                styles.photoBox,
+                {
+                  borderColor:
+                    fotosSeleccionadas.length > 0
+                      ? colors.semantic.success
+                      : isDark
+                      ? 'rgba(0, 229, 255, 0.35)'
+                      : colors.ocean[300],
+                  backgroundColor: isDark ? '#0D1420' : '#F8FAFC',
+                },
+              ]}
+            >
+              <Stack spacing="sm">
+                <Row justify="space-between" align="center">
+                  <Row spacing="xs" align="center" style={{ flex: 1 }}>
+                    <Camera size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                    <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
+                      Fotografías de la Tabla ({fotosSeleccionadas.length}) *
+                    </Text>
+                  </Row>
+                  <Badge
+                    label={fotosSeleccionadas.length > 0 ? 'CARGADAS' : 'REQUERIDO'}
+                    variant={fotosSeleccionadas.length > 0 ? 'success' : 'warning'}
+                  />
+                </Row>
+
+                <Button
+                  title={
+                    isPickingPhotos
+                      ? 'Cargando fotografía...'
+                      : 'Subir Foto de la Tabla desde Dispositivo / Galería'
+                  }
+                  variant="primary"
+                  size="sm"
+                  isLoading={isPickingPhotos}
+                  iconLeft={<Upload size={15} color={isDark ? '#090C10' : '#FFFFFF'} />}
+                  onPress={handleUploadFromDevice}
+                />
+
+                {vendorPhotos.length > 0 && (
+                  <View>
+                    <Text variant="caption" color={theme.subtext} style={{ marginBottom: 6 }}>
+                      O seleccioná de las fotos que ya subiste en tu Perfil de Vendedor:
+                    </Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      <Row spacing="sm">
+                        {vendorPhotos.map((vPhoto, idx) => {
+                          const isChosen = fotosSeleccionadas.includes(vPhoto);
+                          return (
+                            <TouchableOpacity
+                              key={`vendor-photo-${idx}`}
+                              activeOpacity={0.85}
+                              onPress={() => handleToggleVendorPhoto(vPhoto)}
+                              style={[
+                                styles.vendorPhotoItem,
+                                {
+                                  borderColor: isChosen
+                                    ? colors.semantic.success
+                                    : theme.border,
+                                },
+                              ]}
+                            >
+                              <Image source={{ uri: vPhoto }} style={styles.vendorPhotoImg} />
+                              {isChosen && (
+                                <View style={styles.chosenBadge}>
+                                  <CheckCircle2 size={14} color="#FFFFFF" />
+                                </View>
+                              )}
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </Row>
+                    </ScrollView>
+                  </View>
+                )}
+
+                <Row spacing="xs" align="flex-end">
+                  <View style={{ flex: 1 }}>
+                    <Input
+                      label="O pegar URL de fotografía (opcional)"
+                      placeholder="https://..."
+                      value={fotoUrlManual}
+                      onChangeText={setFotoUrlManual}
+                    />
+                  </View>
+                  <Button
+                    title="Añadir"
+                    size="sm"
+                    variant="secondary"
+                    onPress={handleAddManualUrl}
+                  />
+                </Row>
+
+                {fotosSeleccionadas.length > 0 && (
+                  <View>
+                    <Text variant="caption" color={theme.text} style={{ fontWeight: '700', marginBottom: 6 }}>
+                      Fotos que se publicarán en el catálogo:
+                    </Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      <Row spacing="sm">
+                        {fotosSeleccionadas.map((uri, idx) => (
+                          <View key={`selected-board-photo-${idx}`} style={styles.selectedWrap}>
+                            <Image source={{ uri }} style={styles.vendorPhotoImg} />
+                            <TouchableOpacity
+                              style={styles.removeBtn}
+                              onPress={() =>
+                                setFotosSeleccionadas((prev) =>
+                                  prev.filter((_, i) => i !== idx)
+                                )
+                              }
+                            >
+                              <Trash2 size={12} color="#FFFFFF" />
+                            </TouchableOpacity>
+                          </View>
+                        ))}
+                      </Row>
+                    </ScrollView>
+                  </View>
+                )}
+              </Stack>
+            </View>
 
             {errorMsg ? (
               <Card padding="md" style={styles.errorCard}>
                 <Row spacing="xs" align="center">
-                  <Text style={{ fontSize: 18 }}></Text>
                   <Text variant="body" color={colors.semantic.danger} style={{ fontWeight: '600', flex: 1 }}>
                     {errorMsg}
                   </Text>
@@ -348,7 +529,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose, o
                 isLoading={isLoading}
                 onPress={handleSubmit}
               />
-              <Text variant="caption" color={colors.sand[500]} style={{ textAlign: 'center' }}>
+              <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center' }}>
                 Tu tabla entrará en el ciclo de mantenimiento preventivo automático cada 45 días.
               </Text>
             </Stack>
@@ -396,11 +577,53 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.sand[200],
   },
-  typePillSelected: {
-    backgroundColor: colors.ocean[500],
-    borderColor: colors.ocean[600],
-  },
   bold: {
     fontWeight: '700',
+  },
+  photoBox: {
+    padding: spacing.md,
+    borderRadius: radii.md,
+    borderWidth: 1.5,
+  },
+  vendorPhotoItem: {
+    width: 105,
+    height: 75,
+    borderRadius: radii.md,
+    borderWidth: 2,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  vendorPhotoImg: {
+    width: '100%',
+    height: '100%',
+  },
+  chosenBadge: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    backgroundColor: colors.semantic.success,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectedWrap: {
+    width: 110,
+    height: 78,
+    borderRadius: radii.md,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  removeBtn: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    backgroundColor: 'rgba(239, 68, 68, 0.92)',
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

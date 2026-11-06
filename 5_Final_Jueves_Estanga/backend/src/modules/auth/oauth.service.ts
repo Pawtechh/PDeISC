@@ -382,24 +382,39 @@ export class OAuthService {
   }
 
   /**
-   * Lista las cuentas de Google registradas en MariaDB
+   * Lista las cuentas disponibles en MariaDB para el selector de cuentas Google
    */
   async listGoogleAccounts() {
-    const users = await prisma.user.findMany({
-      where: {
-        authProvider: AuthProvider.GOOGLE,
-        activo: true,
-      },
-      orderBy: { createdAt: 'asc' },
-      select: {
-        id: true,
-        email: true,
-        nombre: true,
-        role: true,
-        dniFotoUrl: true,
-      },
-    });
-    return users;
+    try {
+      if (!prisma || !prisma.user || typeof prisma.user.findMany !== 'function') {
+        return [];
+      }
+
+      const users = await prisma.user.findMany({
+        where: {
+          activo: true,
+        },
+        orderBy: { createdAt: 'asc' },
+        select: {
+          id: true,
+          email: true,
+          nombre: true,
+          role: true,
+          authProvider: true,
+          dniFotoUrl: true,
+        },
+      });
+
+      return [...users].sort((a, b) => {
+        const aIsGoogle =
+          a.authProvider === AuthProvider.GOOGLE || a.email.endsWith('@gmail.com') ? 0 : 1;
+        const bIsGoogle =
+          b.authProvider === AuthProvider.GOOGLE || b.email.endsWith('@gmail.com') ? 0 : 1;
+        return aIsGoogle - bIsGoogle;
+      });
+    } catch {
+      return [];
+    }
   }
 }
 

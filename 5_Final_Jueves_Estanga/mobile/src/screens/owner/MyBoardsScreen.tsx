@@ -133,8 +133,8 @@ export const MyBoardsScreen: React.FC = () => {
     >
       <Stack spacing="lg" style={styles.container}>
         {/* Header */}
-        <Row justify="space-between" align="center">
-          <View>
+        <Row justify="space-between" align="center" spacing="sm">
+          <View style={{ flex: 1, flexShrink: 1, paddingRight: spacing.xs }}>
             <Text variant="h1" color={theme.text}>
               Mis Tablas
             </Text>
@@ -143,7 +143,7 @@ export const MyBoardsScreen: React.FC = () => {
             </Text>
           </View>
           <Button
-            title="+ Publicar Tabla"
+            title="+ Publicar"
             size="sm"
             variant="primary"
             onPress={() => setShowCreateModal(true)}
@@ -288,8 +288,8 @@ export const MyBoardsScreen: React.FC = () => {
                       }}
                     >
                       <Stack spacing="sm">
-                        <Row justify="space-between" align="center">
-                          <View style={{ flex: 1 }}>
+                        <Row justify="space-between" align="flex-start" spacing="xs">
+                          <View style={{ flex: 1, paddingRight: spacing.xs }}>
                             <Text variant="h3" color={theme.text}>
                               {board.titulo}
                             </Text>
@@ -324,8 +324,8 @@ export const MyBoardsScreen: React.FC = () => {
                                 },
                           ]}
                         >
-                          <Row justify="space-between" align="center">
-                            <View>
+                          <Row justify="space-between" align="center" spacing="xs">
+                            <View style={{ flex: 1, paddingRight: spacing.xs }}>
                               <Text
                                 variant="caption"
                                 color={
@@ -457,8 +457,8 @@ export const MyBoardsScreen: React.FC = () => {
                   }}
                 >
                   <Stack spacing="xs">
-                    <Row justify="space-between" align="center">
-                      <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
+                    <Row justify="space-between" align="flex-start" spacing="xs">
+                      <Text variant="body" color={theme.text} style={{ fontWeight: '700', flex: 1, paddingRight: spacing.xs }}>
                         {inspectingBoard?.titulo}
                       </Text>
                       <Badge
@@ -648,18 +648,21 @@ export const MyBoardsScreen: React.FC = () => {
                   </Text>
                 )}
 
-                <Row spacing="md" justify="flex-end" style={{ marginTop: spacing.xs }}>
+                <Row spacing="sm" justify="space-between" align="center" style={{ marginTop: spacing.xs }}>
                   <Button
                     title="Cancelar"
                     variant="ghost"
+                    size="sm"
                     onPress={() => {
                       setInspectingBoard(null);
                       setInspectionError(null);
                     }}
                   />
                   <Button
-                    title={isMaintaining ? 'Certificando...' : 'Certificar Inspección (45 días)'}
+                    title={isMaintaining ? 'Certificando...' : 'Certificar (45 días)'}
                     variant="primary"
+                    size="sm"
+                    style={{ flex: 1 }}
                     isLoading={isMaintaining}
                     onPress={handleConfirmInspection}
                   />

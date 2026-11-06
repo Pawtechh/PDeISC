@@ -1,7 +1,9 @@
+import bcrypt from 'bcrypt';
 import { prisma } from '../../config/prisma';
 import { AppError } from '../../middlewares/errorHandler';
 import { BUSINESS } from '../../constants/business';
 import { systemConfig } from '../../config/systemConfig';
+import { vendorRegistry } from '../../config/vendorRegistry';
 import { AgencyCheckInInput, AgencyCheckOutInput, UpdateCommissionInput } from './agency.schemas';
 
 export class AgencyService {
@@ -34,11 +36,9 @@ export class AgencyService {
       );
     }
 
-    // Validación reglamentaria de horario pactado de retiro:
-    // El check-in solo se habilita con un máximo de 15 minutos antes del horario pactado
     const now = new Date();
     const inicioTime = new Date(rental.fechaInicio).getTime();
-    const ventanaAnticipacionMs = 15 * 60 * 1000; // 15 minutos de gracia
+    const ventanaAnticipacionMs = 15 * 60 * 1000;
 
     if (now.getTime() < inicioTime - ventanaAnticipacionMs) {
       const horaPactada = new Date(rental.fechaInicio).toLocaleTimeString('es-AR', {
@@ -53,7 +53,6 @@ export class AgencyService {
       );
     }
 
-    // 1. Actualizar alquiler a EN_CURSO con fotos y firma de conformidad
     const updatedRental = await prisma.rental.update({
       where: { id: rental.id },
       data: {
@@ -67,7 +66,6 @@ export class AgencyService {
       },
     });
 
-    // 2. Actualizar estado de la tabla a ALQUILADA
     await prisma.board.update({
       where: { id: rental.boardId },
       data: {
@@ -75,7 +73,6 @@ export class AgencyService {
       },
     });
 
-    // 3. Notificaciones in-app
     await prisma.notification.createMany({
       data: [
         {
@@ -136,7 +133,6 @@ export class AgencyService {
     const nuevoEstadoRental = input.tieneDanio ? 'PENDIENTE_REVISION' : 'DEVUELTA';
     const nuevoEstadoBoard = input.tieneDanio ? 'MANTENIMIENTO' : 'DISPONIBLE';
 
-    // 1. Si no fue lavada, registrar cobro automático de la multa de $10.000 ARS
     if (!input.lavada) {
       await prisma.payment.create({
         data: {
@@ -162,13 +158,11 @@ export class AgencyService {
       });
     }
 
-    // 2. Preparar fotos de devolución (incluyendo foto del daño si fue reportado)
     let fotosFinales = input.fotosDevolucion;
     if (input.tieneDanio && input.fotoDanio) {
       fotosFinales = [input.fotoDanio, ...input.fotosDevolucion.filter((f) => f !== input.fotoDanio)];
     }
 
-    // Actualizar registro del alquiler
     const updatedRental = await prisma.rental.update({
       where: { id: rental.id },
       data: {
@@ -184,7 +178,6 @@ export class AgencyService {
       },
     });
 
-    // 3. Actualizar estado de la tabla
     await prisma.board.update({
       where: { id: rental.boardId },
       data: {
@@ -192,7 +185,6 @@ export class AgencyService {
       },
     });
 
-    // 4. Notificaciones
     if (input.tieneDanio) {
       await prisma.notification.createMany({
         data: [
@@ -319,8 +311,7 @@ export class AgencyService {
   }
 
   /**
-   * Actualiza el % que cobra la agencia desde la web con confirmación de contraseña especial,
-   * actualizando en general todos los % en cascada (sistema, memoria, disco y registros de alquileres).
+   * Actualiza el % que cobra la agencia desde la web con confirmación de contraseña especial
    */
   async updateAgencyCommission(input: UpdateCommissionInput, operatorIdentifier?: string) {
     if (!systemConfig.validateSpecialPassword(input.specialPassword)) {
@@ -340,10 +331,8 @@ export class AgencyService {
       );
     }
 
-    // 1. Guardar en configuración del sistema (memoria + JSON persistente)
     systemConfig.setAgencyCommissionPercent(nuevoPorcentaje, operatorIdentifier);
 
-    // 2. Actualizar en general todos los % en alquileres existentes (recálculo financiero)
     let rentalsUpdatedCount = 0;
     try {
       if (prisma && prisma.rental && typeof prisma.rental.findMany === 'function') {
@@ -380,6 +369,243 @@ export class AgencyService {
       comisionOwnerPorcentaje: 100 - nuevoPorcentaje,
       rentalsUpdatedCount,
       mensaje: `Comisión de agencia actualizada al ${nuevoPorcentaje}% exitosamente. Se recalcularon en general todos los % de la plataforma.`,
+    };
+  }
+
+  /**
+   * Obtiene todas las solicitudes y vendedores activos (sincronizando owners en DB)
+   */
+  async getVendorRequests() {
+    try {
+      if (prisma?.user?.findMany) {
+        const activeOwners = await prisma.user.findMany({
+          where: { role: 'OWNER', activo: true },
+          include: {
+            boards: {
+              select: { fotos: true },
+              take: 3,
+            },
+          },
+        });
+
+        for (const owner of activeOwners) {
+          const boardPhotos: string[] = [];
+          for (const b of owner.boards || []) {
+            if (Array.isArray(b.fotos)) {
+              for (const f of b.fotos) {
+                if (typeof f === 'string' && f.trim()) boardPhotos.push(f);
+              }
+            }
+          }
+          vendorRegistry.ensureOwnerApproved({
+            id: owner.id,
+            email: owner.email,
+            nombre: owner.nombre,
+            dni: owner.dni,
+            telefono: owner.telefono,
+            fotos: boardPhotos.slice(0, 4),
+          });
+        }
+      }
+    } catch {
+      // Continuar de forma segura si prisma está mockeado en unit tests
+    }
+
+    return vendorRegistry.getAll();
+  }
+
+  /**
+   * Acepta, rechaza o elimina/degrada a usuario (CONSUMER) a un vendedor desde la Agencia,
+   * exigiendo DOBLE validación obligatoria: Huella Dactilar + Contraseña de Agencia.
+   */
+  async resolveVendorRequest(
+    requestId: string,
+    input: {
+      decision: 'APROBADO' | 'RECHAZADO' | 'DEGRADADO';
+      biometricVerified?: boolean;
+      biometricHash?: string;
+      password?: string;
+      motivoResolucion?: string;
+    },
+    operatorId: string,
+    operatorEmail: string
+  ) {
+    if (
+      input.decision !== 'APROBADO' &&
+      input.decision !== 'RECHAZADO' &&
+      input.decision !== 'DEGRADADO'
+    ) {
+      throw new AppError(
+        'INVALID_DECISION',
+        'La decisión debe ser APROBADO, RECHAZADO o DEGRADADO.',
+        400
+      );
+    }
+
+    // 1. Validación obligatoria de Huella Dactilar
+    if (
+      !input.biometricVerified ||
+      !input.biometricHash ||
+      typeof input.biometricHash !== 'string' ||
+      input.biometricHash.trim().length < 8
+    ) {
+      throw new AppError(
+        'BIOMETRIC_REQUIRED',
+        'Es obligatorio escanear la huella dactilar antes de aceptar, rechazar o degradar al vendedor.',
+        400
+      );
+    }
+
+    // 2. Validación obligatoria de Contraseña de Agencia
+    if (!input.password || typeof input.password !== 'string' || !input.password.trim()) {
+      throw new AppError(
+        'AGENCY_PASSWORD_REQUIRED',
+        'Es obligatorio ingresar la contraseña de la agencia además de la huella dactilar.',
+        400
+      );
+    }
+
+    let passwordValid = systemConfig.validateSpecialPassword(input.password);
+    if (!passwordValid) {
+      try {
+        const operatorUser = await prisma.user.findUnique({
+          where: { id: operatorId },
+        });
+        if (operatorUser?.passwordHash) {
+          passwordValid = await bcrypt.compare(input.password.trim(), operatorUser.passwordHash);
+        }
+      } catch {
+        // Fallback si el usuario es mock
+      }
+    }
+
+    if (!passwordValid) {
+      throw new AppError(
+        'INVALID_AGENCY_PASSWORD',
+        'Contraseña de agencia incorrecta. Verificá la clave de autorización del operador.',
+        403
+      );
+    }
+
+    const existing = vendorRegistry.getById(requestId);
+    if (!existing) {
+      throw new AppError(
+        'VENDOR_REQUEST_NOT_FOUND',
+        'Solicitud o perfil de vendedor no encontrado.',
+        404
+      );
+    }
+
+    // Caso especial: Eliminar perfil de vendedor y degradar a rango Usuario (CONSUMER)
+    if (input.decision === 'DEGRADADO') {
+      const removed = vendorRegistry.removeApplication(requestId);
+      if (!removed) {
+        throw new AppError(
+          'VENDOR_REQUEST_NOT_FOUND',
+          'No se pudo eliminar el perfil de vendedor.',
+          404
+        );
+      }
+
+      try {
+        // Degradar al usuario en base de datos de vuelta a CONSUMER
+        if (prisma?.user?.updateMany) {
+          await prisma.user.updateMany({
+            where: {
+              OR: [{ id: removed.userId }, { email: removed.userEmail }],
+              role: 'OWNER',
+            },
+            data: { role: 'CONSUMER' },
+          });
+        }
+
+        // Pausar sus tablas activas a estado PRIVADA para que no sigan publicadas
+        if (prisma?.board?.updateMany) {
+          await prisma.board.updateMany({
+            where: { ownerId: removed.userId, estado: 'DISPONIBLE' },
+            data: { estado: 'PRIVADA' },
+          });
+        }
+
+        if (prisma?.notification?.create) {
+          await prisma.notification.create({
+            data: {
+              userId: removed.userId,
+              titulo: '⚠️ Perfil de Vendedor Dado de Baja',
+              mensaje: `La Agencia dio de baja tu perfil de vendedor "${removed.nombreVendedor}" y tu cuenta volvió al rango de Usuario (Surfista). Motivo: ${
+                input.motivoResolucion?.trim() || 'Baja administrativa en Sede Central.'
+              }`,
+              tipo: 'SISTEMA',
+            },
+          });
+        }
+      } catch {
+        // Ignorar si es cuenta semilla sin FK
+      }
+
+      return {
+        application: {
+          ...removed,
+          status: 'RECHAZADO' as const,
+        },
+        removed: true,
+        mensaje: `El vendedor "${removed.nombreVendedor}" (${removed.userNombre}) fue eliminado del padrón de vendedores y degradado a rango Usuario (CONSUMER).`,
+      };
+    }
+
+    const updated = vendorRegistry.resolveApplication(requestId, {
+      decision: input.decision,
+      reviewedBy: operatorEmail || 'mostrador@surf.com',
+      biometricHash: input.biometricHash.trim(),
+      motivoResolucion: input.motivoResolucion,
+    });
+
+    if (!updated) {
+      throw new AppError(
+        'VENDOR_REQUEST_NOT_FOUND',
+        'No se pudo actualizar la solicitud de vendedor.',
+        404
+      );
+    }
+
+    // Si se rechaza y el usuario estaba en rol OWNER, degradarlo a CONSUMER
+    try {
+      if (input.decision === 'RECHAZADO' && prisma?.user?.updateMany) {
+        await prisma.user.updateMany({
+          where: {
+            OR: [{ id: updated.userId }, { email: updated.userEmail }],
+            role: 'OWNER',
+          },
+          data: { role: 'CONSUMER' },
+        });
+      }
+
+      if (prisma?.notification?.create) {
+        await prisma.notification.create({
+          data: {
+            userId: updated.userId,
+            titulo:
+              input.decision === 'APROBADO'
+                ? '✅ Permiso de Publicación Aprobado'
+                : '❌ Solicitud de Vendedor Rechazada',
+            mensaje:
+              input.decision === 'APROBADO'
+                ? `La Agencia aprobó tu perfil de vendedor "${updated.nombreVendedor}". Ya podés alternar entre tu Perfil de Usuario y Perfil de Vendedor desde Mi Perfil usando tu huella o contraseña.`
+                : `Tu solicitud para "${updated.nombreVendedor}" fue rechazada. Motivo: ${updated.motivoResolucion || 'No cumple los requisitos técnicos.'}`,
+            tipo: 'SISTEMA',
+          },
+        });
+      }
+    } catch {
+      // No interrumpir si el usuario es semilla o mock
+    }
+
+    return {
+      application: updated,
+      mensaje:
+        input.decision === 'APROBADO'
+          ? `Vendedor "${updated.nombreVendedor}" habilitado exitosamente con firma biométrica y contraseña.`
+          : `Solicitud de "${updated.nombreVendedor}" rechazada con registro de auditoría.`,
     };
   }
 }

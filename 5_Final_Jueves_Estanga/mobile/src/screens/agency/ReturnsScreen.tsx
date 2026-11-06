@@ -219,8 +219,8 @@ export const ReturnsScreen: React.FC = () => {
       <Stack spacing="lg" style={styles.container}>
         {/* Título de la pantalla */}
         <Stack spacing="xs">
-          <Row justify="space-between" align="center">
-            <Text variant="h1" color={theme.text}>
+          <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
+            <Text variant="h1" color={theme.text} style={{ flex: 1, paddingRight: spacing.xs }}>
               Devoluciones en Sede
             </Text>
             <Badge

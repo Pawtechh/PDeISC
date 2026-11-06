@@ -26,6 +26,7 @@ export const apiSlice = createApi({
     'LoyaltyBalance',
     'BoardReviews',
     'PendingReviews',
+    'VendorRequest',
   ],
   endpoints: () => ({}),
 });

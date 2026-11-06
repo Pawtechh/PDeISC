@@ -194,8 +194,8 @@ export const AgencyDashboardScreen: React.FC = () => {
     >
       <Stack spacing="lg" style={styles.container}>
         <Stack spacing="xs">
-          <Row justify="space-between" align="center">
-            <View>
+          <Row justify="space-between" align="flex-start" style={{ flexWrap: 'wrap', gap: 6 }}>
+            <View style={{ flex: 1, paddingRight: spacing.xs }}>
               <Text variant="caption" style={styles.eyebrowText}>
                 CENTRO DE CONTROL OPERATIVO • MAR DEL PLATA
               </Text>
@@ -323,10 +323,14 @@ export const AgencyDashboardScreen: React.FC = () => {
           ]}
         >
           <Stack spacing="xs">
-            <Row justify="space-between" align="center">
-              <Row spacing="xs" align="center">
+            <Row justify="space-between" align="flex-start" style={{ flexWrap: 'wrap', gap: 6 }}>
+              <Row spacing="xs" align="center" style={{ flex: 1, flexShrink: 1, paddingRight: spacing.xs }}>
                 <AlertTriangle size={16} color={isDark ? '#F87171' : colors.semantic.danger} />
-                <Text variant="button" color={isDark ? '#FECACA' : colors.semantic.danger}>
+                <Text
+                  variant="button"
+                  color={isDark ? '#FECACA' : colors.semantic.danger}
+                  style={{ flex: 1 }}
+                >
                   Protocolo de Salitre ($10.000 ARS)
                 </Text>
               </Row>
@@ -418,30 +422,37 @@ export const AgencyDashboardScreen: React.FC = () => {
                 <Card key={item.id} padding="md">
                   <Stack spacing="xs">
                     <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
-                      <View style={{ flex: 1 }}>
-                        <Text variant="button" color={theme.text}>
+                      <Badge label={t.badgeLabel} variant={t.badgeVariant} />
+                      <Text
+                        variant="caption"
+                        color={theme.subtext}
+                        style={{ fontFamily: 'monospace' }}
+                      >
+                        QR: {shortQr}
+                      </Text>
+                    </Row>
+                    <Row justify="space-between" align="center" spacing="sm">
+                      <View style={{ flex: 1, paddingRight: spacing.xs }}>
+                        <Text variant="h3" color={theme.text}>
                           {item.board?.titulo || 'Tabla de surf'}
                         </Text>
                         <Text variant="caption" color={theme.subtext}>
-                          Código QR: {shortQr} • {item.consumer?.nombre || 'Surfista'} • {item.horas} hs ({t.fechaPactada} {t.horaPactada} hs)
+                          {item.consumer?.nombre || 'Surfista'} • {item.horas} hs ({t.fechaPactada} {t.horaPactada} hs)
                         </Text>
                       </View>
-                      <Row spacing="xs" align="center">
-                        <Badge label={t.badgeLabel} variant={t.badgeVariant} />
-                        {item.board && (
-                          <Button
-                            title="Ver QR"
-                            variant="secondary"
-                            size="sm"
-                            onPress={() =>
-                              setSelectedQrBoard({
-                                ...(item.board as any),
-                                id: item.id,
-                              })
-                            }
-                          />
-                        )}
-                      </Row>
+                      {item.board && (
+                        <Button
+                          title="Ver QR"
+                          variant="secondary"
+                          size="sm"
+                          onPress={() =>
+                            setSelectedQrBoard({
+                              ...(item.board as any),
+                              id: item.id,
+                            })
+                          }
+                        />
+                      )}
                     </Row>
                     {t.isEarly && (
                       <Text variant="caption" color={isDark ? '#FBBF24' : '#B45309'} style={{ fontWeight: '600' }}>

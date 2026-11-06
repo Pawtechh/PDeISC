@@ -128,8 +128,8 @@ export const EarningsScreen: React.FC = () => {
     >
       <Stack spacing="lg" style={styles.container}>
         {/* Header */}
-        <Row justify="space-between" align="center">
-          <View>
+        <Row justify="space-between" align="center" spacing="sm">
+          <View style={{ flex: 1, flexShrink: 1, paddingRight: spacing.xs }}>
             <Text variant="h1" color={theme.text}>
               Ganancias
             </Text>
@@ -280,8 +280,12 @@ export const EarningsScreen: React.FC = () => {
               ]}
             >
               <Stack spacing="sm">
-                <Row justify="space-between" align="center">
-                  <Text variant="h3" color={isDark ? '#ECFDF5' : colors.ocean[900]}>
+                <Row justify="space-between" align="flex-start" spacing="xs">
+                  <Text
+                    variant="h3"
+                    color={isDark ? '#ECFDF5' : colors.ocean[900]}
+                    style={{ flex: 1, paddingRight: spacing.xs }}
+                  >
                     Membresía Owner en Sede
                   </Text>
                   <Badge
@@ -362,9 +366,9 @@ export const EarningsScreen: React.FC = () => {
               ) : (
                 filteredPayouts.map((payout: any) => (
                   <Card key={payout.id} padding="md" style={[styles.rentalRowCard, cardSurfaceStyle]}>
-                    <Row justify="space-between" align="center">
-                      <View style={{ flex: 1 }}>
-                        <Row spacing="xs" align="center">
+                    <Row justify="space-between" align="flex-start" spacing="sm">
+                      <View style={{ flex: 1, paddingRight: spacing.xs }}>
+                        <Row spacing="xs" align="center" style={{ flexWrap: 'wrap', gap: 4 }}>
                           <Text variant="button" color={theme.text}>
                             ID: {payout.transferId}
                           </Text>
@@ -373,7 +377,7 @@ export const EarningsScreen: React.FC = () => {
                             variant={payout.estado === 'APROBADO' ? 'success' : 'warning'}
                           />
                         </Row>
-                        <Text variant="caption" color={theme.subtext}>
+                        <Text variant="caption" color={theme.subtext} style={{ marginTop: 2 }}>
                           Destino: {payout.cbuAlias} • {new Date(payout.createdAt).toLocaleDateString('es-AR')}
                         </Text>
                       </View>
@@ -405,8 +409,8 @@ export const EarningsScreen: React.FC = () => {
               ) : (
                 alquileresRecientes.map((alq) => (
                   <Card key={alq.id} padding="md" style={[styles.rentalRowCard, cardSurfaceStyle]}>
-                    <Row justify="space-between" align="center">
-                      <View style={{ flex: 1 }}>
+                    <Row justify="space-between" align="center" spacing="sm">
+                      <View style={{ flex: 1, paddingRight: spacing.xs }}>
                         <Text variant="button" color={theme.text}>
                           {alq.tabla}
                         </Text>

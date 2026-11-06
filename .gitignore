@@ -68,3 +68,8 @@ scratch_*.js
 .idea/
 .DS_Store
 Thumbs.db
+
+# Backups & local copies
+* - copia*
+*- copia*
+

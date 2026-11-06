@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
 
 /**
@@ -39,7 +39,16 @@ export function validateImagePayload(imageStr: string): { valid: boolean; error?
 }
 
 export const validateUploadedFiles = (req: Request, res: Response, next: NextFunction): void => {
-  const checkFields = ['foto', 'fotos', 'fotosRetiro', 'fotosDevolucion', 'fotosDano', 'fotoDanio', 'dniFotoUrl'];
+  const checkFields = [
+    'foto',
+    'fotos',
+    'fotosTablas',
+    'fotosRetiro',
+    'fotosDevolucion',
+    'fotosDano',
+    'fotoDanio',
+    'dniFotoUrl',
+  ];
 
   for (const field of checkFields) {
     const val = req.body?.[field];

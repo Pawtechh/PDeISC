@@ -85,14 +85,38 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
   const fetchDbGoogleAccounts = useCallback(async () => {
     setIsLoadingAccounts(true);
     try {
+      let localSaved: GoogleDbAccount[] = [];
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          const raw = window.localStorage.getItem('surf_saved_google_accounts');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) localSaved = parsed;
+          }
+        }
+      } catch {
+        // Ignorar error de localStorage
+      }
+
       const res = await fetch(`${getBaseUrl()}/auth/oauth/google/accounts`, {
         headers: { Accept: 'application/json' },
       });
       if (res.ok) {
         const json = await res.json();
         if (Array.isArray(json?.data)) {
-          setAccounts(json.data);
+          const mergedMap = new Map<string, GoogleDbAccount>();
+          for (const item of localSaved) {
+            if (item?.email) mergedMap.set(item.email.toLowerCase(), item);
+          }
+          for (const item of json.data) {
+            if (item?.email) mergedMap.set(item.email.toLowerCase(), item);
+          }
+          setAccounts(Array.from(mergedMap.values()));
+          return;
         }
+      }
+      if (localSaved.length > 0) {
+        setAccounts(localSaved);
       }
     } catch {
       // Ignorar error de red inicial
@@ -149,6 +173,28 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
       }
 
       const { user, tokens } = json.data;
+
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          const raw = window.localStorage.getItem('surf_saved_google_accounts');
+          const prev: GoogleDbAccount[] = raw ? JSON.parse(raw) : [];
+          const filtered = Array.isArray(prev)
+            ? prev.filter((a) => a.email?.toLowerCase() !== cleanEmail)
+            : [];
+          filtered.unshift({
+            id: user.id || `google-${cleanEmail}`,
+            email: cleanEmail,
+            nombre: user.nombre || finalName,
+            role: user.role,
+          });
+          window.localStorage.setItem(
+            'surf_saved_google_accounts',
+            JSON.stringify(filtered.slice(0, 10))
+          );
+        }
+      } catch {
+        // Ignorar si localStorage no está disponible
+      }
 
       await tokenStorage.save({
         access: tokens.accessToken,
@@ -337,6 +383,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                         placeholderTextColor="#8E918F"
                         keyboardType="email-address"
                         autoCapitalize="none"
+                        autoComplete="email"
                         style={styles.googleInput}
                         testID="input-google-custom-email"
                       />
@@ -349,6 +396,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                         onChangeText={setCustomName}
                         placeholder="Tu nombre completo"
                         placeholderTextColor="#8E918F"
+                        autoComplete="name"
                         style={styles.googleInput}
                         testID="input-google-custom-name"
                       />

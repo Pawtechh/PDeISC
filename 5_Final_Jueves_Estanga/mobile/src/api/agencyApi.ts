@@ -1,5 +1,6 @@
 import { apiSlice } from './apiSlice';
 import { Rental } from './rentalsApi';
+import { VendorApplicationData } from '../store/slices/authSlice';
 
 export interface AgencyCheckInRequest {
   rentalId: string;
@@ -46,6 +47,15 @@ export interface UpdateCommissionResponse {
   mensaje: string;
 }
 
+export interface ResolveVendorRequestInput {
+  id: string;
+  decision: 'APROBADO' | 'RECHAZADO' | 'DEGRADADO';
+  biometricVerified: boolean;
+  biometricHash: string;
+  password: string;
+  motivoResolucion?: string;
+}
+
 export const agencyApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -82,6 +92,29 @@ export const agencyApi = apiSlice.injectEndpoints({
         'Metrics',
         'AgencyMetrics',
       ],
+    }),
+
+    getVendorRequests: builder.query<{ status: string; data: VendorApplicationData[] }, void>({
+      query: () => '/agency/vendor-requests',
+      providesTags: ['VendorRequest', 'AgencyMetrics'],
+    }),
+
+    resolveVendorRequest: builder.mutation<
+      {
+        status: string;
+        data: {
+          application: VendorApplicationData;
+          mensaje: string;
+        };
+      },
+      ResolveVendorRequestInput
+    >({
+      query: ({ id, ...body }) => ({
+        url: `/agency/vendor-requests/${id}/resolve`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['VendorRequest', 'AgencyMetrics', 'User'],
     }),
 
     checkIn: builder.mutation<
@@ -141,6 +174,8 @@ export const {
   useGetMetricsQuery,
   useGetCommissionQuery,
   useUpdateCommissionMutation,
+  useGetVendorRequestsQuery,
+  useResolveVendorRequestMutation,
   useCheckInMutation,
   useCheckOutMutation,
 } = agencyApi;

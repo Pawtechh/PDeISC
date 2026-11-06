@@ -526,11 +526,11 @@ export const RevisionsScreen: React.FC = () => {
               ]}
             >
               <Stack spacing="sm">
-                <Row justify="space-between" align="center">
+                <Row justify="space-between" align="flex-start" spacing="xs">
                   <Text
                     variant="caption"
                     color={isDark ? colors.ocean[300] : colors.ocean[700]}
-                    style={{ fontWeight: '700' }}
+                    style={{ fontWeight: '700', flex: 1, paddingRight: spacing.xs }}
                   >
                     PROTOCOLO TRIPARTITO DE GARANTÍA Y MEDIACIÓN (SURF RENTAL MDP)
                   </Text>
@@ -612,40 +612,42 @@ export const RevisionsScreen: React.FC = () => {
                   >
                     <Stack spacing="md">
                       {/* Header Reclamo */}
-                      <Row justify="space-between" align="flex-start">
-                        <View style={{ flex: 1, paddingRight: spacing.sm }}>
-                          <Row spacing="xs" align="center" style={{ marginBottom: 4 }}>
-                            <Badge
-                              label={`CASO #${claim.id.slice(0, 8).toUpperCase()}`}
-                              variant="sand"
-                            />
-                            {getClaimStatusBadge(claim.estado, claim.horasRestantesDisputa)}
-                          </Row>
-                          <Text variant="h3" color={theme.text}>
-                            {claim.rental?.board?.titulo || 'Tabla de Surf'}
-                          </Text>
-                          <Text variant="caption" color={theme.subtext}>
-                            Surfista: {claim.rental?.consumer?.nombre || 'Surfista'} •{' '}
-                            {claim.rental?.consumer?.email || 'Sin email'} •{' '}
-                            {claim.rental?.consumer?.telefono || 'Sin tel'}
-                          </Text>
-                        </View>
-                        <View style={{ alignItems: 'flex-end' }}>
-                          <Text variant="caption" color={theme.subtext}>
-                            Monto Reclamado:
-                          </Text>
-                          <Text
-                            variant="h2"
-                            color={isDark ? '#F87171' : colors.semantic.danger}
-                            style={{ fontWeight: '700' }}
-                          >
-                            ${claim.montoReclamado.toLocaleString('es-AR')} ARS
-                          </Text>
-                          <Text variant="caption" color={theme.subtext} style={{ fontSize: 11 }}>
-                            Pre-autorización: $30.000 ARS
-                          </Text>
-                        </View>
-                      </Row>
+                      <Stack spacing="xs">
+                        <Row spacing="xs" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
+                          <Badge
+                            label={`CASO #${claim.id.slice(0, 8).toUpperCase()}`}
+                            variant="sand"
+                          />
+                          {getClaimStatusBadge(claim.estado, claim.horasRestantesDisputa)}
+                        </Row>
+                        <Row justify="space-between" align="flex-start" spacing="sm">
+                          <View style={{ flex: 1, paddingRight: spacing.xs }}>
+                            <Text variant="h3" color={theme.text}>
+                              {claim.rental?.board?.titulo || 'Tabla de Surf'}
+                            </Text>
+                            <Text variant="caption" color={theme.subtext}>
+                              Surfista: {claim.rental?.consumer?.nombre || 'Surfista'} •{' '}
+                              {claim.rental?.consumer?.email || 'Sin email'} •{' '}
+                              {claim.rental?.consumer?.telefono || 'Sin tel'}
+                            </Text>
+                          </View>
+                          <View style={{ alignItems: 'flex-end' }}>
+                            <Text variant="caption" color={theme.subtext}>
+                              Monto Reclamado:
+                            </Text>
+                            <Text
+                              variant="h2"
+                              color={isDark ? '#F87171' : colors.semantic.danger}
+                              style={{ fontWeight: '700' }}
+                            >
+                              ${claim.montoReclamado.toLocaleString('es-AR')} ARS
+                            </Text>
+                            <Text variant="caption" color={theme.subtext} style={{ fontSize: 11 }}>
+                              Pre-autorización: $30.000 ARS
+                            </Text>
+                          </View>
+                        </Row>
+                      </Stack>
 
                       {/* Descripción del Daño */}
                       <View
@@ -677,8 +679,20 @@ export const RevisionsScreen: React.FC = () => {
                           </Text>
                           <Row spacing="xs" style={{ flexWrap: 'wrap', gap: spacing.xs }}>
                             {claim.fotosDano.map((foto, idx) => {
-                              const rawUri = typeof foto === 'string' ? foto : String(foto);
-                              const safeUri = resolveAssetUrl(rawUri);
+                              const rawUri =
+                                typeof foto === 'string'
+                                  ? foto
+                                  : String((foto as any)?.url || (foto as any)?.uri || '');
+                              const resolved = resolveAssetUrl(rawUri);
+                              const isValidUri =
+                                Boolean(resolved) &&
+                                resolved !== '[object Object]' &&
+                                (resolved.startsWith('http') ||
+                                  resolved.startsWith('/') ||
+                                  resolved.startsWith('data:'));
+                              const safeUri = isValidUri
+                                ? resolved
+                                : 'https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800&q=80';
                               return (
                                 <View
                                   key={idx}
@@ -686,6 +700,7 @@ export const RevisionsScreen: React.FC = () => {
                                 >
                                   <Image
                                     source={{ uri: safeUri }}
+                                    placeholder="https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800&q=80"
                                     style={styles.thumbnailImage}
                                     contentFit="cover"
                                   />

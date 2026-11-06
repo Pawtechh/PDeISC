@@ -10,6 +10,8 @@ import {
   getAgencyMetrics,
   getCommission,
   updateCommission,
+  getVendorRequests,
+  resolveVendorRequest,
 } from './agency.controller';
 
 const router = Router();
@@ -28,5 +30,7 @@ router.post('/checkin', validateBody(agencyCheckInSchema), checkIn);
 router.post('/checkout', validateBody(agencyCheckOutSchema), checkOut);
 router.get('/schedule', getDailySchedule);
 router.get('/metrics', getAgencyMetrics);
+router.get('/vendor-requests', getVendorRequests);
+router.post('/vendor-requests/:id/resolve', resolveVendorRequest);
 
 export default router;

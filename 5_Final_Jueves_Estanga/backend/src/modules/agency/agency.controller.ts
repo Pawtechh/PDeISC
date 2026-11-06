@@ -76,3 +76,34 @@ export const updateCommission = async (req: Request, res: Response, next: NextFu
   }
 };
 
+export const getVendorRequests = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const requests = await agencyService.getVendorRequests();
+    res.status(200).json({
+      status: 'success',
+      data: requests,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const resolveVendorRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const operatorId = (req as any).user?.id || 'operator-agency';
+    const operatorEmail = (req as any).user?.email || 'mostrador@surf.com';
+    const requestId = String(req.params.id || '');
+    const result = await agencyService.resolveVendorRequest(
+      requestId,
+      req.body,
+      operatorId,
+      operatorEmail
+    );
+    res.status(200).json({
+      status: 'success',
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -6,64 +6,32 @@ import {
   TouchableOpacity,
   Platform,
   useWindowDimensions,
-  ActivityIndicator,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Waves, LogOut, Compass, Shield, Users } from 'lucide-react-native';
+import { Waves, LogOut, Compass, Shield, ShieldCheck } from 'lucide-react-native';
 import { useTheme } from '../../theme/ThemeContext';
-import { setCredentials } from '../../store/slices/authSlice';
-import { logout, resetAllApis } from '../../store/auth/thunks';
-import { tokenStorage } from '../../utils/storage';
-import { useLoginMutation } from '../../api/authApi';
-
-const QUICK_ROLES = [
-  { role: 'CONSUMER' as const, label: 'Surfista', email: 'consumer@surf.com', nombre: 'Gonzalo Surf' },
-  { role: 'OWNER' as const, label: 'Shaper / Owner', email: 'owner@surf.com', nombre: 'Martín Shaper' },
-  { role: 'AGENCIA' as const, label: 'Agencia Sede', email: 'mostrador@surf.com', nombre: 'Operador Playa Grande' },
-];
+import { logout } from '../../store/auth/thunks';
 
 export const DesktopHeader: React.FC = () => {
   const { width } = useWindowDimensions();
   const { isDark } = useTheme();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth?.user);
-  const [login] = useLoginMutation();
-  const [switchingRole, setSwitchingRole] = useState<string | null>(null);
 
   if (width < 768) {
     return null;
   }
 
-  const activeUserRole = user?.role || user?.rol;
+  const activeUserRole = user?.role || user?.rol || 'CONSUMER';
+  const roleBadgeLabel =
+    activeUserRole === 'AGENCIA'
+      ? 'SEDE AGENCIA (ADMIN)'
+      : activeUserRole === 'OWNER'
+      ? 'PERFIL VENDEDOR'
+      : 'PERFIL USUARIO';
 
   const handleLogout = () => {
     dispatch(logout() as any);
-  };
-
-  const handleQuickRoleSwitch = async (item: typeof QUICK_ROLES[number]) => {
-    if (activeUserRole === item.role || switchingRole) return;
-    setSwitchingRole(item.role);
-    try {
-      const response = await login({ email: item.email, password: 'Password123!' }).unwrap();
-      const { user: newUser, tokens } = response.data;
-      await tokenStorage.save({
-        access: tokens.accessToken,
-        refresh: tokens.refreshToken,
-      });
-      await tokenStorage.saveUser(newUser);
-      resetAllApis(dispatch as any);
-      dispatch(
-        setCredentials({
-          user: newUser,
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
-        }) as any
-      );
-    } catch {
-      // Fallback if offline
-    } finally {
-      setSwitchingRole(null);
-    }
   };
 
   return (
@@ -138,63 +106,27 @@ export const DesktopHeader: React.FC = () => {
           </View>
         )}
 
-        {/* Right: Quick Role Switcher + Active User Capsule */}
+        {/* Right: Active Role Pill + Active User Capsule */}
         {user ? (
           <View style={styles.userSection}>
             <View
               style={[
-                styles.roleSwitcherGroup,
+                styles.roleBadgeGroup,
                 {
-                  backgroundColor: isDark ? 'rgba(18, 24, 36, 0.9)' : '#F1F5F9',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#CBD5E1',
+                  backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE',
+                  borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#7DD3FC',
                 },
               ]}
             >
-              <Users
-                size={12}
-                color={isDark ? '#D4AF37' : '#0284C7'}
-                style={{ marginLeft: 8, marginRight: 2 }}
-              />
-              {QUICK_ROLES.map((item) => {
-                const isActive = activeUserRole === item.role;
-                const isLoadingThis = switchingRole === item.role;
-                return (
-                  <TouchableOpacity
-                    key={item.role}
-                    activeOpacity={0.8}
-                    onPress={() => handleQuickRoleSwitch(item)}
-                    testID={`header-switch-role-${item.role.toLowerCase()}`}
-                    style={[
-                      styles.roleSwitchPill,
-                      isActive && {
-                        backgroundColor: isDark ? 'rgba(0, 229, 255, 0.16)' : '#0284C7',
-                        borderWidth: 1,
-                        borderColor: isDark ? 'rgba(0, 229, 255, 0.45)' : '#0369A1',
-                      },
-                    ]}
-                  >
-                    {isLoadingThis ? (
-                      <ActivityIndicator
-                        size="small"
-                        color={isDark ? '#00E5FF' : '#0284C7'}
-                      />
-                    ) : (
-                      <Text
-                        style={[
-                          styles.roleSwitchText,
-                          { color: isDark ? '#94A3B8' : '#475569' },
-                          isActive && {
-                            color: isDark ? '#00E5FF' : '#FFFFFF',
-                            fontWeight: '800',
-                          },
-                        ]}
-                      >
-                        {item.label}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                );
-              })}
+              <ShieldCheck size={13} color={isDark ? '#00E5FF' : '#0284C7'} />
+              <Text
+                style={[
+                  styles.roleBadgeText,
+                  { color: isDark ? '#00E5FF' : '#0369A1' },
+                ]}
+              >
+                {roleBadgeLabel}
+              </Text>
             </View>
 
             <View style={styles.userCapsule}>
@@ -333,22 +265,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
   },
-  roleSwitcherGroup: {
+  roleBadgeGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    padding: 3,
-    borderRadius: 18,
-    borderWidth: 1,
-  },
-  roleSwitchPill: {
-    paddingHorizontal: 11,
+    gap: 6,
+    paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 14,
+    borderWidth: 1,
   },
-  roleSwitchText: {
-    fontSize: 11,
-    fontWeight: '600',
+  roleBadgeText: {
+    fontSize: 10.5,
+    fontWeight: '800',
+    letterSpacing: 0.6,
   },
   userCapsule: {
     flexDirection: 'row',

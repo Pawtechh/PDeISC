@@ -240,10 +240,12 @@ export const RentalCard: React.FC<RentalCardProps> = ({
             styles.footer,
             {
               borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : colors.sand[200],
+              flexWrap: 'wrap',
+              gap: spacing.xs,
             },
           ]}
         >
-          <View>
+          <View style={{ paddingRight: spacing.xs }}>
             <Text variant="caption" color={theme.subtext}>
               Total pagado
             </Text>
@@ -252,7 +254,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
             </Text>
           </View>
 
-          <Row spacing="xs">
+          <Row spacing="xs" style={{ flexWrap: 'wrap', gap: 6 }}>
             {(rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE') && (
               <>
                 {onPressCancel && (
@@ -266,7 +268,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
                 )}
                 {onPressQR && (
                   <Button
-                    title="Ver QR Retiro"
+                    title="Ver QR"
                     variant="primary"
                     size="sm"
                     iconLeft={<QrCode size={14} color={isDark ? '#090C10' : '#FFFFFF'} />}

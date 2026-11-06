@@ -97,6 +97,7 @@ export const Screen: React.FC<ScreenProps> = ({
 
   const dynamicContentContainerStyle = [
     styles.contentContainer,
+    { paddingHorizontal: isDesktop ? spacing.lg : spacing.md },
     fullWidth ? styles.fullWidthContainer : styles.standardContainer,
     contentContainerStyle,
   ];
@@ -161,8 +162,8 @@ export const Screen: React.FC<ScreenProps> = ({
           <View style={dynamicContentContainerStyle}>{children}</View>
         )}
 
-        {/* Botón Volver Arriba Minimalista */}
-        {scrollable && showScrollToTop && (
+        {/* Botón Volver Arriba Minimalista (solo Desktop para no tapar botones en móvil) */}
+        {scrollable && showScrollToTop && isDesktop && (
           <ScrollToTopWithRing
             visible={isScrolledDown}
             progress={scrollProgress}

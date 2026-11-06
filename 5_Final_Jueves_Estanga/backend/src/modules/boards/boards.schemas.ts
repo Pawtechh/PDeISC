@@ -1,5 +1,17 @@
 import { z } from 'zod';
 
+const photoUriSchema = z
+  .string()
+  .min(5, 'URL o imagen de foto inválida')
+  .refine(
+    (val) =>
+      val.startsWith('http://') ||
+      val.startsWith('https://') ||
+      val.startsWith('/images/') ||
+      val.startsWith('data:image/'),
+    { message: 'Formato o URL de foto inválida' }
+  );
+
 export const createBoardSchema = z.object({
   titulo: z.string().min(3, 'El título debe tener al menos 3 caracteres'),
   marca: z.string().min(2, 'La marca es requerida'),
@@ -11,7 +23,7 @@ export const createBoardSchema = z.object({
   }),
   precioHora: z.number().positive('El precio por hora debe ser mayor a 0'),
   valorTasadoUsd: z.number().positive('El valor tasado en USD debe ser mayor a 0'),
-  fotos: z.array(z.string().url('URL de foto inválida')).min(1, 'Se requiere al menos 1 fotografía'),
+  fotos: z.array(photoUriSchema).min(1, 'Se requiere al menos 1 fotografía'),
   polizaSeguroNumero: z.string().optional(),
   polizaAseguradora: z.string().optional(),
 });

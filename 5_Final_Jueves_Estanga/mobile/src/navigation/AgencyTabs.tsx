@@ -1,10 +1,11 @@
 import React from 'react';
 import { Platform, useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { LayoutDashboard, PackageCheck, RotateCcw, User } from 'lucide-react-native';
+import { LayoutDashboard, PackageCheck, RotateCcw, UserCheck, User } from 'lucide-react-native';
 import { AgencyDashboardScreen } from '../screens/agency/AgencyDashboardScreen';
 import { DeliveriesScreen } from '../screens/agency/DeliveriesScreen';
 import { ReturnsScreen } from '../screens/agency/ReturnsScreen';
+import { VendorApprovalsScreen } from '../screens/agency/VendorApprovalsScreen';
 import { ProfileScreen } from '../screens/consumer/ProfileScreen';
 import { colors } from '../theme';
 import { useTheme } from '../theme/ThemeContext';
@@ -21,8 +22,8 @@ export const AgencyTabs: React.FC = () => {
         position: 'absolute' as const,
         bottom: 24,
         left: '50%' as any,
-        transform: [{ translateX: -260 }],
-        width: 520,
+        transform: [{ translateX: -280 }],
+        width: 560,
         height: 64,
         borderRadius: 32,
         backgroundColor: isDark ? 'rgba(18, 24, 36, 0.88)' : 'rgba(255, 255, 255, 0.94)',
@@ -65,7 +66,7 @@ export const AgencyTabs: React.FC = () => {
         tabBarInactiveTintColor: isDark ? '#94A3B8' : colors.sand[500],
         tabBarStyle,
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: 10.5,
           fontWeight: '600',
         },
       }}
@@ -97,6 +98,16 @@ export const AgencyTabs: React.FC = () => {
           tabBarLabel: 'Devoluciones',
           tabBarIcon: ({ color, focused }) => (
             <RotateCcw size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Vendedores"
+        component={VendorApprovalsScreen}
+        options={{
+          tabBarLabel: 'Vendedores',
+          tabBarIcon: ({ color, focused }) => (
+            <UserCheck size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />

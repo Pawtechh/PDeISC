@@ -92,8 +92,8 @@ export const MyRentalsScreen: React.FC = () => {
     >
       <Stack spacing="lg" style={styles.container}>
         {/* Header */}
-        <Row justify="space-between" align="center">
-          <Stack spacing="xs">
+        <Row justify="space-between" align="center" spacing="sm">
+          <Stack spacing="xs" style={{ flex: 1, flexShrink: 1, paddingRight: spacing.xs }}>
             <Text variant="h1" color={theme.text}>
               Mis Alquileres
             </Text>
@@ -102,7 +102,7 @@ export const MyRentalsScreen: React.FC = () => {
             </Text>
           </Stack>
           <Button
-            title="Ir al Catálogo"
+            title="+ Reservar"
             variant="primary"
             size="sm"
             onPress={() => navigation.navigate('Catálogo')}

@@ -1,6 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type UserRole = 'CONSUMER' | 'OWNER' | 'AGENCIA';
+export type VendorStatus = 'NONE' | 'PENDIENTE' | 'APROBADO' | 'RECHAZADO';
+
+export interface VendorApplicationData {
+  id: string;
+  userId: string;
+  userEmail: string;
+  userNombre: string;
+  userDni?: string | null;
+  userTelefono?: string | null;
+  nombreVendedor: string;
+  descripcion: string;
+  fotosTablas: string[];
+  experienciaRubro: string;
+  status: 'PENDIENTE' | 'APROBADO' | 'RECHAZADO';
+  createdAt: string;
+  updatedAt: string;
+  reviewedAt?: string;
+  reviewedBy?: string;
+  biometricHash?: string;
+  motivoResolucion?: string;
+}
 
 export interface User {
   id: string;
@@ -11,6 +32,9 @@ export interface User {
   puntos: number;
   dni?: string;
   telefono?: string;
+  vendorStatus?: VendorStatus;
+  canSwitchRole?: boolean;
+  vendorApplication?: VendorApplicationData | null;
 }
 
 export interface AuthState {

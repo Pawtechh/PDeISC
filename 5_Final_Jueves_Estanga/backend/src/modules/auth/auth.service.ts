@@ -12,6 +12,7 @@ import {
 } from './auth.schemas';
 import { JwtPayload } from '../../types/auth';
 import { AppError } from '../../middlewares/errorHandler';
+import { vendorRegistry } from '../../config/vendorRegistry';
 
 export class AuthService {
   /**
@@ -133,6 +134,14 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user);
 
+    let app = vendorRegistry.getByUser(user.id, user.email);
+    if (!app && user.role === Role.OWNER) {
+      app = vendorRegistry.ensureOwnerApproved(user);
+    }
+    const vendorStatus = app ? app.status : user.role === Role.OWNER ? 'APROBADO' : 'NONE';
+    const canSwitchRole =
+      user.role !== Role.AGENCIA && (vendorStatus === 'APROBADO' || user.role === Role.OWNER);
+
     return {
       user: {
         id: user.id,
@@ -141,6 +150,9 @@ export class AuthService {
         role: user.role,
         dni: user.dni,
         puntos: user.puntos,
+        vendorStatus,
+        canSwitchRole,
+        vendorApplication: app || null,
       },
       tokens,
     };
@@ -233,7 +245,20 @@ export class AuthService {
       throw error;
     }
 
-    return user;
+    let app = vendorRegistry.getByUser(user.id, user.email);
+    if (!app && user.role === Role.OWNER) {
+      app = vendorRegistry.ensureOwnerApproved(user);
+    }
+    const vendorStatus = app ? app.status : user.role === Role.OWNER ? 'APROBADO' : 'NONE';
+    const canSwitchRole =
+      user.role !== Role.AGENCIA && (vendorStatus === 'APROBADO' || user.role === Role.OWNER);
+
+    return {
+      ...user,
+      vendorStatus,
+      canSwitchRole,
+      vendorApplication: app || null,
+    };
   }
 
   /**

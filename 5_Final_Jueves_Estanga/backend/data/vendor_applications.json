@@ -1,0 +1,86 @@
+[
+  {
+    "id": "vendor-req-seed-01",
+    "userId": "seed-user-shaper-mdp",
+    "userEmail": "lucas.quiver@surfmdp.com",
+    "userNombre": "Lucas Echeverría",
+    "userDni": "38451920",
+    "userTelefono": "+54 9 223 541-8892",
+    "nombreVendedor": "Costa Atlántica Quiver & Shapes",
+    "descripcion": "Quiver seleccionado de shortboards de alto rendimiento y twin fins laminados en resina epoxi para las rompientes de Playa Grande y El Yacht. Todas las tablas incluyen quillas FCS II y leash profesional.",
+    "fotosTablas": [
+      "https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80"
+    ],
+    "experienciaRubro": "8 años como shaper y reparador de tablas en Mar del Plata (Taller Puerto Cardiel) y ex instructor nivel 2 de la Asociación de Surf Argentina.",
+    "status": "PENDIENTE",
+    "createdAt": "2026-11-05T19:37:26.550Z",
+    "updatedAt": "2026-11-05T19:37:26.550Z"
+  },
+  {
+    "id": "5d3fb97e-99bf-4263-b3b4-47eb4d37d374",
+    "userId": "c96e5f38-3b20-4688-bbb2-954242e3f000",
+    "userEmail": "owner@surf.com",
+    "userNombre": "Martín Shaper MDP",
+    "userDni": "28987654",
+    "userTelefono": "+54 223 555-0201",
+    "nombreVendedor": "Martín Shaper MDP • Quiver Oficial",
+    "descripcion": "Propietario y shaper verificado en Sede Playa Grande con flota de tablas habilitadas para alquiler temporal.",
+    "fotosTablas": [
+      "https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80"
+    ],
+    "experienciaRubro": "Shaper y propietario registrado con historial activo de alquileres e inspecciones técnicas aprobadas en Mar del Plata.",
+    "status": "APROBADO",
+    "createdAt": "2026-11-05T21:58:08.339Z",
+    "updatedAt": "2026-11-05T21:58:08.339Z",
+    "reviewedAt": "2026-11-05T21:58:08.339Z",
+    "reviewedBy": "mostrador@surf.com",
+    "motivoResolucion": "Habilitación inicial verificada en Sede Central."
+  },
+  {
+    "id": "95d259cf-f543-461b-b803-9ebe2d9348f4",
+    "userId": "705a8832-9c18-4f79-8e4a-84e5a3ad5255",
+    "userEmail": "owner2@surf.com",
+    "userNombre": "Lucas Peralta Shaper",
+    "userDni": "31234567",
+    "userTelefono": "+54 223 555-0202",
+    "nombreVendedor": "Lucas Peralta Shaper • Quiver Oficial",
+    "descripcion": "Propietario y shaper verificado en Sede Playa Grande con flota de tablas habilitadas para alquiler temporal.",
+    "fotosTablas": [
+      "/images/boards/shortboard-3.jpg",
+      "/images/boards/shortboard-1.jpg",
+      "/images/boards/bodyboard-1.jpg",
+      "/images/boards/bodyboard-2.jpg"
+    ],
+    "experienciaRubro": "Shaper y propietario registrado con historial activo de alquileres e inspecciones técnicas aprobadas en Mar del Plata.",
+    "status": "APROBADO",
+    "createdAt": "2026-11-05T23:31:52.106Z",
+    "updatedAt": "2026-11-05T23:31:52.106Z",
+    "reviewedAt": "2026-11-05T23:31:52.106Z",
+    "reviewedBy": "mostrador@surf.com",
+    "motivoResolucion": "Habilitación inicial verificada en Sede Central."
+  },
+  {
+    "id": "0aea58c7-6a8c-4386-900c-af289c9211f9",
+    "userId": "9b91a40f-51cc-4c1d-af34-ca35d07898cc",
+    "userEmail": "owner3@surf.com",
+    "userNombre": "Camila Costa Surf Crafts",
+    "userDni": "33456789",
+    "userTelefono": "+54 223 555-0203",
+    "nombreVendedor": "Camila Costa Surf Crafts • Quiver Oficial",
+    "descripcion": "Propietario y shaper verificado en Sede Playa Grande con flota de tablas habilitadas para alquiler temporal.",
+    "fotosTablas": [
+      "/images/boards/fish-2.jpg",
+      "/images/boards/fish-1.jpg",
+      "/images/boards/shortboard-4.jpg",
+      "/images/boards/shortboard-2.jpg"
+    ],
+    "experienciaRubro": "Shaper y propietario registrado con historial activo de alquileres e inspecciones técnicas aprobadas en Mar del Plata.",
+    "status": "APROBADO",
+    "createdAt": "2026-11-05T23:31:52.107Z",
+    "updatedAt": "2026-11-05T23:31:52.107Z",
+    "reviewedAt": "2026-11-05T23:31:52.107Z",
+    "reviewedBy": "mostrador@surf.com",
+    "motivoResolucion": "Habilitación inicial verificada en Sede Central."
+  }
+]
