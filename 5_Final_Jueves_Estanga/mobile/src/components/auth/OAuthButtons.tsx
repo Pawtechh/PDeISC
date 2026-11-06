@@ -104,7 +104,49 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [modalError, setModalError] = useState<string | null>(null);
 
-  const fetchDbGoogleAccounts = useCallback(async () => {
+  const providerMeta = {
+    google: {
+      name: 'Google',
+      icon: <GoogleLogoSvg size={18} />,
+      topBarText: 'Acceder con Google',
+      chooseTitle: 'Elige una cuenta',
+      continueBrand: 'Ir a Surf Rental Mar del Plata',
+      useAnotherText: 'Usar otra cuenta de Google',
+      inputLabel: 'Correo electrónico de Google',
+      inputPlaceholder: 'correo@gmail.com',
+      nextBtnText: 'Siguiente',
+      nextBtnBg: '#8AB4F8',
+      nextBtnTextColor: '#062E6F',
+    },
+    facebook: {
+      name: 'Facebook',
+      icon: <FacebookLogoSvg size={18} />,
+      topBarText: 'Continuar con Facebook',
+      chooseTitle: 'Elige tu cuenta de Facebook',
+      continueBrand: 'Conectar con Surf Rental MDP',
+      useAnotherText: 'Usar otra cuenta de Facebook',
+      inputLabel: 'Correo electrónico de Facebook',
+      inputPlaceholder: 'usuario@correo.com',
+      nextBtnText: 'Continuar con Facebook',
+      nextBtnBg: '#1877F2',
+      nextBtnTextColor: '#FFFFFF',
+    },
+    github: {
+      name: 'GitHub',
+      icon: <GithubLogoSvg size={18} />,
+      topBarText: 'Authorize with GitHub',
+      chooseTitle: 'Authorize Surf Rental MDP',
+      continueBrand: 'Sign in to GitHub to continue',
+      useAnotherText: 'Usar otro usuario o correo de GitHub',
+      inputLabel: 'Usuario o correo de GitHub',
+      inputPlaceholder: 'username o email@github.com',
+      nextBtnText: 'Authorize surf-rental-mdp',
+      nextBtnBg: '#238636',
+      nextBtnTextColor: '#FFFFFF',
+    },
+  }[activeProvider];
+
+  const fetchDbAccounts = useCallback(async () => {
     setIsLoadingAccounts(true);
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
@@ -116,12 +158,8 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
       });
       if (res.ok) {
         const json = await res.json();
-        if (Array.isArray(json?.data)) {
-          // Solo cuentas reales con @gmail.com
-          const gmailAccounts = json.data.filter((item: any) =>
-            item?.email && item.email.toLowerCase().endsWith('@gmail.com')
-          );
-          setAccounts(gmailAccounts);
+        if (Array.isArray(json?.data) && json.data.length > 0) {
+          setAccounts(json.data);
           return;
         }
       }
@@ -137,15 +175,15 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
     if (isModalOpen) {
       setShowCustomForm(false);
       setModalError(null);
-      fetchDbGoogleAccounts();
+      fetchDbAccounts();
     }
-  }, [isModalOpen, fetchDbGoogleAccounts]);
+  }, [isModalOpen, fetchDbAccounts]);
 
   const handleDirectAuth = async (email: string, name: string) => {
     const provider = activeProvider;
     const cleanEmail = email.trim().toLowerCase();
-    if (!cleanEmail || !cleanEmail.includes('@')) {
-      setModalError('Ingresá una dirección de correo de Google válida.');
+    if (!cleanEmail || (!cleanEmail.includes('@') && provider !== 'github')) {
+      setModalError(`Ingresá una dirección de correo o usuario válido.`);
       return;
     }
 
@@ -170,7 +208,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
           code: `${provider}-oauth-${Date.now()}`,
           profile: {
             id: `${provider}-${cleanEmail}`,
-            email: cleanEmail,
+            email: cleanEmail.includes('@') ? cleanEmail : `${cleanEmail}@github.user`,
             name: finalName,
           },
         }),
@@ -178,7 +216,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
 
       const json = await response.json();
       if (!response.ok || !json?.data?.tokens || !json?.data?.user) {
-        throw new Error(json?.message || 'No se pudo autenticar con Google');
+        throw new Error(json?.message || `No se pudo autenticar con ${providerMeta.name}`);
       }
 
       const { user, tokens } = json.data;
@@ -191,7 +229,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
             ? prev.filter((a) => a.email?.toLowerCase() !== cleanEmail)
             : [];
           filtered.unshift({
-            id: user.id || `google-${cleanEmail}`,
+            id: user.id || `${provider}-${cleanEmail}`,
             email: cleanEmail,
             nombre: user.nombre || finalName,
             role: user.role,
@@ -224,7 +262,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
       setCustomEmail('');
       setCustomName('');
     } catch (err: any) {
-      const msg = err?.message || 'Error al iniciar sesión con Google';
+      const msg = err?.message || `Error al iniciar sesión con ${providerMeta.name}`;
       setModalError(msg);
       onError?.(msg);
     } finally {
@@ -257,7 +295,9 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={() => {
+          setActiveProvider('google');
           setModalError(null);
+          setShowCustomForm(false);
           setIsModalOpen(true);
         }}
         disabled={isAuthenticating}
@@ -270,7 +310,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         ]}
         testID="btn-oauth-google"
       >
-        {isAuthenticating ? (
+        {isAuthenticating && activeProvider === 'google' ? (
           <ActivityIndicator size="small" color="#1F2937" />
         ) : (
           <Row spacing="sm" align="center" justify="center">
@@ -286,6 +326,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         onPress={() => {
           setActiveProvider('facebook');
           setModalError(null);
+          setShowCustomForm(false);
           setIsModalOpen(true);
         }}
         disabled={isAuthenticating}
@@ -304,6 +345,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         onPress={() => {
           setActiveProvider('github');
           setModalError(null);
+          setShowCustomForm(false);
           setIsModalOpen(true);
         }}
         disabled={isAuthenticating}
@@ -316,7 +358,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         </Row>
       </TouchableOpacity>
 
-      {/* Diálogo Oficial Google Material 3 Account Chooser */}
+      {/* Diálogo Oficial de Autenticación de Cuentas */}
       <Modal
         visible={isModalOpen}
         transparent
@@ -325,16 +367,16 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
       >
         <View style={styles.modalBackdrop}>
           <View style={[styles.googleDialog, isTwoColumn && styles.googleDialogWide]}>
-            {/* Barra superior: [G] Acceder con Google */}
+            {/* Barra superior con identidad dinámica del proveedor */}
             <View style={styles.dialogTopBar}>
               <Row spacing="sm" align="center">
-                <GoogleLogoSvg size={18} />
-                <Text style={styles.topBarText}>Acceder con Google</Text>
+                {providerMeta.icon}
+                <Text style={styles.topBarText}>{providerMeta.topBarText}</Text>
               </Row>
               <TouchableOpacity
                 onPress={() => setIsModalOpen(false)}
                 style={styles.closeBtn}
-                testID="btn-close-google-modal"
+                testID="btn-close-oauth-modal"
               >
                 <X size={18} color="#9AA0A6" />
               </TouchableOpacity>
@@ -348,10 +390,10 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                   <Waves size={24} color="#00E5FF" />
                 </View>
                 <Text style={styles.chooseAccountTitle}>
-                  {showCustomForm ? 'Acceder' : 'Elige una cuenta'}
+                  {showCustomForm ? 'Acceder' : providerMeta.chooseTitle}
                 </Text>
                 <Text style={styles.continueToText}>
-                  Ir a <Text style={styles.continueToBrand}>Surf Rental Mar del Plata</Text>
+                  {providerMeta.continueBrand}
                 </Text>
               </View>
 
@@ -371,7 +413,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                       </View>
                     ) : (
                       accounts.map((acc, index) => {
-                        const initial = (acc.nombre || acc.email || 'G')
+                        const initial = (acc.nombre || acc.email || 'U')
                           .trim()
                           .charAt(0)
                           .toUpperCase();
@@ -383,7 +425,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                             disabled={isAuthenticating}
                             onPress={() => handleDirectAuth(acc.email, acc.nombre)}
                             style={styles.accountRow}
-                            testID={`google-account-${acc.email}`}
+                            testID={`oauth-account-${acc.email}`}
                           >
                             <View style={[styles.accountAvatar, { backgroundColor: avatarColor }]}>
                               <Text style={styles.accountAvatarText}>{initial}</Text>
@@ -409,28 +451,28 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                         setShowCustomForm(true);
                       }}
                       style={styles.useAnotherRow}
-                      testID="btn-google-use-another"
+                      testID="btn-oauth-use-another"
                     >
                       <View style={styles.useAnotherIconWrap}>
                         <UserCircle2 size={22} color="#E3E3E3" />
                       </View>
-                      <Text style={styles.useAnotherText}>Usar otra cuenta</Text>
+                      <Text style={styles.useAnotherText}>{providerMeta.useAnotherText}</Text>
                     </TouchableOpacity>
                   </ScrollView>
                 ) : (
                   <Stack spacing="md">
                     <View>
-                      <Text style={styles.inputLabel}>Correo electrónico de Google</Text>
+                      <Text style={styles.inputLabel}>{providerMeta.inputLabel}</Text>
                       <TextInput
                         value={customEmail}
                         onChangeText={setCustomEmail}
-                        placeholder="correo@gmail.com"
+                        placeholder={providerMeta.inputPlaceholder}
                         placeholderTextColor="#8E918F"
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoComplete="email"
                         style={styles.googleInput}
-                        testID="input-google-custom-email"
+                        testID="input-oauth-custom-email"
                       />
                     </View>
 
@@ -443,7 +485,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                         placeholderTextColor="#8E918F"
                         autoComplete="name"
                         style={styles.googleInput}
-                        testID="input-google-custom-name"
+                        testID="input-oauth-custom-name"
                       />
                     </View>
 
@@ -461,13 +503,15 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                       <TouchableOpacity
                         disabled={isAuthenticating}
                         onPress={() => handleDirectAuth(customEmail, customName)}
-                        style={styles.nextBtn}
-                        testID="btn-submit-google-custom"
+                        style={[styles.nextBtn, { backgroundColor: providerMeta.nextBtnBg }]}
+                        testID="btn-submit-oauth-custom"
                       >
                         {isAuthenticating ? (
-                          <ActivityIndicator size="small" color="#062E6F" />
+                          <ActivityIndicator size="small" color={providerMeta.nextBtnTextColor} />
                         ) : (
-                          <Text style={styles.nextBtnText}>Siguiente</Text>
+                          <Text style={[styles.nextBtnText, { color: providerMeta.nextBtnTextColor }]}>
+                            {providerMeta.nextBtnText}
+                          </Text>
                         )}
                       </TouchableOpacity>
                     </Row>

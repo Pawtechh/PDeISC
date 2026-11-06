@@ -406,9 +406,6 @@ export class OAuthService {
       const users = await prisma.user.findMany({
         where: {
           activo: true,
-          email: {
-            endsWith: '@gmail.com',
-          },
         },
         orderBy: { createdAt: 'asc' },
         select: {
