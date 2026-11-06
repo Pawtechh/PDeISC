@@ -52,7 +52,6 @@ import {
   useBiometricSignature,
   BiometricSignaturePayload,
 } from '../../hooks/useBiometricSignature';
-import { VendorApprovalsSection } from '../agency/VendorApprovalsScreen';
 
 export const ProfileScreen: React.FC = () => {
   const { theme, isDark, setMode } = useTheme();
@@ -402,10 +401,8 @@ export const ProfileScreen: React.FC = () => {
           </Stack>
         </Card>
 
-        {/* SI ES AGENCIA (ADMIN): Mostrar Zona de Aceptación / Rechazo / Baja de Vendedores */}
-        {activeRole === 'AGENCIA' ? (
-          <VendorApprovalsSection />
-        ) : (
+        {/* Para usuarios Consumer y Owner: Gestión de Permiso y Cambio de Perfil */}
+        {activeRole !== 'AGENCIA' && (
           <>
             {/* APARTADO 1: Solicitar Permiso de Publicación / Estado del Perfil de Vendedor */}
             <Card

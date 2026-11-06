@@ -32,8 +32,16 @@ export const OAUTH_CONFIG = {
     tokenUrl: 'https://appleid.apple.com/auth/token',
     scope: ['name', 'email'],
   },
+  instagram: {
+    clientId: process.env.INSTAGRAM_CLIENT_ID || 'mock-instagram-client-id',
+    clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || 'mock-instagram-client-secret',
+    authUrl: 'https://api.instagram.com/oauth/authorize',
+    tokenUrl: 'https://api.instagram.com/oauth/access_token',
+    userInfoUrl: 'https://graph.instagram.com/me?fields=id,username',
+    scope: ['user_profile', 'user_media'],
+  },
   callbackBaseUrl: process.env.API_BASE_URL || 'http://localhost:3000/api',
   mobileDeepLinkScheme: 'surfrental://auth/callback',
 } as const;
 
-export type SupportedOAuthProvider = 'google' | 'github' | 'facebook' | 'apple';
+export type SupportedOAuthProvider = 'google' | 'github' | 'facebook' | 'apple' | 'instagram';

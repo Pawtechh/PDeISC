@@ -27,7 +27,10 @@ export class OAuthService {
         return AuthProvider.FACEBOOK;
       case 'apple':
         return AuthProvider.APPLE;
+      case 'instagram':
+        return AuthProvider.FACEBOOK;
     }
+    return AuthProvider.LOCAL;
   }
 
   /**
@@ -47,11 +50,18 @@ export class OAuthService {
         const id = OAUTH_CONFIG.facebook.clientId;
         return Boolean(id && !id.startsWith('mock-') && !id.startsWith('surf-rental-'));
       }
+      case 'instagram': {
+        const id = OAUTH_CONFIG.instagram.clientId;
+        return Boolean(id && !id.startsWith('mock-'));
+      }
       case 'apple': {
         const id = OAUTH_CONFIG.apple.clientId;
         return Boolean(id && !id.startsWith('mock-') && !id.startsWith('com.surfrental.mdp.web'));
       }
+      default:
+        return false;
     }
+    return false;
   }
 
   /**
@@ -111,7 +121,17 @@ export class OAuthService {
         });
         return `${OAUTH_CONFIG.apple.authUrl}?${params.toString()}`;
       }
+      case 'instagram': {
+        const params = new URLSearchParams({
+          client_id: OAUTH_CONFIG.instagram.clientId,
+          redirect_uri: redirectUri,
+          scope: OAUTH_CONFIG.instagram.scope.join(','),
+          response_type: 'code',
+        });
+        return `${OAUTH_CONFIG.instagram.authUrl}?${params.toString()}`;
+      }
     }
+    return defaultRedirect;
   }
 
   /**

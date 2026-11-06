@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { oauthService } from './oauth.service';
 import { SupportedOAuthProvider, OAUTH_CONFIG } from '../../config/oauth';
 
-const validProviders: SupportedOAuthProvider[] = ['google', 'github', 'facebook', 'apple'];
+const validProviders: SupportedOAuthProvider[] = ['google', 'github', 'facebook', 'apple', 'instagram'];
 
 export const initiateOAuth: RequestHandler = (req, res, next) => {
   try {
@@ -726,6 +726,7 @@ export const renderConsentScreen: RequestHandler = async (req, res) => {
     github: 'GitHub',
     facebook: 'Facebook',
     apple: 'Apple',
+    instagram: 'Instagram',
   };
 
   const name = providerNames[provider] || provider;

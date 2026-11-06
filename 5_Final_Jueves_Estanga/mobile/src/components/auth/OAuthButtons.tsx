@@ -10,6 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
 import { UserCircle2, Waves, X } from 'lucide-react-native';
 import { Stack, Row, Text } from '../ui';
 import { colors, radii, spacing } from '../../theme';
@@ -63,9 +64,27 @@ const GoogleLogoSvg: React.FC<{ size?: number }> = ({ size = 18 }) => (
     />
   </Svg>
 );
+const FacebookLogoSvg: React.FC<{ size?: number }> = ({ size = 18 }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path
+      fill="#FFFFFF"
+      d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+    />
+  </Svg>
+);
+
+const InstagramLogoSvg: React.FC<{ size?: number }> = ({ size = 18 }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path
+      fill="#FFFFFF"
+      d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+    />
+  </Svg>
+);
+
 
 export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
-  label = 'O CONTINUÁ CON TU CUENTA GOOGLE',
+  label = 'O ACCEDER CON CUENTAS VINCULADAS',
   onError,
 }) => {
   const { theme, isDark } = useTheme();
@@ -74,6 +93,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
   const isTwoColumn = width >= 660;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeProvider, setActiveProvider] = useState<'google' | 'facebook' | 'instagram'>('google');
   const [accounts, setAccounts] = useState<GoogleDbAccount[]>([]);
   const [isLoadingAccounts, setIsLoadingAccounts] = useState(false);
   const [showCustomForm, setShowCustomForm] = useState(false);
@@ -119,7 +139,8 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
     }
   }, [isModalOpen, fetchDbGoogleAccounts]);
 
-  const handleGoogleDirectAuth = async (email: string, name: string) => {
+  const handleDirectAuth = async (email: string, name: string) => {
+    const provider = activeProvider;
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !cleanEmail.includes('@')) {
       setModalError('Ingresá una dirección de correo de Google válida.');
@@ -137,16 +158,16 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
     setModalError(null);
 
     try {
-      const response = await fetch(`${getBaseUrl()}/auth/oauth/google/token`, {
+      const response = await fetch(`${getBaseUrl()}/auth/oauth/${provider}/token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          code: `google-oauth-${Date.now()}`,
+          code: `${provider}-oauth-${Date.now()}`,
           profile: {
-            id: `google-${cleanEmail}`,
+            id: `${provider}-${cleanEmail}`,
             email: cleanEmail,
             name: finalName,
           },
@@ -257,6 +278,42 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         )}
       </TouchableOpacity>
 
+      {/* Botón Facebook */}
+      <TouchableOpacity
+        activeOpacity={0.88}
+        onPress={() => {
+          setActiveProvider('facebook');
+          setModalError(null);
+          setIsModalOpen(true);
+        }}
+        disabled={isAuthenticating}
+        style={[styles.oauthBtn, { backgroundColor: '#1877F2', borderColor: '#1877F2' }]}
+        testID="btn-oauth-facebook"
+      >
+        <Row spacing="sm" align="center" justify="center">
+          <FacebookLogoSvg size={18} />
+          <Text style={[styles.oauthBtnText, { color: '#FFFFFF' }]}>Continuar con Facebook</Text>
+        </Row>
+      </TouchableOpacity>
+
+      {/* Botón Instagram */}
+      <TouchableOpacity
+        activeOpacity={0.88}
+        onPress={() => {
+          setActiveProvider('instagram');
+          setModalError(null);
+          setIsModalOpen(true);
+        }}
+        disabled={isAuthenticating}
+        style={[styles.oauthBtn, { backgroundColor: '#E1306C', borderColor: '#C13584' }]}
+        testID="btn-oauth-instagram"
+      >
+        <Row spacing="sm" align="center" justify="center">
+          <InstagramLogoSvg size={18} />
+          <Text style={[styles.oauthBtnText, { color: '#FFFFFF' }]}>Continuar con Instagram</Text>
+        </Row>
+      </TouchableOpacity>
+
       {/* Diálogo Oficial Google Material 3 Account Chooser */}
       <Modal
         visible={isModalOpen}
@@ -322,7 +379,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
                           <TouchableOpacity
                             key={acc.id || acc.email}
                             disabled={isAuthenticating}
-                            onPress={() => handleGoogleDirectAuth(acc.email, acc.nombre)}
+                            onPress={() => handleDirectAuth(acc.email, acc.nombre)}
                             style={styles.accountRow}
                             testID={`google-account-${acc.email}`}
                           >
@@ -401,7 +458,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
 
                       <TouchableOpacity
                         disabled={isAuthenticating}
-                        onPress={() => handleGoogleDirectAuth(customEmail, customName)}
+                        onPress={() => handleDirectAuth(customEmail, customName)}
                         style={styles.nextBtn}
                         testID="btn-submit-google-custom"
                       >
@@ -424,6 +481,26 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
 };
 
 const styles = StyleSheet.create({
+  oauthBtn: {
+    width: '100%',
+    height: 48,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.md,
+    marginTop: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  oauthBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    letterSpacing: 0.2,
+  },
   container: {
     width: '100%',
     marginVertical: spacing.xs,
