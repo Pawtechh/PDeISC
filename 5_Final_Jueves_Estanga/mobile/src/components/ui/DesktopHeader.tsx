@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Platform,
   useWindowDimensions,
+  Modal,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Waves, LogOut, Compass, Shield, ShieldCheck } from 'lucide-react-native';
@@ -17,6 +18,7 @@ export const DesktopHeader: React.FC = () => {
   const { isDark } = useTheme();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth?.user);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   if (width < 768) {
     return null;
@@ -31,7 +33,7 @@ export const DesktopHeader: React.FC = () => {
       : 'PERFIL USUARIO';
 
   const handleLogout = () => {
-    dispatch(logout() as any);
+    setShowLogoutModal(true);
   };
 
   return (
@@ -193,6 +195,60 @@ export const DesktopHeader: React.FC = () => {
           </View>
         )}
       </View>
+
+      {/* Modal de Confirmación de Cierre de Sesión Seguro */}
+      <Modal
+        visible={showLogoutModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowLogoutModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.logoutModalCard,
+              {
+                backgroundColor: isDark ? '#111827' : '#FFFFFF',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#E2E8F0',
+              },
+            ]}
+          >
+            <View style={styles.modalHeaderRow}>
+              <LogOut size={20} color="#EF4444" />
+              <Text style={[styles.modalTitle, { color: isDark ? '#F1F5F9' : '#0F172A' }]}>
+                Cerrar Sesión
+              </Text>
+            </View>
+            <Text style={[styles.modalMessage, { color: isDark ? '#94A3B8' : '#475569' }]}>
+              ¿Estás seguro de que deseás cerrar tu sesión actual?
+            </Text>
+            <View style={styles.modalActionsRow}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => setShowLogoutModal(false)}
+                style={[
+                  styles.modalCancelBtn,
+                  { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9' },
+                ]}
+              >
+                <Text style={[styles.modalCancelText, { color: isDark ? '#F1F5F9' : '#0F172A' }]}>
+                  Cancelar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  setShowLogoutModal(false);
+                  dispatch(logout() as any);
+                }}
+                style={styles.modalConfirmBtn}
+              >
+                <Text style={styles.modalConfirmText}>Sí, Cerrar Sesión</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -322,5 +378,65 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 1.5,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    zIndex: 9999,
+  },
+  logoutModalCard: {
+    width: '100%',
+    maxWidth: 420,
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.35,
+    shadowRadius: 24,
+    elevation: 20,
+  },
+  modalHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 12,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  modalMessage: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 20,
+  },
+  modalActionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 12,
+  },
+  modalCancelBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  modalCancelText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  modalConfirmBtn: {
+    backgroundColor: '#EF4444',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  modalConfirmText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
   },
 });

@@ -55,7 +55,7 @@ export const Screen: React.FC<ScreenProps> = ({
   backgroundColor,
   safeBottom = true,
   refreshControl,
-  showScrollToTop = false,
+  showScrollToTop = true,
   scrollRef,
   fullWidth = false,
   atmosphericGradient = false,
@@ -165,7 +165,7 @@ export const Screen: React.FC<ScreenProps> = ({
         )}
 
         {/* Botón Volver Arriba Minimalista */}
-        {false && scrollable && showScrollToTop && (
+        {scrollable && showScrollToTop && (
           <ScrollToTopWithRing
             visible={isScrolledDown}
             progress={scrollProgress}

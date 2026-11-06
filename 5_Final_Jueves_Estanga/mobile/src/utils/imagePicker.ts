@@ -97,18 +97,18 @@ export const pickImagesFromDevice = async (options?: {
       finish(results);
     };
 
-    // Disparar click en el input inmediatamente
     try {
       input.click();
-    } catch (e) {
+    } catch {
       finish([]);
     }
   });
 };
 
 /**
- * Abre directamente la CÁMARA del dispositivo para tomar una fotografía
- * (compatible con Android APK, iOS y Web)
+ * Abre la cámara del dispositivo para tomar una foto en vivo.
+ * - En Android APK / iOS: Lanza la cámara nativa del sistema mediante launchCameraAsync.
+ * - En Web: Abre un visor de cámara en vivo (webcam) con botón de disparo o selector si no hay webcam.
  */
 export const takePhotoWithCamera = async (options?: {
   quality?: number;
@@ -118,15 +118,14 @@ export const takePhotoWithCamera = async (options?: {
 
   if (Platform.OS !== 'web') {
     try {
-      try {
+      const perm = await ImagePicker.requestCameraPermissionsAsync();
+      if (!perm.granted && perm.canAskAgain) {
         await ImagePicker.requestCameraPermissionsAsync();
-      } catch {
-        // Ignorar
       }
 
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing,
+        allowsEditing: false, // Desactivado para evitar cierres forzados por crop activity ausente en Android
         quality,
         base64: true,
       });
@@ -143,56 +142,204 @@ export const takePhotoWithCamera = async (options?: {
     }
   }
 
-  // Web fallback con cámara nativa del navegador
+  // Web: Abrir cámara web en vivo con visor y botón de captura
+  return openWebCameraAsync(quality);
+};
+
+/**
+ * Visor de cámara en vivo para navegadores Web (Webcam)
+ */
+function openWebCameraAsync(quality: number): Promise<string | null> {
   return new Promise((resolve) => {
-    if (typeof document === 'undefined') {
-      resolve(null);
+    if (
+      typeof window === 'undefined' ||
+      typeof document === 'undefined' ||
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ) {
+      return fallbackWebFileInput(quality, resolve);
+    }
+
+    navigator.mediaDevices
+      .getUserMedia({
+        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
+        audio: false,
+      })
+      .then((stream) => {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.backgroundColor = 'rgba(11, 15, 23, 0.94)';
+        overlay.style.zIndex = '999999';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.padding = '20px';
+        overlay.style.boxSizing = 'border-box';
+        overlay.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+
+        const card = document.createElement('div');
+        card.style.backgroundColor = '#111827';
+        card.style.borderRadius = '16px';
+        card.style.border = '1px solid rgba(56, 189, 248, 0.35)';
+        card.style.boxShadow = '0 25px 60px rgba(0,0,0,0.7)';
+        card.style.maxWidth = '560px';
+        card.style.width = '100%';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'center';
+        card.style.padding = '20px';
+        card.style.boxSizing = 'border-box';
+
+        const header = document.createElement('div');
+        header.style.width = '100%';
+        header.style.display = 'flex';
+        header.style.justifyContent = 'space-between';
+        header.style.alignItems = 'center';
+        header.style.marginBottom = '14px';
+
+        const title = document.createElement('div');
+        title.innerText = '📸 Cámara en Vivo';
+        title.style.color = '#F8FAFC';
+        title.style.fontWeight = '700';
+        title.style.fontSize = '17px';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.innerText = '✕';
+        closeBtn.style.background = 'transparent';
+        closeBtn.style.border = 'none';
+        closeBtn.style.color = '#94A3B8';
+        closeBtn.style.fontSize = '22px';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.padding = '4px 8px';
+
+        header.appendChild(title);
+        header.appendChild(closeBtn);
+        card.appendChild(header);
+
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.style.width = '100%';
+        video.style.maxHeight = '360px';
+        video.style.borderRadius = '12px';
+        video.style.backgroundColor = '#000';
+        video.style.objectFit = 'cover';
+        card.appendChild(video);
+
+        const controls = document.createElement('div');
+        controls.style.display = 'flex';
+        controls.style.gap = '12px';
+        controls.style.marginTop = '18px';
+
+        const captureBtn = document.createElement('button');
+        captureBtn.innerText = '🔘 Capturar Foto';
+        captureBtn.style.backgroundColor = '#0284C7';
+        captureBtn.style.color = '#FFFFFF';
+        captureBtn.style.border = 'none';
+        captureBtn.style.borderRadius = '8px';
+        captureBtn.style.padding = '12px 28px';
+        captureBtn.style.fontSize = '15px';
+        captureBtn.style.fontWeight = '700';
+        captureBtn.style.cursor = 'pointer';
+
+        controls.appendChild(captureBtn);
+        card.appendChild(controls);
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+
+        const cleanup = () => {
+          stream.getTracks().forEach((t) => t.stop());
+          if (overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+          }
+        };
+
+        closeBtn.onclick = () => {
+          cleanup();
+          resolve(null);
+        };
+
+        captureBtn.onclick = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              const dataUrl = canvas.toDataURL('image/jpeg', quality);
+              cleanup();
+              resolve(dataUrl);
+              return;
+            }
+          } catch {
+            // Fallback
+          }
+          cleanup();
+          resolve(null);
+        };
+      })
+      .catch(() => {
+        fallbackWebFileInput(quality, resolve);
+      });
+  });
+}
+
+function fallbackWebFileInput(
+  quality: number,
+  resolve: (res: string | null) => void
+) {
+  if (typeof document === 'undefined') {
+    resolve(null);
+    return;
+  }
+
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.style.position = 'fixed';
+  input.style.top = '-10000px';
+  input.style.left = '-10000px';
+  input.style.opacity = '0';
+  document.body.appendChild(input);
+
+  let finished = false;
+  const finish = (result: string | null) => {
+    if (!finished) {
+      finished = true;
+      if (input.parentNode) {
+        input.parentNode.removeChild(input);
+      }
+      resolve(result);
+    }
+  };
+
+  input.onchange = async () => {
+    const files = input.files ? Array.from(input.files) : [];
+    if (files.length === 0) {
+      finish(null);
       return;
     }
 
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.setAttribute('capture', 'environment');
-    input.style.position = 'fixed';
-    input.style.top = '-10000px';
-    input.style.left = '-10000px';
-    input.style.opacity = '0';
-    document.body.appendChild(input);
-
-    let finished = false;
-    const finish = (result: string | null) => {
-      if (!finished) {
-        finished = true;
-        if (input.parentNode) {
-          input.parentNode.removeChild(input);
-        }
-        resolve(result);
-      }
-    };
-
-    input.onchange = async () => {
-      const files = input.files ? Array.from(input.files) : [];
-      if (files.length === 0) {
-        finish(null);
-        return;
-      }
-
-      try {
-        const dataUrl = await compressImageFile(files[0], 1200, quality);
-        finish(dataUrl);
-      } catch {
-        finish(null);
-      }
-    };
-
     try {
-      input.click();
+      const dataUrl = await compressImageFile(files[0], 1200, quality);
+      finish(dataUrl);
     } catch {
       finish(null);
     }
-  });
-};
+  };
+
+  try {
+    input.click();
+  } catch {
+    finish(null);
+  }
+}
 
 /**
  * Selecciona una sola imagen de la galería con recorte cuadrado para perfil o DNI
@@ -201,7 +348,7 @@ export const pickSingleImage = async (options?: {
   quality?: number;
   allowsEditing?: boolean;
 }): Promise<string | null> => {
-  const { quality = 0.85, allowsEditing = true } = options || {};
+  const { quality = 0.85, allowsEditing = false } = options || {};
 
   if (Platform.OS !== 'web') {
     try {
@@ -213,8 +360,7 @@ export const pickSingleImage = async (options?: {
 
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing,
-        aspect: [1, 1],
+        allowsEditing: false,
         quality,
         base64: true,
       });

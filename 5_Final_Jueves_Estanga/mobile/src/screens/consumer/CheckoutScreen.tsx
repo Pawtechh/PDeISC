@@ -121,7 +121,6 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   });
 
   // UI / DEV States
-  const [showDebugModal, setShowDebugModal] = useState(false);
   const [showTestCardsAccordion, setShowTestCardsAccordion] = useState(false);
   const [globalBannerError, setGlobalBannerError] = useState<string | null>(null);
 
@@ -543,7 +542,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   return (
     <Screen scrollable>
       <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
-        {/* Header con botón de Debug */}
+        {/* Header */}
         <Row justify="space-between" align="center">
           <View>
             <Text variant="h1" color={titleColor} testID="checkout-title">
@@ -554,15 +553,6 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             </Text>
           </View>
           <Row spacing="xs" align="center">
-            <TouchableOpacity
-              onPress={() => setShowDebugModal(true)}
-              style={styles.debugPill}
-              testID="btn-checkout-debug"
-            >
-              <Text variant="caption" color={colors.ocean[700]} style={styles.bold}>
-                Debug
-              </Text>
-            </TouchableOpacity>
             {onClose && <Button title="✕" variant="ghost" size="sm" onPress={onClose} />}
           </Row>
         </Row>
@@ -1617,67 +1607,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           </Text>
         </Card>
 
-        {/* Modal de Debug DEV (Bloque 1.5) */}
-        <Modal
-          visible={showDebugModal}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setShowDebugModal(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <Card
-              padding="md"
-              style={[
-                styles.debugModalCard,
-                isDark && {
-                  backgroundColor: theme.card,
-                  borderColor: theme.border,
-                },
-              ]}
-            >
-              <Stack spacing="sm">
-                <Row justify="space-between" align="center">
-                  <Text variant="h3" color={titleColor}>
-                    Debug Estado del Formulario
-                  </Text>
-                  <Button title="✕" variant="ghost" size="sm" onPress={() => setShowDebugModal(false)} />
-                </Row>
-                <Divider />
-                <ScrollView style={{ maxHeight: 320 }}>
-                  <Text style={[styles.codeBlock, isDark && { backgroundColor: '#0B111E', color: '#94A3B8' }]}>
-                    {JSON.stringify(
-                      {
-                        isValid: isFormValid,
-                        camposCompletados: `${camposCompletados}/${totalCampos}`,
-                        errors: fieldErrors,
-                        values: {
-                          numeroTarjeta: numeroTarjeta || '(vacío)',
-                          marca,
-                          isLuhnValid: isCardNumberValid,
-                          nombreTitular,
-                          vencimiento,
-                          cvv,
-                          dniTitular,
-                          aceptaGarantia,
-                          fechaRetiro,
-                          horaRetiro,
-                        },
-                      },
-                      null,
-                      2
-                    )}
-                  </Text>
-                </ScrollView>
-                <Button
-                  title="Cerrar Debug"
-                  variant="secondary"
-                  size="sm"
-                  onPress={() => setShowDebugModal(false)}
-                />
-              </Stack>
-            </Card>
-          </View>
-        </Modal>
+
       </ScrollView>
     </Screen>
   );

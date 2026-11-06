@@ -55,6 +55,12 @@
           "photosPermission": "Surf Rental MDP requiere acceso a tus fotos para que puedas seleccionar imágenes de tus tablas de surf.",
           "cameraPermission": "Surf Rental MDP requiere acceso a tu cámara para que puedas tomar fotos de tus tablas y perfil."
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Surf Rental MDP requiere acceso a tu cámara para que puedas tomar fotos de tus tablas y perfil."
+        }
       ]
     ],
     "extra": {
