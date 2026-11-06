@@ -365,20 +365,13 @@ export class OAuthService {
       return { user, tokens, merged: true, isNew: false };
     }
 
-    // 3. Si no existe ni por oauthId ni por email, crear usuario nuevo con rol CONSUMER
-    user = await prisma.user.create({
-      data: {
-        email: profile.email.toLowerCase(),
-        nombre: profile.name,
-        role: Role.CONSUMER,
-        authProvider: providerEnum,
-        oauthId: profile.id,
-        dniFotoUrl: profile.avatarUrl,
-      },
-    });
-
-    const tokens = await this.generateTokens(user);
-    return { user, tokens, merged: false, isNew: true };
+    // 3. Si no existe una cuenta previa con ese email, NO permitir el acceso y exigir registro tradicional
+    const error: any = new Error(
+      `No existe una cuenta registrada con el correo ${profile.email.toLowerCase()}. Para ingresar a Surf Rental MDP debés crear tu cuenta primero completando tus datos y aceptando los Términos y Condiciones.`
+    );
+    error.statusCode = 404;
+    error.code = 'ACCOUNT_NOT_REGISTERED';
+    throw error;
   }
 
   /**
@@ -393,6 +386,9 @@ export class OAuthService {
       const users = await prisma.user.findMany({
         where: {
           activo: true,
+          email: {
+            endsWith: '@gmail.com',
+          },
         },
         orderBy: { createdAt: 'asc' },
         select: {
@@ -405,13 +401,7 @@ export class OAuthService {
         },
       });
 
-      return [...users].sort((a, b) => {
-        const aIsGoogle =
-          a.authProvider === AuthProvider.GOOGLE || a.email.endsWith('@gmail.com') ? 0 : 1;
-        const bIsGoogle =
-          b.authProvider === AuthProvider.GOOGLE || b.email.endsWith('@gmail.com') ? 0 : 1;
-        return aIsGoogle - bIsGoogle;
-      });
+      return users;
     } catch {
       return [];
     }

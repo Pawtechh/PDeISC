@@ -21,6 +21,8 @@ import {
   UserCheck,
   UserMinus,
   AlertCircle,
+  Search,
+  Waves,
 } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, Input, Avatar } from '../../components/ui';
 import { colors, spacing, radii } from '../../theme';
@@ -45,6 +47,7 @@ export const VendorApprovalsSection: React.FC = () => {
   const { signContractWithBiometrics, isAuthenticating, capabilities } = useBiometricSignature();
 
   const [filter, setFilter] = useState<'ALL' | 'PENDIENTE' | 'APROBADO' | 'RECHAZADO'>('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedApp, setSelectedApp] = useState<VendorApplicationData | null>(null);
   const [decisionType, setDecisionType] = useState<'APROBADO' | 'RECHAZADO' | 'DEGRADADO'>(
     'APROBADO'
@@ -62,9 +65,26 @@ export const VendorApprovalsSection: React.FC = () => {
   const requests = data?.data || [];
   const pendingCount = requests.filter((r) => r.status === 'PENDIENTE').length;
 
-  const filteredRequests = requests.filter((r) => {
-    if (filter === 'ALL') return true;
-    return r.status === filter;
+  const filteredRequests = requests.filter((r: any) => {
+    if (filter !== 'ALL' && r.status !== filter) return false;
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase().trim();
+    const vendorName = (r.nombreVendedor || '').toLowerCase();
+    const userName = (r.userNombre || '').toLowerCase();
+    const email = (r.userEmail || '').toLowerCase();
+    const dni = (r.userDni || '').toLowerCase();
+    const desc = (r.descripcion || '').toLowerCase();
+    const boards = Array.isArray(r.tablasList)
+      ? r.tablasList.map((b: any) => `${b.titulo} ${b.marca} ${b.tipoTabla}`.toLowerCase()).join(' ')
+      : '';
+    return (
+      vendorName.includes(q) ||
+      userName.includes(q) ||
+      email.includes(q) ||
+      dni.includes(q) ||
+      desc.includes(q) ||
+      boards.includes(q)
+    );
   });
 
   const openDecisionModal = (
@@ -235,6 +255,14 @@ export const VendorApprovalsSection: React.FC = () => {
               );
             })}
           </Row>
+
+          {/* Buscador de Vendedores y Quiver de Tablas */}
+          <Input
+            placeholder="Buscar por nombre, email, DNI o tablas del quiver..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            iconLeft={<Search size={16} color={theme.subtext} />}
+          />
 
           {feedbackBanner && (
             <View
@@ -446,9 +474,95 @@ export const VendorApprovalsSection: React.FC = () => {
                   </View>
                 )}
 
-                {/* Botones de Acción (Aceptar / Rechazar / Eliminar y Degradar a Usuario) */}
-                <Row spacing="sm" style={{ flexWrap: 'wrap', gap: spacing.xs }}>
-                  {app.status !== 'APROBADO' && (
+                {/* Quiver de Tablas Habilitadas en Inventario (Solo Vendedores Activos) */}
+                {app.status === 'APROBADO' && (
+                  <View
+                    style={[
+                      styles.quiverSection,
+                      {
+                        backgroundColor: isDark ? 'rgba(0, 229, 255, 0.04)' : '#F0F9FF',
+                        borderColor: isDark ? 'rgba(0, 229, 255, 0.22)' : '#BAE6FD',
+                      },
+                    ]}
+                  >
+                    <Row justify="space-between" align="center" style={{ marginBottom: 6 }}>
+                      <Row spacing="xs" align="center">
+                        <Waves size={15} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                        <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
+                          Quiver de Tablas en Custodia ({(app as any).tablasList?.length || 0}):
+                        </Text>
+                      </Row>
+                      <Badge label="INVENTARIO ASOCIADO" variant="ocean" />
+                    </Row>
+
+                    {(app as any).tablasList && (app as any).tablasList.length > 0 ? (
+                      <View style={{ gap: 6 }}>
+                        {(app as any).tablasList.map((t: any) => (
+                          <View
+                            key={t.id}
+                            style={[
+                              styles.boardItemRow,
+                              {
+                                backgroundColor: isDark ? '#111A2C' : '#FFFFFF',
+                                borderColor: theme.border,
+                              },
+                            ]}
+                          >
+                            <Row justify="space-between" align="center">
+                              <View style={{ flex: 1, marginRight: 8 }}>
+                                <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
+                                  🏄 {t.titulo}
+                                </Text>
+                                <Text variant="caption" color={theme.subtext} style={{ fontSize: 11 }}>
+                                  {t.marca} • {t.tipoTabla} • ${t.precioHora}/h
+                                </Text>
+                              </View>
+                              <Badge
+                                label={t.estado === 'DISPONIBLE' ? 'EN CATÁLOGO' : t.estado}
+                                variant={t.estado === 'DISPONIBLE' ? 'success' : 'sand'}
+                              />
+                            </Row>
+                          </View>
+                        ))}
+                      </View>
+                    ) : (
+                      <Text variant="caption" color={theme.subtext}>
+                        Este vendedor aún no ha registrado tablas en el inventario de la sede.
+                      </Text>
+                    )}
+                  </View>
+                )}
+
+                {/* Zona de Acciones Separada */}
+                {app.status === 'APROBADO' ? (
+                  <View
+                    style={[
+                      styles.degradeZone,
+                      {
+                        backgroundColor: isDark ? 'rgba(239, 68, 68, 0.06)' : '#FEF2F2',
+                        borderColor: isDark ? 'rgba(239, 68, 68, 0.3)' : '#FECACA',
+                      },
+                    ]}
+                  >
+                    <Row justify="space-between" align="center" style={{ marginBottom: 6 }}>
+                      <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '700' }}>
+                        Zona de Control Sede (Baja de Vendedor):
+                      </Text>
+                      <Badge label="DEGRADACIÓN A USUARIO" variant="danger" />
+                    </Row>
+                    <Text variant="caption" color={theme.subtext} style={{ marginBottom: 8, fontSize: 11 }}>
+                      Al degradar al vendedor, se pausarán sus tablas del catálogo y su cuenta volverá al rango Usuario (Consumer). Requiere autorización biométrica + clave de agencia.
+                    </Text>
+                    <Button
+                      title="Eliminar Vendedor y Degradar a Usuario"
+                      size="sm"
+                      variant="danger"
+                      iconLeft={<UserMinus size={15} color="#FFFFFF" />}
+                      onPress={() => openDecisionModal(app, 'DEGRADADO')}
+                    />
+                  </View>
+                ) : (
+                  <Row spacing="sm" style={{ flexWrap: 'wrap', gap: spacing.xs }}>
                     <Button
                       title="Aceptar y Habilitar"
                       size="sm"
@@ -457,28 +571,18 @@ export const VendorApprovalsSection: React.FC = () => {
                       style={{ flex: 1 }}
                       onPress={() => openDecisionModal(app, 'APROBADO')}
                     />
-                  )}
-                  {app.status === 'PENDIENTE' && (
-                    <Button
-                      title="Rechazar Solicitud"
-                      size="sm"
-                      variant="danger"
-                      iconLeft={<XCircle size={15} color="#FFFFFF" />}
-                      style={{ flex: 1 }}
-                      onPress={() => openDecisionModal(app, 'RECHAZADO')}
-                    />
-                  )}
-                  {app.status === 'APROBADO' && (
-                    <Button
-                      title="Eliminar Vendedor y Degradar a Usuario"
-                      size="sm"
-                      variant="danger"
-                      iconLeft={<UserMinus size={15} color="#FFFFFF" />}
-                      style={{ flex: 1 }}
-                      onPress={() => openDecisionModal(app, 'DEGRADADO')}
-                    />
-                  )}
-                </Row>
+                    {app.status === 'PENDIENTE' && (
+                      <Button
+                        title="Rechazar Solicitud"
+                        size="sm"
+                        variant="danger"
+                        iconLeft={<XCircle size={15} color="#FFFFFF" />}
+                        style={{ flex: 1 }}
+                        onPress={() => openDecisionModal(app, 'RECHAZADO')}
+                      />
+                    )}
+                  </Row>
+                )}
               </Stack>
             </Card>
           );
@@ -785,6 +889,23 @@ const styles = StyleSheet.create({
     padding: spacing.sm,
     borderRadius: radii.md,
     borderWidth: 1,
+  },
+  quiverSection: {
+    padding: spacing.sm,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.xs,
+  },
+  boardItemRow: {
+    padding: spacing.xs + 2,
+    borderRadius: radii.sm,
+    borderWidth: 1,
+  },
+  degradeZone: {
+    padding: spacing.sm,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.xs,
   },
   boardThumbnail: {
     width: 120,

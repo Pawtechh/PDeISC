@@ -741,20 +741,7 @@ export const ProfileScreen: React.FC = () => {
             <Text variant="caption" color={theme.subtext}>
               Instrucciones completas para los 3 perfiles (Surfista, Dueño de Tabla, Mostrador de Sede), arquitectura y guía de defensa de examen:
             </Text>
-            <Button
-              title="🎓 Descargar PDF de Estudio / Defensa"
-              size="sm"
-              variant="primary"
-              iconLeft={<GraduationCap size={16} color={isDark ? '#090C10' : '#FFFFFF'} />}
-              style={{ backgroundColor: isDark ? '#D4AF37' : '#D97706' }}
-              onPress={() => {
-                if (typeof window !== 'undefined' && window.location) {
-                  window.open(`${window.location.origin}/manual/guia-estudio-defensa.pdf`, '_blank');
-                } else {
-                  Linking.openURL(`${getServerOrigin()}/manual/guia-estudio-defensa.pdf`);
-                }
-              }}
-            />
+
             <Row spacing="sm">
               <Button
                 title="Ver Manual Web"

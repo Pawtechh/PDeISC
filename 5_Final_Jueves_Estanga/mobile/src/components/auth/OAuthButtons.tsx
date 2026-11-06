@@ -85,17 +85,8 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
   const fetchDbGoogleAccounts = useCallback(async () => {
     setIsLoadingAccounts(true);
     try {
-      let localSaved: GoogleDbAccount[] = [];
-      try {
-        if (typeof window !== 'undefined' && window.localStorage) {
-          const raw = window.localStorage.getItem('surf_saved_google_accounts');
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)) localSaved = parsed;
-          }
-        }
-      } catch {
-        // Ignorar error de localStorage
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.removeItem('surf_saved_google_accounts');
       }
 
       const res = await fetch(`${getBaseUrl()}/auth/oauth/google/accounts`, {
@@ -104,22 +95,17 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
       if (res.ok) {
         const json = await res.json();
         if (Array.isArray(json?.data)) {
-          const mergedMap = new Map<string, GoogleDbAccount>();
-          for (const item of localSaved) {
-            if (item?.email) mergedMap.set(item.email.toLowerCase(), item);
-          }
-          for (const item of json.data) {
-            if (item?.email) mergedMap.set(item.email.toLowerCase(), item);
-          }
-          setAccounts(Array.from(mergedMap.values()));
+          // Solo cuentas reales con @gmail.com
+          const gmailAccounts = json.data.filter((item: any) =>
+            item?.email && item.email.toLowerCase().endsWith('@gmail.com')
+          );
+          setAccounts(gmailAccounts);
           return;
         }
       }
-      if (localSaved.length > 0) {
-        setAccounts(localSaved);
-      }
+      setAccounts([]);
     } catch {
-      // Ignorar error de red inicial
+      setAccounts([]);
     } finally {
       setIsLoadingAccounts(false);
     }

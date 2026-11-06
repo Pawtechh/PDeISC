@@ -411,7 +411,29 @@ export class AgencyService {
       // Continuar de forma segura si prisma está mockeado en unit tests
     }
 
-    return vendorRegistry.getAll();
+    const all = vendorRegistry.getAll();
+    try {
+      if (prisma?.board?.findMany) {
+        const allBoards = await prisma.board.findMany({
+          select: {
+            id: true,
+            ownerId: true,
+            titulo: true,
+            marca: true,
+            tipoTabla: true,
+            precioHora: true,
+            estado: true,
+          },
+        });
+        return all.map((app) => ({
+          ...app,
+          tablasList: allBoards.filter((b) => b.ownerId === app.userId),
+        }));
+      }
+    } catch {
+      // Continuar si prisma está mockeado
+    }
+    return all;
   }
 
   /**
