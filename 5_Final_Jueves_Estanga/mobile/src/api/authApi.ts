@@ -128,9 +128,23 @@ export const authApi = apiSlice.injectEndpoints({
       invalidatesTags: ['User', 'VendorRequest', 'OwnerBoards', 'Rental'],
     }),
 
-    forgotPassword: builder.mutation<{ data: { message: string } }, ForgotPasswordRequest>({
+    forgotPassword: builder.mutation<
+      { data: { message: string; resetToken?: string; recoveryCode?: string; emailSent?: boolean } },
+      ForgotPasswordRequest
+    >({
       query: (body) => ({
         url: '/auth/forgot-password',
+        method: 'POST',
+        body,
+      }),
+    }),
+
+    resetPassword: builder.mutation<
+      { data: { message: string } },
+      { token: string; newPassword: string }
+    >({
+      query: (body) => ({
+        url: '/auth/reset-password',
         method: 'POST',
         body,
       }),
@@ -169,4 +183,5 @@ export const {
   useForgotPasswordMutation,
   useLogoutApiMutation,
   useUpdateProfileMutation,
+  useResetPasswordMutation,
 } = authApi;

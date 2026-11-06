@@ -4,14 +4,20 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
-  Linking,
   Platform,
 } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking';
 import Svg, { Path } from 'react-native-svg';
 import { Stack, Row, Text } from '../ui';
 import { radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { getBaseUrl } from '../../api/baseQueryWithAuth';
+import { useAppDispatch } from '../../store';
+import { setCredentials, setRole } from '../../store/slices/authSlice';
+import { tokenStorage } from '../../utils/storage';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export interface OAuthButtonsProps {
   label?: string;
@@ -64,28 +70,58 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
   onError,
 }) => {
   const { theme, isDark } = useTheme();
+  const dispatch = useAppDispatch();
   const [loadingProvider, setLoadingProvider] = useState<'google' | 'facebook' | 'github' | null>(null);
 
   const handleOAuthLogin = async (provider: 'google' | 'facebook' | 'github') => {
     setLoadingProvider(provider);
     try {
       const baseUrl = getBaseUrl();
-      const authUrl = `${baseUrl}/auth/oauth/${provider}`;
 
       if (Platform.OS === 'web') {
-        window.location.href = authUrl;
-      } else {
-        const urlWithClient = `${authUrl}?client=mobile`;
-        const canOpen = await Linking.canOpenURL(urlWithClient);
-        if (canOpen) {
-          await Linking.openURL(urlWithClient);
-        } else {
-          await Linking.openURL(authUrl);
+        window.location.href = `${baseUrl}/auth/oauth/${provider}`;
+        return;
+      }
+
+      // En Android APK / iOS: Usar WebBrowser con Custom Tabs en ventana modal
+      // La ventana se cierra automáticamente al autenticar y vuelve a la app nativa
+      const deepLink = Linking.createURL('auth/callback');
+      const authUrl = `${baseUrl}/auth/oauth/${provider}?client=mobile&redirectUri=${encodeURIComponent(deepLink)}`;
+
+      const result = await WebBrowser.openAuthSessionAsync(authUrl, deepLink);
+
+      if (result.type === 'success' && result.url) {
+        const parsed = Linking.parse(result.url);
+        const access = (parsed.queryParams?.access as string) || (parsed.queryParams?.token as string);
+        const refresh = (parsed.queryParams?.refresh as string) || '';
+
+        if (access) {
+          const meRes = await fetch(`${baseUrl}/auth/me`, {
+            headers: { Authorization: `Bearer ${access}` },
+          });
+          if (meRes.ok) {
+            const json = await meRes.json();
+            const user = json?.data?.user;
+            if (user) {
+              await tokenStorage.save({ access, refresh });
+              await tokenStorage.saveUser(user);
+              const role = (user.role || user.rol || 'CONSUMER').toUpperCase();
+              dispatch(
+                setCredentials({
+                  user: { ...user, role, rol: role },
+                  accessToken: access,
+                  refreshToken: refresh,
+                })
+              );
+              dispatch(setRole(role));
+            }
+          }
         }
       }
     } catch (err: any) {
-      setLoadingProvider(null);
       onError?.(err?.message || `Error al conectar con ${provider}`);
+    } finally {
+      setLoadingProvider(null);
     }
   };
 

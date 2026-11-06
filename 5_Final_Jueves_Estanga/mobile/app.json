@@ -2,6 +2,7 @@
   "expo": {
     "name": "Surf Rental MDP",
     "slug": "surf-rental-mdp",
+    "scheme": "surfrental",
     "version": "1.0.0",
     "orientation": "portrait",
     "jsEngine": "hermes",

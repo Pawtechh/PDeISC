@@ -1,5 +1,8 @@
 import React from 'react';
+import * as WebBrowser from 'expo-web-browser';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+WebBrowser.maybeCompleteAuthSession();
 import { Provider } from 'react-redux';
 import { store } from './src/store';
 import { RootNavigator } from './src/navigation/RootNavigator';

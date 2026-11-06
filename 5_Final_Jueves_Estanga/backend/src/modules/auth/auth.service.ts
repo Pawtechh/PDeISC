@@ -14,6 +14,7 @@ import { JwtPayload } from '../../types/auth';
 import { AppError } from '../../middlewares/errorHandler';
 import { vendorRegistry } from '../../config/vendorRegistry';
 import { saveBase64Image } from '../../utils/fileStorage';
+import { sendPasswordResetEmail } from '../../utils/mailer';
 
 export class AuthService {
   /**
@@ -281,15 +282,27 @@ export class AuthService {
       };
     }
 
+    const recoveryCode = String(Math.floor(100000 + Math.random() * 900000));
     const resetToken = jwt.sign(
-      { id: user.id, type: 'reset' },
+      { id: user.id, type: 'reset', recoveryCode },
       JWT_CONFIG.accessSecret,
       { expiresIn: '1h' }
     );
 
+    const emailSent = await sendPasswordResetEmail({
+      to: user.email,
+      nombre: user.nombre,
+      resetToken,
+      recoveryCode,
+    });
+
     return {
-      message: 'Si el email está registrado, se enviaron las instrucciones de recuperación.',
-      resetToken, // Retornado en desarrollo para testing
+      message: emailSent
+        ? `Se envió un correo a ${user.email} con tu código de recuperación.`
+        : 'Código de recuperación generado exitosamente.',
+      resetToken,
+      recoveryCode,
+      emailSent,
     };
   }
 

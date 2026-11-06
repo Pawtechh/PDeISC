@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
+import * as Linking from 'expo-linking';
 import { NavigationContainer } from '@react-navigation/native';
 import { Waves } from 'lucide-react-native';
 import { useAppSelector, useAppDispatch } from '../store';
@@ -127,6 +128,55 @@ export function RootNavigator() {
     restoreSession();
     return () => {
       isMounted = false;
+    };
+  }, [dispatch]);
+
+  // Listener para capturar Deep Links de autenticación OAuth (ej: surfrental://auth/callback?access=...&refresh=...)
+  useEffect(() => {
+    const handleAuthUrl = async (url: string) => {
+      try {
+        if (!url || !url.includes('auth/callback')) return;
+        const parsed = Linking.parse(url);
+        const access = (parsed.queryParams?.access as string) || (parsed.queryParams?.token as string);
+        const refresh = (parsed.queryParams?.refresh as string) || '';
+
+        if (access && isValidJwt(access)) {
+          const res = await fetch(`${getBaseUrl()}/auth/me`, {
+            headers: { Authorization: `Bearer ${access}` },
+          });
+          if (res.ok) {
+            const json = await res.json();
+            const user = json?.data?.user;
+            if (user) {
+              await tokenStorage.save({ access, refresh });
+              await tokenStorage.saveUser(user);
+              const role = (user.role || user.rol || 'CONSUMER').toUpperCase();
+              dispatch(
+                setCredentials({
+                  user: { ...user, role, rol: role },
+                  accessToken: access,
+                  refreshToken: refresh,
+                })
+              );
+              dispatch(setRole(role));
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('[RootNavigator] Error al procesar deep link de login:', err);
+      }
+    };
+
+    const subscription = Linking.addEventListener('url', (evt) => {
+      if (evt.url) handleAuthUrl(evt.url);
+    });
+
+    Linking.getInitialURL().then((initUrl) => {
+      if (initUrl) handleAuthUrl(initUrl);
+    });
+
+    return () => {
+      subscription.remove();
     };
   }, [dispatch]);
 

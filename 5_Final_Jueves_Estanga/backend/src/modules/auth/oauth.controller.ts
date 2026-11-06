@@ -18,10 +18,14 @@ export const initiateOAuth: RequestHandler = (req, res, next) => {
     }
 
     const redirectUri = req.query.redirectUri as string | undefined;
+    const client = req.query.client as string | undefined;
     const proto = (req.headers['x-forwarded-proto'] as string)?.split(',')[0]?.trim() || req.protocol || 'http';
     const host = (req.headers['x-forwarded-host'] as string)?.split(',')[0]?.trim() || req.get('host');
     const dynamicBaseUrl = host ? `${proto}://${host}/api` : undefined;
-    const authUrl = oauthService.getAuthorizationUrl(provider, redirectUri, dynamicBaseUrl);
+
+    const statePayload = JSON.stringify({ client, redirectUri });
+    const state = Buffer.from(statePayload).toString('base64');
+    const authUrl = oauthService.getAuthorizationUrl(provider, redirectUri, dynamicBaseUrl, state);
 
     // Si el cliente pide JSON
     if (req.headers.accept?.includes('application/json')) {
@@ -68,10 +72,20 @@ export const handleCallback: RequestHandler = async (req, res, next) => {
     const profile = await oauthService.fetchUserProfile(provider, code, redirectUri);
     const result = await oauthService.handleOAuthUser(provider, profile);
 
-    // Si viene de un flujo mobile con deep link
-    const isMobileClient = req.query.client === 'mobile';
-    if (isMobileClient) {
-      const deepLink = `${OAUTH_CONFIG.mobileDeepLinkScheme}?access=${result.tokens.accessToken}&refresh=${result.tokens.refreshToken}`;
+    // Decodificar parámetro state si proviene de un flujo mobile o custom redirect
+    let stateData: { client?: string; redirectUri?: string } = {};
+    if (req.query.state && typeof req.query.state === 'string') {
+      try {
+        stateData = JSON.parse(Buffer.from(req.query.state, 'base64').toString('utf8'));
+      } catch {}
+    }
+
+    const isMobileClient = stateData.client === 'mobile' || req.query.client === 'mobile';
+    const mobileRedirect = stateData.redirectUri || (isMobileClient ? OAUTH_CONFIG.mobileDeepLinkScheme : undefined);
+
+    if (mobileRedirect) {
+      const sep = mobileRedirect.includes('?') ? '&' : '?';
+      const deepLink = `${mobileRedirect}${sep}access=${encodeURIComponent(result.tokens.accessToken)}&refresh=${encodeURIComponent(result.tokens.refreshToken)}`;
       res.redirect(deepLink);
       return;
     }
@@ -134,12 +148,16 @@ export const handleCallback: RequestHandler = async (req, res, next) => {
           localStorage.setItem('auth_user', JSON.stringify(user));
         }
 
+        var deepLink = "${OAUTH_CONFIG.mobileDeepLinkScheme}?access=" + encodeURIComponent(tokens.accessToken) + "&refresh=" + encodeURIComponent(tokens.refreshToken || '');
+
         var parentWin = window.opener || window.parent;
         if (parentWin && parentWin !== window) {
           try {
             parentWin.postMessage({ type: 'expo-auth-session', url: window.location.href }, '*');
           } catch (e) {}
           setTimeout(function() { window.close(); }, 350);
+        } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || ${isMobileClient}) {
+          window.location.href = deepLink;
         } else {
           setTimeout(function() { window.location.href = '/'; }, 300);
         }

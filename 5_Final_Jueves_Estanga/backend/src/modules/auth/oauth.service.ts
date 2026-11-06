@@ -70,16 +70,17 @@ export class OAuthService {
   getAuthorizationUrl(
     provider: SupportedOAuthProvider,
     customRedirectUri?: string,
-    dynamicBaseUrl?: string
+    dynamicBaseUrl?: string,
+    state?: string
   ): string {
     const baseApiUrl = dynamicBaseUrl || OAUTH_CONFIG.callbackBaseUrl;
     const defaultRedirect = `${baseApiUrl}/auth/oauth/${provider}/callback`;
-    const redirectUri = customRedirectUri || defaultRedirect;
+    const redirectUri = (customRedirectUri && customRedirectUri.startsWith('http')) ? customRedirectUri : defaultRedirect;
 
     // Si no cuenta con Client ID real de producción y no estamos en entorno de testing unitario,
     // redirigir a la pantalla de consentimiento del Sandbox
     if (process.env.NODE_ENV !== 'test' && !this.isRealProviderConfigured(provider)) {
-      return `${baseApiUrl}/auth/oauth/${provider}/consent?redirectUri=${encodeURIComponent(redirectUri)}`;
+      return `${baseApiUrl}/auth/oauth/${provider}/consent?redirectUri=${encodeURIComponent(redirectUri)}${state ? `&state=${encodeURIComponent(state)}` : ''}`;
     }
 
     switch (provider) {
@@ -92,6 +93,7 @@ export class OAuthService {
           access_type: 'offline',
           prompt: 'select_account',
         });
+        if (state) params.set('state', state);
         return `${OAUTH_CONFIG.google.authUrl}?${params.toString()}`;
       }
       case 'github': {
@@ -100,6 +102,7 @@ export class OAuthService {
           redirect_uri: redirectUri,
           scope: OAUTH_CONFIG.github.scope.join(' '),
         });
+        if (state) params.set('state', state);
         return `${OAUTH_CONFIG.github.authUrl}?${params.toString()}`;
       }
       case 'facebook': {
@@ -109,6 +112,7 @@ export class OAuthService {
           scope: OAUTH_CONFIG.facebook.scope.join(','),
           response_type: 'code',
         });
+        if (state) params.set('state', state);
         return `${OAUTH_CONFIG.facebook.authUrl}?${params.toString()}`;
       }
       case 'apple': {
