@@ -275,7 +275,19 @@ export class OAuthService {
     // Flujo real de Facebook
     if (provider === 'facebook') {
       try {
-        const res = await fetch(`${OAUTH_CONFIG.facebook.userInfoUrl}&access_token=${codeOrToken}`);
+        let accessToken = codeOrToken;
+        if (!codeOrToken.startsWith('EAAB') && !codeOrToken.startsWith('EAAQ')) {
+          const defaultRedirect = `${OAUTH_CONFIG.callbackBaseUrl}/auth/oauth/facebook/callback`;
+          const targetRedirect = redirectUri || defaultRedirect;
+          const tokenUrl = `${OAUTH_CONFIG.facebook.tokenUrl}?client_id=${OAUTH_CONFIG.facebook.clientId}&client_secret=${OAUTH_CONFIG.facebook.clientSecret}&redirect_uri=${encodeURIComponent(targetRedirect)}&code=${encodeURIComponent(codeOrToken)}`;
+          const tokenRes = await fetch(tokenUrl);
+          if (tokenRes.ok) {
+            const tokenJson = (await tokenRes.json()) as any;
+            if (tokenJson.access_token) accessToken = tokenJson.access_token;
+          }
+        }
+
+        const res = await fetch(`${OAUTH_CONFIG.facebook.userInfoUrl}&access_token=${accessToken}`);
         if (!res.ok) throw new Error('Error al consultar perfil de Facebook');
         const data = (await res.json()) as any;
         return {
@@ -385,13 +397,23 @@ export class OAuthService {
       return { user, tokens, merged: true, isNew: false };
     }
 
-    // 3. Si no existe una cuenta previa con ese email, NO permitir el acceso y exigir registro tradicional
-    const error: any = new Error(
-      `No existe una cuenta registrada con el correo ${profile.email.toLowerCase()}. Para ingresar a Surf Rental MDP debés crear tu cuenta primero completando tus datos y aceptando los Términos y Condiciones.`
-    );
-    error.statusCode = 404;
-    error.code = 'ACCOUNT_NOT_REGISTERED';
-    throw error;
+    // 3. Si no existe una cuenta previa con ese email, crearla automáticamente con el perfil del proveedor
+    const cleanDni = `OAUTH-${Date.now().toString().slice(-8)}`;
+    user = await prisma.user.create({
+      data: {
+        email: profile.email.toLowerCase(),
+        nombre: profile.name || `Surfista ${provider.toUpperCase()}`,
+        role: Role.CONSUMER,
+        oauthId: profile.id,
+        authProvider: providerEnum,
+        dni: cleanDni,
+        puntos: 50,
+        activo: true,
+      },
+    });
+
+    const tokens = await this.generateTokens(user);
+    return { user, tokens, merged: false, isNew: true };
   }
 
   /**

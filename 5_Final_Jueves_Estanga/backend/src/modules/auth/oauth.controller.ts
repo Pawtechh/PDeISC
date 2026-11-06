@@ -210,24 +210,6 @@ export const renderConsentScreen: RequestHandler = async (req, res) => {
   const redirectUri = (req.query.redirectUri as string) || `${dynamicBaseUrl}/auth/oauth/${provider}/callback`;
 
   if (provider === 'google') {
-    const dbAccounts = await oauthService.listGoogleAccounts();
-    const avatarColors = ['#78909C', '#E57373', '#0097A7', '#F4511E', '#E64A19', '#5C6BC0', '#00897B'];
-    const accountsHtml = dbAccounts
-      .map((acc, idx) => {
-        const initial = (acc.nombre || acc.email || 'G').trim().charAt(0).toUpperCase();
-        const color = avatarColors[idx % avatarColors.length];
-        const safeEmail = acc.email.replace(/"/g, '&quot;');
-        const safeName = (acc.nombre || acc.email.split('@')[0] || 'Usuario').replace(/"/g, '&quot;');
-        return `
-        <div class="account-item" onclick="submitAuth('${safeEmail}', '${safeName}')">
-          <div class="avatar" style="background:${color}">${initial}</div>
-          <div class="account-info">
-            <div class="account-name">${safeName}</div>
-            <div class="account-email">${safeEmail}</div>
-          </div>
-        </div>`;
-      })
-      .join('');
 
     const html = `<!DOCTYPE html>
 <html lang="es">
@@ -432,24 +414,18 @@ export const renderConsentScreen: RequestHandler = async (req, res) => {
             <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
           </svg>
         </div>
-        <h1 id="leftTitle">Elige una cuenta</h1>
+        <h1 id="leftTitle">Acceder con Google</h1>
         <p>Ir a <span>Surf Rental Mar del Plata</span></p>
       </div>
       <div class="col-right">
-        <div id="accountList">
-          ${accountsHtml}
-          <div class="use-another" onclick="showCustomForm()">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e3e3e3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;margin-right:6px;">
-              <circle cx="12" cy="12" r="10"/>
-              <circle cx="12" cy="10" r="3"/>
-              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
-            </svg>
-            <span>Usar otra cuenta</span>
+        <form id="customForm" onsubmit="handleGoogleSubmit(event)" style="display:flex; flex-direction:column;">
+          <input type="email" id="googleEmail" class="input-field" placeholder="Correo electrónico de Google" required autofocus>
+          <input type="text" id="googleName" class="input-field" placeholder="Nombre y apellido (opcional)">
+          <div class="btn-row">
+            <button type="submit" class="btn-next">Siguiente</button>
           </div>
-        </div>
-        <form id="customForm" onsubmit="handleGoogleSubmit(event)">
-          <input type="email" id="googleEmail" class="input-field" placeholder="Correo electrónico o teléfono" required>
-          <input type="text" id="googleName" class="input-field" placeholder="Nombre y apellido">
+        </form>
+      </div>
           <div class="btn-row">
             <button type="button" class="btn-link" onclick="showAccountList()">Volver a las cuentas</button>
             <button type="submit" class="btn-next">Siguiente</button>
