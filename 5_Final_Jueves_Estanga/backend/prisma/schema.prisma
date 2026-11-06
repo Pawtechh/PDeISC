@@ -69,7 +69,7 @@ model User {
   nombre          String
   telefono        String?
   dni             String?        @unique
-  dniFotoUrl      String?
+  dniFotoUrl      String?        @db.MediumText
   authProvider    AuthProvider   @default(LOCAL)
   oauthId         String?
   puntos          Int            @default(0)
@@ -155,7 +155,7 @@ model Rental {
   
   // Entrega y devolución
   fotosRetiro         Json?
-  firmaRetiroUrl      String?
+  firmaRetiroUrl      String?       @db.MediumText
   fotosDevolucion     Json?
   descripcionDanio    String?       @db.Text
   lavada              Boolean?      @default(true)
@@ -188,7 +188,7 @@ model InsuranceClaim {
   montoReclamado      Decimal     @db.Decimal(10, 2)
   descripcion         String      @db.Text
   fotosDano           Json
-  presupuestoReparacionUrl String?
+  presupuestoReparacionUrl String? @db.MediumText
   estado              ClaimStatus @default(ABIERTO)
   notificadoAt        DateTime?
   plazoDisputaVence   DateTime?
@@ -255,7 +255,7 @@ model DigitalSignature {
   rentalId        String?
   ipAddress       String
   userAgent       String?
-  signatureData   String?  @db.Text
+  signatureData   String?  @db.MediumText
   auditToken      String   @unique
   verified        Boolean  @default(true)
   timestamp       DateTime @default(now())

@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Star, Search, LayoutGrid, Award, Shield, Clock, Waves } from 'lucide-react-native';
-import * as Haptics from 'expo-haptics';
+import { safeHaptic } from '../../utils/haptics';
 import { Screen, Stack, Row, Text, Input, Badge, Button, EmptyState, GlassCard, Card } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -31,11 +31,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   const { numColumns } = useResponsive();
 
   const triggerHaptic = useCallback(() => {
-    try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch {
-      // Non-blocking fallback
-    }
+    safeHaptic.impact();
   }, []);
 
   const { data, isLoading, isFetching, refetch } = useGetBoardsQuery(

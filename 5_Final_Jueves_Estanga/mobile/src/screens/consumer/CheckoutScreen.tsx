@@ -9,7 +9,7 @@ import {
   Modal,
 } from 'react-native';
 import { Image } from 'expo-image';
-import * as Haptics from 'expo-haptics';
+import { safeHaptic } from '../../utils/haptics';
 import { Screen, Stack, Row, Text, Card, Badge, Button, Divider } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -354,17 +354,13 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
       dniTitular: true,
     });
     setGlobalBannerError(null);
-    try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch {}
+    safeHaptic.impact();
   };
 
   // Acción cuando el usuario toca el botón estando deshabilitado
   const handlePressDisabledButton = () => {
     markAllTouched();
-    try {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-    } catch {}
+    safeHaptic.notification(Haptics.NotificationFeedbackType.Warning);
 
     setGlobalBannerError('Revisá los campos marcados en rojo para continuar.');
 
@@ -382,16 +378,12 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
     const slotCheck = availableSlots.find((s) => s.label === horaRetiro);
     if (!slotCheck || !slotCheck.disponible) {
       setGlobalBannerError('Ese horario acaba de pasar o ya no está disponible. Elegí otro.');
-      try {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      } catch {}
+      safeHaptic.notification(Haptics.NotificationFeedbackType.Error);
       return;
     }
 
     try {
-      try {
-        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      } catch {}
+      safeHaptic.impact(Haptics.ImpactFeedbackStyle.Medium);
 
       setIsProcessing(true);
       setGlobalBannerError(null);
@@ -457,9 +449,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         hora: horaRetiro,
       });
 
-      try {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      } catch {}
+      safeHaptic.notification(Haptics.NotificationFeedbackType.Success);
 
       setPaymentSuccess(true);
     } catch {

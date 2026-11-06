@@ -9,6 +9,7 @@ import { JWT_CONFIG } from '../../config/jwt';
 import { vendorRegistry } from '../../config/vendorRegistry';
 import { systemConfig } from '../../config/systemConfig';
 import { AppError } from '../../middlewares/errorHandler';
+import { saveBase64Image } from '../../utils/fileStorage';
 
 const router = Router();
 
@@ -130,7 +131,7 @@ router.patch('/me', async (req, res, next) => {
         nombre: nombre || undefined,
         telefono: telefono || undefined,
         dni: cleanDni || undefined,
-        dniFotoUrl: dniFotoUrl || undefined,
+        dniFotoUrl: dniFotoUrl ? (saveBase64Image(dniFotoUrl, 'dni', req.user!.id) || dniFotoUrl) : undefined,
       },
       select: {
         id: true,
@@ -199,7 +200,7 @@ router.post('/verify-identity', async (req, res, next) => {
       where: { id: req.user!.id },
       data: {
         dni: cleanDni,
-        dniFotoUrl: String(dniFotoUrl).trim(),
+        dniFotoUrl: saveBase64Image(dniFotoUrl, 'dni', req.user!.id) || String(dniFotoUrl).trim(),
       },
       select: {
         id: true,

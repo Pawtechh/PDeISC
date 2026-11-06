@@ -9,7 +9,7 @@ import { Screen, Stack, Row, Text, Button, Card, FormInput, Divider } from '../.
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppDispatch } from '../../store';
-import { setCredentials, setGuestMode, UserRole } from '../../store/slices/authSlice';
+import { setCredentials, setGuestMode } from '../../store/slices/authSlice';
 import { useLoginMutation } from '../../api/authApi';
 import { tokenStorage } from '../../utils/storage';
 import { loginSchema, LoginFormData } from '../../schemas/auth.schema';
@@ -107,67 +107,24 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       });
 
       if (result.success) {
-        await handleDevLogin('CONSUMER');
+        const storedUser = await tokenStorage.getUser();
+        const tokens = await tokenStorage.get();
+        if (storedUser && tokens.access) {
+          dispatch(
+            setCredentials({
+              user: storedUser,
+              accessToken: tokens.access,
+              refreshToken: tokens.refresh || '',
+            })
+          );
+        } else {
+          setErrorMessage('Iniciá sesión primero con tu cuenta para activar el acceso biométrico.');
+        }
       } else {
         setErrorMessage('Verificación biométrica no completada.');
       }
     } catch {
       setErrorMessage('No se pudo verificar la biometría.');
-    }
-  };
-
-  const handleDevLogin = async (role: UserRole) => {
-    const creds: Record<UserRole, { email: string; pass: string }> = {
-      CONSUMER: { email: 'consumer@surf.com', pass: 'Password123!' },
-      OWNER: { email: 'owner@surf.com', pass: 'Password123!' },
-      AGENCIA: { email: 'mostrador@surf.com', pass: 'Password123!' },
-    };
-
-    const target = creds[role];
-    try {
-      const response = await loginApi({ email: target.email, password: target.pass }).unwrap();
-      const { user, tokens } = response.data;
-
-      await tokenStorage.save({
-        access: tokens.accessToken,
-        refresh: tokens.refreshToken,
-      });
-      await tokenStorage.saveUser(user);
-
-      dispatch(
-        setCredentials({
-          user,
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
-        })
-      );
-    } catch {
-      const devUser = {
-        id: `dev-${role.toLowerCase()}-1`,
-        email: target.email,
-        role,
-        nombre:
-          role === 'CONSUMER'
-            ? 'Gonzalo Surfista'
-            : role === 'OWNER'
-            ? 'Martín Shaper MDP'
-            : 'Operador Mostrador Playa Grande',
-        puntos: 120,
-      };
-
-      await tokenStorage.save({
-        access: 'dev-access-token',
-        refresh: 'dev-refresh-token',
-      });
-      await tokenStorage.saveUser(devUser);
-
-      dispatch(
-        setCredentials({
-          user: devUser,
-          accessToken: 'dev-access-token',
-          refreshToken: 'dev-refresh-token',
-        })
-      );
     }
   };
 
@@ -327,55 +284,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               />
             </Stack>
           </Card>
-
-          {/* Development Quick Role Switcher */}
-          <Card
-            padding="md"
-            style={[
-              styles.devCard,
-              {
-                backgroundColor: isDark ? 'rgba(18, 24, 36, 0.75)' : '#FFFBEB',
-                borderColor: isDark ? 'rgba(245, 158, 11, 0.4)' : '#FDE68A',
-              },
-            ]}
-          >
-            <Stack spacing="xs">
-              <Row align="center" justify="center">
-                <Text
-                  variant="caption"
-                  style={[
-                    styles.devTitle,
-                    { color: isDark ? '#F59E0B' : colors.sunset[600] },
-                  ]}
-                >
-                  ACCESO DIRECTO POR ROL
-                </Text>
-              </Row>
-              <Row spacing="sm" justify="space-between">
-                <Button
-                  title="Consumer"
-                  size="sm"
-                  variant="secondary"
-                  style={styles.roleBtn}
-                  onPress={() => handleDevLogin('CONSUMER')}
-                />
-                <Button
-                  title="Owner"
-                  size="sm"
-                  variant="secondary"
-                  style={styles.roleBtn}
-                  onPress={() => handleDevLogin('OWNER')}
-                />
-                <Button
-                  title="Agencia"
-                  size="sm"
-                  variant="secondary"
-                  style={styles.roleBtn}
-                  onPress={() => handleDevLogin('AGENCIA')}
-                />
-              </Row>
-            </Stack>
-          </Card>
         </View>
       </View>
     </Screen>
@@ -513,17 +421,5 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 1,
     borderColor: 'rgba(239, 68, 68, 0.5)',
-  },
-  devCard: {
-    borderRadius: radii.lg,
-    borderWidth: 1,
-  },
-  devTitle: {
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    fontSize: 11,
-  },
-  roleBtn: {
-    flex: 1,
   },
 });

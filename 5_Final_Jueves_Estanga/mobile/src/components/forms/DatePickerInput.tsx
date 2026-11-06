@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import * as Haptics from 'expo-haptics';
+import { safeHaptic } from '../../utils/haptics';
 import { Text, Card, Row, Stack, Button, Divider } from '../ui';
 import { colors, radii, spacing, useTheme } from '../../theme';
 import { calcularEdad } from '../../schemas/auth.schema';
@@ -129,9 +129,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
     }
     setShowYearPicker(false);
     setModalVisible(true);
-    try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch {}
+    safeHaptic.impact();
   };
 
   const handlePrevMonth = () => {
@@ -164,9 +162,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
     const dStr = String(day).padStart(2, '0');
     const iso = `${viewYear}-${mStr}-${dStr}`;
     setTempSelected(iso);
-    try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch {}
+    safeHaptic.impact();
   };
 
   const handleConfirm = () => {
@@ -174,9 +170,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
       onChange(tempSelected);
     }
     setModalVisible(false);
-    try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    } catch {}
+    safeHaptic.impact();
   };
 
   const handleCancel = () => {

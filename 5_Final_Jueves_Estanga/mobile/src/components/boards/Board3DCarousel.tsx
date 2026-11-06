@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
-import * as Haptics from 'expo-haptics';
+import { safeHaptic } from '../../utils/haptics';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import Animated, {
   useAnimatedScrollHandler,
@@ -30,11 +30,7 @@ export interface Board3DCarouselProps {
 }
 
 const triggerHaptic = () => {
-  try {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  } catch {
-    // Non-blocking fallback
-  }
+  safeHaptic.impact();
 };
 
 interface CarouselCardItemProps {

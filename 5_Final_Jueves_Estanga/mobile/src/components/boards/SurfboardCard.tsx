@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as Haptics from 'expo-haptics';
+import { safeHaptic } from '../../utils/haptics';
 import { Star, Award } from 'lucide-react-native';
 import { Board } from '../../api/boardsApi';
 import { Badge } from '../ui/Badge';
@@ -30,11 +30,7 @@ export interface SurfboardCardProps {
 }
 
 const triggerHaptic = () => {
-  try {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  } catch {
-    // Non-blocking fallback
-  }
+  safeHaptic.impact();
 };
 
 export const SurfboardCard: React.FC<SurfboardCardProps> = ({

@@ -62,7 +62,9 @@ export const MandatoryKycModal: React.FC = () => {
     setErrorMessage(null);
     setDniFotoUrl('https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80');
     if (!dni) {
-      setDni('42111222');
+      // Generar DNI aleatorio de 8 dígitos único para testing y evitar colisiones 409
+      const randomDni = String(Math.floor(41000000 + Math.random() * 8900000));
+      setDni(randomDni);
     }
   };
 

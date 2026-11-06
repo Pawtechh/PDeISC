@@ -13,6 +13,7 @@ import {
 import { JwtPayload } from '../../types/auth';
 import { AppError } from '../../middlewares/errorHandler';
 import { vendorRegistry } from '../../config/vendorRegistry';
+import { saveBase64Image } from '../../utils/fileStorage';
 
 export class AuthService {
   /**
@@ -88,7 +89,7 @@ export class AuthService {
         nombre: nombreLegal,
         telefono: data.telefono ? data.telefono.replace(/\D/g, '') : null,
         dni: dniLimpio,
-        dniFotoUrl: data.dniFotoUrl,
+        dniFotoUrl: data.dniFotoUrl ? (saveBase64Image(data.dniFotoUrl, 'dni', dniLimpio) || data.dniFotoUrl) : undefined,
         role: Role.CONSUMER,
       },
       select: {

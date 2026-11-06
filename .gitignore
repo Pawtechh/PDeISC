@@ -75,3 +75,8 @@ Thumbs.db
 * - copia*
 *- copia*
 
+
+# User uploads & KYC photos
+**/public/uploads/dni/*
+!**/public/uploads/dni/.gitkeep
+

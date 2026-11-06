@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity, Modal, RefreshControl, Text as RNText } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import * as Haptics from 'expo-haptics';
+import { safeHaptic } from '../../utils/haptics';
 import { Screen, Stack, Row, Text, Card, Button, EmptyState, QrCodeView } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
@@ -87,7 +87,7 @@ export const MyRentalsScreen: React.FC = () => {
 
     try {
       try {
-        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        safeHaptic.impact(Haptics.ImpactFeedbackStyle.Medium);
       } catch {
         // Haptics no soportado en web
       }

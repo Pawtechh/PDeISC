@@ -85,6 +85,7 @@ export const createApp = (): Application => {
   const activeHtmlPath = fs.existsSync(distHtmlPath) ? distHtmlPath : publicHtmlPath;
 
   // Recursos del backend: imágenes de tablas, manual operativo y portal de desarrollo
+  app.use('/uploads', express.static(path.join(publicPath, 'uploads')));
   app.use('/images', express.static(path.join(publicPath, 'images')));
   app.use('/manual', express.static(path.join(publicPath, 'manual')));
   app.get('/portal', (_req: Request, res: Response) => {
