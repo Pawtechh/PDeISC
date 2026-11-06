@@ -63,8 +63,8 @@ export const ProfileScreen: React.FC = () => {
     return (
       <Screen scrollable>
         <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center', marginTop: 40 }}>
-          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE', alignItems: 'center', justifyContent: 'center' }}>
-            <Waves size={32} color={isDark ? '#00E5FF' : '#0284C7'} />
+          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE', alignItems: 'center', justifyContent: 'center' }}>
+            <Waves size={32} color={isDark ? '#38BDF8' : '#0284C7'} />
           </View>
           <Text variant="h2" align="center">Perfil de Usuario</Text>
           <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 460 }}>
@@ -353,12 +353,12 @@ export const ProfileScreen: React.FC = () => {
         <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 12 }}>
           <View>
             <Row spacing="xs" align="center">
-              <ShieldCheck size={14} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+              <ShieldCheck size={14} color={isDark ? '#F59E0B' : colors.ocean[600]} />
               <Text
                 variant="caption"
                 style={[
                   styles.eyebrowText,
-                  { color: isDark ? '#D4AF37' : colors.ocean[600] },
+                  { color: isDark ? '#F59E0B' : colors.ocean[600] },
                 ]}
               >
                 CUENTA VERIFICADA • PLAYA GRANDE
@@ -425,7 +425,7 @@ export const ProfileScreen: React.FC = () => {
                     : vendorStatus === 'RECHAZADO'
                     ? colors.semantic.danger
                     : isDark
-                    ? 'rgba(212, 175, 55, 0.4)'
+                    ? 'rgba(245, 158, 11, 0.4)'
                     : colors.ocean[400],
               }}
             >
@@ -438,7 +438,7 @@ export const ProfileScreen: React.FC = () => {
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
                     <Sparkles
                       size={18}
-                      color={isDark ? '#D4AF37' : colors.ocean[600]}
+                      color={isDark ? '#F59E0B' : colors.ocean[600]}
                     />
                     <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                       Permiso de Publicación (Perfil de Vendedor)
@@ -492,7 +492,7 @@ export const ProfileScreen: React.FC = () => {
                       title="Solicitar Permiso de Publicación"
                       variant="primary"
                       size="md"
-                      iconLeft={<Briefcase size={16} color={isDark ? '#090C10' : '#FFFFFF'} />}
+                      iconLeft={<Briefcase size={16} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
                       onPress={openVendorApplicationForm}
                     />
                   </Stack>
@@ -664,7 +664,7 @@ export const ProfileScreen: React.FC = () => {
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
                     <Users
                       size={16}
-                      color={isDark ? '#D4AF37' : colors.ocean[600]}
+                      color={isDark ? '#F59E0B' : colors.ocean[600]}
                     />
                     <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                       Cambiar Modo de Perfil (Usuario ↔ Vendedor)
@@ -710,7 +710,7 @@ export const ProfileScreen: React.FC = () => {
             <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
               <Row spacing="xs" align="center" style={{ flex: 1 }}>
                 {isDark ? (
-                  <Moon size={16} color="#00E5FF" />
+                  <Moon size={16} color="#38BDF8" />
                 ) : (
                   <Sun size={16} color={colors.ocean[600]} />
                 )}
@@ -747,7 +747,7 @@ export const ProfileScreen: React.FC = () => {
                 iconLeft={
                   <Moon
                     size={14}
-                    color={isDark ? '#090C10' : colors.sand[900]}
+                    color={isDark ? '#0B0F17' : colors.sand[900]}
                   />
                 }
                 style={styles.flexBtn}
@@ -807,7 +807,7 @@ export const ProfileScreen: React.FC = () => {
               styles.vendorModalCard,
               {
                 backgroundColor: theme.card,
-                borderColor: isDark ? '#D4AF37' : colors.ocean[400],
+                borderColor: isDark ? '#F59E0B' : colors.ocean[400],
               },
             ]}
           >
@@ -815,7 +815,7 @@ export const ProfileScreen: React.FC = () => {
               <Stack spacing="md">
                 <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                    <Briefcase size={18} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+                    <Briefcase size={18} color={isDark ? '#F59E0B' : colors.ocean[600]} />
                     <Text variant="h2" color={theme.text} style={{ flex: 1 }}>
                       Crear Perfil de Vendedor
                     </Text>
@@ -859,7 +859,7 @@ export const ProfileScreen: React.FC = () => {
                         fotosTablas.length > 0
                           ? colors.semantic.success
                           : isDark
-                          ? 'rgba(0, 229, 255, 0.35)'
+                          ? 'rgba(56, 189, 248, 0.35)'
                           : colors.ocean[300],
                       backgroundColor: isDark ? '#0D1420' : '#F8FAFC',
                     },
@@ -868,7 +868,7 @@ export const ProfileScreen: React.FC = () => {
                   <Stack spacing="sm">
                     <Row justify="space-between" align="center">
                       <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                        <Camera size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                        <Camera size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                         <Text
                           variant="caption"
                           color={theme.text}
@@ -900,7 +900,7 @@ export const ProfileScreen: React.FC = () => {
                       size="sm"
                       isLoading={isPickingPhotos}
                       iconLeft={
-                        <Upload size={15} color={isDark ? '#090C10' : '#FFFFFF'} />
+                        <Upload size={15} color={isDark ? '#0B0F17' : '#FFFFFF'} />
                       }
                       onPress={handleUploadFromDevice}
                     />
@@ -1012,7 +1012,7 @@ export const ProfileScreen: React.FC = () => {
               styles.logoutModalCard,
               {
                 backgroundColor: theme.card,
-                borderColor: isDark ? '#00E5FF' : colors.ocean[500],
+                borderColor: isDark ? '#38BDF8' : colors.ocean[500],
               },
             ]}
           >
@@ -1021,7 +1021,7 @@ export const ProfileScreen: React.FC = () => {
                 <Row spacing="xs" align="center" style={{ flex: 1 }}>
                   <ShieldCheck
                     size={20}
-                    color={isDark ? '#00E5FF' : colors.ocean[600]}
+                    color={isDark ? '#38BDF8' : colors.ocean[600]}
                   />
                   <Text variant="h2" color={theme.text} style={{ flex: 1 }}>
                     Pasar a Perfil de{' '}
@@ -1047,7 +1047,7 @@ export const ProfileScreen: React.FC = () => {
                       color={
                         switchAuthMethod === 'BIOMETRIC'
                           ? isDark
-                            ? '#090C10'
+                            ? '#0B0F17'
                             : '#FFFFFF'
                           : isDark
                           ? '#F1F5F9'
@@ -1071,7 +1071,7 @@ export const ProfileScreen: React.FC = () => {
                       color={
                         switchAuthMethod === 'PASSWORD'
                           ? isDark
-                            ? '#090C10'
+                            ? '#0B0F17'
                             : '#FFFFFF'
                           : isDark
                           ? '#F1F5F9'
@@ -1138,7 +1138,7 @@ export const ProfileScreen: React.FC = () => {
                         iconLeft={
                           <Fingerprint
                             size={18}
-                            color={isDark ? '#00E5FF' : colors.ocean[600]}
+                            color={isDark ? '#38BDF8' : colors.ocean[600]}
                           />
                         }
                         onPress={handleScanForRoleSwitch}

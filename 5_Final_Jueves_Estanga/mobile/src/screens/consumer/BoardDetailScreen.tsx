@@ -93,7 +93,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         <Stack spacing="xs">
           <Row justify="space-between" align="center">
             <View style={{ flex: 1, paddingRight: spacing.md }}>
-              <Text variant="caption" style={{ color: '#D4AF37', fontWeight: '800', letterSpacing: 1.5 }}>
+              <Text variant="caption" style={{ color: '#F59E0B', fontWeight: '800', letterSpacing: 1.5 }}>
                 {board.marca.toUpperCase()} • SHAPER OFICIAL MAR DEL PLATA
               </Text>
               <Text variant="h1" color={theme.text}>
@@ -101,7 +101,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
               </Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-              <Text variant="display" color={isDark ? '#00E5FF' : colors.ocean[600]}>
+              <Text variant="display" color={isDark ? '#38BDF8' : colors.ocean[600]}>
                 ${board.precioHora}
               </Text>
               <Text variant="caption" color={theme.subtext}>
@@ -122,15 +122,15 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                   style={[
                     styles.merchantAvatar,
                     {
-                      backgroundColor: isDark ? 'rgba(0, 229, 255, 0.15)' : '#E0F2FE',
-                      borderColor: isDark ? '#00E5FF' : colors.ocean[500],
+                      backgroundColor: isDark ? 'rgba(56, 189, 248, 0.15)' : '#E0F2FE',
+                      borderColor: isDark ? '#38BDF8' : colors.ocean[500],
                     },
                   ]}
                 >
-                  <Briefcase size={20} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                  <Briefcase size={20} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text variant="caption" color={isDark ? '#D4AF37' : colors.ocean[600]} style={{ fontWeight: '800', letterSpacing: 1 }}>
+                  <Text variant="caption" color={isDark ? '#F59E0B' : colors.ocean[600]} style={{ fontWeight: '800', letterSpacing: 1 }}>
                     COMERCIANTE HABILITADO
                   </Text>
                   <Text variant="h3" color={theme.text}>
@@ -154,8 +154,8 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Star size={14} color="#D4AF37" fill="#D4AF37" />
-                <Text variant="caption" color={isDark ? '#D4AF37' : colors.sunset[500]} style={{ fontWeight: '700' }}>
+                <Star size={14} color="#F59E0B" fill="#F59E0B" />
+                <Text variant="caption" color={isDark ? '#F59E0B' : colors.sunset[500]} style={{ fontWeight: '700' }}>
                   5.0 ★ Reputación
                 </Text>
               </Row>
@@ -175,28 +175,28 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
             </Text>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Ruler size={14} color="#00E5FF" />
+                <Ruler size={14} color="#38BDF8" />
                 <Text variant="body" color={theme.subtext}>Medidas:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>{board.medidas}</Text>
             </Row>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Droplets size={14} color="#00E5FF" />
+                <Droplets size={14} color="#38BDF8" />
                 <Text variant="body" color={theme.subtext}>Volumen:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>{board.volumenLitros || '-'} Litros</Text>
             </Row>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <DollarSign size={14} color="#D4AF37" />
+                <DollarSign size={14} color="#F59E0B" />
                 <Text variant="body" color={theme.subtext}>Valor tasado (Agencia):</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>${board.valorTasadoUsd} USD</Text>
             </Row>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <MapPin size={14} color="#D4AF37" />
+                <MapPin size={14} color="#F59E0B" />
                 <Text variant="body" color={theme.subtext}>Sede de retiro:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>Playa Grande (Sede Central)</Text>
@@ -243,8 +243,8 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                 <Text variant="h3" color={theme.text}>Reseñas Verificadas</Text>
               </Row>
               <Row align="center" spacing="xs">
-                <Star size={14} color="#D4AF37" fill="#D4AF37" />
-                <Text variant="button" color={isDark ? '#D4AF37' : colors.sunset[500]}>
+                <Star size={14} color="#F59E0B" fill="#F59E0B" />
+                <Text variant="button" color={isDark ? '#F59E0B' : colors.sunset[500]}>
                   {averageRating} ({totalReviews})
                 </Text>
               </Row>
@@ -273,14 +273,14 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
           styles.bottomBar,
           {
             backgroundColor: isDark ? 'rgba(9, 12, 16, 0.94)' : theme.card,
-            borderTopColor: isDark ? 'rgba(212, 175, 55, 0.25)' : theme.border,
+            borderTopColor: isDark ? 'rgba(245, 158, 11, 0.25)' : theme.border,
           },
         ]}
       >
         <Row justify="space-between" align="center" style={{ maxWidth: 1200, width: '100%', alignSelf: 'center' }}>
           <View>
             <Text variant="caption" color={theme.subtext}>Tarifa base (2h)</Text>
-            <Text variant="h2" color={isDark ? '#00E5FF' : colors.ocean[600]}>
+            <Text variant="h2" color={isDark ? '#38BDF8' : colors.ocean[600]}>
               ${(Number(board.precioHora) * 2).toLocaleString('es-AR')} ARS
             </Text>
           </View>
@@ -329,7 +329,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
           <Card padding="xl" style={styles.authModalCard}>
             <Stack spacing="md" align="center">
               <View style={styles.authIconCircle}>
-                <UserCheck size={36} color="#00E5FF" />
+                <UserCheck size={36} color="#38BDF8" />
               </View>
 
               <Text variant="h2" align="center">
@@ -405,9 +405,9 @@ const styles = StyleSheet.create({
     width: 68,
     height: 68,
     borderRadius: 34,
-    backgroundColor: 'rgba(0, 229, 255, 0.12)',
+    backgroundColor: 'rgba(56, 189, 248, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.35)',
+    borderColor: 'rgba(56, 189, 248, 0.35)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     position: 'relative',
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.25)',
+    borderColor: 'rgba(245, 158, 11, 0.25)',
   },
   badgeOverlay: {
     position: 'absolute',

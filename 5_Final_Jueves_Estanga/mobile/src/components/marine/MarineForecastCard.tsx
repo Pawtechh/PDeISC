@@ -22,12 +22,12 @@ export const MarineForecastCard: React.FC = () => {
           styles.loadingContainer,
           {
             backgroundColor: isDark ? 'rgba(13, 19, 29, 0.85)' : '#F0F9FF',
-            borderColor: isDark ? 'rgba(0, 229, 255, 0.2)' : '#BAE6FD',
+            borderColor: isDark ? 'rgba(56, 189, 248, 0.2)' : '#BAE6FD',
           },
         ]}
       >
         <Row align="center" justify="center" spacing="sm">
-          <ActivityIndicator size="small" color={isDark ? '#00E5FF' : colors.ocean[500]} />
+          <ActivityIndicator size="small" color={isDark ? '#38BDF8' : colors.ocean[500]} />
           <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[500]}>
             Sincronizando boya oceanográfica de Playa Grande...
           </Text>
@@ -47,7 +47,7 @@ export const MarineForecastCard: React.FC = () => {
         styles.instrumentContainer,
         {
           backgroundColor: isDark ? 'rgba(13, 19, 29, 0.90)' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(0, 229, 255, 0.25)' : '#E2E8F0',
+          borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : '#E2E8F0',
         },
         Platform.OS === 'web'
           ? ({
@@ -86,7 +86,7 @@ export const MarineForecastCard: React.FC = () => {
           {/* Ola */}
           <View style={[styles.dialTile, { backgroundColor: isDark ? 'rgba(8, 12, 20, 0.75)' : '#F8FAFC' }]}>
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Waves size={14} color="#00E5FF" />
+              <Waves size={14} color="#38BDF8" />
               <Text style={styles.dialLabel}>ALTURA OLA</Text>
             </Row>
             <View style={styles.dialValueRow}>
@@ -101,7 +101,7 @@ export const MarineForecastCard: React.FC = () => {
           {/* Periodo */}
           <View style={[styles.dialTile, { backgroundColor: isDark ? 'rgba(8, 12, 20, 0.75)' : '#F8FAFC' }]}>
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Timer size={14} color="#00E5FF" />
+              <Timer size={14} color="#38BDF8" />
               <Text style={styles.dialLabel}>PERIODO</Text>
             </Row>
             <View style={styles.dialValueRow}>
@@ -116,7 +116,7 @@ export const MarineForecastCard: React.FC = () => {
           {/* Viento */}
           <View style={[styles.dialTile, { backgroundColor: isDark ? 'rgba(8, 12, 20, 0.75)' : '#F8FAFC' }]}>
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Wind size={14} color="#00E5FF" />
+              <Wind size={14} color="#38BDF8" />
               <Text style={styles.dialLabel}>VIENTO</Text>
             </Row>
             <View style={styles.dialValueRow}>
@@ -131,7 +131,7 @@ export const MarineForecastCard: React.FC = () => {
           {/* Agua */}
           <View style={[styles.dialTile, { backgroundColor: isDark ? 'rgba(8, 12, 20, 0.75)' : '#F8FAFC' }]}>
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Thermometer size={14} color="#00E5FF" />
+              <Thermometer size={14} color="#38BDF8" />
               <Text style={styles.dialLabel}>TEMP. AGUA</Text>
             </Row>
             <View style={styles.dialValueRow}>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 20,
     borderWidth: 1,
-    shadowColor: '#00E5FF',
+    shadowColor: '#38BDF8',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 16,
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   stationLabel: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#00E5FF',
+    color: '#38BDF8',
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   dialUnit: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#00E5FF',
+    color: '#38BDF8',
   },
   dialSubtext: {
     fontSize: 10,
@@ -266,14 +266,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: 'rgba(0, 229, 255, 0.1)',
+    backgroundColor: 'rgba(56, 189, 248, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.25)',
+    borderColor: 'rgba(56, 189, 248, 0.25)',
   },
   recomPillText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#00E5FF',
+    color: '#38BDF8',
     letterSpacing: 0.5,
   },
 });

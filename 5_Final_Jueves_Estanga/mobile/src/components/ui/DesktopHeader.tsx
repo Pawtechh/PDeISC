@@ -39,7 +39,7 @@ export const DesktopHeader: React.FC = () => {
       style={[
         styles.headerContainer,
         {
-          backgroundColor: isDark ? 'rgba(9, 12, 16, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+          backgroundColor: isDark ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.96)',
           borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0',
         },
         Platform.OS === 'web'
@@ -60,12 +60,12 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE',
-                borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#7DD3FC',
+                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE',
+                borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#7DD3FC',
               },
             ]}
           >
-            <Waves size={18} color={isDark ? '#00E5FF' : '#0284C7'} strokeWidth={2.2} />
+            <Waves size={18} color={isDark ? '#38BDF8' : '#0284C7'} strokeWidth={2.2} />
           </View>
           <View style={styles.brandTexts}>
             <Text style={[styles.brandTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
@@ -74,7 +74,7 @@ export const DesktopHeader: React.FC = () => {
             <Text
               style={[
                 styles.brandSubtitle,
-                { color: isDark ? '#D4AF37' : '#0284C7' },
+                { color: isDark ? '#38BDF8' : '#0284C7' },
               ]}
             >
               MAR DEL PLATA • EST. 2026
@@ -88,13 +88,13 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.telemetryPill,
               {
-                backgroundColor: isDark ? 'rgba(0, 229, 255, 0.06)' : '#F0F9FF',
-                borderColor: isDark ? 'rgba(0, 229, 255, 0.22)' : '#BAE6FD',
+                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.06)' : '#F0F9FF',
+                borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : '#BAE6FD',
               },
             ]}
           >
             <View style={styles.livePulseDot} />
-            <Compass size={13} color={isDark ? '#00E5FF' : '#0284C7'} />
+            <Compass size={13} color={isDark ? '#38BDF8' : '#0284C7'} />
             <Text
               style={[
                 styles.telemetryText,
@@ -113,16 +113,16 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.roleBadgeGroup,
                 {
-                  backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE',
-                  borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#7DD3FC',
+                  backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE',
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#7DD3FC',
                 },
               ]}
             >
-              <ShieldCheck size={13} color={isDark ? '#00E5FF' : '#0284C7'} />
+              <ShieldCheck size={13} color={isDark ? '#38BDF8' : '#0284C7'} />
               <Text
                 style={[
                   styles.roleBadgeText,
-                  { color: isDark ? '#00E5FF' : '#0369A1' },
+                  { color: isDark ? '#38BDF8' : '#0369A1' },
                 ]}
               >
                 {roleBadgeLabel}
@@ -134,15 +134,15 @@ export const DesktopHeader: React.FC = () => {
                 style={[
                   styles.userAvatar,
                   {
-                    backgroundColor: isDark ? 'rgba(0, 229, 255, 0.14)' : '#E0F2FE',
-                    borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#7DD3FC',
+                    backgroundColor: isDark ? 'rgba(56, 189, 248, 0.14)' : '#E0F2FE',
+                    borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#7DD3FC',
                   },
                 ]}
               >
                 <Text
                   style={[
                     styles.avatarLetter,
-                    { color: isDark ? '#00E5FF' : '#0369A1' },
+                    { color: isDark ? '#38BDF8' : '#0369A1' },
                   ]}
                 >
                   {(user.nombre || user.email || 'S').charAt(0).toUpperCase()}
@@ -181,7 +181,7 @@ export const DesktopHeader: React.FC = () => {
               },
             ]}
           >
-            <Shield size={12} color={isDark ? '#D4AF37' : '#0284C7'} />
+            <Shield size={12} color={isDark ? '#38BDF8' : '#0284C7'} />
             <Text
               style={[
                 styles.guestText,

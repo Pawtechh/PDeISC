@@ -29,7 +29,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         {icon && typeof icon !== 'string' ? (
           icon
         ) : (
-          <Waves size={36} color={isDark ? '#00E5FF' : '#0284C7'} strokeWidth={1.75} />
+          <Waves size={36} color={isDark ? '#38BDF8' : '#0284C7'} strokeWidth={1.75} />
         )}
       </View>
       <Text
@@ -70,9 +70,9 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: 'rgba(0, 229, 255, 0.08)',
+    backgroundColor: 'rgba(56, 189, 248, 0.08)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.2)',
+    borderColor: 'rgba(56, 189, 248, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.md,

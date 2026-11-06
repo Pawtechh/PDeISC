@@ -29,7 +29,7 @@ export const Card: React.FC<CardProps> = ({
       style={[
         styles.card,
         {
-          backgroundColor: isDark ? 'rgba(13, 19, 29, 0.88)' : theme.card,
+          backgroundColor: isDark ? 'rgba(19, 28, 46, 0.82)' : theme.card,
           borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : theme.border,
         },
         Platform.OS === 'web'
@@ -65,10 +65,8 @@ export const Card: React.FC<CardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.white,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: colors.sand[200],
     overflow: 'hidden',
   },
 });

@@ -143,7 +143,7 @@ const PaginationDot: React.FC<PaginationDotProps> = ({ index, scrollX, cardWidth
     return {
       width,
       opacity,
-      backgroundColor: opacity > 0.65 ? '#00E5FF' : '#D4AF37',
+      backgroundColor: opacity > 0.65 ? '#38BDF8' : '#F59E0B',
     };
   });
 
@@ -327,7 +327,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               styles.floatingArrowLeft,
               {
                 backgroundColor: isDark ? 'rgba(9, 12, 16, 0.85)' : 'rgba(255, 255, 255, 0.92)',
-                borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : '#CBD5E1',
+                borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : '#CBD5E1',
               },
             ]}
             onPress={handlePrev}
@@ -345,7 +345,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               styles.floatingArrowRight,
               {
                 backgroundColor: isDark ? 'rgba(9, 12, 16, 0.85)' : 'rgba(255, 255, 255, 0.92)',
-                borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : '#CBD5E1',
+                borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : '#CBD5E1',
               },
             ]}
             onPress={handleNext}
@@ -372,7 +372,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <ChevronLeft size={15} color={isFirst ? '#64748B' : '#00E5FF'} />
+          <ChevronLeft size={15} color={isFirst ? '#64748B' : '#38BDF8'} />
         </TouchableOpacity>
 
         {boards.length <= 10 ? (
@@ -419,7 +419,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <ChevronRight size={15} color={isLast ? '#64748B' : '#00E5FF'} />
+          <ChevronRight size={15} color={isLast ? '#64748B' : '#38BDF8'} />
         </TouchableOpacity>
       </View>
     </View>
@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   counterHighlight: {
-    color: '#00E5FF',
+    color: '#38BDF8',
     fontSize: 13,
     fontWeight: '800',
   },

@@ -395,7 +395,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                     fotosSeleccionadas.length > 0
                       ? colors.semantic.success
                       : isDark
-                      ? 'rgba(0, 229, 255, 0.35)'
+                      ? 'rgba(56, 189, 248, 0.35)'
                       : colors.ocean[300],
                   backgroundColor: isDark ? '#0D1420' : '#F8FAFC',
                 },
@@ -404,7 +404,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                    <Camera size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                    <Camera size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                     <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                       Fotografías de la Tabla ({fotosSeleccionadas.length}) *
                     </Text>
@@ -424,7 +424,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                   variant="primary"
                   size="sm"
                   isLoading={isPickingPhotos}
-                  iconLeft={<Upload size={15} color={isDark ? '#090C10' : '#FFFFFF'} />}
+                  iconLeft={<Upload size={15} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
                   onPress={handleUploadFromDevice}
                 />
 

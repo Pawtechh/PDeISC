@@ -24,18 +24,18 @@ export interface ThemeColors {
 }
 
 export const lightTheme: ThemeColors = {
-  background: '#F8FAFC', // Crisp coastal daylight
+  background: '#F8FAFC', // Crisp coastal daylight mist
   surface: '#FFFFFF',
   card: '#FFFFFF',
-  champagne: '#B39129', // Deep refined champagne gold for light mode
-  primary: '#0A66D4', // Deep vivid ocean blue
+  champagne: '#D97706', // Warm amber gold
+  primary: '#0284C7', // Vivid coastal blue
   primaryText: '#FFFFFF',
   text: '#0F172A', // Rich slate midnight, maximum contrast & readability
   subtext: '#475569', // Clear secondary slate
   sand: '#E2E8F0',
   border: '#E2E8F0', // Clean subtle border
-  accent: '#0A66D4',
-  accentLight: '#EFF6FF',
+  accent: '#0284C7',
+  accentLight: '#F0F9FF',
   divider: '#E2E8F0',
   cardHighlight: '#F0F9FF',
   inputBg: '#FFFFFF',
@@ -44,22 +44,22 @@ export const lightTheme: ThemeColors = {
 };
 
 export const darkTheme: ThemeColors = {
-  background: '#090C10', // Deep maritime obsidian
-  surface: '#121824',
-  card: '#121824',
-  champagne: '#D4AF37', // Champagne gold
-  primary: '#00E5FF',   // Ocean neon cyan
-  primaryText: '#090C10',
-  text: '#F1F5F9',
-  subtext: '#94A3B8',
-  sand: '#E5DFD5',
-  border: 'rgba(212, 175, 55, 0.22)', // Golden champagne glow
-  accent: '#D4AF37',
-  accentLight: 'rgba(212, 175, 55, 0.12)',
-  divider: 'rgba(212, 175, 55, 0.18)',
-  cardHighlight: 'rgba(0, 229, 255, 0.08)',
-  inputBg: '#0D131D',
-  inputBorder: 'rgba(212, 175, 55, 0.25)',
+  background: '#0B0F17', // Deep maritime obsidian
+  surface: '#131C2E',    // Elevated deep navy card
+  card: '#131C2E',
+  champagne: '#F59E0B',  // Warm refined golden amber
+  primary: '#0284C7',    // Coastal Ocean Blue
+  primaryText: '#FFFFFF',// Crisp pure white
+  text: '#F8FAFC',       // Bright high-contrast white
+  subtext: '#94A3B8',    // Slate secondary
+  sand: '#CBD5E1',
+  border: 'rgba(255, 255, 255, 0.08)', // Frosted subtle border
+  accent: '#38BDF8',     // Sky highlight
+  accentLight: 'rgba(56, 189, 248, 0.12)',
+  divider: 'rgba(255, 255, 255, 0.08)',
+  cardHighlight: 'rgba(56, 189, 248, 0.06)',
+  inputBg: '#0F172A',
+  inputBorder: 'rgba(255, 255, 255, 0.12)',
   isDark: true,
 };
 
@@ -99,10 +99,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setMode(mode === 'light' ? 'dark' : 'light');
   };
 
-  const theme = mode === 'dark' ? darkTheme : lightTheme;
+  const theme = mode === 'light' ? lightTheme : darkTheme;
+  const isDark = mode === 'dark';
 
   return (
-    <ThemeContext.Provider value={{ mode, theme, isDark: mode === 'dark', toggleTheme, setMode }}>
+    <ThemeContext.Provider value={{ mode, theme, isDark, toggleTheme, setMode }}>
       {children}
     </ThemeContext.Provider>
   );

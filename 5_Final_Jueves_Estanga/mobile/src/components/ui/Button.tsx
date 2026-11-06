@@ -84,12 +84,12 @@ export const Button: React.FC<ButtonProps> = ({
     switch (variant) {
       case 'primary':
         return {
-          backgroundColor: isDark ? '#00E5FF' : colors.ocean[600],
+          backgroundColor: isDark ? '#0284C7' : colors.ocean[600],
           borderWidth: 1,
-          borderColor: isDark ? '#67E8F9' : colors.ocean[700],
-          shadowColor: isDark ? '#00E5FF' : colors.ocean[600],
+          borderColor: isDark ? '#38BDF8' : colors.ocean[700],
+          shadowColor: isDark ? '#0284C7' : colors.ocean[600],
           shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: isDark ? 0.25 : 0.2,
+          shadowOpacity: isDark ? 0.35 : 0.2,
           shadowRadius: 10,
           elevation: 4,
         };
@@ -97,7 +97,7 @@ export const Button: React.FC<ButtonProps> = ({
         return {
           backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9',
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.16)' : '#CBD5E1',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#CBD5E1',
         };
       case 'danger':
         return {
@@ -117,13 +117,13 @@ export const Button: React.FC<ButtonProps> = ({
   const getTextColor = (): string => {
     switch (variant) {
       case 'primary':
-        return isDark ? '#090C10' : colors.white;
+        return '#FFFFFF';
       case 'danger':
-        return colors.white;
+        return '#FFFFFF';
       case 'secondary':
-        return isDark ? '#F1F5F9' : colors.sand[900];
+        return isDark ? '#F8FAFC' : colors.sand[900];
       case 'ghost':
-        return isDark ? '#CBD5E1' : colors.ocean[700];
+        return isDark ? '#38BDF8' : colors.ocean[700];
     }
   };
 

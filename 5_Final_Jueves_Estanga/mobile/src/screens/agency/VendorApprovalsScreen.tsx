@@ -174,13 +174,13 @@ export const VendorApprovalsSection: React.FC = () => {
         padding="lg"
         style={{
           borderWidth: 1.5,
-          borderColor: isDark ? 'rgba(212, 175, 55, 0.4)' : colors.ocean[300],
+          borderColor: isDark ? 'rgba(245, 158, 11, 0.4)' : colors.ocean[300],
         }}
       >
         <Stack spacing="md">
           <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
             <Row spacing="xs" align="center" style={{ flex: 1, paddingRight: spacing.xs }}>
-              <UserCheck size={18} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+              <UserCheck size={18} color={isDark ? '#F59E0B' : colors.ocean[600]} />
               <Text variant="h2" color={theme.text} style={{ flex: 1 }}>
                 Zona de Habilitación y Gestión de Vendedores
               </Text>
@@ -229,14 +229,14 @@ export const VendorApprovalsSection: React.FC = () => {
                     {
                       backgroundColor: active
                         ? isDark
-                          ? '#D4AF37'
+                          ? '#F59E0B'
                           : colors.ocean[600]
                         : isDark
                         ? '#131B2E'
                         : colors.sand[100],
                       borderColor: active
                         ? isDark
-                          ? '#D4AF37'
+                          ? '#F59E0B'
                           : colors.ocean[600]
                         : theme.border,
                     },
@@ -246,7 +246,7 @@ export const VendorApprovalsSection: React.FC = () => {
                     variant="caption"
                     style={{
                       fontWeight: '700',
-                      color: active ? (isDark ? '#090C10' : '#FFFFFF') : theme.text,
+                      color: active ? (isDark ? '#0B0F17' : '#FFFFFF') : theme.text,
                     }}
                   >
                     {item.label}
@@ -382,7 +382,7 @@ export const VendorApprovalsSection: React.FC = () => {
                   ]}
                 >
                   <Row spacing="xs" align="center" style={{ marginBottom: 4 }}>
-                    <FileText size={14} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                    <FileText size={14} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                     <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                       Descripción del Vendedor y Propuesta de Tablas:
                     </Text>
@@ -403,7 +403,7 @@ export const VendorApprovalsSection: React.FC = () => {
                   ]}
                 >
                   <Row spacing="xs" align="center" style={{ marginBottom: 4 }}>
-                    <Briefcase size={14} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+                    <Briefcase size={14} color={isDark ? '#F59E0B' : colors.ocean[600]} />
                     <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                       Experiencias Anteriores en el Rubro:
                     </Text>
@@ -416,7 +416,7 @@ export const VendorApprovalsSection: React.FC = () => {
                 {/* Fotos de las tablas */}
                 <View>
                   <Row spacing="xs" align="center" style={{ marginBottom: 6 }}>
-                    <Camera size={14} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                    <Camera size={14} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                     <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                       Fotos de Tablas Subidas por el Vendedor ({app.fotosTablas?.length || 0}):
                     </Text>
@@ -480,14 +480,14 @@ export const VendorApprovalsSection: React.FC = () => {
                     style={[
                       styles.quiverSection,
                       {
-                        backgroundColor: isDark ? 'rgba(0, 229, 255, 0.04)' : '#F0F9FF',
-                        borderColor: isDark ? 'rgba(0, 229, 255, 0.22)' : '#BAE6FD',
+                        backgroundColor: isDark ? 'rgba(56, 189, 248, 0.04)' : '#F0F9FF',
+                        borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : '#BAE6FD',
                       },
                     ]}
                   >
                     <Row justify="space-between" align="center" style={{ marginBottom: 6 }}>
                       <Row spacing="xs" align="center">
-                        <Waves size={15} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                        <Waves size={15} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                         <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                           Quiver de Tablas en Custodia ({(app as any).tablasList?.length || 0}):
                         </Text>
@@ -671,7 +671,7 @@ export const VendorApprovalsSection: React.FC = () => {
                       borderColor: biometricProof
                         ? colors.semantic.success
                         : isDark
-                        ? '#D4AF37'
+                        ? '#F59E0B'
                         : colors.ocean[500],
                       backgroundColor: biometricProof
                         ? isDark
@@ -692,7 +692,7 @@ export const VendorApprovalsSection: React.FC = () => {
                             biometricProof
                               ? colors.semantic.success
                               : isDark
-                              ? '#D4AF37'
+                              ? '#F59E0B'
                               : colors.ocean[600]
                           }
                         />
@@ -761,7 +761,7 @@ export const VendorApprovalsSection: React.FC = () => {
                   <Stack spacing="xs">
                     <Row justify="space-between" align="center">
                       <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                        <Lock size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                        <Lock size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                         <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                           Paso 2: Contraseña de Agencia
                         </Text>

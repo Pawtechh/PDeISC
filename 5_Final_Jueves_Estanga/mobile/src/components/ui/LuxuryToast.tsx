@@ -61,7 +61,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return '#F59E0B';
       case 'info':
       default:
-        return isDark ? '#00E5FF' : '#0284C7';
+        return isDark ? '#38BDF8' : '#0284C7';
     }
   };
 

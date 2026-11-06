@@ -63,9 +63,9 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
         <Row justify="space-between" align="center">
           <Row spacing="xs" align="center">
             {useNativeBiometrics ? (
-              <Fingerprint size={18} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+              <Fingerprint size={18} color={isDark ? '#F59E0B' : colors.ocean[600]} />
             ) : (
-              <FileCheck2 size={18} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+              <FileCheck2 size={18} color={isDark ? '#F59E0B' : colors.ocean[600]} />
             )}
             <Text variant="h3" color={theme.text}>
               {useNativeBiometrics
@@ -80,7 +80,7 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
                 backgroundColor: isSigned
                   ? 'rgba(34, 197, 94, 0.15)'
                   : isDark
-                  ? 'rgba(212, 175, 55, 0.15)'
+                  ? 'rgba(245, 158, 11, 0.15)'
                   : 'rgba(10, 102, 212, 0.12)',
               },
             ]}
@@ -147,10 +147,10 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
             <Row spacing="sm" align="center" justify="center">
               {isAuthenticating ? (
                 <>
-                  <ActivityIndicator size="small" color={isDark ? '#090C10' : '#FFFFFF'} />
+                  <ActivityIndicator size="small" color={isDark ? '#0B0F17' : '#FFFFFF'} />
                   <Text
                     variant="button"
-                    color={isDark ? '#090C10' : '#FFFFFF'}
+                    color={isDark ? '#0B0F17' : '#FFFFFF'}
                     style={{ fontWeight: '700' }}
                   >
                     {useNativeBiometrics
@@ -161,13 +161,13 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
               ) : (
                 <>
                   {useNativeBiometrics ? (
-                    <Fingerprint size={18} color={isDark ? '#090C10' : '#FFFFFF'} />
+                    <Fingerprint size={18} color={isDark ? '#0B0F17' : '#FFFFFF'} />
                   ) : (
-                    <FileCheck2 size={18} color={isDark ? '#090C10' : '#FFFFFF'} />
+                    <FileCheck2 size={18} color={isDark ? '#0B0F17' : '#FFFFFF'} />
                   )}
                   <Text
                     variant="button"
-                    color={isDark ? '#090C10' : '#FFFFFF'}
+                    color={isDark ? '#0B0F17' : '#FFFFFF'}
                     style={{ fontWeight: '700' }}
                   >
                     {useNativeBiometrics

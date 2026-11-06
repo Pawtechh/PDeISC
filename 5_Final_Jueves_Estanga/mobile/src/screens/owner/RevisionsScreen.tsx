@@ -239,7 +239,7 @@ export const RevisionsScreen: React.FC = () => {
               styles.segmentBtn,
               activeSection === 'PENDIENTES' && styles.segmentBtnActive,
               activeSection === 'PENDIENTES' && {
-                backgroundColor: isDark ? '#00E5FF' : colors.ocean[600],
+                backgroundColor: isDark ? '#38BDF8' : colors.ocean[600],
               },
             ]}
             onPress={() => setActiveSection('PENDIENTES')}
@@ -250,7 +250,7 @@ export const RevisionsScreen: React.FC = () => {
               color={
                 activeSection === 'PENDIENTES'
                   ? isDark
-                    ? '#090C10'
+                    ? '#0B0F17'
                     : '#FFFFFF'
                   : theme.text
               }
@@ -265,7 +265,7 @@ export const RevisionsScreen: React.FC = () => {
               styles.segmentBtn,
               activeSection === 'RECLAMOS' && styles.segmentBtnActive,
               activeSection === 'RECLAMOS' && {
-                backgroundColor: isDark ? '#00E5FF' : colors.ocean[600],
+                backgroundColor: isDark ? '#38BDF8' : colors.ocean[600],
               },
             ]}
             onPress={() => setActiveSection('RECLAMOS')}
@@ -276,7 +276,7 @@ export const RevisionsScreen: React.FC = () => {
               color={
                 activeSection === 'RECLAMOS'
                   ? isDark
-                    ? '#090C10'
+                    ? '#0B0F17'
                     : '#FFFFFF'
                   : theme.text
               }
@@ -326,7 +326,7 @@ export const RevisionsScreen: React.FC = () => {
                   >
                     <Text
                       variant="caption"
-                      color={isDark ? '#00E5FF' : colors.ocean[700]}
+                      color={isDark ? '#38BDF8' : colors.ocean[700]}
                       style={{ fontWeight: '700', textDecorationLine: 'underline' }}
                     >
                       {feedbackBanner.actionLabel}
@@ -722,8 +722,8 @@ export const RevisionsScreen: React.FC = () => {
                             borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
                           },
                           (claim.estado === 'EN_MEDIACION' || claim.estado === 'DISPUTADO') && {
-                            backgroundColor: isDark ? 'rgba(0, 229, 255, 0.06)' : '#EFF6FF',
-                            borderColor: isDark ? 'rgba(0, 229, 255, 0.28)' : '#60A5FA',
+                            backgroundColor: isDark ? 'rgba(56, 189, 248, 0.06)' : '#EFF6FF',
+                            borderColor: isDark ? 'rgba(56, 189, 248, 0.28)' : '#60A5FA',
                           },
                           claim.estado === 'RESUELTO_OWNER' && {
                             backgroundColor: isDark ? 'rgba(16, 185, 129, 0.10)' : '#ECFDF5',

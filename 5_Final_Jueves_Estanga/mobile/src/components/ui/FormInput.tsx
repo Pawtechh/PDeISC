@@ -58,7 +58,7 @@ export function FormInput<T extends FieldValues>({
     if (isError) return colors.semantic.danger;
     if (isValid) return colors.semantic.success;
     if (isFocused) return theme.primary;
-    return isDark ? 'rgba(212, 175, 55, 0.28)' : colors.sand[200];
+    return isDark ? 'rgba(245, 158, 11, 0.28)' : colors.sand[200];
   };
 
   const isSecure = secureTextEntry && !showPassword;
@@ -106,7 +106,7 @@ export function FormInput<T extends FieldValues>({
             style={styles.rightAction}
             activeOpacity={0.7}
           >
-            <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[600]}>
+            <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[600]}>
               {showPassword ? 'Ocultar' : 'Ver'}
             </Text>
           </TouchableOpacity>

@@ -194,8 +194,8 @@ export const MyBoardsScreen: React.FC = () => {
           style={[
             styles.summaryCard,
             {
-              backgroundColor: isDark ? 'rgba(0, 229, 255, 0.06)' : '#EFF6FF',
-              borderColor: isDark ? 'rgba(0, 229, 255, 0.25)' : '#BFDBFE',
+              backgroundColor: isDark ? 'rgba(56, 189, 248, 0.06)' : '#EFF6FF',
+              borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : '#BFDBFE',
             },
           ]}
         >
@@ -203,7 +203,7 @@ export const MyBoardsScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <Text
                 variant="caption"
-                color={isDark ? '#00E5FF' : colors.ocean[700]}
+                color={isDark ? '#38BDF8' : colors.ocean[700]}
                 style={{ fontWeight: '700' }}
               >
                 SUSCRIPCIÓN OWNER
@@ -556,7 +556,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkQuillas ? (
-                      <CheckSquare size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                      <CheckSquare size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}
@@ -570,7 +570,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkDeckFibra ? (
-                      <CheckSquare size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                      <CheckSquare size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}
@@ -584,7 +584,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkParafina ? (
-                      <CheckSquare size={16} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                      <CheckSquare size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}

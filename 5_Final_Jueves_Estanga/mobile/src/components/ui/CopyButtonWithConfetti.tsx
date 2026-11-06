@@ -48,7 +48,7 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
           particleCount: 45,
           spread: 60,
           origin: { y: 0.8 },
-          colors: ['#00E5FF', '#D4AF37', '#10B981', '#FFFFFF'],
+          colors: ['#38BDF8', '#F59E0B', '#10B981', '#FFFFFF'],
           ticks: 120,
           scalar: 0.85,
         });
@@ -78,12 +78,12 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
               ? 'rgba(16, 185, 129, 0.2)'
               : '#ECFDF5'
             : isDark
-            ? 'rgba(212, 175, 55, 0.12)'
+            ? 'rgba(245, 158, 11, 0.12)'
             : colors.sand[100],
           borderColor: copied
             ? '#10B981'
             : isDark
-            ? 'rgba(212, 175, 55, 0.35)'
+            ? 'rgba(245, 158, 11, 0.35)'
             : colors.sand[300],
         },
         style,
@@ -102,7 +102,7 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
             color: copied
               ? '#10B981'
               : isDark
-              ? '#D4AF37'
+              ? '#F59E0B'
               : colors.ocean[700],
             fontWeight: copied ? '700' : '600',
           },

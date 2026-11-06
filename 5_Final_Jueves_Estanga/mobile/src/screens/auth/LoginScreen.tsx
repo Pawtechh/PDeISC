@@ -186,7 +186,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             colors={[
               'rgba(9, 12, 16, 0.45)',
               'rgba(9, 12, 16, 0.82)',
-              '#090C10',
+              '#0B0F17',
             ]}
             locations={[0, 0.65, 1]}
             style={StyleSheet.absoluteFillObject}
@@ -228,7 +228,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               styles.authCard,
               {
                 backgroundColor: isDark ? 'rgba(18, 24, 36, 0.92)' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : '#E2E8F0',
+                borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : '#E2E8F0',
               },
             ]}
           >
@@ -273,7 +273,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation?.navigate?.('ForgotPassword')}>
                   <Text
                     variant="caption"
-                    style={[styles.link, { color: isDark ? '#00E5FF' : colors.ocean[600] }]}
+                    style={[styles.link, { color: isDark ? '#38BDF8' : colors.ocean[600] }]}
                   >
                     ¿Olvidaste tu contraseña?
                   </Text>
@@ -309,7 +309,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation?.navigate?.('Register')}>
                   <Text
                     variant="caption"
-                    style={[styles.link, { color: isDark ? '#D4AF37' : colors.ocean[500] }]}
+                    style={[styles.link, { color: isDark ? '#F59E0B' : colors.ocean[500] }]}
                   >
                     Registrate acá
                   </Text>
@@ -335,7 +335,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               styles.devCard,
               {
                 backgroundColor: isDark ? 'rgba(18, 24, 36, 0.75)' : '#FFFBEB',
-                borderColor: isDark ? 'rgba(212, 175, 55, 0.4)' : '#FDE68A',
+                borderColor: isDark ? 'rgba(245, 158, 11, 0.4)' : '#FDE68A',
               },
             ]}
           >
@@ -345,7 +345,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                   variant="caption"
                   style={[
                     styles.devTitle,
-                    { color: isDark ? '#D4AF37' : colors.sunset[600] },
+                    { color: isDark ? '#F59E0B' : colors.sunset[600] },
                   ]}
                 >
                   ACCESO DIRECTO POR ROL
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.25)',
+    borderColor: 'rgba(245, 158, 11, 0.25)',
   },
   heroPanelDesktop: {
     flex: 1.1,
@@ -428,15 +428,15 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.4)',
+    borderColor: 'rgba(56, 189, 248, 0.4)',
     marginBottom: spacing.xs,
   },
   brandPillDot: {
-    color: '#00E5FF',
+    color: '#38BDF8',
     fontSize: 8,
   },
   brandPillText: {
-    color: '#00E5FF',
+    color: '#38BDF8',
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 0.5,
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
     lineHeight: 38,
   },
   heroBrandTagline: {
-    color: '#D4AF37',
+    color: '#F59E0B',
     fontSize: 16,
     fontWeight: '600',
     lineHeight: 22,

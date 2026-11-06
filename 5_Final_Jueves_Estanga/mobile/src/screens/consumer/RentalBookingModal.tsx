@@ -678,6 +678,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   methodPillActive: {
-    backgroundColor: 'rgba(0, 229, 255, 0.1)',
+    backgroundColor: 'rgba(56, 189, 248, 0.1)',
   },
 });

@@ -225,7 +225,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
               {/* Header */}
               <Row justify="space-between" align="center">
                 <Row spacing="xs" align="center">
-                  <QrCode size={18} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                  <QrCode size={18} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                   <View>
                     <Text variant="h2" color={theme.text}>
                       Verificador y Escáner QR de Sede
@@ -279,7 +279,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                         />
                       ) : (
                         <View style={styles.cameraFallback}>
-                          <ScanLine size={40} color="#00E5FF" style={{ marginBottom: 8 }} />
+                          <ScanLine size={40} color="#38BDF8" style={{ marginBottom: 8 }} />
                           <Text
                             variant="body"
                             color="#F8FAFC"
@@ -324,7 +324,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       style={[
                         styles.manualInputWrap,
                         {
-                          backgroundColor: isDark ? '#0D131D' : '#F8FAFC',
+                          backgroundColor: isDark ? '#131C2E' : '#F8FAFC',
                           borderColor: theme.border,
                         },
                       ]}
@@ -352,15 +352,15 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     style={[
                       styles.simBox,
                       {
-                        backgroundColor: isDark ? 'rgba(0, 229, 255, 0.05)' : '#F0F9FF',
-                        borderColor: isDark ? 'rgba(0, 229, 255, 0.22)' : '#BAE6FD',
+                        backgroundColor: isDark ? 'rgba(56, 189, 248, 0.05)' : '#F0F9FF',
+                        borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : '#BAE6FD',
                       },
                     ]}
                   >
                     <Row justify="space-between" align="center">
                       <Text
                         variant="caption"
-                        color={isDark ? '#00E5FF' : colors.ocean[700]}
+                        color={isDark ? '#38BDF8' : colors.ocean[700]}
                         style={{ fontWeight: '700' }}
                       >
                         PASES Y RESERVAS EN BASE DE DATOS ({liveQrItems.length}):
@@ -381,7 +381,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                               borderColor: b.isEarly
                                 ? 'rgba(245, 158, 11, 0.55)'
                                 : b.rentalId
-                                ? 'rgba(0, 229, 255, 0.45)'
+                                ? 'rgba(56, 189, 248, 0.45)'
                                 : isDark
                                 ? 'rgba(255, 255, 255, 0.14)'
                                 : colors.ocean[300],
@@ -396,7 +396,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                                 b.isEarly
                                   ? '#FBBF24'
                                   : isDark
-                                  ? '#00E5FF'
+                                  ? '#38BDF8'
                                   : colors.ocean[700]
                               }
                               style={{ fontWeight: '800', fontFamily: 'monospace' }}
@@ -508,7 +508,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     <View
                       style={[
                         styles.qrMiniFrame,
-                        { borderColor: scannedBoard.isEarly ? '#F59E0B' : '#00E5FF' },
+                        { borderColor: scannedBoard.isEarly ? '#F59E0B' : '#38BDF8' },
                       ]}
                     >
                       <QrCodeView value={scannedBoard.code} size={96} />
@@ -522,7 +522,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       </Text>
                       <Text
                         variant="caption"
-                        color={isDark ? '#00E5FF' : colors.ocean[600]}
+                        color={isDark ? '#38BDF8' : colors.ocean[600]}
                         style={{ fontWeight: '700', marginTop: 4 }}
                       >
                         Medidas: {scannedBoard.medidas}
@@ -664,7 +664,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#05080F',
     position: 'relative',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.3)',
+    borderColor: 'rgba(56, 189, 248, 0.3)',
   },
   camera: {
     flex: 1,
@@ -689,7 +689,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 24,
     height: 24,
-    borderColor: '#00E5FF',
+    borderColor: '#38BDF8',
     borderWidth: 3,
   },
   cornerTL: { top: 0, left: 0, borderRightWidth: 0, borderBottomWidth: 0 },
@@ -750,7 +750,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: radii.md,
     borderWidth: 2,
-    borderColor: '#00E5FF',
+    borderColor: '#38BDF8',
     alignItems: 'center',
     justifyContent: 'center',
   },

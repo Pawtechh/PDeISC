@@ -26,8 +26,8 @@ export const getBaseUrl = () => {
   if (process.env.EXPO_PUBLIC_API_URL) {
     return process.env.EXPO_PUBLIC_API_URL;
   }
-  if (Platform.OS === 'android') {
-    return 'http://10.0.2.2:3000/api';
+  if (Platform.OS === 'android' || Platform.OS === 'ios') {
+    return 'https://pdeisc-1.onrender.com/api';
   }
   return 'http://localhost:3000/api';
 };
@@ -131,24 +131,13 @@ export const baseQueryWithAuth: BaseQueryFn<
             }
           }
 
-          // 2. Auto-recuperación transparente si es una cuenta oficial de la plataforma
-          const fallbackEmail =
-            currentUser?.email && DEMO_ACCOUNTS.has(currentUser.email.toLowerCase())
-              ? currentUser.email.toLowerCase()
-              : currentUser?.role === 'OWNER' || currentUser?.rol === 'OWNER'
-              ? 'owner@surf.com'
-              : currentUser?.role === 'AGENCIA' || currentUser?.rol === 'AGENCIA'
-              ? 'mostrador@surf.com'
-              : currentUser
-              ? 'consumer@surf.com'
-              : null;
-
-          if (fallbackEmail) {
+          // 2. Si no hay refresh token real o falló, verificar si es cuenta demo o dev
+          if (currentUser?.email && DEMO_ACCOUNTS.has(currentUser.email)) {
             const loginResult = await rawBaseQuery(
               {
                 url: '/auth/login',
                 method: 'POST',
-                body: { email: fallbackEmail, password: 'Password123!' },
+                body: { email: currentUser.email, password: 'Password123!' },
               },
               api,
               extraOptions
@@ -162,6 +151,7 @@ export const baseQueryWithAuth: BaseQueryFn<
                   refresh: payload.tokens.refreshToken,
                 });
                 await tokenStorage.saveUser(payload.user);
+
                 api.dispatch(
                   setCredentials({
                     user: payload.user,
@@ -174,12 +164,11 @@ export const baseQueryWithAuth: BaseQueryFn<
             }
           }
 
-          await tokenStorage.clear();
-          api.dispatch(logout());
+          // 3. Si no se pudo renovar ni es demo recuperable, desloguear limpiamente
+          await api.dispatch(logout() as any);
           return false;
         } catch {
-          await tokenStorage.clear();
-          api.dispatch(logout());
+          await api.dispatch(logout() as any);
           return false;
         } finally {
           refreshMutexPromise = null;
@@ -187,8 +176,8 @@ export const baseQueryWithAuth: BaseQueryFn<
       })();
     }
 
-    const recovered = await refreshMutexPromise;
-    if (recovered) {
+    const refreshed = await refreshMutexPromise;
+    if (refreshed) {
       result = await rawBaseQuery(args, api, extraOptions);
     }
   }

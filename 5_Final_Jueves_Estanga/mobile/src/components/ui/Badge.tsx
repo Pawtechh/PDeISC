@@ -25,17 +25,16 @@ export const Badge: React.FC<BadgeProps> = ({
     if (isDark) {
       switch (variant) {
         case 'success':
-          return { bg: 'rgba(16, 185, 129, 0.14)', border: 'rgba(16, 185, 129, 0.38)', text: '#34D399' };
+          return { bg: 'rgba(16, 185, 129, 0.14)', border: 'rgba(16, 185, 129, 0.35)', text: '#34D399' };
         case 'warning':
-          return { bg: 'rgba(212, 175, 55, 0.16)', border: 'rgba(212, 175, 55, 0.42)', text: '#FBBF24' };
+          return { bg: 'rgba(245, 158, 11, 0.14)', border: 'rgba(245, 158, 11, 0.35)', text: '#FBBF24' };
         case 'danger':
-          return { bg: 'rgba(239, 68, 68, 0.16)', border: 'rgba(239, 68, 68, 0.42)', text: '#F87171' };
+          return { bg: 'rgba(239, 68, 68, 0.14)', border: 'rgba(239, 68, 68, 0.35)', text: '#F87171' };
         case 'info':
-          return { bg: 'rgba(0, 229, 255, 0.12)', border: 'rgba(0, 229, 255, 0.32)', text: '#38BDF8' };
         case 'ocean':
-          return { bg: 'rgba(0, 229, 255, 0.15)', border: 'rgba(0, 229, 255, 0.40)', text: '#00E5FF' };
+          return { bg: 'rgba(56, 189, 248, 0.12)', border: 'rgba(56, 189, 248, 0.32)', text: '#38BDF8' };
         case 'sand':
-          return { bg: 'rgba(148, 163, 184, 0.12)', border: 'rgba(148, 163, 184, 0.28)', text: '#CBD5E1' };
+          return { bg: 'rgba(203, 213, 225, 0.08)', border: 'rgba(203, 213, 225, 0.22)', text: '#CBD5E1' };
       }
     }
 
@@ -47,11 +46,11 @@ export const Badge: React.FC<BadgeProps> = ({
       case 'danger':
         return { bg: '#FEE2E2', border: '#FECACA', text: '#991B1B' };
       case 'info':
-        return { bg: colors.ocean[100], border: colors.ocean[200], text: colors.ocean[700] };
+        return { bg: '#E0F2FE', border: '#BAE6FD', text: '#0369A1' };
       case 'ocean':
-        return { bg: colors.ocean[500], border: colors.ocean[600], text: colors.white };
+        return { bg: '#0284C7', border: '#0369A1', text: '#FFFFFF' };
       case 'sand':
-        return { bg: colors.sand[200], border: colors.sand[300], text: colors.sand[700] };
+        return { bg: '#F1F5F9', border: '#CBD5E1', text: '#475569' };
     }
   };
 

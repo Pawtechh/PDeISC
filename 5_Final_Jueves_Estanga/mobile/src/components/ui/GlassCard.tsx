@@ -66,8 +66,8 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     switch (glow) {
       case 'champagne':
         return {
-          borderColor: 'rgba(212, 175, 55, 0.25)', // Golden champagne glow
-          shadowColor: '#D4AF37',
+          borderColor: 'rgba(245, 158, 11, 0.25)', // Golden champagne glow
+          shadowColor: '#F59E0B',
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.18,
           shadowRadius: 10,
@@ -75,8 +75,8 @@ export const GlassCard: React.FC<GlassCardProps> = ({
         };
       case 'cyan':
         return {
-          borderColor: 'rgba(0, 229, 255, 0.22)', // Neon cyan ocean pulse
-          shadowColor: '#00E5FF',
+          borderColor: 'rgba(56, 189, 248, 0.22)', // Neon cyan ocean pulse
+          shadowColor: '#38BDF8',
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.2,
           shadowRadius: 10,
@@ -100,9 +100,9 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     switch (glow) {
       case 'cyan':
         return [
-          'rgba(0, 229, 255, 0.08)',
+          'rgba(56, 189, 248, 0.08)',
           'rgba(18, 24, 36, 0.25)',
-          'rgba(212, 175, 55, 0.02)',
+          'rgba(245, 158, 11, 0.02)',
         ];
       case 'none':
         return [
@@ -113,9 +113,9 @@ export const GlassCard: React.FC<GlassCardProps> = ({
       case 'champagne':
       default:
         return [
-          'rgba(212, 175, 55, 0.08)',
+          'rgba(245, 158, 11, 0.08)',
           'rgba(18, 24, 36, 0.25)',
-          'rgba(0, 229, 255, 0.03)',
+          'rgba(56, 189, 248, 0.03)',
         ];
     }
   };

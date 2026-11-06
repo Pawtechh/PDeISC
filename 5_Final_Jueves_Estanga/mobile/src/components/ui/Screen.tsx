@@ -20,7 +20,7 @@ import { ScrollToTopWithRing } from './ScrollToTopWithRing';
 import { ReadingProgressBar } from './ReadingProgressBar';
 import { DesktopHeader } from './DesktopHeader';
 
-export const LUXURY_COASTAL_GRADIENT = ['#090C10', '#0C131F', '#080B0F'] as const;
+export const LUXURY_COASTAL_GRADIENT = ['#0B0F17', '#0C131F', '#080B0F'] as const;
 export const LIGHT_COASTAL_GRADIENT = ['#F8FAFC', '#F1F5F9', '#E0F2FE'] as const;
 
 export interface ScreenProps {
@@ -38,7 +38,7 @@ export interface ScreenProps {
    */
   fullWidth?: boolean;
   /**
-   * Optionally wrap the screen in a deep luxury atmospheric coastal gradient ([#090C10, #0C131F, #080B0F] in dark, [#F8FAFC, #F1F5F9, #E0F2FE] in light)
+   * Optionally wrap the screen in a deep luxury atmospheric coastal gradient ([#0B0F17, #0C131F, #080B0F] in dark, [#F8FAFC, #F1F5F9, #E0F2FE] in light)
    */
   atmosphericGradient?: boolean;
   /**
@@ -91,7 +91,7 @@ export const Screen: React.FC<ScreenProps> = ({
 
   const resolvedGradientColors = gradientColors || (isDark ? LUXURY_COASTAL_GRADIENT : LIGHT_COASTAL_GRADIENT);
   const rootBg = atmosphericGradient
-    ? (isDark ? '#090C10' : '#F8FAFC')
+    ? (isDark ? '#0B0F17' : '#F8FAFC')
     : (backgroundColor || theme.background);
   const statusBarBg = rootBg;
 
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     width: 600,
     height: 400,
     borderRadius: 300,
-    backgroundColor: 'rgba(0, 229, 255, 0.05)',
+    backgroundColor: 'rgba(56, 189, 248, 0.05)',
   },
   ambientGoldGlow: {
     position: 'absolute',
@@ -222,6 +222,6 @@ const styles = StyleSheet.create({
     width: 500,
     height: 360,
     borderRadius: 250,
-    backgroundColor: 'rgba(212, 175, 55, 0.035)',
+    backgroundColor: 'rgba(245, 158, 11, 0.035)',
   },
 });

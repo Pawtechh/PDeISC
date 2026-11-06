@@ -77,15 +77,15 @@ export const NativeSensorsCard: React.FC = () => {
       padding="lg"
       style={[
         styles.container,
-        { borderColor: isDark ? 'rgba(212, 175, 55, 0.32)' : colors.ocean[400] },
+        { borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : colors.ocean[400] },
       ]}
     >
       <Stack spacing="md">
         {/* Header */}
         <Row justify="space-between" align="center">
           <Row spacing="xs" align="center">
-            <Radio size={16} color={isDark ? '#D4AF37' : colors.ocean[700]} />
-            <Text variant="h3" color={isDark ? '#D4AF37' : colors.ocean[700]}>
+            <Radio size={16} color={isDark ? '#F59E0B' : colors.ocean[700]} />
+            <Text variant="h3" color={isDark ? '#F59E0B' : colors.ocean[700]}>
               Sensores Nativos del Dispositivo & GPS
             </Text>
           </Row>
@@ -114,7 +114,7 @@ export const NativeSensorsCard: React.FC = () => {
             <Stack spacing="xs">
               <Row justify="space-between" align="center">
                 <Row spacing="xs" align="center">
-                  <Camera size={14} color="#00E5FF" />
+                  <Camera size={14} color="#38BDF8" />
                   <Text variant="caption" color={theme.text} style={styles.sensorTitle}>
                     Cámara Óptica QR
                   </Text>
@@ -130,10 +130,10 @@ export const NativeSensorsCard: React.FC = () => {
 
             <TouchableOpacity onPress={handleTestCamera} style={styles.miniBtn}>
               <Row spacing="xs" align="center">
-                <ScanLine size={13} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+                <ScanLine size={13} color={isDark ? '#38BDF8' : colors.ocean[600]} />
                 <Text
                   variant="caption"
-                  color={isDark ? '#00E5FF' : colors.ocean[600]}
+                  color={isDark ? '#38BDF8' : colors.ocean[600]}
                   style={{ fontWeight: '700' }}
                 >
                   Abrir Cámara QR
@@ -156,7 +156,7 @@ export const NativeSensorsCard: React.FC = () => {
               <Stack spacing="xs">
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center">
-                    <ShieldCheck size={14} color="#D4AF37" />
+                    <ShieldCheck size={14} color="#F59E0B" />
                     <Text variant="caption" color={theme.text} style={styles.sensorTitle}>
                       Biometría Nativa
                     </Text>
@@ -177,10 +177,10 @@ export const NativeSensorsCard: React.FC = () => {
                   <ActivityIndicator size="small" color={theme.champagne} />
                 ) : (
                   <Row spacing="xs" align="center">
-                    <Fingerprint size={13} color={isDark ? '#D4AF37' : colors.sand[700]} />
+                    <Fingerprint size={13} color={isDark ? '#F59E0B' : colors.sand[700]} />
                     <Text
                       variant="caption"
-                      color={isDark ? '#D4AF37' : colors.sand[700]}
+                      color={isDark ? '#F59E0B' : colors.sand[700]}
                       style={{ fontWeight: '700' }}
                     >
                       {isBiometricVerified ? 'Validar Nuevamente' : 'Probar Lector'}

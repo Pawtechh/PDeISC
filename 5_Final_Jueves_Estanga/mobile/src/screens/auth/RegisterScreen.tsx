@@ -211,7 +211,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
                     title="📷 Subir Foto DNI"
                     size="sm"
                     variant="secondary"
-                    iconLeft={<Camera size={14} color={isDark ? '#00E5FF' : colors.ocean[600]} />}
+                    iconLeft={<Camera size={14} color={isDark ? '#38BDF8' : colors.ocean[600]} />}
                     onPress={handlePickDniPhoto}
                     testID="btn-upload-dni-foto"
                   />

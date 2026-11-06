@@ -88,8 +88,8 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
       style={[
         styles.cardContainer,
         {
-          backgroundColor: isDark ? '#0D131D' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(212, 175, 55, 0.22)' : '#E2E8F0',
+          backgroundColor: isDark ? '#111827' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0',
           shadowColor: isDark ? '#000000' : '#64748B',
           shadowOpacity: isDark ? 0.45 : 0.12,
         },
@@ -98,7 +98,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
       ]}
     >
       {/* 1. Curated Gallery Image Showcase Frame */}
-      <View style={[styles.imageFrame, { backgroundColor: isDark ? '#080C14' : '#F1F5F9' }]}>
+      <View style={[styles.imageFrame, { backgroundColor: isDark ? '#0B0F17' : '#F1F5F9' }]}>
         <View style={styles.imageInner}>
           <Image
             source={{ uri: photoUrl }}
@@ -129,7 +129,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
           {isFeatured && (
             <View style={styles.floatingBadgeCenter}>
               <View style={styles.featuredBlurPill}>
-                <Award size={10} color="#D4AF37" strokeWidth={2.2} />
+                <Award size={10} color="#F59E0B" strokeWidth={2.2} />
                 <Text style={styles.featuredBadgeText}>DESTACADA</Text>
               </View>
             </View>
@@ -138,7 +138,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
           {/* Floating Rating Badge with Lucide Star Icon */}
           <View style={styles.floatingBadgeRight}>
             <View style={styles.blurPill}>
-              <Star size={11} color="#D4AF37" fill="#D4AF37" />
+              <Star size={11} color="#F59E0B" fill="#F59E0B" />
               <Text style={styles.ratingText}>
                 {board.calificacionPromedio ? board.calificacionPromedio.toFixed(1) : '5.0'}
               </Text>
@@ -148,13 +148,13 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
       </View>
 
       {/* 2. Editorial Typography & Technical Specs */}
-      <View style={[styles.contentContainer, { backgroundColor: isDark ? '#0D131D' : '#FFFFFF' }]}>
+      <View style={[styles.contentContainer, { backgroundColor: isDark ? '#111827' : '#FFFFFF' }]}>
         {/* Brand & Model */}
         <View style={styles.brandRow}>
           <Text
             style={[
               styles.brandSubtitle,
-              { color: isDark ? '#D4AF37' : '#0A66D4' },
+              { color: isDark ? '#38BDF8' : '#0284C7' },
             ]}
             numberOfLines={1}
           >
@@ -182,14 +182,14 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
             </Text>
           </View>
           {Boolean(board.volumenLitros) && (
-            <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(0, 229, 255, 0.08)' : '#E0F2FE' }]}>
-              <Text style={[styles.specChipText, { color: isDark ? '#00E5FF' : '#0284C7' }]}>
+            <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE' }]}>
+              <Text style={[styles.specChipText, { color: isDark ? '#38BDF8' : '#0284C7' }]}>
                 {board.volumenLitros} L
               </Text>
             </View>
           )}
-          <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(212, 175, 55, 0.08)' : '#FEF3C7' }]}>
-            <Text style={[styles.specChipText, { color: isDark ? '#D4AF37' : '#B45309' }]}>
+          <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9' }]}>
+            <Text style={[styles.specChipText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
               {board.tipoTabla.toUpperCase()}
             </Text>
           </View>
@@ -249,7 +249,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
               testID={`board-3d-reserve-${board.id}`}
             >
               <LinearGradient
-                colors={['#00E5FF', '#0099B8']}
+                colors={isDark ? ['#0284C7', '#0369A1'] : ['#0284C7', '#075985']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.reserveBtnGradient}
@@ -319,11 +319,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     backgroundColor: 'rgba(9, 12, 16, 0.85)',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: 'rgba(245, 158, 11, 0.4)',
     borderRadius: 6,
   },
   featuredBadgeText: {
-    color: '#D4AF37',
+    color: '#F59E0B',
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 1,
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
   reserveBtnWrapper: {
     borderRadius: 10,
     overflow: 'hidden',
-    shadowColor: '#00E5FF',
+    shadowColor: '#0284C7',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   reserveBtnText: {
-    color: '#090C10',
+    color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0.8,
@@ -462,12 +462,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: 'rgba(212, 175, 55, 0.15)',
+    backgroundColor: 'rgba(56, 189, 248, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.4)',
+    borderColor: 'rgba(56, 189, 248, 0.3)',
   },
   ownerEditBtnText: {
-    color: '#D4AF37',
+    color: '#38BDF8',
     fontSize: 11,
     fontWeight: '700',
   },

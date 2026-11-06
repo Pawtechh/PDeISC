@@ -205,7 +205,7 @@ export function RootNavigator() {
       <View
         style={[
           styles.splashContainer,
-          { backgroundColor: isDark ? '#090C10' : '#F8FAFC' },
+          { backgroundColor: isDark ? '#0B0F17' : '#F8FAFC' },
         ]}
       >
         <View
@@ -213,7 +213,7 @@ export function RootNavigator() {
             styles.splashCard,
             {
               backgroundColor: isDark ? 'rgba(18, 24, 36, 0.85)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(0, 229, 255, 0.25)' : '#E2E8F0',
+              borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : '#E2E8F0',
             },
           ]}
         >
@@ -221,22 +221,22 @@ export function RootNavigator() {
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE',
-                borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#7DD3FC',
+                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE',
+                borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#7DD3FC',
               },
             ]}
           >
-            <Waves size={32} color={isDark ? '#00E5FF' : '#0284C7'} strokeWidth={2.2} />
+            <Waves size={32} color={isDark ? '#38BDF8' : '#0284C7'} strokeWidth={2.2} />
           </View>
           <Text style={[styles.brandTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
             SURF RENTAL
           </Text>
-          <Text style={[styles.brandSubtitle, { color: isDark ? '#D4AF37' : '#0284C7' }]}>
+          <Text style={[styles.brandSubtitle, { color: isDark ? '#F59E0B' : '#0284C7' }]}>
             SEDE PLAYA GRANDE • MAR DEL PLATA
           </Text>
           <ActivityIndicator
             size="small"
-            color={isDark ? '#00E5FF' : '#0284C7'}
+            color={isDark ? '#38BDF8' : '#0284C7'}
             style={{ marginTop: 18 }}
           />
           <Text style={[styles.loadingHint, { color: isDark ? '#94A3B8' : '#64748B' }]}>

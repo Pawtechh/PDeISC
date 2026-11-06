@@ -480,7 +480,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               styles.successCard,
               isDark && {
                 backgroundColor: theme.card,
-                borderColor: 'rgba(212, 175, 55, 0.25)',
+                borderColor: 'rgba(245, 158, 11, 0.25)',
                 borderWidth: 1,
               },
             ]}
@@ -597,7 +597,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             styles.boardCard,
             isDark && {
               backgroundColor: theme.card,
-              borderColor: 'rgba(212, 175, 55, 0.25)',
+              borderColor: 'rgba(245, 158, 11, 0.25)',
               borderWidth: 1,
             },
           ]}
@@ -617,7 +617,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               <Text variant="caption" color={subtextColor}>
                 {board.marca} • {board.medidas}
               </Text>
-              <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[700]} style={styles.bold}>
+              <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[700]} style={styles.bold}>
                 Sede Central Playa Grande
               </Text>
             </Stack>
@@ -1981,6 +1981,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   sigMethodPillActive: {
-    backgroundColor: 'rgba(0, 229, 255, 0.1)',
+    backgroundColor: 'rgba(56, 189, 248, 0.1)',
   },
 });

@@ -26,8 +26,8 @@ export const RatingStars: React.FC<RatingStarsProps> = ({
       <View key={i} style={styles.starWrapper}>
         <Star
           size={size}
-          color={isFilled ? '#D4AF37' : '#475569'}
-          fill={isFilled ? '#D4AF37' : 'transparent'}
+          color={isFilled ? '#F59E0B' : '#475569'}
+          fill={isFilled ? '#F59E0B' : 'transparent'}
           strokeWidth={1.5}
         />
       </View>

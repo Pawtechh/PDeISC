@@ -128,8 +128,8 @@ export const MandatoryKycModal: React.FC = () => {
           style={[
             styles.card,
             {
-              backgroundColor: isDark ? '#121824' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(212, 175, 55, 0.4)' : '#CBD5E1',
+              backgroundColor: isDark ? '#131C2E' : '#FFFFFF',
+              borderColor: isDark ? 'rgba(245, 158, 11, 0.4)' : '#CBD5E1',
             },
           ]}
         >

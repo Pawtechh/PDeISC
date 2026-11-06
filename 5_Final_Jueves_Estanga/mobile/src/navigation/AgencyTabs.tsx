@@ -26,14 +26,14 @@ export const AgencyTabs: React.FC = () => {
         width: 560,
         height: 64,
         borderRadius: 32,
-        backgroundColor: isDark ? 'rgba(18, 24, 36, 0.88)' : 'rgba(255, 255, 255, 0.94)',
+        backgroundColor: isDark ? 'rgba(17, 24, 39, 0.88)' : 'rgba(255, 255, 255, 0.94)',
         borderWidth: 1,
-        borderColor: isDark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(0, 0, 0, 0.1)',
+        borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
         paddingBottom: 8,
         paddingTop: 6,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.45,
+        shadowOpacity: 0.35,
         shadowRadius: 24,
         elevation: 20,
         ...(Platform.OS === 'web'
@@ -44,8 +44,8 @@ export const AgencyTabs: React.FC = () => {
           : {}),
       }
     : {
-        backgroundColor: isDark ? 'rgba(18, 24, 36, 0.94)' : 'rgba(255, 255, 255, 0.96)',
-        borderTopColor: isDark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(0, 0, 0, 0.08)',
+        backgroundColor: isDark ? 'rgba(17, 24, 39, 0.95)' : 'rgba(255, 255, 255, 0.96)',
+        borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
         borderTopWidth: 1,
         height: 64,
         paddingBottom: 8,
@@ -62,8 +62,8 @@ export const AgencyTabs: React.FC = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: isDark ? theme.primary : colors.ocean[600],
-        tabBarInactiveTintColor: isDark ? '#94A3B8' : colors.sand[500],
+        tabBarActiveTintColor: isDark ? '#38BDF8' : '#0284C7',
+        tabBarInactiveTintColor: isDark ? '#64748B' : '#94A3B8',
         tabBarStyle,
         tabBarLabelStyle: {
           fontSize: 10.5,

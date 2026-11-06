@@ -32,8 +32,8 @@ export const MyRentalsScreen: React.FC = () => {
     return (
       <Screen scrollable>
         <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center', marginTop: 40 }}>
-          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(0, 229, 255, 0.12)' : '#E0F2FE', alignItems: 'center', justifyContent: 'center' }}>
-            <Waves size={32} color={isDark ? '#00E5FF' : '#0284C7'} />
+          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE', alignItems: 'center', justifyContent: 'center' }}>
+            <Waves size={32} color={isDark ? '#38BDF8' : '#0284C7'} />
           </View>
           <Text variant="h2" align="center">Alquileres de Tablas</Text>
           <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 460 }}>
@@ -281,8 +281,8 @@ export const MyRentalsScreen: React.FC = () => {
               {/* Código de Pase Destacado de Alto Contraste */}
               <View
                 style={{
-                  backgroundColor: isDark ? '#090C10' : '#F1F5F9',
-                  borderColor: isDark ? '#D4AF37' : colors.ocean[400],
+                  backgroundColor: isDark ? '#0B0F17' : '#F1F5F9',
+                  borderColor: isDark ? '#F59E0B' : colors.ocean[400],
                   borderWidth: 1.5,
                   borderRadius: 12,
                   paddingHorizontal: 16,
@@ -291,7 +291,7 @@ export const MyRentalsScreen: React.FC = () => {
                   width: '100%',
                 }}
               >
-                <Text style={{ fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: '#D4AF37', marginBottom: 2 }}>
+                <Text style={{ fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: '#F59E0B', marginBottom: 2 }}>
                   CÓDIGO DE RETIRO
                 </Text>
                 <Text
@@ -300,7 +300,7 @@ export const MyRentalsScreen: React.FC = () => {
                     fontWeight: '900',
                     letterSpacing: 2,
                     fontFamily: 'monospace',
-                    color: isDark ? '#00E5FF' : colors.ocean[800],
+                    color: isDark ? '#38BDF8' : colors.ocean[800],
                   }}
                   selectable
                 >
@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     height: 180,
     backgroundColor: '#FFFFFF',
     borderWidth: 2,
-    borderColor: '#090C10',
+    borderColor: '#0B0F17',
     borderRadius: radii.md,
     position: 'relative',
     alignItems: 'center',
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderWidth: 4,
-    borderColor: '#090C10',
+    borderColor: '#0B0F17',
   },
   qrCornerTR: {
     position: 'absolute',
@@ -547,7 +547,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderWidth: 4,
-    borderColor: '#090C10',
+    borderColor: '#0B0F17',
   },
   qrCornerBL: {
     position: 'absolute',
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderWidth: 4,
-    borderColor: '#090C10',
+    borderColor: '#0B0F17',
   },
   qrCenter: {
     alignItems: 'center',

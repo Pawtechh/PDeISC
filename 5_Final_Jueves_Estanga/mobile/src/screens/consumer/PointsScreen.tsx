@@ -161,7 +161,7 @@ export const PointsScreen: React.FC = () => {
         <Row justify="space-between" align="center">
           <View>
             <Row spacing="xs" align="center">
-              <Award size={15} color="#D4AF37" />
+              <Award size={15} color="#F59E0B" />
               <Text variant="caption" style={styles.eyebrowText}>
                 PROGRAMA DE FIDELIDAD • PLAYA GRANDE
               </Text>
@@ -220,7 +220,7 @@ export const PointsScreen: React.FC = () => {
               >
                 <Stack spacing="md" align="center">
                   <Row spacing="xs" align="center">
-                    <Sparkles size={14} color="#D4AF37" />
+                    <Sparkles size={14} color="#F59E0B" />
                     <Badge
                       label={`RIDER ${loyalty?.nivel?.nombre?.toUpperCase() || 'PRINCIPIANTE'}`}
                       variant="warning"
@@ -228,7 +228,7 @@ export const PointsScreen: React.FC = () => {
                   </Row>
                   <Text
                     variant="display"
-                    color={isDark ? '#00E5FF' : colors.sunset[500]}
+                    color={isDark ? '#38BDF8' : colors.sunset[500]}
                     style={{ fontSize: 44, fontWeight: '900' }}
                   >
                     {loyalty?.puntos ?? 0} pts
@@ -244,7 +244,7 @@ export const PointsScreen: React.FC = () => {
                   <View style={styles.progressContainer}>
                     <View style={[styles.progressTrack, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : colors.sand[200] }]}>
                       <LinearGradient
-                        colors={['#00E5FF', '#D4AF37']}
+                        colors={['#38BDF8', '#F59E0B']}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                         style={[
@@ -259,7 +259,7 @@ export const PointsScreen: React.FC = () => {
                       <Text variant="caption" color={theme.subtext}>
                         Nivel {loyalty?.nivel?.nivel || 1}
                       </Text>
-                      <Text variant="caption" color="#D4AF37" style={{ fontWeight: '700' }}>
+                      <Text variant="caption" color="#F59E0B" style={{ fontWeight: '700' }}>
                         Próximo: {loyalty?.nivel?.proximoNivelPuntos || 100} pts
                       </Text>
                     </Row>
@@ -274,14 +274,14 @@ export const PointsScreen: React.FC = () => {
               style={[
                 styles.expirationCard,
                 {
-                  backgroundColor: isDark ? 'rgba(0, 229, 255, 0.06)' : colors.ocean[50],
-                  borderColor: isDark ? 'rgba(0, 229, 255, 0.28)' : colors.ocean[200],
+                  backgroundColor: isDark ? 'rgba(56, 189, 248, 0.06)' : colors.ocean[50],
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.28)' : colors.ocean[200],
                 },
               ]}
             >
               <Row justify="space-between" align="center">
                 <Row spacing="sm" align="center" style={{ flex: 1 }}>
-                  <Clock size={18} color="#00E5FF" />
+                  <Clock size={18} color="#38BDF8" />
                   <View style={{ flex: 1 }}>
                     <Text variant="button" color={isDark ? '#E0F2FE' : colors.ocean[900]}>
                       Vigencia de Puntos (12 Meses)
@@ -331,7 +331,7 @@ export const PointsScreen: React.FC = () => {
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center">
-                    <Calculator size={16} color="#00E5FF" />
+                    <Calculator size={16} color="#38BDF8" />
                     <Text variant="h3" color={theme.text}>
                       Calculadora de Canje
                     </Text>
@@ -358,19 +358,19 @@ export const PointsScreen: React.FC = () => {
                           paddingVertical: 6,
                           borderRadius: radii.full,
                           backgroundColor: isSelected
-                            ? (isDark ? 'rgba(0, 229, 255, 0.18)' : colors.ocean[500])
+                            ? (isDark ? 'rgba(56, 189, 248, 0.18)' : colors.ocean[500])
                             : isDark
                             ? 'rgba(18, 24, 36, 0.8)'
                             : colors.sand[100],
                           borderWidth: 1,
                           borderColor: isSelected
-                            ? (isDark ? '#00E5FF' : colors.ocean[500])
+                            ? (isDark ? '#38BDF8' : colors.ocean[500])
                             : (isDark ? 'rgba(255,255,255,0.12)' : theme.border),
                         }}
                       >
                         <Text
                           variant="caption"
-                          color={isSelected ? (isDark ? '#00E5FF' : colors.white) : theme.text}
+                          color={isSelected ? (isDark ? '#38BDF8' : colors.white) : theme.text}
                           style={{ fontWeight: isSelected ? '700' : '500' }}
                         >
                           {preset} pts (${(parseInt(preset, 10) * 10).toLocaleString('es-AR')})
@@ -541,7 +541,7 @@ export const PointsScreen: React.FC = () => {
             {/* Historial de Puntos */}
             <Stack spacing="sm">
               <Row spacing="xs" align="center">
-                <TrendingUp size={16} color="#D4AF37" />
+                <TrendingUp size={16} color="#F59E0B" />
                 <Text variant="h2" color={theme.text}>
                   Historial de Actividad
                 </Text>
@@ -696,7 +696,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   eyebrowText: {
-    color: '#D4AF37',
+    color: '#F59E0B',
     fontWeight: '800',
     letterSpacing: 1.5,
     fontSize: 10.5,
@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.35)',
+    borderColor: 'rgba(245, 158, 11, 0.35)',
   },
   heroGradient: {
     padding: spacing.xl,

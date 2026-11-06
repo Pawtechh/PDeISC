@@ -39,7 +39,7 @@ export const BoardQrModal: React.FC<BoardQrModalProps> = ({ board, visible, onCl
             styles.modalCard,
             {
               backgroundColor: isDark ? '#0F172A' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(212, 175, 55, 0.4)' : colors.sand[300],
+              borderColor: isDark ? 'rgba(245, 158, 11, 0.4)' : colors.sand[300],
             },
           ]}
         >
@@ -70,8 +70,8 @@ export const BoardQrModal: React.FC<BoardQrModalProps> = ({ board, visible, onCl
             style={[
               styles.codeBadge,
               {
-                backgroundColor: isDark ? '#090C10' : '#F1F5F9',
-                borderColor: isDark ? '#D4AF37' : colors.ocean[400],
+                backgroundColor: isDark ? '#0B0F17' : '#F1F5F9',
+                borderColor: isDark ? '#F59E0B' : colors.ocean[400],
               },
             ]}
           >
@@ -79,7 +79,7 @@ export const BoardQrModal: React.FC<BoardQrModalProps> = ({ board, visible, onCl
             <Text
               style={[
                 styles.codeText,
-                { color: isDark ? '#00E5FF' : colors.ocean[800] },
+                { color: isDark ? '#38BDF8' : colors.ocean[800] },
               ]}
               selectable
             >
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1.5,
-    color: '#D4AF37',
+    color: '#F59E0B',
     marginBottom: 2,
   },
   codeText: {

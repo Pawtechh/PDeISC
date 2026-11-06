@@ -32,7 +32,7 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
         styles.chip,
         {
           backgroundColor: selected
-            ? (isDark ? '#00E5FF' : colors.ocean[600])
+            ? (isDark ? '#38BDF8' : colors.ocean[600])
             : !disponible
             ? (isDark ? 'rgba(255, 255, 255, 0.03)' : colors.sand[100])
             : (isDark ? '#101726' : colors.white),
@@ -40,7 +40,7 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
             ? (isDark ? '#38BDF8' : colors.ocean[700])
             : !disponible
             ? (isDark ? 'rgba(255, 255, 255, 0.08)' : colors.sand[200])
-            : (isDark ? 'rgba(212, 175, 55, 0.45)' : colors.ocean[400]),
+            : (isDark ? 'rgba(245, 158, 11, 0.45)' : colors.ocean[400]),
           opacity: !disponible ? 0.4 : 1,
         },
       ]}
@@ -54,7 +54,7 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
           variant="caption"
           color={
             selected
-              ? (isDark ? '#090C10' : colors.white)
+              ? (isDark ? '#0B0F17' : colors.white)
               : !disponible
               ? (isDark ? '#64748B' : colors.sand[500])
               : (isDark ? '#F1F5F9' : colors.ocean[900])

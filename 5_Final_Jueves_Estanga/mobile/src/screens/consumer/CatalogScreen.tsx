@@ -92,8 +92,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         <RefreshControl
           refreshing={isFetching}
           onRefresh={refetch}
-          tintColor="#00E5FF"
-          colors={['#00E5FF', '#D4AF37']}
+          tintColor="#38BDF8"
+          colors={['#38BDF8', '#F59E0B']}
         />
       }
     >
@@ -110,7 +110,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
             colors={[
               'rgba(9, 12, 16, 0.45)',
               'rgba(9, 12, 16, 0.85)',
-              '#090C10',
+              '#0B0F17',
             ]}
             locations={[0, 0.65, 1]}
             style={StyleSheet.absoluteFillObject}
@@ -134,19 +134,19 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
 
             <View style={styles.kpiRow}>
               <View style={styles.kpiChip}>
-                <Award size={13} color="#D4AF37" />
+                <Award size={13} color="#F59E0B" />
                 <Text style={styles.kpiChipText}>Shapers Marplatenses</Text>
               </View>
               <View style={styles.kpiChip}>
-                <Clock size={13} color="#00E5FF" />
+                <Clock size={13} color="#38BDF8" />
                 <Text style={styles.kpiChipText}>Retiro Express 5 min</Text>
               </View>
               <View style={styles.kpiChip}>
-                <Star size={13} color="#D4AF37" fill="#D4AF37" />
+                <Star size={13} color="#F59E0B" fill="#F59E0B" />
                 <Text style={styles.kpiChipText}>4.9/5 Calificación</Text>
               </View>
               <View style={styles.kpiChip}>
-                <Shield size={13} color="#00E5FF" />
+                <Shield size={13} color="#38BDF8" />
                 <Text style={styles.kpiChipText}>Cobertura Total 100%</Text>
               </View>
             </View>
@@ -161,14 +161,14 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <Card
             padding="md"
             style={{
-              backgroundColor: isDark ? 'rgba(0, 229, 255, 0.08)' : '#F0F9FF',
-              borderColor: isDark ? 'rgba(0, 229, 255, 0.35)' : '#BAE6FD',
+              backgroundColor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
+              borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#BAE6FD',
               borderWidth: 1,
             }}
           >
             <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
               <View style={{ flex: 1, minWidth: 200 }}>
-                <Text variant="caption" color={isDark ? '#00E5FF' : colors.ocean[600]} style={{ fontWeight: '800' }}>
+                <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[600]} style={{ fontWeight: '800' }}>
                   MODO INVITADO (SOLO LECTURA)
                 </Text>
                 <Text variant="caption" color={theme.text}>
@@ -198,10 +198,10 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <View style={styles.featuredSection}>
             <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
               <Row align="center" spacing="xs">
-                <Star size={14} color="#D4AF37" fill="#D4AF37" />
+                <Star size={14} color="#F59E0B" fill="#F59E0B" />
                 <Text
                   variant="caption"
-                  style={[styles.sectionTitle, { color: isDark ? '#D4AF37' : '#0A66D4' }]}
+                  style={[styles.sectionTitle, { color: isDark ? '#F59E0B' : '#0A66D4' }]}
                 >
                   TABLAS DESTACADAS • SELECCIÓN PLAYA GRANDE
                 </Text>
@@ -228,10 +228,10 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         <View style={styles.gridSection}>
           <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
             <Row align="center" spacing="xs">
-              <Waves size={14} color={isDark ? '#D4AF37' : '#0A66D4'} />
+              <Waves size={14} color={isDark ? '#F59E0B' : '#0A66D4'} />
               <Text
                 variant="caption"
-                style={[styles.sectionTitle, { color: isDark ? '#D4AF37' : '#0A66D4' }]}
+                style={[styles.sectionTitle, { color: isDark ? '#F59E0B' : '#0A66D4' }]}
               >
                 TODAS LAS TABLAS {selectedType !== 'Todos' ? `• ${selectedType.toUpperCase()}` : ''} ({boardsList.length})
               </Text>
@@ -240,17 +240,17 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
               style={[
                 styles.gridBadge,
                 {
-                  backgroundColor: isDark ? 'rgba(0, 229, 255, 0.1)' : '#EFF6FF',
-                  borderColor: isDark ? 'rgba(0, 229, 255, 0.3)' : '#BFDBFE',
+                  backgroundColor: isDark ? 'rgba(56, 189, 248, 0.1)' : '#EFF6FF',
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.3)' : '#BFDBFE',
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 4,
                 },
               ]}
             >
-              <LayoutGrid size={11} color={isDark ? '#00E5FF' : '#0A66D4'} />
+              <LayoutGrid size={11} color={isDark ? '#38BDF8' : '#0A66D4'} />
               <Text
-                style={[styles.gridBadgeText, { color: isDark ? '#00E5FF' : '#0A66D4' }]}
+                style={[styles.gridBadgeText, { color: isDark ? '#38BDF8' : '#0A66D4' }]}
               >
                 CUADRÍCULA
               </Text>
@@ -269,7 +269,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                 styles.searchInput,
                 {
                   backgroundColor: isDark ? 'rgba(13, 19, 29, 0.8)' : '#FFFFFF',
-                  borderColor: isDark ? 'rgba(212, 175, 55, 0.25)' : '#CBD5E1',
+                  borderColor: isDark ? 'rgba(245, 158, 11, 0.25)' : '#CBD5E1',
                   color: isDark ? '#F1F5F9' : '#0F172A',
                 },
               ]}
@@ -291,7 +291,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                     styles.filterPill,
                     {
                       backgroundColor: isDark ? 'rgba(18, 24, 36, 0.75)' : '#FFFFFF',
-                      borderColor: isDark ? 'rgba(212, 175, 55, 0.22)' : '#CBD5E1',
+                      borderColor: isDark ? 'rgba(245, 158, 11, 0.22)' : '#CBD5E1',
                     },
                     isSelected &&
                       (isDark ? styles.filterPillSelectedDark : styles.filterPillSelectedLight),
@@ -365,8 +365,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         onRequestClose={() => setSelectedBoard(null)}
       >
         {selectedBoard && (
-          <View style={[styles.modalRoot, { backgroundColor: isDark ? '#090C10' : '#F8FAFC' }]}>
-            <View style={[styles.modalHeader, { backgroundColor: isDark ? '#090C10' : '#FFFFFF', borderBottomColor: isDark ? 'rgba(212, 175, 55, 0.2)' : '#E2E8F0' }]}>
+          <View style={[styles.modalRoot, { backgroundColor: isDark ? '#0B0F17' : '#F8FAFC' }]}>
+            <View style={[styles.modalHeader, { backgroundColor: isDark ? '#0B0F17' : '#FFFFFF', borderBottomColor: isDark ? 'rgba(245, 158, 11, 0.2)' : '#E2E8F0' }]}>
               <Button
                 title="✕ Cerrar"
                 variant="ghost"
@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.28)',
+    borderColor: 'rgba(245, 158, 11, 0.28)',
     minHeight: 240,
     justifyContent: 'flex-end',
     padding: spacing.lg,
@@ -432,14 +432,14 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.4)',
+    borderColor: 'rgba(56, 189, 248, 0.4)',
   },
   brandLocationDot: {
-    color: '#00E5FF',
+    color: '#38BDF8',
     fontSize: 8,
   },
   brandLocationText: {
-    color: '#00E5FF',
+    color: '#38BDF8',
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 0.5,
@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
   },
   headerCard: {
     backgroundColor: 'rgba(18, 24, 36, 0.65)',
-    borderColor: 'rgba(212, 175, 55, 0.25)',
+    borderColor: 'rgba(245, 158, 11, 0.25)',
   },
   headerTextGroup: {
     flex: 1,
@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   sectionTitle: {
-    color: '#D4AF37',
+    color: '#F59E0B',
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 1.5,
@@ -549,12 +549,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: 'rgba(0, 229, 255, 0.1)',
+    backgroundColor: 'rgba(56, 189, 248, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.3)',
+    borderColor: 'rgba(56, 189, 248, 0.3)',
   },
   gridBadgeText: {
-    color: '#00E5FF',
+    color: '#38BDF8',
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 1,
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     backgroundColor: 'rgba(13, 19, 29, 0.8)',
-    borderColor: 'rgba(212, 175, 55, 0.25)',
+    borderColor: 'rgba(245, 158, 11, 0.25)',
     color: '#F1F5F9',
   },
   searchIcon: {
@@ -585,12 +585,12 @@ const styles = StyleSheet.create({
     borderRadius: radii.full,
     backgroundColor: 'rgba(18, 24, 36, 0.75)',
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.22)',
+    borderColor: 'rgba(245, 158, 11, 0.22)',
   },
   filterPillSelectedDark: {
-    backgroundColor: 'rgba(0, 229, 255, 0.18)',
-    borderColor: '#00E5FF',
-    shadowColor: '#00E5FF',
+    backgroundColor: 'rgba(56, 189, 248, 0.18)',
+    borderColor: '#38BDF8',
+    shadowColor: '#38BDF8',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.45,
     shadowRadius: 8,
@@ -610,7 +610,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   filterPillTextSelectedDark: {
-    color: '#00E5FF',
+    color: '#38BDF8',
     fontWeight: '800',
   },
   filterPillTextSelectedLight: {
@@ -645,14 +645,14 @@ const styles = StyleSheet.create({
   },
   modalRoot: {
     flex: 1,
-    backgroundColor: '#090C10',
+    backgroundColor: '#0B0F17',
   },
   modalHeader: {
-    backgroundColor: '#090C10',
+    backgroundColor: '#0B0F17',
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     alignItems: 'flex-end',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(212, 175, 55, 0.2)',
+    borderBottomColor: 'rgba(245, 158, 11, 0.2)',
   },
 });

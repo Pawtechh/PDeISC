@@ -161,20 +161,20 @@ export const RentalCard: React.FC<RentalCardProps> = ({
               <Text variant="caption" color={theme.subtext}>
                 {formatDate(rental.fechaInicio)}
               </Text>
-              <Clock size={12} color={isDark ? '#00E5FF' : colors.ocean[600]} />
+              <Clock size={12} color={isDark ? '#38BDF8' : colors.ocean[600]} />
               <Text
                 variant="caption"
-                color={isDark ? '#00E5FF' : colors.ocean[600]}
+                color={isDark ? '#38BDF8' : colors.ocean[600]}
                 style={{ fontWeight: '700' }}
               >
                 ({rental.horas}h)
               </Text>
             </Row>
             <Row spacing="xs" align="center">
-              <MapPin size={12} color={isDark ? '#D4AF37' : colors.ocean[700]} />
+              <MapPin size={12} color={isDark ? '#F59E0B' : colors.ocean[700]} />
               <Text
                 variant="caption"
-                color={isDark ? '#D4AF37' : colors.ocean[700]}
+                color={isDark ? '#F59E0B' : colors.ocean[700]}
                 style={styles.locationText}
               >
                 Sede Central Playa Grande
@@ -249,7 +249,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
             <Text variant="caption" color={theme.subtext}>
               Total pagado
             </Text>
-            <Text variant="h3" color={isDark ? '#00E5FF' : colors.ocean[600]}>
+            <Text variant="h3" color={isDark ? '#38BDF8' : colors.ocean[600]}>
               ${Number(rental.precioTotal || 0).toLocaleString('es-AR')} ARS
             </Text>
           </View>
@@ -271,7 +271,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
                     title="Ver QR"
                     variant="primary"
                     size="sm"
-                    iconLeft={<QrCode size={14} color={isDark ? '#090C10' : '#FFFFFF'} />}
+                    iconLeft={<QrCode size={14} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
                     onPress={onPressQR}
                     testID={`btn-qr-rental-${rental.id}`}
                   />
