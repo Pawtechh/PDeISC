@@ -351,23 +351,32 @@ export const ProfileScreen: React.FC = () => {
       }
     >
       <Stack spacing="lg" style={{ paddingVertical: spacing.md }}>
-        <View>
-          <Row spacing="xs" align="center">
-            <ShieldCheck size={14} color={isDark ? '#D4AF37' : colors.ocean[600]} />
-            <Text
-              variant="caption"
-              style={[
-                styles.eyebrowText,
-                { color: isDark ? '#D4AF37' : colors.ocean[600] },
-              ]}
-            >
-              CUENTA VERIFICADA • PLAYA GRANDE
+        <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 12 }}>
+          <View>
+            <Row spacing="xs" align="center">
+              <ShieldCheck size={14} color={isDark ? '#D4AF37' : colors.ocean[600]} />
+              <Text
+                variant="caption"
+                style={[
+                  styles.eyebrowText,
+                  { color: isDark ? '#D4AF37' : colors.ocean[600] },
+                ]}
+              >
+                CUENTA VERIFICADA • PLAYA GRANDE
+              </Text>
+            </Row>
+            <Text variant="h1" color={theme.text}>
+              Mi Perfil
             </Text>
-          </Row>
-          <Text variant="h1" color={theme.text}>
-            Mi Perfil
-          </Text>
-        </View>
+          </View>
+          <Button
+            title="Cerrar Sesión"
+            variant="danger"
+            size="sm"
+            iconLeft={<LogOut size={16} color="#FFFFFF" />}
+            onPress={() => setShowLogoutModal(true)}
+          />
+        </Row>
 
         {/* Tarjeta Principal de Identidad del Usuario */}
         <Card padding="lg">
@@ -749,13 +758,40 @@ export const ProfileScreen: React.FC = () => {
           </Stack>
         </Card>
 
-        <Button
-          title="Cerrar Sesión"
-          variant="danger"
-          size="lg"
-          iconLeft={<LogOut size={16} color="#FFFFFF" />}
-          onPress={() => setShowLogoutModal(true)}
-        />
+        {/* Sección de Cierre de Sesión Seguro */}
+        <Card
+          padding="lg"
+          style={{
+            borderColor: colors.semantic.danger,
+            borderWidth: 1.5,
+            backgroundColor: isDark ? 'rgba(239, 68, 68, 0.08)' : '#FEF2F2',
+            marginTop: spacing.sm,
+          }}
+        >
+          <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 12 }}>
+            <Stack spacing="xs" style={{ flex: 1, minWidth: 200 }}>
+              <Row spacing="xs" align="center">
+                <LogOut size={18} color={colors.semantic.danger} />
+                <Text variant="h3" color={theme.text}>
+                  Finalizar Sesión
+                </Text>
+              </Row>
+              <Text variant="caption" color={theme.subtext}>
+                Cerrá tu sesión de trabajo de forma segura en este dispositivo.
+              </Text>
+            </Stack>
+            <Button
+              title="Cerrar Sesión"
+              variant="danger"
+              size="md"
+              iconLeft={<LogOut size={16} color="#FFFFFF" />}
+              onPress={() => setShowLogoutModal(true)}
+            />
+          </Row>
+        </Card>
+
+        {/* Espaciador de seguridad para que la barra flotante de navegación NUNCA solape contenido */}
+        <View style={{ height: 120 }} />
       </Stack>
 
       {/* MODAL 1: Crear / Editar Solicitud de Perfil de Vendedor (Subida Real de Fotos) */}

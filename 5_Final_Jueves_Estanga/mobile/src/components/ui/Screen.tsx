@@ -63,7 +63,7 @@ export const Screen: React.FC<ScreenProps> = ({
 }) => {
   const { theme, isDark } = useTheme();
   const { width } = useWindowDimensions();
-  const isDesktop = width >= 860;
+  const isDesktop = width >= 768;
   const screenBg = atmosphericGradient ? 'transparent' : (backgroundColor || theme.background);
 
   const internalScrollRef = useRef<ScrollView>(null);
@@ -98,6 +98,9 @@ export const Screen: React.FC<ScreenProps> = ({
   const dynamicContentContainerStyle = [
     styles.contentContainer,
     fullWidth ? styles.fullWidthContainer : styles.standardContainer,
+    {
+      paddingBottom: isDesktop ? 160 : 48,
+    },
     contentContainerStyle,
   ];
 
