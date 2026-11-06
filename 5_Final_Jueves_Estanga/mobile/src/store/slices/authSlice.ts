@@ -67,7 +67,7 @@ export const authSlice = createSlice({
       }>
     ) => {
       const u = action.payload.user;
-      const role = u.role || u.rol || 'CONSUMER';
+      const role = (u.role || u.rol || 'CONSUMER') as UserRole;
       state.user = {
         ...u,
         role,
@@ -77,6 +77,26 @@ export const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
       state.isGuest = false;
+    },
+    updateUser: (state, action: PayloadAction<Partial<User>>) => {
+      if (state.user) {
+        const u = action.payload;
+        const newRole = (u.role || u.rol || state.user.role || state.user.rol || 'CONSUMER') as UserRole;
+        state.user = {
+          ...state.user,
+          ...u,
+          role: newRole,
+          rol: newRole,
+        };
+      } else if (action.payload) {
+        const u = action.payload as User;
+        const newRole = (u.role || u.rol || 'CONSUMER') as UserRole;
+        state.user = {
+          ...u,
+          role: newRole,
+          rol: newRole,
+        };
+      }
     },
     setGuestMode: (state, action: PayloadAction<boolean>) => {
       state.isGuest = action.payload;

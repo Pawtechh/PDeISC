@@ -37,7 +37,7 @@ import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge, Input } from '..
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { setCredentials, setRole, setGuestMode } from '../../store/slices/authSlice';
+import { setCredentials, setRole, setGuestMode, updateUser, UserRole } from '../../store/slices/authSlice';
 import { logout, resetAllApis } from '../../store/auth/thunks';
 import {
   useGetMeQuery,
@@ -129,21 +129,20 @@ export const ProfileScreen: React.FC = () => {
     }, [refetch, refetchVendor])
   );
 
-  // Sincronizar degradación de rango en tiempo real si la Agencia dio de baja al vendedor
+  // Sincronizar cambios de rango en tiempo real desde la base de datos (AGENCIA, OWNER, CONSUMER)
   useEffect(() => {
-    const serverRole = meData?.data?.user?.role;
-    const currentReduxRole = reduxUser?.role || reduxUser?.rol;
-    if (
-      serverRole === 'CONSUMER' &&
-      currentReduxRole === 'OWNER' &&
-      vendorData?.data?.vendorStatus !== 'APROBADO'
-    ) {
-      dispatch(setRole('CONSUMER'));
-      if (meData?.data?.user) {
-        tokenStorage.saveUser(meData.data.user);
+    const serverUser = meData?.data?.user;
+    if (serverUser) {
+      const serverRole = (serverUser.role || serverUser.rol)?.toUpperCase() as UserRole;
+      const currentReduxRole = (reduxUser?.role || reduxUser?.rol)?.toUpperCase();
+      if (serverRole && serverRole !== currentReduxRole) {
+        dispatch(setRole(serverRole));
+        dispatch(updateUser({ ...serverUser, role: serverRole, rol: serverRole }));
+        tokenStorage.saveUser({ ...reduxUser, ...serverUser, role: serverRole, rol: serverRole });
+        resetAllApis(dispatch);
       }
     }
-  }, [meData, vendorData, reduxUser, dispatch]);
+  }, [meData, reduxUser, dispatch]);
 
   const user = meData?.data?.user || reduxUser;
   const activeRole = user?.role || user?.rol || 'CONSUMER';
