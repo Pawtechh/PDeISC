@@ -101,6 +101,9 @@ export const createApp = (): Application => {
 
   app.get('/', (_req: Request, res: Response) => {
     if (fs.existsSync(activeHtmlPath)) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
       res.sendFile(activeHtmlPath);
     } else {
       res.status(200).send('Surf Rental API Live');
@@ -226,7 +229,14 @@ export const createApp = (): Application => {
     ) {
       return next();
     }
+
+    // Previene error estricto de MIME en navegadores: nunca servir index.html para assets estáticos faltantes
+    if (/\.(js|css|png|jpg|jpeg|gif|ico|svg|map|json|woff|woff2|ttf|eot)$/i.test(req.path)) {
+      return res.status(404).type('text/plain').send('Asset not found');
+    }
+
     if (fs.existsSync(activeHtmlPath)) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
       return res.sendFile(activeHtmlPath);
     }
     return next();
