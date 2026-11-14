@@ -14,6 +14,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { Screen, Stack, Row, Text, Card, Badge, Button, Divider, EmptyState } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import {
   useGetClaimsQuery,
   useConsumerRespondMutation,
@@ -21,6 +22,7 @@ import {
 } from '../../api/claimsApi';
 
 export const ClaimDetailScreen: React.FC = () => {
+  const { theme, isDark } = useTheme();
   const { data, isLoading, isFetching, refetch } = useGetClaimsQuery();
   const [consumerRespond, { isLoading: isResponding }] = useConsumerRespondMutation();
 
@@ -141,7 +143,7 @@ export const ClaimDetailScreen: React.FC = () => {
         refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} />}
       >
         <Stack spacing="lg" style={styles.container}>
-          <Text variant="h1" color={colors.ocean[900]}>
+          <Text variant="h1" color={theme.text}>
             Reclamos de Daño
           </Text>
           <EmptyState
@@ -163,10 +165,10 @@ export const ClaimDetailScreen: React.FC = () => {
         {/* Header */}
         <Row justify="space-between" align="center">
           <View>
-            <Text variant="h1" color={colors.ocean[900]}>
+            <Text variant="h1" color={theme.text}>
               Reclamo de Daño
             </Text>
-            <Text variant="body" color={colors.sand[700]}>
+            <Text variant="body" color={theme.subtext}>
               Seguro y mediación de sede
             </Text>
           </View>
@@ -174,7 +176,7 @@ export const ClaimDetailScreen: React.FC = () => {
         </Row>
 
         {/* ALERTA DE REGLA NO NEGOCIABLE: 24 HORAS */}
-        <Card padding="md" style={styles.ruleCard}>
+        <Card padding="md" style={[styles.ruleCard, isDark && { backgroundColor: 'rgba(245, 158, 11, 0.12)', borderColor: 'rgba(245, 158, 11, 0.35)' }]}>
           <Stack spacing="xs">
             <Row justify="space-between" align="center">
               <Text variant="caption" color={colors.sunset[600]} style={{ fontWeight: '700' }}>
@@ -185,7 +187,7 @@ export const ClaimDetailScreen: React.FC = () => {
                 variant="danger"
               />
             </Row>
-            <Text variant="caption" color={colors.sand[900]} style={{ lineHeight: 18 }}>
+            <Text variant="caption" color={theme.text} style={{ lineHeight: 18 }}>
               Según los términos y condiciones de la sede, <Text variant="caption" style={{ fontWeight: '700' }}>el silencio del cliente tras 24 horas de la notificación constituye aceptación tácita del daño</Text> y habilita el débito sobre la garantía.
             </Text>
           </Stack>
@@ -194,20 +196,20 @@ export const ClaimDetailScreen: React.FC = () => {
         {/* Detalle del Alquiler y Tabla */}
         <Card padding="md">
           <Stack spacing="xs">
-            <Text variant="caption" color={colors.sand[500]}>
+            <Text variant="caption" color={theme.subtext}>
               TABLA PERITADA
             </Text>
-            <Text variant="h2" color={colors.ocean[900]}>
+            <Text variant="h2" color={theme.text}>
               {claim.rental?.board?.titulo || 'Tabla de Surf'}
             </Text>
-            <Text variant="caption" color={colors.sand[700]}>
+            <Text variant="caption" color={theme.subtext}>
               Alquiler ID: {claim.rentalId ? claim.rentalId.slice(0, 8) : '-'}... • Sede Playa Grande
             </Text>
           </Stack>
         </Card>
 
         {/* Presupuesto Reclamado */}
-        <Card padding="lg" style={styles.amountCard}>
+        <Card padding="lg" style={isDark ? { borderRadius: radii.lg } : styles.amountCard}>
           <Row justify="space-between" align="center">
             <View>
               <Text variant="caption" color={colors.sand[500]}>
@@ -224,10 +226,10 @@ export const ClaimDetailScreen: React.FC = () => {
         {/* Descripción del Daño */}
         <Card padding="md">
           <Stack spacing="xs">
-            <Text variant="caption" color={colors.sand[500]}>
+            <Text variant="caption" color={theme.subtext}>
               DESCRIPCIÓN DEL PROPIETARIO
             </Text>
-            <Text variant="body" color={colors.sand[900]}>
+            <Text variant="body" color={theme.text}>
               {claim.descripcion}
             </Text>
           </Stack>
@@ -235,7 +237,7 @@ export const ClaimDetailScreen: React.FC = () => {
 
         {/* Evidencia Fotográfica */}
         <Stack spacing="xs">
-          <Text variant="h3" color={colors.ocean[900]}>
+          <Text variant="h3" color={theme.text}>
             Evidencia Fotográfica
           </Text>
           <Row spacing="sm" style={styles.photoRow}>
@@ -286,17 +288,18 @@ export const ClaimDetailScreen: React.FC = () => {
         onRequestClose={() => setShowDisputeModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <Card padding="lg" style={styles.disputeCard}>
+          <Card padding="lg" style={[styles.disputeCard, isDark && { backgroundColor: 'rgba(6, 16, 32, 0.96)', borderColor: 'rgba(34, 211, 238, 0.30)' }]}>
             <Stack spacing="md">
-              <Text variant="h2" color={colors.ocean[900]}>
+              <Text variant="h2" color={theme.text}>
                 Presentar Descargo
               </Text>
-              <Text variant="caption" color={colors.sand[700]}>
+              <Text variant="caption" color={theme.subtext}>
                 Explicá por qué considerás que el daño no ocurrió durante tu alquiler o no corresponde al valor reclamado.
               </Text>
 
               <TextInput
-                style={styles.textArea}
+                style={[styles.textArea, { backgroundColor: theme.inputBg, borderColor: theme.border, color: theme.text }]}
+                placeholderTextColor={theme.subtext}
                 multiline
                 numberOfLines={4}
                 placeholder="Escribí tu descargo detallado aquí..."

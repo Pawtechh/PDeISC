@@ -452,7 +452,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                     title="📷 Tomar Foto (Cámara)"
                     variant="primary"
                     size="sm"
-                    iconLeft={<Camera size={14} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
+                    iconLeft={<Camera size={14} color="#FFFFFF" />}
                     onPress={handleTakePhoto}
                   />
                   <Button

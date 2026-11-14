@@ -23,6 +23,8 @@ import {
 import { Screen, Stack, Row, Text, Card, Badge, Button } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
+import { useAppSelector, useAppDispatch } from '../../store';
+import { setGuestMode } from '../../store/slices/authSlice';
 import {
   useGetLoyaltyBalanceQuery,
   useGetPendingReviewsQuery,
@@ -34,18 +36,33 @@ import { RatingStars } from '../../components/reviews/RatingStars';
 
 export const PointsScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
+  const isGuest = useAppSelector((s) => s.auth.isGuest);
+  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
+  const dispatch = useAppDispatch();
+
+  const shouldSkipAuthQueries = isGuest || !isAuthenticated;
   const { data: loyaltyData, isLoading: loadingLoyalty, isFetching: fetchingLoyalty, refetch: refetchLoyalty } =
-    useGetLoyaltyBalanceQuery(undefined, { pollingInterval: 6000, refetchOnMountOrArgChange: true });
+    useGetLoyaltyBalanceQuery(undefined, {
+      skip: shouldSkipAuthQueries,
+      pollingInterval: 6000,
+      refetchOnMountOrArgChange: true,
+    });
   const { data: pendingData, isFetching: fetchingPending, refetch: refetchPending } =
-    useGetPendingReviewsQuery(undefined, { pollingInterval: 6000, refetchOnMountOrArgChange: true });
+    useGetPendingReviewsQuery(undefined, {
+      skip: shouldSkipAuthQueries,
+      pollingInterval: 6000,
+      refetchOnMountOrArgChange: true,
+    });
   const [createReview, { isLoading: isSubmittingReview }] = useCreateReviewMutation();
   const [calculateDiscount, { isLoading: isCalculatingDiscount }] = useCalculateDiscountMutation();
 
   useFocusEffect(
     useCallback(() => {
-      refetchLoyalty();
-      refetchPending();
-    }, [refetchLoyalty, refetchPending])
+      if (!shouldSkipAuthQueries) {
+        refetchLoyalty();
+        refetchPending();
+      }
+    }, [shouldSkipAuthQueries, refetchLoyalty, refetchPending])
   );
 
   const [pointsToRedeemInput, setPointsToRedeemInput] = useState('100');
@@ -143,6 +160,49 @@ export const PointsScreen: React.FC = () => {
     }
   };
 
+  if (shouldSkipAuthQueries) {
+    return (
+      <Screen scrollable>
+        <Stack spacing="lg" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: spacing.xl * 2 }}>
+          <View
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: 36,
+              backgroundColor: isDark ? 'rgba(251, 191, 36, 0.14)' : '#FEF3C7',
+              borderWidth: 1,
+              borderColor: isDark ? 'rgba(251, 191, 36, 0.35)' : '#FDE68A',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Award size={34} color={isDark ? '#FBBF24' : '#D97706'} />
+          </View>
+          <Text variant="h1" color={theme.text} align="center">
+            Club Surf MDP • Puntos
+          </Text>
+          <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 440, lineHeight: 22 }}>
+            Sumá 10 puntos por cada hora de alquiler y +20 puntos extras por cada reseña verificada para canjear descuentos en tus próximas sesiones en Playa Grande.
+          </Text>
+          <Row spacing="sm">
+            <Button
+              title="Crear Cuenta con DNI"
+              variant="primary"
+              size="md"
+              onPress={() => dispatch(setGuestMode(false))}
+            />
+            <Button
+              title="Iniciar Sesión"
+              variant="secondary"
+              size="md"
+              onPress={() => dispatch(setGuestMode(false))}
+            />
+          </Row>
+        </Stack>
+      </Screen>
+    );
+  }
+
   return (
     <Screen
       scrollable
@@ -211,9 +271,18 @@ export const PointsScreen: React.FC = () => {
         ) : (
           <>
             {/* Card Principal: Puntos y Nivel de Rider */}
-            <View style={styles.heroCardWrapper}>
+            <View style={[
+              styles.heroCardWrapper,
+              {
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.34)' : 'rgba(2, 132, 199, 0.22)',
+              },
+            ]}>
               <LinearGradient
-                colors={isDark ? ['#0D1626', '#090E18', '#141B2D'] : ['#FFFFFF', '#F8FAFC']}
+                colors={
+                  isDark
+                    ? ['rgba(7, 22, 46, 0.92)', 'rgba(4, 13, 28, 0.95)', 'rgba(12, 32, 60, 0.90)']
+                    : ['#FFFFFF', '#EFF9FF', '#FEF9EE']
+                }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.heroGradient}
@@ -358,19 +427,19 @@ export const PointsScreen: React.FC = () => {
                           paddingVertical: 6,
                           borderRadius: radii.full,
                           backgroundColor: isSelected
-                            ? (isDark ? 'rgba(56, 189, 248, 0.18)' : colors.ocean[500])
+                            ? (isDark ? 'rgba(34, 211, 238, 0.20)' : '#0284C7')
                             : isDark
-                            ? 'rgba(18, 24, 36, 0.8)'
-                            : colors.sand[100],
+                            ? 'rgba(8, 20, 38, 0.78)'
+                            : '#FFFFFF',
                           borderWidth: 1,
                           borderColor: isSelected
-                            ? (isDark ? '#38BDF8' : colors.ocean[500])
-                            : (isDark ? 'rgba(255,255,255,0.12)' : theme.border),
+                            ? (isDark ? '#22D3EE' : '#0284C7')
+                            : (isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)'),
                         }}
                       >
                         <Text
                           variant="caption"
-                          color={isSelected ? (isDark ? '#38BDF8' : colors.white) : theme.text}
+                          color={isSelected ? (isDark ? '#67E8F9' : colors.white) : theme.text}
                           style={{ fontWeight: isSelected ? '700' : '500' }}
                         >
                           {preset} pts (${(parseInt(preset, 10) * 10).toLocaleString('es-AR')})
@@ -385,8 +454,8 @@ export const PointsScreen: React.FC = () => {
                     style={[
                       styles.input,
                       {
-                        backgroundColor: isDark ? 'rgba(11, 16, 26, 0.85)' : theme.inputBg,
-                        borderColor: calculatorError ? colors.semantic.danger : (isDark ? 'rgba(255,255,255,0.12)' : theme.border),
+                        backgroundColor: isDark ? 'rgba(6, 16, 32, 0.82)' : theme.inputBg,
+                        borderColor: calculatorError ? colors.semantic.danger : (isDark ? 'rgba(56, 189, 248, 0.24)' : theme.border),
                         color: theme.text,
                       },
                     ]}

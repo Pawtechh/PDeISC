@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { Screen, Stack, Row, Text, Card, Badge, Button, Divider, EmptyState } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import {
   useGetClaimsQuery,
   useAgencyMediateMutation,
@@ -20,6 +21,7 @@ import {
 } from '../../api/claimsApi';
 
 export const MediationScreen: React.FC = () => {
+  const { theme, isDark } = useTheme();
   const { data, isLoading, isFetching, refetch } = useGetClaimsQuery(undefined, {
     pollingInterval: 6000,
     refetchOnMountOrArgChange: true,
@@ -98,10 +100,10 @@ export const MediationScreen: React.FC = () => {
         {/* Header */}
         <Row justify="space-between" align="center">
           <View>
-            <Text variant="h1" color={colors.ocean[900]}>
+            <Text variant="h1" color={theme.text}>
               Mesa de Mediación
             </Text>
-            <Text variant="body" color={colors.sand[700]}>
+            <Text variant="body" color={theme.subtext}>
               Arbitraje de disputas entre propietarios y surfistas
             </Text>
           </View>
@@ -112,15 +114,15 @@ export const MediationScreen: React.FC = () => {
         </Row>
 
         {/* Rol de la Agencia */}
-        <Card padding="md" style={styles.arbitrationInfo}>
+        <Card padding="md" style={[styles.arbitrationInfo, isDark && { backgroundColor: 'rgba(14, 165, 233, 0.12)', borderColor: 'rgba(34, 211, 238, 0.30)' }]}>
           <Stack spacing="xs">
             <Row justify="space-between" align="center">
-              <Text variant="caption" color={colors.ocean[700]} style={{ fontWeight: '700' }}>
+              <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[700]} style={{ fontWeight: '700' }}>
                 ARBITRAJE DE SEDE CENTRAL PLAYA GRANDE
               </Text>
               <Badge label="INAPELABLE" variant="sand" />
             </Row>
-            <Text variant="caption" color={colors.sand[900]}>
+            <Text variant="caption" color={theme.text}>
               La agencia audita las fotos fehacientes tomadas al retiro y devolución. El laudo final puede dar la razón al dueño (debitando la garantía) o desestimar el cobro a favor del surfista.
             </Text>
           </Stack>
@@ -142,26 +144,26 @@ export const MediationScreen: React.FC = () => {
                 <Stack spacing="md">
                   <Row justify="space-between" align="center">
                     <Badge label="DISPUTADO POR CONSUMER" variant="danger" />
-                    <Text variant="caption" color={colors.sand[500]}>
+                    <Text variant="caption" color={theme.subtext}>
                       Caso #{claim.id.slice(0, 8)}
                     </Text>
                   </Row>
 
-                  <Text variant="h2">{claim.rental.board.titulo}</Text>
+                  <Text variant="h2" color={theme.text}>{claim.rental.board.titulo}</Text>
 
                   {/* Detalle del Propietario vs Surfista */}
                   <Row justify="space-between" style={styles.partiesRow}>
                     <View style={{ flex: 1 }}>
-                      <Text variant="caption" color={colors.sand[500]}>
+                      <Text variant="caption" color={theme.subtext}>
                         SURFISTA DISPUTANTE:
                       </Text>
-                      <Text variant="button">{claim.rental.consumer.nombre}</Text>
-                      <Text variant="caption" color={colors.sand[700]}>
+                      <Text variant="button" color={theme.text}>{claim.rental.consumer.nombre}</Text>
+                      <Text variant="caption" color={theme.subtext}>
                         {claim.rental.consumer.email}
                       </Text>
                     </View>
                     <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                      <Text variant="caption" color={colors.sand[500]}>
+                      <Text variant="caption" color={theme.subtext}>
                         MONTO RECLAMADO:
                       </Text>
                       <Text variant="h2" color={colors.semantic.danger}>
@@ -172,21 +174,21 @@ export const MediationScreen: React.FC = () => {
                   </Row>
 
                   {/* Argumentos de Ambas Partes */}
-                  <Card padding="sm" style={{ backgroundColor: colors.sand[50] }}>
+                  <Card padding="sm" style={isDark ? { backgroundColor: 'rgba(6, 16, 32, 0.72)' } : { backgroundColor: colors.sand[50] }}>
                     <Stack spacing="xs">
-                      <Text variant="caption" color={colors.sand[500]} style={{ fontWeight: '700' }}>
+                      <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700' }}>
                         REPORTE DEL DUEÑO:
                       </Text>
-                      <Text variant="caption" color={colors.sand[700]}>
+                      <Text variant="caption" color={theme.text}>
                         "{claim.descripcion}"
                       </Text>
                       {claim.resolucionAgencia && (
                         <>
                           <Divider />
-                          <Text variant="caption" color={colors.ocean[700]} style={{ fontWeight: '700' }}>
+                          <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[700]} style={{ fontWeight: '700' }}>
                             DESCARGO DEL SURFISTA:
                           </Text>
-                          <Text variant="caption" color={colors.sand[700]}>
+                          <Text variant="caption" color={theme.text}>
                             {claim.resolucionAgencia}
                           </Text>
                         </>
@@ -240,11 +242,11 @@ export const MediationScreen: React.FC = () => {
         <Screen scrollable>
           <Stack spacing="lg" style={styles.modalContent}>
             <Row justify="space-between" align="center">
-              <Text variant="h2" color={colors.ocean[900]}>
+              <Text variant="h2" color={theme.text}>
                 Laudo Arbitral de Agencia
               </Text>
               <TouchableOpacity onPress={() => setShowResolutionModal(false)}>
-                <Text variant="body" color={colors.ocean[500]}>
+                <Text variant="body" color={isDark ? '#22D3EE' : colors.ocean[500]}>
                   Cerrar
                 </Text>
               </TouchableOpacity>
@@ -261,11 +263,11 @@ export const MediationScreen: React.FC = () => {
 
             {resolutionType === 'RESUELTO_OWNER' && (
               <Stack spacing="xs">
-                <Text variant="caption" color={colors.sand[700]} style={{ fontWeight: '700' }}>
+                <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                   Monto Final Aprobado a Debitar (ARS):
                 </Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { backgroundColor: theme.inputBg, borderColor: theme.border, color: theme.text }]}
                   keyboardType="numeric"
                   value={approvedAmount}
                   onChangeText={setApprovedAmount}
@@ -279,11 +281,11 @@ export const MediationScreen: React.FC = () => {
             )}
 
             <Stack spacing="xs">
-              <Text variant="caption" color={colors.sand[700]} style={{ fontWeight: '700' }}>
+              <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                 Fundamentos Técnicos del Dictamen:
               </Text>
               <TextInput
-                style={[styles.input, styles.textArea]}
+                style={[styles.input, styles.textArea, { backgroundColor: theme.inputBg, borderColor: theme.border, color: theme.text }]}
                 multiline
                 numberOfLines={4}
                 value={resolutionNotes}

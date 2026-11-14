@@ -413,7 +413,7 @@ export const ReturnsScreen: React.FC = () => {
             padding="lg"
             style={[
               styles.modalCard,
-              isDark && { backgroundColor: '#1E293B', borderColor: '#334155', borderWidth: 1 },
+              isDark && { backgroundColor: 'rgba(6, 16, 32, 0.96)', borderColor: 'rgba(34, 211, 238, 0.32)', borderWidth: 1 },
             ]}
           >
             <ScrollView showsVerticalScrollIndicator={false}>

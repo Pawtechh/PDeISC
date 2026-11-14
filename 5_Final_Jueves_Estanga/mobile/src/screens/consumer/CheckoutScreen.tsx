@@ -469,8 +469,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             style={[
               styles.successCard,
               isDark && {
-                backgroundColor: theme.card,
-                borderColor: 'rgba(245, 158, 11, 0.25)',
+                borderColor: 'rgba(34, 211, 238, 0.28)',
                 borderWidth: 1,
               },
             ]}
@@ -577,8 +576,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           style={[
             styles.boardCard,
             isDark && {
-              backgroundColor: theme.card,
-              borderColor: 'rgba(245, 158, 11, 0.25)',
+              borderColor: 'rgba(34, 211, 238, 0.26)',
               borderWidth: 1,
             },
           ]}
@@ -621,8 +619,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     style={[
                       styles.hourPill,
                       isDark && {
-                        backgroundColor: '#1E293B',
-                        borderColor: '#334155',
+                        backgroundColor: 'rgba(8, 20, 38, 0.78)',
+                        borderColor: 'rgba(56, 189, 248, 0.24)',
                       },
                       isSelected && styles.hourPillSelected,
                     ]}
@@ -680,8 +678,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.viewModeToggle,
                         {
-                          backgroundColor: isDark ? '#1E293B' : colors.sand[100],
-                          borderColor: isDark ? '#334155' : colors.sand[300],
+                          backgroundColor: isDark ? 'rgba(8, 20, 38, 0.80)' : '#FFFFFF',
+                          borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : 'rgba(2, 132, 199, 0.22)',
                         },
                       ]}
                       accessibilityRole="button"
@@ -834,8 +832,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.scrollArrowBtn,
                         {
-                          backgroundColor: isDark ? '#1E293B' : colors.sand[100],
-                          borderColor: isDark ? '#334155' : colors.sand[300],
+                          backgroundColor: isDark ? 'rgba(8, 20, 38, 0.80)' : '#FFFFFF',
+                          borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : 'rgba(2, 132, 199, 0.22)',
                         },
                       ]}
                       accessibilityLabel="Desplazar horarios anteriores"
@@ -874,8 +872,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.scrollArrowBtn,
                         {
-                          backgroundColor: isDark ? '#1E293B' : colors.sand[100],
-                          borderColor: isDark ? '#334155' : colors.sand[300],
+                          backgroundColor: isDark ? 'rgba(8, 20, 38, 0.80)' : '#FFFFFF',
+                          borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : 'rgba(2, 132, 199, 0.22)',
                         },
                       ]}
                       accessibilityLabel="Desplazar horarios siguientes"

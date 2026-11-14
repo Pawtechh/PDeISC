@@ -62,6 +62,7 @@ export const OwnerTabs: React.FC = () => {
 
   return (
     <Tab.Navigator
+      detachInactiveScreens={true}
       screenOptions={{
         headerShown: false,
         sceneStyle: {

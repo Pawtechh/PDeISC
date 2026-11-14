@@ -63,6 +63,7 @@ export const AgencyTabs: React.FC = () => {
 
   return (
     <Tab.Navigator
+      detachInactiveScreens={true}
       screenOptions={{
         headerShown: false,
         sceneStyle: {

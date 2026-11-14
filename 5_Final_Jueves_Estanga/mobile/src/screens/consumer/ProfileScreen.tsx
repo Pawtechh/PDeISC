@@ -63,28 +63,78 @@ export const ProfileScreen: React.FC = () => {
   if (isGuest || !reduxUser) {
     return (
       <Screen scrollable>
-        <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center', marginTop: 40 }}>
-          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE', alignItems: 'center', justifyContent: 'center' }}>
-            <Waves size={32} color={isDark ? '#38BDF8' : '#0284C7'} />
-          </View>
-          <Text variant="h2" align="center">Perfil de Usuario</Text>
-          <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 460 }}>
-            Estás explorando el catálogo de tablas y shapers de Playa Grande como invitado. Creá tu cuenta con DNI para alquilar tablas y gestionar tu perfil.
-          </Text>
-          <Row spacing="md" style={{ marginTop: spacing.md, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Button
-              title="Crear Cuenta con DNI"
-              variant="primary"
-              size="lg"
-              onPress={() => dispatch(setGuestMode(false))}
-            />
-            <Button
-              title="Iniciar Sesión"
-              variant="secondary"
-              size="lg"
-              onPress={() => dispatch(setGuestMode(false))}
-            />
-          </Row>
+        <Stack spacing="lg" style={{ paddingVertical: spacing.xl, maxWidth: 640, alignSelf: 'center', width: '100%' }}>
+          <Card padding="lg">
+            <Stack spacing="md" align="center">
+              <View
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: 36,
+                  backgroundColor: isDark ? 'rgba(56, 189, 248, 0.14)' : 'rgba(14, 165, 233, 0.12)',
+                  borderWidth: 1,
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.28)' : 'rgba(14, 165, 233, 0.24)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Waves size={32} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+              </View>
+              <Badge label="MODO INVITADO • PLAYA GRANDE" variant="ocean" />
+              <Text variant="h2" align="center" color={theme.text}>
+                Perfil de Usuario
+              </Text>
+              <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 460 }}>
+                Estás explorando el catálogo de tablas y shapers de Playa Grande como invitado. Creá tu cuenta con DNI para alquilar tablas y gestionar tu perfil.
+              </Text>
+              <Row spacing="md" style={{ marginTop: spacing.xs, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Button
+                  title="Crear Cuenta con DNI"
+                  variant="primary"
+                  size="lg"
+                  onPress={() => dispatch(setGuestMode(false))}
+                />
+                <Button
+                  title="Iniciar Sesión"
+                  variant="secondary"
+                  size="lg"
+                  onPress={() => dispatch(setGuestMode(false))}
+                />
+              </Row>
+            </Stack>
+          </Card>
+
+          <Card padding="lg">
+            <Stack spacing="md">
+              <Row justify="space-between" align="center">
+                <Text variant="h3" color={theme.text}>
+                  Apariencia
+                </Text>
+                <Badge label={isDark ? 'MODO OSCURO' : 'MODO CLARO'} variant="ocean" />
+              </Row>
+              <Text variant="caption" color={theme.subtext}>
+                Personalizá la visualización de la plataforma para sesiones diurnas o nocturnas.
+              </Text>
+              <Row spacing="sm">
+                <Button
+                  title="Modo Claro"
+                  variant={!isDark ? 'primary' : 'secondary'}
+                  size="sm"
+                  style={{ flex: 1 }}
+                  iconLeft={<Sun size={16} color={!isDark ? '#FFFFFF' : theme.text} />}
+                  onPress={() => setMode('light')}
+                />
+                <Button
+                  title="Modo Oscuro"
+                  variant={isDark ? 'primary' : 'secondary'}
+                  size="sm"
+                  style={{ flex: 1 }}
+                  iconLeft={<Moon size={16} color={isDark ? '#FFFFFF' : theme.text} />}
+                  onPress={() => setMode('dark')}
+                />
+              </Row>
+            </Stack>
+          </Card>
         </Stack>
       </Screen>
     );
@@ -622,7 +672,7 @@ export const ProfileScreen: React.FC = () => {
                       title="Solicitar Permiso de Publicación"
                       variant="primary"
                       size="md"
-                      iconLeft={<Briefcase size={16} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
+                      iconLeft={<Briefcase size={16} color="#FFFFFF" />}
                       onPress={openVendorApplicationForm}
                     />
                   </Stack>
@@ -877,7 +927,7 @@ export const ProfileScreen: React.FC = () => {
                 iconLeft={
                   <Moon
                     size={14}
-                    color={isDark ? '#0B0F17' : colors.sand[900]}
+                    color={isDark ? '#FFFFFF' : colors.sand[900]}
                   />
                 }
                 style={styles.flexBtn}
@@ -936,8 +986,8 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.vendorModalCard,
               {
-                backgroundColor: theme.card,
-                borderColor: isDark ? '#F59E0B' : colors.ocean[400],
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.36)' : colors.ocean[400],
               },
             ]}
           >
@@ -1026,7 +1076,7 @@ export const ProfileScreen: React.FC = () => {
                         variant="primary"
                         size="sm"
                         iconLeft={
-                          <Camera size={14} color={isDark ? '#0B0F17' : '#FFFFFF'} />
+                          <Camera size={14} color="#FFFFFF" />
                         }
                         onPress={handleTakePhotoOfBoard}
                       />
@@ -1156,8 +1206,7 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.logoutModalCard,
               {
-                backgroundColor: theme.card,
-                borderColor: isDark ? '#38BDF8' : colors.ocean[500],
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.36)' : colors.ocean[500],
               },
             ]}
           >
@@ -1191,9 +1240,7 @@ export const ProfileScreen: React.FC = () => {
                       size={15}
                       color={
                         switchAuthMethod === 'BIOMETRIC'
-                          ? isDark
-                            ? '#0B0F17'
-                            : '#FFFFFF'
+                          ? '#FFFFFF'
                           : isDark
                           ? '#F1F5F9'
                           : colors.sand[900]
@@ -1215,9 +1262,7 @@ export const ProfileScreen: React.FC = () => {
                       size={15}
                       color={
                         switchAuthMethod === 'PASSWORD'
-                          ? isDark
-                            ? '#0B0F17'
-                            : '#FFFFFF'
+                          ? '#FFFFFF'
                           : isDark
                           ? '#F1F5F9'
                           : colors.sand[900]
@@ -1352,7 +1397,6 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.logoutModalCard,
               {
-                backgroundColor: theme.card,
                 borderColor: theme.border,
               },
             ]}
@@ -1399,8 +1443,8 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.vendorModalCard,
               {
-                backgroundColor: isDark ? '#131C2E' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#CBD5E1',
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.32)' : 'rgba(2, 132, 199, 0.22)',
               },
             ]}
           >

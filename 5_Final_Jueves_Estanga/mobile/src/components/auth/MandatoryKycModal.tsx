@@ -125,13 +125,26 @@ export const MandatoryKycModal: React.FC = () => {
 
   return (
     <Modal visible={isKycIncomplete} transparent animationType="fade">
-      <View style={styles.overlay}>
+      <View
+        style={[
+          styles.overlay,
+          {
+            backgroundColor: isDark ? 'rgba(2, 8, 19, 0.80)' : 'rgba(12, 74, 110, 0.36)',
+            ...(Platform.OS === 'web'
+              ? ({ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' } as any)
+              : {}),
+          },
+        ]}
+      >
         <View
           style={[
             styles.card,
             {
-              backgroundColor: isDark ? '#131C2E' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(245, 158, 11, 0.4)' : '#CBD5E1',
+              backgroundColor: theme.card,
+              borderColor: isDark ? 'rgba(245, 158, 11, 0.42)' : theme.border,
+              ...(Platform.OS === 'web'
+                ? ({ backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)' } as any)
+                : {}),
             },
           ]}
         >
@@ -161,8 +174,8 @@ export const MandatoryKycModal: React.FC = () => {
                   style={[
                     styles.input,
                     {
-                      backgroundColor: isDark ? '#1E293B' : '#F8FAFC',
-                      borderColor: dni && !isDniValid ? colors.semantic.danger : isDark ? '#334155' : '#E2E8F0',
+                      backgroundColor: isDark ? 'rgba(9, 26, 48, 0.72)' : 'rgba(240, 249, 255, 0.85)',
+                      borderColor: dni && !isDniValid ? colors.semantic.danger : isDark ? 'rgba(56, 189, 248, 0.25)' : '#CBD5E1',
                       color: theme.text,
                     },
                   ]}
@@ -212,8 +225,8 @@ export const MandatoryKycModal: React.FC = () => {
                     style={[
                       styles.photoPlaceholder,
                       {
-                        backgroundColor: isDark ? '#1E293B' : '#F1F5F9',
-                        borderColor: isDark ? '#334155' : '#CBD5E1',
+                        backgroundColor: isDark ? 'rgba(9, 26, 48, 0.72)' : 'rgba(240, 249, 255, 0.85)',
+                        borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : '#CBD5E1',
                       },
                     ]}
                   >

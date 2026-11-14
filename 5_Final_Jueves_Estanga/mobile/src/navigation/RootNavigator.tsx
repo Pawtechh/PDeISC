@@ -297,7 +297,9 @@ export function RootNavigator() {
               serverRole !== clientRole ||
               serverUser.puntos !== current?.puntos ||
               serverUser.nombre !== current?.nombre ||
-              serverUser.dni !== current?.dni
+              serverUser.dni !== current?.dni ||
+              serverUser.dniFotoUrl !== current?.dniFotoUrl ||
+              serverUser.avatarUrl !== current?.avatarUrl
             ) {
               console.log('[LiveSync] Role updated in DB:', clientRole, '->', serverRole);
               dispatch(updateUser({ ...serverUser, role: serverRole, rol: serverRole }));

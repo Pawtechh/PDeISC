@@ -672,14 +672,14 @@ const styles = StyleSheet.create({
   },
   modalRoot: {
     flex: 1,
-    backgroundColor: '#0B0F17',
+    backgroundColor: '#030812',
   },
   modalHeader: {
-    backgroundColor: '#0B0F17',
+    backgroundColor: 'rgba(5, 13, 27, 0.94)',
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     alignItems: 'flex-end',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(245, 158, 11, 0.2)',
+    borderBottomColor: 'rgba(34, 211, 238, 0.22)',
   },
 });

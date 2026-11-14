@@ -103,7 +103,7 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navi
           </Text>
         </Stack>
 
-        <Card padding="xl" style={{ backgroundColor: theme.card, borderColor: theme.border }}>
+        <Card padding="xl" style={{ borderColor: theme.border }}>
           {resetSuccess ? (
             <Stack spacing="md" align="center">
               <CheckCircle2 size={44} color={colors.semantic.success} />

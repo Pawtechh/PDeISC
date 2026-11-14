@@ -28,6 +28,7 @@ import {
 } from '../../api/legalApi';
 import { isMobileDevice } from '../../utils/device';
 import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 interface LegalDocumentViewerScreenProps {
   route?: {
@@ -44,6 +45,7 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
   route,
   navigation,
 }) => {
+  const { theme, isDark } = useTheme();
   const initialSlug = route?.params?.slug || 'terminos-y-condiciones';
   const rentalId = route?.params?.rentalId;
 
@@ -143,10 +145,10 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
     : 'No disponible';
 
   return (
-    <Screen style={styles.screen}>
+    <Screen>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Selector de Documentos Legales */}
-        <Text variant="bodySmall" style={styles.sectionTitle}>
+        <Text variant="bodySmall" style={[styles.sectionTitle, { color: isDark ? '#22D3EE' : colors.ocean[700] }]}>
           DOCUMENTOS LEGALES (13 DISPONIBLES)
         </Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.selectorScroll}>
@@ -163,12 +165,13 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
                 }}
                 style={[
                   styles.docPill,
-                  isSelected && styles.docPillSelected,
+                  isDark && { backgroundColor: 'rgba(8, 20, 38, 0.78)', borderColor: 'rgba(56, 189, 248, 0.24)' },
+                  isSelected && (isDark ? { backgroundColor: 'rgba(34, 211, 238, 0.22)', borderColor: '#22D3EE' } : styles.docPillSelected),
                 ]}
               >
                 <Text
                   variant="caption"
-                  style={[styles.docPillText, isSelected && styles.docPillTextSelected]}
+                  style={[styles.docPillText, isDark && { color: theme.text }, isSelected && styles.docPillTextSelected]}
                 >
                   {doc.title.split(' ')[0]} {doc.title.split(' ')[1] || ''}
                 </Text>
@@ -180,29 +183,29 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
         {documentDetail && (
           <Stack spacing="md" style={{ marginTop: 16 }}>
             {/* Cabecera del Documento */}
-            <Card style={styles.headerCard}>
+            <Card style={[styles.headerCard, isDark && { backgroundColor: 'rgba(9, 20, 38, 0.78)', borderColor: 'rgba(56, 189, 248, 0.24)' }]}>
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
                   <Badge label={`Versión ${documentDetail.version}`} variant="ocean" />
                   <Badge label={documentDetail.category} variant="sand" />
                 </Row>
-                <Text variant="headingMedium" style={{ color: colors.ocean[900] }}>
+                <Text variant="headingMedium" style={{ color: theme.text }}>
                   {documentDetail.title}
                 </Text>
-                <Text variant="caption" style={{ color: colors.sand[700] }}>
+                <Text variant="caption" style={{ color: theme.subtext }}>
                   Última actualización: {documentDetail.lastUpdated} | Jurisdicción: Mar del Plata
                 </Text>
                 <Divider />
 
                 {/* Sello Criptográfico SHA-256 */}
-                <View style={styles.sealBox}>
+                <View style={[styles.sealBox, isDark && { backgroundColor: 'rgba(14, 165, 233, 0.12)', borderColor: 'rgba(34, 211, 238, 0.30)' }]}>
                   <Row align="center" spacing="sm">
                     <Badge label="SHA-256" variant="success" />
                     <View style={{ flex: 1 }}>
-                      <Text variant="caption" style={{ fontWeight: '700', color: colors.ocean[800] }}>
+                      <Text variant="caption" style={{ fontWeight: '700', color: isDark ? '#38BDF8' : colors.ocean[800] }}>
                         Sello de Integridad Criptográfica (Ley 25.506)
                       </Text>
-                      <Text variant="caption" style={styles.hashText} numberOfLines={1}>
+                      <Text variant="caption" style={[styles.hashText, isDark && { color: theme.subtext }]} numberOfLines={1}>
                         {truncatedHash}
                       </Text>
                     </View>
@@ -235,12 +238,12 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
             )}
 
             {/* Contenido Completo del Documento */}
-            <Card style={styles.documentBodyCard}>
-              <Text variant="caption" style={{ color: colors.sand[500], marginBottom: 8 }}>
+            <Card style={[styles.documentBodyCard, isDark && { backgroundColor: 'rgba(9, 20, 38, 0.78)', borderColor: 'rgba(56, 189, 248, 0.24)' }]}>
+              <Text variant="caption" style={{ color: theme.subtext, marginBottom: 8 }}>
                 TEXTO COMPLETO DEL INSTRUMENTO LEGAL:
               </Text>
-              <ScrollView style={styles.documentScrollView} nestedScrollEnabled>
-                <Text variant="bodySmall" style={styles.documentText}>
+              <ScrollView style={[styles.documentScrollView, isDark && { backgroundColor: 'rgba(4, 10, 22, 0.65)' }]} nestedScrollEnabled>
+                <Text variant="bodySmall" style={[styles.documentText, { color: theme.text }]}>
                   {documentDetail.content}
                 </Text>
               </ScrollView>
@@ -250,15 +253,16 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
             {!signedResult && (
               <Stack spacing="md" style={styles.signatureSection}>
                 {/* Selector de método de firma (Huella Digital o Trazo Manual) */}
-                <Card style={styles.methodSelectorCard}>
-                  <Text variant="caption" style={styles.selectorLabel}>
+                <Card style={[styles.methodSelectorCard, isDark && { backgroundColor: 'rgba(9, 20, 38, 0.78)', borderColor: 'rgba(56, 189, 248, 0.24)' }]}>
+                  <Text variant="caption" style={[styles.selectorLabel, { color: theme.subtext }]}>
                     MÉTODO DE FIRMA (LEY 25.506):
                   </Text>
                   <Row spacing="sm" style={{ marginTop: 8 }}>
                     <TouchableOpacity
                       style={[
                         styles.methodTab,
-                        signatureMode === 'biometric' && styles.methodTabActive,
+                        isDark && { backgroundColor: 'rgba(6, 16, 32, 0.75)', borderColor: 'rgba(56, 189, 248, 0.22)' },
+                        signatureMode === 'biometric' && (isDark ? { borderColor: '#22D3EE', backgroundColor: 'rgba(34, 211, 238, 0.16)' } : styles.methodTabActive),
                       ]}
                       onPress={() => setSignatureMode('biometric')}
                     >
@@ -266,7 +270,8 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
                         variant="caption"
                         style={[
                           styles.methodTabText,
-                          signatureMode === 'biometric' && styles.methodTabTextActive,
+                          isDark && { color: theme.text },
+                          signatureMode === 'biometric' && (isDark ? { color: '#67E8F9', fontWeight: '700' } : styles.methodTabTextActive),
                         ]}
                       >
                         Huella Digital {isPhone ? '(Recomendado en Teléfono)' : ''}
@@ -276,7 +281,8 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
                     <TouchableOpacity
                       style={[
                         styles.methodTab,
-                        signatureMode === 'manual' && styles.methodTabActive,
+                        isDark && { backgroundColor: 'rgba(6, 16, 32, 0.75)', borderColor: 'rgba(56, 189, 248, 0.22)' },
+                        signatureMode === 'manual' && (isDark ? { borderColor: '#22D3EE', backgroundColor: 'rgba(34, 211, 238, 0.16)' } : styles.methodTabActive),
                       ]}
                       onPress={() => setSignatureMode('manual')}
                     >
@@ -284,7 +290,8 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
                         variant="caption"
                         style={[
                           styles.methodTabText,
-                          signatureMode === 'manual' && styles.methodTabTextActive,
+                          isDark && { color: theme.text },
+                          signatureMode === 'manual' && (isDark ? { color: '#67E8F9', fontWeight: '700' } : styles.methodTabTextActive),
                         ]}
                       >
                         Trazo Manual / Firma PC
@@ -295,14 +302,14 @@ export const LegalDocumentViewerScreen: React.FC<LegalDocumentViewerScreenProps>
 
                 {/* Checkbox de Aceptación */}
                 <TouchableOpacity
-                  style={styles.checkboxRow}
+                  style={[styles.checkboxRow, isDark && { backgroundColor: 'rgba(9, 20, 38, 0.78)', borderColor: 'rgba(56, 189, 248, 0.24)' }]}
                   onPress={() => setHasAcceptedTerms(!hasAcceptedTerms)}
                   testID="checkbox-accept-terms"
                 >
                   <View style={[styles.checkbox, hasAcceptedTerms && styles.checkboxActive]}>
                     {hasAcceptedTerms && <Text style={styles.checkmark}>✓</Text>}
                   </View>
-                  <Text variant="bodySmall" style={styles.checkboxLabel}>
+                  <Text variant="bodySmall" style={[styles.checkboxLabel, { color: theme.text }]}>
                     He leído íntegramente este documento, comprendo su alcance y presto mi consentimiento libre, informado y expreso bajo los términos de la Ley Nacional 25.506.
                   </Text>
                 </TouchableOpacity>

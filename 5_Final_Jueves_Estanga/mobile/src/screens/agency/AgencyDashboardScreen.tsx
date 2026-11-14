@@ -358,7 +358,7 @@ export const AgencyDashboardScreen: React.FC = () => {
               title="Escanear QR"
               variant="primary"
               size="sm"
-              iconLeft={<QrCode size={14} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
+              iconLeft={<QrCode size={14} color="#FFFFFF" />}
               onPress={() => setIsScanningQr(true)}
               testID="btn-dashboard-scan-qr"
             />

@@ -282,8 +282,7 @@ export const MyBoardsScreen: React.FC = () => {
                     <Card
                       padding="md"
                       style={{
-                        backgroundColor: theme.card,
-                        borderColor: theme.border,
+                        borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.16)',
                         borderWidth: 1,
                       }}
                     >
@@ -426,8 +425,8 @@ export const MyBoardsScreen: React.FC = () => {
             style={[
               styles.actionModalCard,
               {
-                backgroundColor: theme.card,
-                borderColor: theme.border,
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : theme.border,
                 borderWidth: 1,
                 maxHeight: '90%',
               },
@@ -686,8 +685,8 @@ export const MyBoardsScreen: React.FC = () => {
             style={[
               styles.actionModalCard,
               {
-                backgroundColor: theme.card,
-                borderColor: theme.border,
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(248, 113, 113, 0.35)' : theme.border,
                 borderWidth: 1,
               },
             ]}

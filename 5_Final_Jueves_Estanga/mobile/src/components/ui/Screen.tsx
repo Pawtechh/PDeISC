@@ -57,7 +57,7 @@ export const Screen: React.FC<ScreenProps> = ({
   showScrollToTop = true,
   scrollRef,
   fullWidth = false,
-  atmosphericGradient = false,
+  atmosphericGradient = true,
   gradientColors,
 }) => {
   const { theme, isDark } = useTheme();
@@ -144,13 +144,14 @@ export const Screen: React.FC<ScreenProps> = ({
         />
       )}
 
-      {/* Ambient Coastal Atmospheric Glows (Bioluminescent Depth) */}
-      {atmosphericGradient && isDark && (
+      {/* Ambient Coastal Atmospheric Glows (Bioluminescent Dark & Sunlit Daylight) */}
+      {atmosphericGradient && (
         <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
           <View
             {...(Platform.OS === 'web' ? ({ dataSet: { ambientGlow: 'cyan' } } as any) : {})}
             style={[
               styles.ambientCyanGlow,
+              !isDark && styles.ambientCyanGlowLight,
               Platform.OS === 'web' ? ({ filter: 'blur(90px)', pointerEvents: 'none' } as any) : {},
             ]}
           />
@@ -158,6 +159,7 @@ export const Screen: React.FC<ScreenProps> = ({
             {...(Platform.OS === 'web' ? ({ dataSet: { ambientGlow: 'gold' } } as any) : {})}
             style={[
               styles.ambientGoldGlow,
+              !isDark && styles.ambientGoldGlowLight,
               Platform.OS === 'web' ? ({ filter: 'blur(85px)', pointerEvents: 'none' } as any) : {},
             ]}
           />
@@ -239,6 +241,9 @@ const styles = StyleSheet.create({
     borderRadius: 300,
     backgroundColor: 'rgba(34, 211, 238, 0.09)',
   },
+  ambientCyanGlowLight: {
+    backgroundColor: 'rgba(14, 165, 233, 0.08)',
+  },
   ambientGoldGlow: {
     position: 'absolute',
     top: 100,
@@ -247,5 +252,8 @@ const styles = StyleSheet.create({
     height: 360,
     borderRadius: 250,
     backgroundColor: 'rgba(251, 191, 36, 0.06)',
+  },
+  ambientGoldGlowLight: {
+    backgroundColor: 'rgba(245, 158, 11, 0.07)',
   },
 });

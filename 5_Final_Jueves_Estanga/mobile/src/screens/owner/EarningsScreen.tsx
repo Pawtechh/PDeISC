@@ -117,8 +117,7 @@ export const EarningsScreen: React.FC = () => {
   };
 
   const cardSurfaceStyle = {
-    backgroundColor: theme.card,
-    borderColor: theme.border,
+    borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.16)',
   };
 
   return (
@@ -215,8 +214,7 @@ export const EarningsScreen: React.FC = () => {
               style={[
                 styles.heroCard,
                 {
-                  backgroundColor: theme.card,
-                  borderColor: isDark ? colors.ocean[700] : colors.ocean[100],
+                  borderColor: isDark ? 'rgba(34, 211, 238, 0.32)' : 'rgba(2, 132, 199, 0.20)',
                 },
               ]}
             >

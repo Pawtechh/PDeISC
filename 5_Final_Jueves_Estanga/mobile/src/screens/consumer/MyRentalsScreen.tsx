@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal, RefreshControl, Text as RNText } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal, RefreshControl, Text as RNText, Platform } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import { safeHaptic } from '../../utils/haptics';
@@ -182,14 +182,15 @@ export const MyRentalsScreen: React.FC = () => {
             return (
               <TouchableOpacity
                 key={tab}
+                {...(Platform.OS === 'web' ? ({ dataSet: { filterPill: isSelected ? 'active' : 'idle' } } as any) : {})}
                 onPress={() => setSelectedTab(tab)}
                 style={[
                   styles.tabPill,
                   {
-                    backgroundColor: isDark ? '#1E293B' : colors.sand[100],
-                    borderColor: theme.border,
+                    backgroundColor: isDark ? 'rgba(8, 20, 38, 0.78)' : '#FFFFFF',
+                    borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)',
                   },
-                  isSelected && styles.tabPillSelected,
+                  isSelected && (isDark ? styles.tabPillSelectedDark : styles.tabPillSelected),
                 ]}
               >
                 <Text
@@ -253,8 +254,8 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.qrModalCard,
               {
-                backgroundColor: theme.card,
-                borderColor: theme.border,
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : 'rgba(2, 132, 199, 0.20)',
                 borderWidth: 1,
               },
             ]}
@@ -282,8 +283,8 @@ export const MyRentalsScreen: React.FC = () => {
               {/* Código de Pase Destacado de Alto Contraste */}
               <View
                 style={{
-                  backgroundColor: isDark ? '#0B0F17' : '#F1F5F9',
-                  borderColor: isDark ? '#F59E0B' : colors.ocean[400],
+                  backgroundColor: isDark ? 'rgba(6, 16, 32, 0.88)' : '#F0F9FF',
+                  borderColor: isDark ? '#22D3EE' : colors.ocean[400],
                   borderWidth: 1.5,
                   borderRadius: 12,
                   paddingHorizontal: 16,
@@ -292,7 +293,7 @@ export const MyRentalsScreen: React.FC = () => {
                   width: '100%',
                 }}
               >
-                <Text style={{ fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: '#F59E0B', marginBottom: 2 }}>
+                <Text style={{ fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: isDark ? '#22D3EE' : '#0284C7', marginBottom: 2 }}>
                   CÓDIGO DE RETIRO
                 </Text>
                 <Text
@@ -389,8 +390,8 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.qrModalCard,
               {
-                backgroundColor: theme.card,
-                borderColor: theme.border,
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : 'rgba(2, 132, 199, 0.20)',
                 borderWidth: 1,
               },
             ]}
@@ -502,8 +503,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   tabPillSelected: {
-    backgroundColor: colors.ocean[500],
-    borderColor: colors.ocean[600],
+    backgroundColor: '#0284C7',
+    borderColor: '#0369A1',
+  },
+  tabPillSelectedDark: {
+    backgroundColor: 'rgba(6, 182, 212, 0.24)',
+    borderColor: '#22D3EE',
   },
   bold: {
     fontWeight: '700',

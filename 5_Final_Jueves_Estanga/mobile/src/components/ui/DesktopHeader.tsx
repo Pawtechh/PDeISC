@@ -9,13 +9,13 @@ import {
   Modal,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Waves, LogOut, Compass, Shield, ShieldCheck } from 'lucide-react-native';
+import { Waves, LogOut, Compass, Shield, ShieldCheck, Sun, Moon } from 'lucide-react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { logout } from '../../store/auth/thunks';
 
 export const DesktopHeader: React.FC = () => {
   const { width } = useWindowDimensions();
-  const { isDark } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth?.user);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -168,6 +168,27 @@ export const DesktopHeader: React.FC = () => {
             </View>
             <TouchableOpacity
               activeOpacity={0.7}
+              onPress={toggleTheme}
+              {...(Platform.OS === 'web' ? ({ dataSet: { themeToggle: 'true' } } as any) : {})}
+              style={[
+                styles.logoutBtn,
+                {
+                  backgroundColor: isDark ? 'rgba(34, 211, 238, 0.10)' : '#E0F2FE',
+                  borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : '#7DD3FC',
+                },
+              ]}
+              accessibilityLabel={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              testID="desktop-theme-toggle"
+            >
+              {isDark ? (
+                <Sun size={15} color="#FBBF24" />
+              ) : (
+                <Moon size={15} color="#0284C7" />
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
               onPress={handleLogout}
               style={[
                 styles.logoutBtn,
@@ -183,24 +204,47 @@ export const DesktopHeader: React.FC = () => {
             </TouchableOpacity>
           </View>
         ) : (
-          <View
-            style={[
-              styles.guestPill,
-              {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0',
-              },
-            ]}
-          >
-            <Shield size={12} color={isDark ? '#38BDF8' : '#0284C7'} />
-            <Text
+          <View style={styles.userSection}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={toggleTheme}
+              {...(Platform.OS === 'web' ? ({ dataSet: { themeToggle: 'true' } } as any) : {})}
               style={[
-                styles.guestText,
-                { color: isDark ? '#94A3B8' : '#475569' },
+                styles.logoutBtn,
+                {
+                  backgroundColor: isDark ? 'rgba(34, 211, 238, 0.10)' : '#E0F2FE',
+                  borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : '#7DD3FC',
+                },
+              ]}
+              accessibilityLabel={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              testID="desktop-theme-toggle"
+            >
+              {isDark ? (
+                <Sun size={15} color="#FBBF24" />
+              ) : (
+                <Moon size={15} color="#0284C7" />
+              )}
+            </TouchableOpacity>
+
+            <View
+              style={[
+                styles.guestPill,
+                {
+                  backgroundColor: isDark ? 'rgba(8, 20, 38, 0.72)' : '#F8FAFC',
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : '#E2E8F0',
+                },
               ]}
             >
-              SEDE CENTRAL • BALNEARIO PLAYA GRANDE
-            </Text>
+              <Shield size={12} color={isDark ? '#38BDF8' : '#0284C7'} />
+              <Text
+                style={[
+                  styles.guestText,
+                  { color: isDark ? '#CBD5E1' : '#475569' },
+                ]}
+              >
+                SEDE CENTRAL • BALNEARIO PLAYA GRANDE
+              </Text>
+            </View>
           </View>
         )}
       </View>
@@ -217,9 +261,15 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.logoutModalCard,
               {
-                backgroundColor: isDark ? '#111827' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#E2E8F0',
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.24)' : 'rgba(2, 132, 199, 0.18)',
               },
+              Platform.OS === 'web'
+                ? ({
+                    backdropFilter: 'blur(24px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                  } as any)
+                : {},
             ]}
           >
             <View style={styles.modalHeaderRow}>

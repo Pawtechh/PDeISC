@@ -271,7 +271,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
                     title="Ver QR"
                     variant="primary"
                     size="sm"
-                    iconLeft={<QrCode size={14} color={isDark ? '#0B0F17' : '#FFFFFF'} />}
+                    iconLeft={<QrCode size={14} color="#FFFFFF" />}
                     onPress={onPressQR}
                     testID={`btn-qr-rental-${rental.id}`}
                   />

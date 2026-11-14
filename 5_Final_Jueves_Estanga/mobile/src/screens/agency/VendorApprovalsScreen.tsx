@@ -229,16 +229,18 @@ export const VendorApprovalsSection: React.FC = () => {
                     {
                       backgroundColor: active
                         ? isDark
-                          ? '#F59E0B'
-                          : colors.ocean[600]
+                          ? 'rgba(34, 211, 238, 0.22)'
+                          : '#0284C7'
                         : isDark
-                        ? '#131B2E'
-                        : colors.sand[100],
+                        ? 'rgba(8, 20, 38, 0.78)'
+                        : '#FFFFFF',
                       borderColor: active
                         ? isDark
-                          ? '#F59E0B'
-                          : colors.ocean[600]
-                        : theme.border,
+                          ? '#22D3EE'
+                          : '#0284C7'
+                        : isDark
+                        ? 'rgba(56, 189, 248, 0.22)'
+                        : 'rgba(2, 132, 199, 0.18)',
                     },
                   ]}
                 >
@@ -246,7 +248,7 @@ export const VendorApprovalsSection: React.FC = () => {
                     variant="caption"
                     style={{
                       fontWeight: '700',
-                      color: active ? (isDark ? '#0B0F17' : '#FFFFFF') : theme.text,
+                      color: active ? (isDark ? '#67E8F9' : '#FFFFFF') : theme.text,
                     }}
                   >
                     {item.label}
@@ -602,7 +604,7 @@ export const VendorApprovalsSection: React.FC = () => {
             style={[
               styles.modalCard,
               {
-                backgroundColor: theme.card,
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor:
                   decisionType === 'APROBADO'
                     ? colors.semantic.success

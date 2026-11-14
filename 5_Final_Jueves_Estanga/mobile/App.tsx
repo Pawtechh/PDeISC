@@ -1,7 +1,9 @@
 import React from 'react';
 import * as WebBrowser from 'expo-web-browser';
+import { enableScreens } from 'react-native-screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+enableScreens(true);
 WebBrowser.maybeCompleteAuthSession();
 import { Provider } from 'react-redux';
 import { store } from './src/store';

@@ -228,9 +228,9 @@ export const RevisionsScreen: React.FC = () => {
           style={[
             styles.segmentContainer,
             {
-              backgroundColor: isDark ? 'rgba(18, 24, 36, 0.92)' : colors.sand[100],
+              backgroundColor: isDark ? 'rgba(6, 16, 32, 0.84)' : '#F0F9FF',
               borderWidth: 1,
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#E2E8F0',
+              borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)',
             },
           ]}
         >
@@ -239,7 +239,7 @@ export const RevisionsScreen: React.FC = () => {
               styles.segmentBtn,
               activeSection === 'PENDIENTES' && styles.segmentBtnActive,
               activeSection === 'PENDIENTES' && {
-                backgroundColor: isDark ? '#38BDF8' : colors.ocean[600],
+                backgroundColor: isDark ? '#0284C7' : colors.ocean[600],
               },
             ]}
             onPress={() => setActiveSection('PENDIENTES')}
@@ -247,13 +247,7 @@ export const RevisionsScreen: React.FC = () => {
           >
             <Text
               variant="button"
-              color={
-                activeSection === 'PENDIENTES'
-                  ? isDark
-                    ? '#0B0F17'
-                    : '#FFFFFF'
-                  : theme.text
-              }
+              color={activeSection === 'PENDIENTES' ? '#FFFFFF' : theme.text}
               style={{ fontWeight: activeSection === 'PENDIENTES' ? '800' : '600' }}
             >
               Inspecciones Pendientes ({revisions.length})
@@ -265,7 +259,7 @@ export const RevisionsScreen: React.FC = () => {
               styles.segmentBtn,
               activeSection === 'RECLAMOS' && styles.segmentBtnActive,
               activeSection === 'RECLAMOS' && {
-                backgroundColor: isDark ? '#38BDF8' : colors.ocean[600],
+                backgroundColor: isDark ? '#0284C7' : colors.ocean[600],
               },
             ]}
             onPress={() => setActiveSection('RECLAMOS')}
@@ -273,13 +267,7 @@ export const RevisionsScreen: React.FC = () => {
           >
             <Text
               variant="button"
-              color={
-                activeSection === 'RECLAMOS'
-                  ? isDark
-                    ? '#0B0F17'
-                    : '#FFFFFF'
-                  : theme.text
-              }
+              color={activeSection === 'RECLAMOS' ? '#FFFFFF' : theme.text}
               style={{ fontWeight: activeSection === 'RECLAMOS' ? '800' : '600' }}
             >
               Reclamos y Mediación ({claims.length})
@@ -411,10 +399,7 @@ export const RevisionsScreen: React.FC = () => {
                   <Card
                     key={rev.rentalId}
                     padding="md"
-                    style={[
-                      styles.revisionCard,
-                      { backgroundColor: theme.card, borderColor: theme.border },
-                    ]}
+                    style={styles.revisionCard}
                   >
                     <Stack spacing="md">
                       {/* Info Header */}
@@ -543,9 +528,9 @@ export const RevisionsScreen: React.FC = () => {
                   style={[
                     styles.flowDiagram,
                     {
-                      backgroundColor: isDark ? '#1E293B' : 'rgba(255,255,255,0.85)',
+                      backgroundColor: isDark ? 'rgba(6, 16, 32, 0.72)' : 'rgba(255,255,255,0.88)',
                       borderWidth: 1,
-                      borderColor: isDark ? '#334155' : '#BFDBFE',
+                      borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : '#BAE6FD',
                     },
                   ]}
                 >
@@ -607,7 +592,10 @@ export const RevisionsScreen: React.FC = () => {
                     padding="md"
                     style={[
                       styles.revisionCard,
-                      { backgroundColor: theme.card, borderColor: theme.border },
+                      {
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : theme.border,
+              },
                     ]}
                   >
                     <Stack spacing="md">
@@ -909,7 +897,10 @@ export const RevisionsScreen: React.FC = () => {
             padding="lg"
             style={[
               styles.confirmCard,
-              { backgroundColor: theme.card, borderColor: theme.border },
+              {
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : theme.border,
+              },
             ]}
           >
             <Stack spacing="md">
@@ -965,7 +956,10 @@ export const RevisionsScreen: React.FC = () => {
             padding="lg"
             style={[
               styles.claimModalCard,
-              { backgroundColor: theme.card, borderColor: theme.border },
+              {
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : theme.border,
+              },
             ]}
           >
             <ScrollView
@@ -1090,8 +1084,8 @@ export const RevisionsScreen: React.FC = () => {
                           style={[
                             styles.presetAmountPill,
                             {
-                              backgroundColor: isDark ? '#1E293B' : colors.sand[100],
-                              borderColor: theme.border,
+                              backgroundColor: isDark ? 'rgba(8, 20, 38, 0.78)' : '#FFFFFF',
+                              borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)',
                             },
                             isSelected && styles.presetAmountPillActive,
                           ]}

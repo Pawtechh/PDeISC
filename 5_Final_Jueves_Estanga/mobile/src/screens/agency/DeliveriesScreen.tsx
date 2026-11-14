@@ -386,8 +386,8 @@ export const DeliveriesScreen: React.FC = () => {
             style={[
               styles.modalCard,
               {
-                backgroundColor: theme.card,
-                borderColor: theme.border,
+                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.32)' : theme.border,
                 borderWidth: 1,
               },
             ]}

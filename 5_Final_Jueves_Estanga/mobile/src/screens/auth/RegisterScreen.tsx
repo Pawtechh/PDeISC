@@ -120,10 +120,13 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
     <Screen scrollable>
       <Stack spacing="lg" style={styles.container}>
         <Stack spacing="xs">
-          <Text variant="h1" color={colors.ocean[600]}>
+          <Text variant="caption" style={{ fontWeight: '800', letterSpacing: 1.5, color: isDark ? '#22D3EE' : '#0284C7' }}>
+            NUEVA MEMBRESÍA
+          </Text>
+          <Text variant="h1" color={theme.text}>
             Crear Cuenta
           </Text>
-          <Text variant="body" color={colors.sand[700]}>
+          <Text variant="body" color={theme.subtext}>
             Sumate a la plataforma de alquiler de tablas de Mar del Plata.
           </Text>
         </Stack>
@@ -280,8 +283,8 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
                   style={[
                     styles.checkbox,
                     {
-                      backgroundColor: aceptaTerminos ? colors.ocean[500] : colors.white,
-                      borderColor: errors.aceptaTerminos ? colors.semantic.danger : colors.ocean[500],
+                      backgroundColor: aceptaTerminos ? (isDark ? '#06B6D4' : colors.ocean[500]) : theme.inputBg,
+                      borderColor: errors.aceptaTerminos ? colors.semantic.danger : (isDark ? '#22D3EE' : colors.ocean[500]),
                     },
                   ]}
                 >
@@ -293,25 +296,25 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
                 </View>
               </TouchableOpacity>
               <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center' }}>
-                <Text variant="caption" color={colors.sand[700]}>Acepto los </Text>
+                <Text variant="caption" color={theme.subtext}>Acepto los </Text>
                 <TouchableOpacity onPress={() => setLegalModal('terminos')}>
-                  <Text variant="caption" color={colors.ocean[600]} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
+                  <Text variant="caption" color={isDark ? '#22D3EE' : colors.ocean[600]} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
                     Términos y Condiciones
                   </Text>
                 </TouchableOpacity>
-                <Text variant="caption" color={colors.sand[700]}>, la </Text>
+                <Text variant="caption" color={theme.subtext}>, la </Text>
                 <TouchableOpacity onPress={() => setLegalModal('ley')}>
-                  <Text variant="caption" color={colors.ocean[600]} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
+                  <Text variant="caption" color={isDark ? '#22D3EE' : colors.ocean[600]} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
                     Ley 25.506
                   </Text>
                 </TouchableOpacity>
-                <Text variant="caption" color={colors.sand[700]}> y la </Text>
+                <Text variant="caption" color={theme.subtext}> y la </Text>
                 <TouchableOpacity onPress={() => setLegalModal('cancelacion')}>
-                  <Text variant="caption" color={colors.ocean[600]} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
+                  <Text variant="caption" color={isDark ? '#22D3EE' : colors.ocean[600]} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
                     Política de Cancelación en MDP
                   </Text>
                 </TouchableOpacity>
-                <Text variant="caption" color={colors.sand[700]}> *</Text>
+                <Text variant="caption" color={theme.subtext}> *</Text>
               </View>
             </Row>
             {errors.aceptaTerminos && (
@@ -331,11 +334,11 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
             />
 
             <Row justify="center" spacing="xs">
-              <Text variant="caption" color={colors.sand[500]}>
+              <Text variant="caption" color={theme.subtext}>
                 ¿Ya tenés cuenta?
               </Text>
               <TouchableOpacity onPress={() => navigation?.goBack?.()}>
-                <Text variant="caption" color={colors.ocean[500]} style={styles.link}>
+                <Text variant="caption" color={isDark ? '#22D3EE' : colors.ocean[600]} style={styles.link}>
                   Iniciá sesión
                 </Text>
               </TouchableOpacity>
@@ -357,39 +360,39 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
             <Stack spacing="md">
               <Row justify="space-between" align="center">
                 <Row spacing="xs" align="center">
-                  {legalModal === 'terminos' && <FileText size={20} color={colors.ocean[600]} />}
-                  {legalModal === 'ley' && <Scale size={20} color={colors.ocean[600]} />}
-                  {legalModal === 'cancelacion' && <ShieldCheck size={20} color={colors.ocean[600]} />}
-                  <Text variant="h3" color={colors.sand[900]}>
+                  {legalModal === 'terminos' && <FileText size={20} color={isDark ? '#22D3EE' : colors.ocean[600]} />}
+                  {legalModal === 'ley' && <Scale size={20} color={isDark ? '#22D3EE' : colors.ocean[600]} />}
+                  {legalModal === 'cancelacion' && <ShieldCheck size={20} color={isDark ? '#22D3EE' : colors.ocean[600]} />}
+                  <Text variant="h3" color={theme.text}>
                     {legalModal === 'terminos' && 'Términos y Condiciones del Servicio'}
                     {legalModal === 'ley' && 'Ley Nacional 25.506 de Firma Digital'}
                     {legalModal === 'cancelacion' && 'Política de Cancelación y Reembolso'}
                   </Text>
                 </Row>
                 <TouchableOpacity onPress={() => setLegalModal(null)} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                  <X size={20} color={colors.sand[700]} />
+                  <X size={20} color={theme.subtext} />
                 </TouchableOpacity>
               </Row>
 
               <ScrollView style={{ maxHeight: 380 }} showsVerticalScrollIndicator={true}>
                 {legalModal === 'terminos' && (
                   <Stack spacing="sm">
-                    <Text variant="body" color={colors.sand[900]} style={{ fontWeight: '700' }}>
+                    <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
                       1. Registro y Verificación de Identidad
                     </Text>
-                    <Text variant="caption" color={colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       Todo usuario debe registrar sus datos verídicos (Nombre completo, DNI y Teléfono de contacto). Queda expresamente prohibido operar con identidades falsas o delegadas sin consentimiento.
                     </Text>
-                    <Text variant="body" color={colors.sand[900]} style={{ fontWeight: '700' }}>
+                    <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
                       2. Custodia y Cuidado de Tablas en Sede
                     </Text>
-                    <Text variant="caption" color={colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       Las tablas son propiedad de shapers y surfistas locales bajo custodia de la Sede Central Playa Grande. El usuario asume la responsabilidad de cuidado durante las horas de uso en el agua.
                     </Text>
-                    <Text variant="body" color={colors.sand[900]} style={{ fontWeight: '700' }}>
+                    <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
                       3. Depósito de Garantía ($50.000 ARS)
                     </Text>
-                    <Text variant="caption" color={colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       Al confirmar un alquiler se genera una pre-autorización como garantía para responder ante roturas no declaradas o incumplimiento del protocolo obligatorio de enjuague con agua dulce.
                     </Text>
                   </Stack>
@@ -397,13 +400,13 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
 
                 {legalModal === 'ley' && (
                   <Stack spacing="sm">
-                    <Text variant="body" color={colors.sand[900]} style={{ fontWeight: '700' }}>
+                    <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
                       Marco Jurídico de Firma y Consentimiento Digital
                     </Text>
-                    <Text variant="caption" color={colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       En cumplimiento con la Ley Nacional 25.506 de Firma Digital de la República Argentina, los contratos rubricados mediante verificación biométrica (huella dactilar en celular) o firma digital electrónica (con usuario autenticado, IP y marca de tiempo) poseen plena validez legal y probatoria equivalente a la firma ológrafa.
                     </Text>
-                    <Text variant="caption" color={colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       Al crear tu cuenta y rubricar cada contrato, prestás tu conformidad libre, informada y expresa para el registro criptográfico de tu identidad.
                     </Text>
                   </Stack>
@@ -411,16 +414,16 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
 
                 {legalModal === 'cancelacion' && (
                   <Stack spacing="sm">
-                    <Text variant="body" color={colors.sand[900]} style={{ fontWeight: '700' }}>
+                    <Text variant="body" color={theme.text} style={{ fontWeight: '700' }}>
                       Escala Oficial de Reembolsos en Mar del Plata
                     </Text>
-                    <Text variant="caption" color={colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       • Más de 24 horas antes del horario de retiro: Reembolso del 100% del monto abonado acreditado a tu cuenta.
                     </Text>
-                    <Text variant="caption" color={colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       • Entre 12 y 24 horas antes del retiro: Reembolso del 50% para cubrir costos operativos de reserva de la tabla en mostrador.
                     </Text>
-                    <Text variant="caption" color={colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       • Menos de 12 horas o turno en curso: Sin reembolso, dado que el inventario queda reservado en sede y bloqueado para otros surfistas.
                     </Text>
                   </Stack>
