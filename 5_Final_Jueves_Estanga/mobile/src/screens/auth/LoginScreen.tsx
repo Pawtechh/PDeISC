@@ -15,7 +15,6 @@ import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { tokenStorage } from '../../utils/storage';
 import { loginSchema, LoginFormData } from '../../schemas/auth.schema';
 import { OAuthButtons } from '../../components/auth/OAuthButtons';
-import { RegisterAgencyModal } from '../../components/agencies/RegisterAgencyModal';
 
 export interface LoginScreenProps {
   navigation?: any;
@@ -31,7 +30,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hasBiometrics, setHasBiometrics] = useState(false);
   const [biometricType, setBiometricType] = useState<string>('Biometría');
-  const [showRegisterAgencyModal, setShowRegisterAgencyModal] = useState(false);
 
   useEffect(() => {
     const checkBiometrics = async () => {
@@ -297,23 +295,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 onPress={() => dispatch(setGuestMode(true))}
                 testID="btn-explore-as-guest"
               />
-
-              <Button
-                title="Sumar Mi Surf Shop / Agencia por Zona"
-                variant="secondary"
-                size="md"
-                onPress={() => setShowRegisterAgencyModal(true)}
-                testID="btn-open-register-agency"
-              />
             </Stack>
           </Card>
         </View>
       </View>
-
-      <RegisterAgencyModal
-        visible={showRegisterAgencyModal}
-        onClose={() => setShowRegisterAgencyModal(false)}
-      />
     </Screen>
   );
 };

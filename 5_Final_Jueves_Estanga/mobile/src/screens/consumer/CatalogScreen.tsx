@@ -14,7 +14,6 @@ import {
   Scale,
   Share2,
   Check,
-  PlusCircle,
 } from 'lucide-react-native';
 import { safeHaptic } from '../../utils/haptics';
 import { Screen, Stack, Row, Text, Input, Badge, Button, EmptyState, GlassCard, Card, CatalogSkeletonGrid } from '../../components/ui';
@@ -25,7 +24,6 @@ import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { BoardCard } from '../../components/boards/BoardCard';
 import { Board3DCarousel } from '../../components/boards/Board3DCarousel';
 import { QuiverCompareModal } from '../../components/boards/QuiverCompareModal';
-import { RegisterAgencyModal } from '../../components/agencies/RegisterAgencyModal';
 import { BoardDetailScreen } from './BoardDetailScreen';
 import { useResponsive } from '../../hooks/useResponsive';
 import { MarineForecastCard } from '../../components/marine/MarineForecastCard';
@@ -66,9 +64,6 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   // Comparador de Quiver (hasta 3 tablas lado a lado)
   const [comparedMap, setComparedMap] = useState<Record<string, Board>>({});
   const [showCompareModal, setShowCompareModal] = useState(false);
-
-  // Modal de auto-registro para guarderías / surf shops
-  const [showRegisterAgency, setShowRegisterAgency] = useState(false);
   const [copiedSpotLink, setCopiedSpotLink] = useState(false);
 
   const triggerHaptic = useCallback(() => {
@@ -499,30 +494,6 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                   · {agencies.length} {agencies.length === 1 ? 'tienda' : 'tiendas'}
                 </Text>
               </Row>
-              <RNPressable
-                onPress={() => setShowRegisterAgency(true)}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 5,
-                  paddingHorizontal: 12,
-                  paddingVertical: 5,
-                  borderRadius: radii.full,
-                  backgroundColor: theme.primarySubtle,
-                  borderWidth: 1,
-                  borderColor: theme.primaryBorder,
-                }}
-                testID="btn-open-register-agency"
-              >
-                <PlusCircle size={13} color={isDark ? theme.primaryHover : theme.primary} />
-                <Text
-                  variant="caption"
-                  color={isDark ? theme.primaryHover : theme.primary}
-                  style={{ fontWeight: '800', fontSize: 11.5 }}
-                >
-                  Sumar Mi Guardería +
-                </Text>
-              </RNPressable>
             </Row>
             {agencies.length > 0 && (
               <RNScrollView
@@ -892,12 +863,6 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           setShowCompareModal(false);
           setSelectedBoard(board);
         }}
-      />
-
-      {/* Self-Service Guardería Registration Modal */}
-      <RegisterAgencyModal
-        visible={showRegisterAgency}
-        onClose={() => setShowRegisterAgency(false)}
       />
       </Screen>
 
