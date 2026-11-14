@@ -17,6 +17,8 @@ import {
   PauseCircle,
   PlayCircle,
   Trash2,
+  Clock,
+  Sparkles,
 } from 'lucide-react-native';
 import {
   Screen,
@@ -67,6 +69,16 @@ const BOARD_TYPES: Array<'Shortboard' | 'Longboard' | 'Funboard' | 'Fish' | 'Bod
 
 const BRAND_ACCENTS = ['#0E6B74', '#1D6F5A', '#9A6312', '#2B5B78', '#3C5F4B', '#C94A29'];
 
+const ADMIN_PLAN_TIERS: Array<{
+  tier: 'STARTER' | 'PRO' | 'ENTERPRISE';
+  label: string;
+  comm: string;
+}> = [
+  { tier: 'STARTER', label: 'Starter 8%', comm: '8' },
+  { tier: 'PRO', label: 'Pro 3%', comm: '3' },
+  { tier: 'ENTERPRISE', label: 'Enterprise 2%', comm: '2' },
+];
+
 export const SuperAdminScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
   const [section, setSection] = useState<AdminSection>('zones');
@@ -104,7 +116,9 @@ export const SuperAdminScreen: React.FC = () => {
   const [agDescripcion, setAgDescripcion] = useState('');
   const [agZoneId, setAgZoneId] = useState('');
   const [agAccent, setAgAccent] = useState(BRAND_ACCENTS[0]);
-  const [agComision, setAgComision] = useState('5');
+  const [agPlanTier, setAgPlanTier] = useState<'STARTER' | 'PRO' | 'ENTERPRISE'>('STARTER');
+  const [agComision, setAgComision] = useState('8');
+  const [agMpCollectorId, setAgMpCollectorId] = useState('');
   const [agOpNombre, setAgOpNombre] = useState('');
   const [agOpEmail, setAgOpEmail] = useState('');
   const [agOpPassword, setAgOpPassword] = useState('');
@@ -139,6 +153,25 @@ export const SuperAdminScreen: React.FC = () => {
     [agencies, effectiveBoardAgencyId]
   );
   const effectiveBoardZoneId = bZoneId || selectedBoardAgency?.zoneId || zones[0]?.id || '';
+
+  const pendingAgenciesCount = useMemo(
+    () =>
+      metrics?.pendingApprovalCount ??
+      agencies.filter(
+        (ag) => !ag.verificada || String(ag.planEstado || '').toUpperCase().includes('PENDIENTE')
+      ).length,
+    [metrics?.pendingApprovalCount, agencies]
+  );
+
+  const sortedAgencies = useMemo(
+    () =>
+      [...agencies].sort((a, b) => {
+        const aPending = !a.verificada || String(a.planEstado || '').includes('PENDIENTE') ? 0 : 1;
+        const bPending = !b.verificada || String(b.planEstado || '').includes('PENDIENTE') ? 0 : 1;
+        return aPending - bPending;
+      }),
+    [agencies]
+  );
 
   const showError = (err: any, fallback: string) => {
     setBanner({
@@ -207,7 +240,9 @@ export const SuperAdminScreen: React.FC = () => {
         descripcion: agDescripcion.trim() || undefined,
         whatsapp: agWhatsapp.trim() || undefined,
         accentColor: agAccent,
-        comisionPorcentaje: parseFloat(agComision) || 5,
+        planTier: agPlanTier,
+        comisionPorcentaje: parseFloat(agComision) || 8,
+        mpCollectorId: agMpCollectorId.trim() || undefined,
         zoneId: effectiveAgZoneId,
         operatorEmail: agOpEmail.trim() || undefined,
         operatorPassword: agOpPassword || undefined,
@@ -224,6 +259,7 @@ export const SuperAdminScreen: React.FC = () => {
       setAgNombre('');
       setAgDireccion('');
       setAgDescripcion('');
+      setAgMpCollectorId('');
       setAgOpNombre('');
       setAgOpEmail('');
       setAgOpPassword('');
@@ -247,6 +283,43 @@ export const SuperAdminScreen: React.FC = () => {
       });
     } catch (err) {
       showError(err, 'Error al actualizar agencia.');
+    }
+  };
+
+  const handleModerateAgency = async (ag: AdminAgencyItem, action: 'approve' | 'reject') => {
+    try {
+      const body =
+        action === 'approve'
+          ? { verificada: true, activa: true, planEstado: 'ACTIVA' }
+          : { verificada: false, activa: false, planEstado: 'RECHAZADA' };
+      await adminUpdateAgency({ id: ag.id, body }).unwrap();
+      setBanner({
+        type: 'success',
+        text:
+          action === 'approve'
+            ? `Tienda "${ag.nombre}" aprobada y publicada en vivo.`
+            : `Solicitud de "${ag.nombre}" rechazada y pausada.`,
+      });
+    } catch (err) {
+      showError(err, 'No se pudo actualizar la verificación de la tienda.');
+    }
+  };
+
+  const handleSwitchAgencyPlan = async (
+    ag: AdminAgencyItem,
+    planTier: 'STARTER' | 'PRO' | 'ENTERPRISE'
+  ) => {
+    try {
+      await adminUpdateAgency({
+        id: ag.id,
+        body: { planTier },
+      }).unwrap();
+      setBanner({
+        type: 'success',
+        text: `Plan de "${ag.nombre}" actualizado a ${planTier}.`,
+      });
+    } catch (err) {
+      showError(err, 'No se pudo cambiar el plan SaaS de la agencia.');
     }
   };
 
@@ -446,12 +519,50 @@ export const SuperAdminScreen: React.FC = () => {
           </Card>
         </Row>
 
+        {pendingAgenciesCount > 0 && (
+          <Card
+            padding="md"
+            style={{
+              backgroundColor: isDark ? 'rgba(245, 158, 11, 0.14)' : 'rgba(245, 158, 11, 0.1)',
+              borderColor: theme.accent,
+            }}
+          >
+            <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 10 }}>
+              <Row spacing="sm" align="center" style={{ flex: 1 }}>
+                <Clock size={18} color={theme.accent} />
+                <View style={{ flex: 1 }}>
+                  <Text variant="body" color={theme.text} style={{ fontWeight: '800' }}>
+                    {pendingAgenciesCount} {pendingAgenciesCount === 1 ? 'guardería pendiente' : 'guarderías pendientes'} de verificación
+                  </Text>
+                  <Text variant="caption" color={theme.subtext}>
+                    Revisá su plan comercial y aprobá la tienda para publicarla en el mapa.
+                  </Text>
+                </View>
+              </Row>
+              <Button
+                title="Revisar Pendientes →"
+                variant="primary"
+                size="sm"
+                onPress={() => setSection('agencies')}
+                testID="admin-btn-review-pending"
+              />
+            </Row>
+          </Card>
+        )}
+
         {/* Sub-navigation Tabs */}
         <Row spacing="xs" style={{ flexWrap: 'wrap' }}>
           {(
             [
               { key: 'zones', label: '1. Zonas y Spots', testID: 'admin-tab-zones' },
-              { key: 'agencies', label: '2. Negocios y Cuentas', testID: 'admin-tab-agencies' },
+              {
+                key: 'agencies',
+                label:
+                  pendingAgenciesCount > 0
+                    ? `2. Negocios y Cuentas (${pendingAgenciesCount} pend.)`
+                    : '2. Negocios y Cuentas',
+                testID: 'admin-tab-agencies',
+              },
               { key: 'boards', label: '3. Locaciones de Tablas', testID: 'admin-tab-boards' },
             ] as const
           ).map((item) => {
@@ -670,10 +781,10 @@ export const SuperAdminScreen: React.FC = () => {
                 />
 
                 <Row spacing="sm" style={{ flexWrap: 'wrap' }}>
-                  <View style={styles.halfField}>
+                  <View style={styles.thirdField}>
                     <Input label="WhatsApp" value={agWhatsapp} onChangeText={setAgWhatsapp} />
                   </View>
-                  <View style={styles.halfField}>
+                  <View style={styles.thirdField}>
                     <Input
                       label="Comisión Plataforma (%)"
                       value={agComision}
@@ -681,7 +792,55 @@ export const SuperAdminScreen: React.FC = () => {
                       keyboardType="numeric"
                     />
                   </View>
+                  <View style={styles.thirdField}>
+                    <Input
+                      label="MP Collector ID (Split)"
+                      placeholder="Ej: 123456789"
+                      value={agMpCollectorId}
+                      onChangeText={setAgMpCollectorId}
+                      autoCapitalize="none"
+                    />
+                  </View>
                 </Row>
+
+                {/* Plan Tier Selector */}
+                <Stack spacing="xs">
+                  <Row spacing="xs" align="center">
+                    <Sparkles size={14} color={isDark ? theme.primaryHover : theme.primary} />
+                    <Text variant="label" color={theme.text}>
+                      Plan SaaS de la agencia:
+                    </Text>
+                  </Row>
+                  <Row spacing="xs" style={{ flexWrap: 'wrap' }}>
+                    {ADMIN_PLAN_TIERS.map((plan) => {
+                      const sel = agPlanTier === plan.tier;
+                      return (
+                        <TouchableOpacity
+                          key={plan.tier}
+                          onPress={() => {
+                            setAgPlanTier(plan.tier);
+                            setAgComision(plan.comm);
+                          }}
+                          style={[
+                            styles.chip,
+                            {
+                              backgroundColor: sel ? theme.primary : theme.surfaceElevated,
+                              borderColor: sel ? theme.primary : theme.border,
+                            },
+                          ]}
+                        >
+                          <Text
+                            variant="caption"
+                            color={sel ? getContrastInk(theme.primary) : theme.text}
+                            style={{ fontWeight: sel ? '800' : '600' }}
+                          >
+                            {plan.label}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </Row>
+                </Stack>
 
                 {/* Zone Selector Chips */}
                 <Stack spacing="xs">
@@ -851,44 +1010,117 @@ export const SuperAdminScreen: React.FC = () => {
             {/* Agencies & Users Directory */}
             <Stack spacing="sm">
               <Text variant="h2" color={theme.text}>
-                Negocios Registrados ({agencies.length})
+                Negocios Registrados ({sortedAgencies.length})
               </Text>
-              {agencies.map((ag) => (
-                <Card key={ag.id} padding="md">
-                  <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 10 }}>
-                    <View style={{ flex: 1, minWidth: 240 }}>
-                      <Row spacing="xs" align="center">
-                        <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: ag.accentColor || theme.primary }} />
-                        <Text variant="h3" color={theme.text}>
-                          {ag.nombre}
-                        </Text>
-                        <Badge label={ag.verificada ? 'VERIFICADA' : 'PENDIENTE'} variant={ag.verificada ? 'success' : 'warning'} />
-                        {!ag.activa && <Badge label="PAUSADA" variant="danger" />}
+              {sortedAgencies.map((ag) => {
+                const isPendingApproval =
+                  !ag.verificada || String(ag.planEstado || '').toUpperCase().includes('PENDIENTE');
+                return (
+                  <Card
+                    key={ag.id}
+                    padding="md"
+                    style={
+                      isPendingApproval
+                        ? { borderColor: theme.accent, borderWidth: 1.5 }
+                        : undefined
+                    }
+                  >
+                    <Stack spacing="sm">
+                      <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 10 }}>
+                        <View style={{ flex: 1, minWidth: 240 }}>
+                          <Row spacing="xs" align="center" style={{ flexWrap: 'wrap' }}>
+                            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: ag.accentColor || theme.primary }} />
+                            <Text variant="h3" color={theme.text}>
+                              {ag.nombre}
+                            </Text>
+                            <Badge
+                              label={isPendingApproval ? (ag.planEstado || 'PENDIENTE') : (ag.planEstado || 'VERIFICADA')}
+                              variant={ag.verificada ? 'success' : 'warning'}
+                            />
+                            <Badge label={`${ag.comisionPorcentaje}% fee`} variant="ocean" />
+                            <Badge
+                              label={ag.mpCollectorId ? 'Split MP OK' : 'Centralizado'}
+                              variant={ag.mpCollectorId ? 'success' : 'sand'}
+                            />
+                            {!ag.activa && <Badge label="PAUSADA" variant="danger" />}
+                          </Row>
+                          <Text variant="caption" color={theme.subtext} style={{ marginTop: 2 }}>
+                            {ag.zone ? `${ag.zone.ciudad} · ${ag.zone.nombre}` : 'Sin zona'} · {ag.direccion}
+                          </Text>
+                          <Text variant="caption" color={theme.subtext}>
+                            {ag.boardCount} tablas · {ag.rentalCount} alquileres · Operadores: {(ag.users || []).map((u) => u.email).join(', ') || 'Sin cuenta asignada'}
+                          </Text>
+                        </View>
+                        <Row spacing="xs" style={{ flexWrap: 'wrap' }}>
+                          {isPendingApproval && (
+                            <>
+                              <Button
+                                title="Aprobar Tienda"
+                                variant="success"
+                                size="sm"
+                                onPress={() => handleModerateAgency(ag, 'approve')}
+                                testID={`admin-approve-agency-${ag.slug}`}
+                              />
+                              <Button
+                                title="Rechazar"
+                                variant="danger"
+                                size="sm"
+                                onPress={() => handleModerateAgency(ag, 'reject')}
+                                testID={`admin-reject-agency-${ag.slug}`}
+                              />
+                            </>
+                          )}
+                          <Button
+                            title={ag.verificada ? 'Quitar Verif.' : 'Verificar'}
+                            variant="secondary"
+                            size="sm"
+                            onPress={() => handleToggleAgencyField(ag, 'verificada')}
+                          />
+                          <Button
+                            title={ag.activa ? 'Pausar' : 'Activar'}
+                            variant={ag.activa ? 'danger' : 'success'}
+                            size="sm"
+                            onPress={() => handleToggleAgencyField(ag, 'activa')}
+                          />
+                        </Row>
                       </Row>
-                      <Text variant="caption" color={theme.subtext}>
-                        {ag.zone ? `${ag.zone.ciudad} · ${ag.zone.nombre}` : 'Sin zona'} · {ag.direccion}
-                      </Text>
-                      <Text variant="caption" color={theme.subtext}>
-                        {ag.boardCount} tablas · {ag.rentalCount} alquileres · Operadores: {(ag.users || []).map((u) => u.email).join(', ') || 'Sin cuenta asignada'}
-                      </Text>
-                    </View>
-                    <Row spacing="xs">
-                      <Button
-                        title={ag.verificada ? 'Quitar Verif.' : 'Verificar'}
-                        variant="secondary"
-                        size="sm"
-                        onPress={() => handleToggleAgencyField(ag, 'verificada')}
-                      />
-                      <Button
-                        title={ag.activa ? 'Pausar' : 'Activar'}
-                        variant={ag.activa ? 'danger' : 'success'}
-                        size="sm"
-                        onPress={() => handleToggleAgencyField(ag, 'activa')}
-                      />
-                    </Row>
-                  </Row>
-                </Card>
-              ))}
+
+                      {/* Cambio rápido de Plan SaaS */}
+                      <Row spacing="xs" align="center" style={{ flexWrap: 'wrap' }}>
+                        <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700' }}>
+                          Plan SaaS:
+                        </Text>
+                        {ADMIN_PLAN_TIERS.map((plan) => {
+                          const activeCommission = Number(ag.comisionPorcentaje) === Number(plan.comm);
+                          return (
+                            <TouchableOpacity
+                              key={plan.tier}
+                              onPress={() => handleSwitchAgencyPlan(ag, plan.tier)}
+                              style={[
+                                styles.chip,
+                                {
+                                  paddingVertical: 4,
+                                  paddingHorizontal: 10,
+                                  backgroundColor: activeCommission ? theme.primarySubtle : theme.surfaceElevated,
+                                  borderColor: activeCommission ? theme.primaryBorder : theme.border,
+                                },
+                              ]}
+                            >
+                              <Text
+                                variant="caption"
+                                color={activeCommission ? theme.primary : theme.subtext}
+                                style={{ fontWeight: activeCommission ? '800' : '600', fontSize: 11 }}
+                              >
+                                {plan.label}
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </Row>
+                    </Stack>
+                  </Card>
+                );
+              })}
             </Stack>
 
             {/* Platform Accounts Quick Control */}

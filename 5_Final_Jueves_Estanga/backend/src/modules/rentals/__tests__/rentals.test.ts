@@ -38,6 +38,8 @@ describe('Rentals Module Tests (MP5 Cotizaciones, Reservas y Cancelación Escalo
     id: 'user-consumer-1',
     email: 'consumer@surf.com',
     role: 'CONSUMER',
+    dni: '38123456',
+    dniFotoUrl: 'https://example.com/dni.jpg',
     activo: true,
   };
 

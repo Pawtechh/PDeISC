@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
-import { Store, MapPin, Palette, X, CheckCircle2 } from 'lucide-react-native';
+import { Store, MapPin, Palette, X, CheckCircle2, Sparkles, Clock } from 'lucide-react-native';
 import { Stack, Row, Text, Input, Button, Badge } from '../ui';
 import { radii, spacing } from '../../theme';
 import { useTheme, getContrastInk } from '../../theme/ThemeContext';
@@ -15,6 +15,38 @@ const BRAND_PRESETS = [
   { hex: '#9A6312', label: 'Latón Wax' },
   { hex: '#2B5B78', label: 'Puerto Azul' },
   { hex: '#3C5F4B', label: 'Acantilado' },
+];
+
+type PlanTierKey = 'STARTER' | 'PRO' | 'ENTERPRISE';
+
+const SAAS_PLAN_OPTIONS: Array<{
+  tier: PlanTierKey;
+  title: string;
+  priceLabel: string;
+  commissionLabel: string;
+  subtitle: string;
+}> = [
+  {
+    tier: 'STARTER',
+    title: 'Starter',
+    priceLabel: '$0 / mes',
+    commissionLabel: '8% comisión',
+    subtitle: 'Ideal para sumar tu primera guardería sin costo fijo.',
+  },
+  {
+    tier: 'PRO',
+    title: 'Pro',
+    priceLabel: '$15.000 / mes',
+    commissionLabel: '3% comisión',
+    subtitle: 'Prioridad en Mapa Multi-Pin y link de tienda personalizado.',
+  },
+  {
+    tier: 'ENTERPRISE',
+    title: 'Enterprise',
+    priceLabel: '$35.000 / mes',
+    commissionLabel: '2% comisión',
+    subtitle: 'Split directo con MercadoPago y soporte multi-sede.',
+  },
 ];
 
 export interface RegisterAgencyModalProps {
@@ -42,6 +74,15 @@ export const RegisterAgencyModal: React.FC<RegisterAgencyModalProps> = ({
   const [whatsapp, setWhatsapp] = useState('');
   const [horario, setHorario] = useState('Todos los días 08:00 a 20:00');
   const [accentColor, setAccentColor] = useState('#0E6B74');
+  const [planTier, setPlanTier] = useState<PlanTierKey>('STARTER');
+  const [mpCollectorId, setMpCollectorId] = useState('');
+  const [createdAgencyInfo, setCreatedAgencyInfo] = useState<{
+    nombre: string;
+    planEstado?: string;
+    comisionPorcentaje?: number;
+    user: any;
+    tokens: { accessToken: string; refreshToken: string };
+  } | null>(null);
 
   const [useCustomZone, setUseCustomZone] = useState(false);
   const [selectedZoneId, setSelectedZoneId] = useState('');
@@ -87,6 +128,8 @@ export const RegisterAgencyModal: React.FC<RegisterAgencyModalProps> = ({
         whatsapp: whatsapp.trim() || undefined,
         horario: horario.trim() || undefined,
         accentColor,
+        planTier,
+        mpCollectorId: mpCollectorId.trim() || undefined,
       };
 
       if (useCustomZone) {
@@ -103,20 +146,18 @@ export const RegisterAgencyModal: React.FC<RegisterAgencyModalProps> = ({
       }
 
       const res = await registerAgency(payload).unwrap();
-      const { user, tokens } = res.data;
+      const { user, tokens, agency } = res.data;
 
       await tokenStorage.save({ access: tokens.accessToken, refresh: tokens.refreshToken });
       await tokenStorage.saveUser(user);
-      dispatch(
-        setCredentials({
-          user,
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
-        })
-      );
 
-      onClose();
-      onSuccess?.();
+      setCreatedAgencyInfo({
+        nombre: agency?.nombre || nombre.trim(),
+        planEstado: agency?.planEstado || `${planTier}_PENDIENTE`,
+        comisionPorcentaje: agency?.comisionPorcentaje,
+        user,
+        tokens,
+      });
     } catch (err: any) {
       setErrorMsg(
         err?.data?.message || 'No pudimos registrar tu agencia en este momento. Verificá los datos.'
@@ -323,6 +364,60 @@ export const RegisterAgencyModal: React.FC<RegisterAgencyModalProps> = ({
                 </Row>
               </Stack>
 
+              {/* Selector de Plan SaaS */}
+              <Stack spacing="xs">
+                <Row spacing="xs" align="center">
+                  <Sparkles size={14} color={isDark ? theme.primaryHover : theme.primary} />
+                  <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
+                    Plan comercial de tu guardería *
+                  </Text>
+                </Row>
+                <View style={styles.planGrid}>
+                  {SAAS_PLAN_OPTIONS.map((plan) => {
+                    const selected = planTier === plan.tier;
+                    return (
+                      <TouchableOpacity
+                        key={plan.tier}
+                        onPress={() => setPlanTier(plan.tier)}
+                        style={[
+                          styles.planCard,
+                          {
+                            backgroundColor: selected ? theme.primarySubtle : theme.surfaceElevated,
+                            borderColor: selected ? theme.primary : theme.border,
+                          },
+                        ]}
+                        testID={`plan-option-${plan.tier}`}
+                      >
+                        <Row justify="space-between" align="center">
+                          <Text variant="body" color={theme.text} style={{ fontWeight: '800', fontSize: 13 }}>
+                            {plan.title}
+                          </Text>
+                          <Badge label={plan.commissionLabel} variant={selected ? 'ocean' : 'sand'} />
+                        </Row>
+                        <Text
+                          variant="caption"
+                          color={selected ? (isDark ? theme.primaryHover : theme.primary) : theme.text}
+                          style={{ fontWeight: '700', marginTop: 2 }}
+                        >
+                          {plan.priceLabel}
+                        </Text>
+                        <Text variant="caption" color={theme.subtext} style={{ marginTop: 2, fontSize: 11 }}>
+                          {plan.subtitle}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </Stack>
+
+              <Input
+                label="MercadoPago Collector ID (opcional — Split Automático)"
+                placeholder="Ej: 123456789 (podés completarlo después)"
+                value={mpCollectorId}
+                onChangeText={setMpCollectorId}
+                autoCapitalize="none"
+              />
+
               {/* Credenciales si crea cuenta nueva */}
               {!isAuthenticated && (
                 <Stack spacing="sm">
@@ -351,13 +446,77 @@ export const RegisterAgencyModal: React.FC<RegisterAgencyModalProps> = ({
                 </Stack>
               )}
 
-              <Button
-                title={isLoading ? 'Creando vidriera...' : 'Crear Mi Agencia y Publicar Tablas'}
-                variant="primary"
-                onPress={handleSubmit}
-                isLoading={isLoading}
-                fullWidth
-              />
+              <View
+                style={[
+                  styles.pendingInfoBox,
+                  {
+                    backgroundColor: theme.surfaceElevated,
+                    borderColor: theme.border,
+                  },
+                ]}
+              >
+                <Row spacing="xs" align="center">
+                  <Clock size={14} color={theme.primary} />
+                  <Text variant="caption" color={theme.subtext} style={{ flex: 1 }}>
+                    Tu guardería se crea en estado PENDIENTE y queda publicada en el mapa ni bien Super Admin apruebe el alta.
+                  </Text>
+                </Row>
+              </View>
+
+              {createdAgencyInfo ? (
+                <View
+                  style={[
+                    styles.successBox,
+                    {
+                      backgroundColor: theme.successBg,
+                      borderColor: theme.successBorder,
+                    },
+                  ]}
+                  testID="register-agency-success-card"
+                >
+                  <Stack spacing="xs">
+                    <Row spacing="xs" align="center">
+                      <CheckCircle2 size={16} color={theme.successText} />
+                      <Text variant="body" color={theme.successText} style={{ fontWeight: '800' }}>
+                        ¡{createdAgencyInfo.nombre} registrada!
+                      </Text>
+                    </Row>
+                    <Text variant="caption" color={theme.successText}>
+                      Estado inicial: {createdAgencyInfo.planEstado} ({createdAgencyInfo.comisionPorcentaje ?? 8}% comisión). Ya podés cargar tus tablas desde tu panel mientras Super Admin aprueba tu tienda.
+                    </Text>
+                    <Button
+                      title="Continuar a Mi Vidriera →"
+                      variant="primary"
+                      onPress={() => {
+                        const info = createdAgencyInfo;
+                        setCreatedAgencyInfo(null);
+                        onClose();
+                        if (info) {
+                          dispatch(
+                            setCredentials({
+                              user: info.user,
+                              accessToken: info.tokens.accessToken,
+                              refreshToken: info.tokens.refreshToken,
+                            })
+                          );
+                        }
+                        onSuccess?.();
+                      }}
+                      testID="btn-register-agency-continue"
+                      fullWidth
+                    />
+                  </Stack>
+                </View>
+              ) : (
+                <Button
+                  title={isLoading ? 'Creando vidriera...' : 'Crear Mi Agencia y Publicar Tablas'}
+                  variant="primary"
+                  onPress={handleSubmit}
+                  isLoading={isLoading}
+                  testID="btn-submit-register-agency"
+                  fullWidth
+                />
+              )}
             </Stack>
           </ScrollView>
         </View>
@@ -415,5 +574,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: radii.full,
+  },
+  planGrid: {
+    gap: 8,
+  },
+  planCard: {
+    borderWidth: 1.5,
+    borderRadius: radii.md,
+    padding: spacing.sm,
+  },
+  pendingInfoBox: {
+    padding: spacing.sm,
+    borderRadius: radii.md,
+    borderWidth: 1,
+  },
+  successBox: {
+    padding: spacing.md,
+    borderRadius: radii.md,
+    borderWidth: 1,
   },
 });

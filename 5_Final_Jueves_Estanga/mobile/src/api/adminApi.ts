@@ -33,6 +33,11 @@ export interface AdminAgencyItem {
   accentColor?: string | null;
   comisionPorcentaje: number;
   multaSalitreArs: number;
+  mpCollectorId?: string | null;
+  planEstado?: string;
+  planTier?: 'STARTER' | 'PRO' | 'ENTERPRISE';
+  latitud?: number | null;
+  longitud?: number | null;
   verificada: boolean;
   activa: boolean;
   zoneId: string;
@@ -105,6 +110,7 @@ export interface AdminOverviewResponse {
       activeZones: number;
       totalAgencies: number;
       activeAgencies: number;
+      pendingApprovalCount?: number;
       totalUsers: number;
       agencyAccounts: number;
       totalBoards: number;
@@ -164,6 +170,9 @@ export const adminApi = apiSlice.injectEndpoints({
       horario?: string;
       accentColor?: string;
       comisionPorcentaje?: number;
+      planTier?: 'STARTER' | 'PRO' | 'ENTERPRISE';
+      planEstado?: string;
+      mpCollectorId?: string;
       multaSalitreArs?: number;
       zoneId: string;
       operatorEmail?: string;

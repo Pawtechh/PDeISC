@@ -36,6 +36,7 @@ describe('AuthService Unit Tests', () => {
       password: 'Password123!',
       nombre: 'Nuevo Surfista',
       dni: '38123456',
+      dniFotoUrl: 'data:image/png;base64,iVBORw0KGgo=',
     };
 
     it('should register a new user with CONSUMER role and return tokens', async () => {
@@ -96,6 +97,7 @@ describe('AuthService Unit Tests', () => {
         nombre: 'Lucas',
         apellido: 'Peralta',
         dni: '38123457',
+        dniFotoUrl: 'data:image/png;base64,iVBORw0KGgo=',
       });
 
       expect(prisma.user.create).toHaveBeenCalledWith(

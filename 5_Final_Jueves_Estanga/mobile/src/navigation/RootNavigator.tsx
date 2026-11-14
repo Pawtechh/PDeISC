@@ -4,8 +4,11 @@ import * as Linking from 'expo-linking';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { Waves } from 'lucide-react-native';
 import { store, useAppSelector, useAppDispatch } from '../store';
-import { setCredentials, updateUser, setRole } from '../store/slices/authSlice';
+import { setCredentials, updateUser, setRole, setGuestMode } from '../store/slices/authSlice';
+import { setActiveRouteName } from '../store/slices/uiSlice';
 import { resetAllApis } from '../store/auth/thunks';
+import { rootNavigationRef, extractActiveRouteName } from './navigationRef';
+import { parseInitialWebRoute } from '../utils/deepLinks';
 import { tokenStorage } from '../utils/storage';
 import {
   getBaseUrl,
@@ -192,6 +195,13 @@ export function RootNavigator() {
         console.warn('Error al restaurar sesión previa:', e);
       } finally {
         if (isMounted) {
+          const initialDeepLink = parseInitialWebRoute();
+          if (
+            !store.getState().auth.isAuthenticated &&
+            (initialDeepLink.zoneSlug || initialDeepLink.agencySlug)
+          ) {
+            dispatch(setGuestMode(true));
+          }
           setIsInitializing(false);
         }
       }
@@ -416,7 +426,18 @@ export function RootNavigator() {
   };
 
   return (
-    <NavigationContainer theme={navigationTheme}>
+    <NavigationContainer
+      ref={rootNavigationRef}
+      theme={navigationTheme}
+      onReady={() => {
+        const name = extractActiveRouteName(rootNavigationRef.getRootState());
+        if (name) dispatch(setActiveRouteName(name));
+      }}
+      onStateChange={(state) => {
+        const name = extractActiveRouteName(state);
+        if (name) dispatch(setActiveRouteName(name));
+      }}
+    >
       {renderContent()}
       <MandatoryKycModal />
     </NavigationContainer>

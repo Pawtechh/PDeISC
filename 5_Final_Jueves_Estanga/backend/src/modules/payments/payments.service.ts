@@ -2,18 +2,22 @@ import crypto from 'crypto';
 import { prisma } from '../../config/prisma';
 import { AppError } from '../../middlewares/errorHandler';
 import { MP_CONFIG, mpPreference, mpPayment } from '../../config/mercadopago';
+import { buildSplitBreakdown } from '../../constants/saasPlans';
 import { logger } from '../../utils/logger';
 import { CreatePreAuthInput, SimulatePaymentInput } from './payments.schemas';
 
 export class PaymentsService {
   /**
-   * Crea una preferencia de pago en MercadoPago para un alquiler
+   * Crea una preferencia de pago en MercadoPago para un alquiler con soporte Split Marketplace
    */
   async createPreference(rentalId: string, consumerId: string, installments: number = 1) {
     const rental = await prisma.rental.findUnique({
       where: { id: rentalId },
       include: {
-        board: true,
+        board: {
+          include: { agency: true },
+        },
+        agency: true,
         consumer: true,
       },
     });
@@ -31,14 +35,21 @@ export class PaymentsService {
     }
 
     const unitPrice = Number(rental.precioTotal);
+    const agency = (rental as any).agency || (rental as any).board?.agency || null;
+    const splitBreakdown = buildSplitBreakdown(
+      unitPrice,
+      Number(agency?.comisionPorcentaje ?? 5),
+      agency?.mpCollectorId
+    );
+    const agencyLabel = agency?.nombre || 'Sede Oficial Surf Rental';
 
-    const preferencePayload = {
+    const preferencePayload: any = {
       body: {
         items: [
           {
             id: rental.boardId,
             title: `Alquiler: ${rental.board.titulo} (${rental.horas} hs)`,
-            description: `Surf Rental MDP - Sede Central Playa Grande (${rental.horas} hs)`,
+            description: `${agencyLabel} (${rental.horas} hs)`,
             quantity: 1,
             unit_price: unitPrice,
             currency_id: MP_CONFIG.currency,
@@ -51,11 +62,16 @@ export class PaymentsService {
         back_urls: MP_CONFIG.backUrls,
         auto_return: 'approved' as const,
         notification_url: MP_CONFIG.notificationUrl,
+        ...(splitBreakdown.mpCollectorId
+          ? { marketplace_fee: splitBreakdown.platformFeeArs }
+          : {}),
         metadata: {
           rental_id: rental.id,
           consumer_id: consumerId,
           board_id: rental.boardId,
+          agency_id: agency?.id || rental.agencyId || null,
           horas: rental.horas,
+          split: splitBreakdown,
         },
         payment_methods: {
           installments,
@@ -95,6 +111,7 @@ export class PaymentsService {
         metadataJson: {
           installments,
           currency: MP_CONFIG.currency,
+          split: splitBreakdown,
         },
       },
     });
@@ -106,6 +123,7 @@ export class PaymentsService {
       sandboxInitPoint: mpResponse.sandbox_init_point || mpResponse.init_point,
       monto: unitPrice,
       currency: MP_CONFIG.currency,
+      splitBreakdown,
     };
   }
 
@@ -286,12 +304,22 @@ export class PaymentsService {
 
     const rental = await prisma.rental.findUnique({
       where: { id: input.rentalId },
-      include: { board: true },
+      include: {
+        board: { include: { agency: true } },
+        agency: true,
+      },
     });
 
     if (!rental) {
       throw new AppError('RENTAL_NOT_FOUND', 'Alquiler no encontrado', 404);
     }
+
+    const agency = (rental as any).agency || (rental as any).board?.agency || null;
+    const splitBreakdown = buildSplitBreakdown(
+      Number(rental.precioTotal),
+      Number(agency?.comisionPorcentaje ?? 5),
+      agency?.mpCollectorId
+    );
 
     const payment = await prisma.payment.create({
       data: {
@@ -300,7 +328,7 @@ export class PaymentsService {
         monto: rental.precioTotal,
         tipo: input.tipo || 'ALQUILER',
         estado: isApproved ? 'APROBADO' : 'RECHAZADO',
-        metadataJson: { simulated: true, status: input.status },
+        metadataJson: { simulated: true, status: input.status, split: splitBreakdown },
       },
     });
 
@@ -323,6 +351,7 @@ export class PaymentsService {
     return {
       payment,
       status: isApproved ? 'APROBADO' : 'RECHAZADO',
+      splitBreakdown,
     };
   }
 

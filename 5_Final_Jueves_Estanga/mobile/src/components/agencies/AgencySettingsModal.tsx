@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
-import { Store, X, CheckCircle2 } from 'lucide-react-native';
-import { Stack, Row, Text, Input, Button } from '../ui';
+import { Store, X, CheckCircle2, ShieldAlert } from 'lucide-react-native';
+import { Stack, Row, Text, Input, Button, Badge } from '../ui';
 import { radii, spacing } from '../../theme';
 import { useTheme, getContrastInk } from '../../theme/ThemeContext';
 import { useGetZonesQuery, useUpdateMyAgencyMutation } from '../../api/agenciesApi';
@@ -35,6 +35,7 @@ export const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ visibl
   const [multaSalitreArs, setMultaSalitreArs] = useState(
     String(currentAgency?.multaSalitreArs ?? 10000)
   );
+  const [mpCollectorId, setMpCollectorId] = useState(currentAgency?.mpCollectorId || '');
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ visibl
       setAccentColor(currentAgency.accentColor || '#0E6B74');
       setZoneId(currentAgency.zoneId || '');
       setMultaSalitreArs(String(currentAgency.multaSalitreArs ?? 10000));
+      setMpCollectorId(currentAgency.mpCollectorId || '');
       setFeedback(null);
     }
   }, [visible, currentAgency]);
@@ -63,6 +65,7 @@ export const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ visibl
         accentColor,
         zoneId: zoneId || undefined,
         multaSalitreArs: Number(multaSalitreArs) || 10000,
+        mpCollectorId: mpCollectorId.trim() || null,
       }).unwrap();
 
       dispatch(updateUser({ agency: res.data }));
@@ -124,6 +127,34 @@ export const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ visibl
                 </View>
               )}
 
+              {currentAgency && (
+                <View
+                  style={[
+                    styles.banner,
+                    {
+                      backgroundColor: theme.surfaceElevated,
+                      borderColor: theme.border,
+                    },
+                  ]}
+                >
+                  <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
+                    <Row spacing="xs" align="center">
+                      {!currentAgency.verificada && (
+                        <ShieldAlert size={14} color={theme.accent} />
+                      )}
+                      <Text variant="caption" color={theme.text} style={{ fontWeight: '800' }}>
+                        Plan: {currentAgency.planEstado || 'ACTIVA'} • Comisión{' '}
+                        {currentAgency.comisionPorcentaje ?? 8}%
+                      </Text>
+                    </Row>
+                    <Badge
+                      label={currentAgency.verificada ? 'VERIFICADA ✓' : 'PENDIENTE ADMIN'}
+                      variant={currentAgency.verificada ? 'success' : 'warning'}
+                    />
+                  </Row>
+                </View>
+              )}
+
               <Input label="Nombre visible de la tienda" value={nombre} onChangeText={setNombre} />
               <Input
                 label="Descripción de tu vidriera"
@@ -146,6 +177,13 @@ export const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ visibl
                 value={multaSalitreArs}
                 onChangeText={setMultaSalitreArs}
                 keyboardType="numeric"
+              />
+              <Input
+                label="MercadoPago Collector ID (Split Marketplace, opcional)"
+                placeholder="Ej: 123456789 (vacío = cobro centralizado)"
+                value={mpCollectorId}
+                onChangeText={setMpCollectorId}
+                autoCapitalize="none"
               />
 
               <Stack spacing="xs">

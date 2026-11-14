@@ -48,6 +48,9 @@ export interface User {
     horario?: string | null;
     comisionPorcentaje?: number;
     multaSalitreArs?: number;
+    planEstado?: string;
+    mpCollectorId?: string | null;
+    mpSplitConfigured?: boolean;
     verificada?: boolean;
     zoneId?: string;
     zone?: {

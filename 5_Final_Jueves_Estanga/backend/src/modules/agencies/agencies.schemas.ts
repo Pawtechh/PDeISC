@@ -37,6 +37,7 @@ export const registerAgencySchema = z.object({
   portadaUrl: imageUriOrEmpty,
   multaSalitreArs: z.coerce.number().min(0).max(500000).optional(),
   comisionPorcentaje: z.coerce.number().min(0).max(40).optional(),
+  planTier: z.enum(['STARTER', 'PRO', 'ENTERPRISE']).optional().default('STARTER'),
   mpCollectorId: z.string().max(80).optional(),
   // Selección de zona existente o creación automática de ciudad/spot costero
   zoneId: z.string().optional(),
@@ -64,6 +65,8 @@ export const updateMyAgencySchema = z.object({
   portadaUrl: imageUriOrEmpty,
   multaSalitreArs: z.coerce.number().min(0).max(500000).optional(),
   mpCollectorId: z.string().max(80).optional().nullable(),
+  latitud: z.coerce.number().min(-90).max(90).optional(),
+  longitud: z.coerce.number().min(-180).max(180).optional(),
   zoneId: z.string().optional(),
   agencyId: z.string().optional(), // Permitido para SUPER_ADMIN al editar una agencia específica
 });

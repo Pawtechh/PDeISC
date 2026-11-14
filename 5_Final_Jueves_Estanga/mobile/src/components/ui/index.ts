@@ -21,3 +21,4 @@ export * from './CommandPalette';
 export * from './LuxuryToast';
 export * from './QrCodeView';
 export * from './DesktopHeader';
+export * from './SkeletonCard';

@@ -168,4 +168,66 @@ describe('Agencies & Zones SaaS API', () => {
       })
     );
   });
+
+  it('POST /api/agencies/register permite alta self-service con plan PRO (3%) en estado pendiente de aprobación', async () => {
+    (prisma.zone.findUnique as jest.Mock).mockResolvedValue({
+      id: 'zone-pinamar',
+      slug: 'pinamar-muelle-norte',
+      ciudad: 'Pinamar',
+      nombre: 'Muelle Norte',
+      latitud: -37.1079,
+      longitud: -56.8548,
+    });
+    (prisma.agency.findUnique as jest.Mock).mockResolvedValue(null);
+    (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+    (prisma.$transaction as jest.Mock).mockImplementation(async (cb: any) =>
+      cb({
+        agency: {
+          create: jest.fn().mockResolvedValue({
+            id: 'ag-self-1',
+            slug: 'pinamar-pro-quiver',
+            nombre: 'Pinamar Pro Quiver',
+            descripcion: 'Alquiler frente al muelle',
+            direccion: 'Av. del Mar 300',
+            comisionPorcentaje: 3,
+            multaSalitreArs: 10000,
+            planEstado: 'PRO_PENDIENTE',
+            verificada: false,
+            activa: true,
+            zoneId: 'zone-pinamar',
+            zone: { id: 'zone-pinamar', ciudad: 'Pinamar', nombre: 'Muelle Norte' },
+          }),
+        },
+        user: {
+          create: jest.fn().mockResolvedValue({
+            id: 'usr-ag-self-1',
+            email: 'pro@pinamar.com',
+            nombre: 'Sofía Costa',
+            telefono: null,
+            role: 'AGENCIA',
+            puntos: 0,
+            agencyId: 'ag-self-1',
+            agency: { id: 'ag-self-1', zoneId: 'zone-pinamar' },
+          }),
+        },
+      })
+    );
+    (prisma.refreshToken.create as jest.Mock).mockResolvedValue({});
+
+    const res = await request(app).post('/api/agencies/register').send({
+      nombre: 'Pinamar Pro Quiver',
+      direccion: 'Av. del Mar 300',
+      zoneId: 'zone-pinamar',
+      planTier: 'PRO',
+      nombreResponsable: 'Sofía Costa',
+      email: 'pro@pinamar.com',
+      password: 'Password123!',
+    });
+
+    expect(res.status).toBe(201);
+    expect(res.body.data.agency.planEstado).toBe('PRO_PENDIENTE');
+    expect(res.body.data.agency.verificada).toBe(false);
+    expect(res.body.data.agency.comisionPorcentaje).toBe(3);
+    expect(res.body.data.user.role).toBe('AGENCIA');
+  });
 });

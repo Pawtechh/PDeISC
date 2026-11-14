@@ -11,10 +11,12 @@ export interface ActiveZoneInfo {
 
 interface UiState {
   activeZone: ActiveZoneInfo | null;
+  activeRouteName: string | null;
 }
 
 const initialState: UiState = {
   activeZone: null,
+  activeRouteName: null,
 };
 
 const uiSlice = createSlice({
@@ -24,8 +26,11 @@ const uiSlice = createSlice({
     setActiveZone: (state, action: PayloadAction<ActiveZoneInfo | null>) => {
       state.activeZone = action.payload;
     },
+    setActiveRouteName: (state, action: PayloadAction<string | null>) => {
+      state.activeRouteName = action.payload;
+    },
   },
 });
 
-export const { setActiveZone } = uiSlice.actions;
+export const { setActiveZone, setActiveRouteName } = uiSlice.actions;
 export default uiSlice.reducer;

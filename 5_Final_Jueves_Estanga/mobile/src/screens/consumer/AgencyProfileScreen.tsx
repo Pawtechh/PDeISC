@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Linking,
   Platform,
+  Share,
   useWindowDimensions,
   ScrollView,
 } from 'react-native';
@@ -19,6 +20,8 @@ import {
   Waves,
   ArrowLeft,
   Store,
+  Share2,
+  Check,
 } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, EmptyState } from '../../components/ui';
 import { radii, spacing } from '../../theme';
@@ -30,6 +33,7 @@ import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { BoardCard } from '../../components/boards/BoardCard';
 import { useResponsive } from '../../hooks/useResponsive';
 import { sensorService } from '../../services/sensorService';
+import { buildPublicShareUrl } from '../../utils/deepLinks';
 
 export interface AgencyProfileScreenProps {
   agencyIdOrSlug: string;
@@ -45,6 +49,7 @@ export const AgencyProfileScreen: React.FC<AgencyProfileScreenProps> = ({
   const { theme, isDark } = useTheme();
   const { numColumns } = useResponsive();
   const { width } = useWindowDimensions();
+  const [copiedLink, setCopiedLink] = useState(false);
 
   const { data, isLoading, isError, refetch } = useGetAgencyProfileQuery(agencyIdOrSlug, {
     skip: !agencyIdOrSlug,
@@ -116,6 +121,28 @@ export const AgencyProfileScreen: React.FC<AgencyProfileScreenProps> = ({
     );
   };
 
+  const handleShareAgency = async () => {
+    const shareUrl = buildPublicShareUrl('local', agency.slug || agency.id);
+    if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2200);
+        return;
+      } catch {
+        // Fallback abajo si el permiso de clipboard está bloqueado
+      }
+    }
+    try {
+      await Share.share({
+        message: `Mirá el quiver de ${agency.nombre} en Surf Rental: ${shareUrl}`,
+        url: shareUrl,
+      });
+    } catch {
+      // Cancelado por usuario
+    }
+  };
+
   return (
     <Screen safeBottom={false} atmosphericGradient={false} backgroundColor={theme.background} style={{ flex: 1 }}>
       <ScrollView
@@ -127,8 +154,8 @@ export const AgencyProfileScreen: React.FC<AgencyProfileScreenProps> = ({
         showsVerticalScrollIndicator={false}
       >
         <Stack spacing="lg">
-          {onClose && (
-            <Row justify="space-between" align="center">
+          <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
+            {onClose ? (
               <TouchableOpacity
                 onPress={onClose}
                 activeOpacity={0.8}
@@ -145,14 +172,43 @@ export const AgencyProfileScreen: React.FC<AgencyProfileScreenProps> = ({
                   Volver al Catálogo
                 </Text>
               </TouchableOpacity>
+            ) : (
+              <View />
+            )}
+            <Row spacing="xs" align="center" style={{ flexWrap: 'wrap' }}>
               {agency.zone && (
                 <Badge
                   label={`${agency.zone.ciudad.toUpperCase()} • ${agency.zone.nombre.toUpperCase()}`}
                   variant="ocean"
                 />
               )}
+              <TouchableOpacity
+                onPress={handleShareAgency}
+                activeOpacity={0.82}
+                style={[
+                  styles.backBtn,
+                  {
+                    backgroundColor: copiedLink ? theme.successBg : theme.surfaceElevated,
+                    borderColor: copiedLink ? theme.successBorder : theme.border,
+                  },
+                ]}
+                testID="btn-share-agency-link"
+              >
+                {copiedLink ? (
+                  <Check size={14} color={theme.successText} />
+                ) : (
+                  <Share2 size={14} color={theme.primary} />
+                )}
+                <Text
+                  variant="caption"
+                  color={copiedLink ? theme.successText : theme.primary}
+                  style={{ fontWeight: '700' }}
+                >
+                  {copiedLink ? '¡Link copiado!' : 'Compartir link'}
+                </Text>
+              </TouchableOpacity>
             </Row>
-          )}
+          </Row>
 
           {/* Storefront Header Banner */}
           <Card

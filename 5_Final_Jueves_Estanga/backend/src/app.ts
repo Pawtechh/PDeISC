@@ -9,6 +9,7 @@ import { swaggerSpec } from './docs/swagger';
 import { errorHandler } from './middlewares/errorHandler';
 import { sanitizeInputs } from './middlewares/sanitize';
 import { validateUploadedFiles } from './middlewares/fileValidator';
+import { getActiveStorageProvider } from './utils/fileStorage';
 import { logger } from './utils/logger';
 
 import authRoutes from './modules/auth/auth.routes';
@@ -212,6 +213,7 @@ export const createApp = (): Application => {
     res.status(statusCode).json({
       status: database === 'ok' ? 'ok' : 'degraded',
       database,
+      storage: getActiveStorageProvider(),
       timestamp: new Date().toISOString(),
       service: 'surf-rental-backend',
     });

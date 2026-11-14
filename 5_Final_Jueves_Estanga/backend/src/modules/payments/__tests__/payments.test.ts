@@ -144,7 +144,55 @@ describe('Payments Module Tests (MP6 MercadoPago Checkout, Pre-Auth & Webhook Id
       expect(res.body.data.preferenceId).toBe('pref-mock-12345');
       expect(res.body.data.initPoint).toContain('mercadopago.com.ar');
       expect(res.body.data.currency).toBe('ARS');
+      expect(res.body.data.splitBreakdown).toMatchObject({
+        grossArs: 18000,
+        platformFeePct: 5,
+      });
       expect(prisma.payment.create).toHaveBeenCalled();
+    });
+
+    it('debe incluir marketplace_fee cuando la agencia tiene mpCollectorId configurado', async () => {
+      (prisma.rental.findUnique as jest.Mock).mockResolvedValue({
+        ...mockRental,
+        agency: {
+          id: 'agency-pro-1',
+          nombre: 'Shop Pro Split',
+          comisionPorcentaje: 3,
+          mpCollectorId: 'MP-COLL-9988',
+        },
+      });
+      (prisma.payment.create as jest.Mock).mockResolvedValue({
+        id: 'pay-split-1',
+        rentalId: mockRental.id,
+        mpPreferenceId: 'pref-mock-12345',
+        monto: 18000,
+        estado: 'PENDIENTE',
+      });
+
+      const res = await request(app)
+        .post('/api/payments/preference')
+        .set('Authorization', `Bearer ${consumerToken}`)
+        .send({
+          rentalId: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
+          installments: 1,
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.splitBreakdown).toMatchObject({
+        grossArs: 18000,
+        platformFeePct: 3,
+        platformFeeArs: 540,
+        agencyNetArs: 17460,
+        mpCollectorId: 'MP-COLL-9988',
+        mode: 'mercadopago_marketplace_split',
+      });
+      expect(mpPreference.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          body: expect.objectContaining({
+            marketplace_fee: 540,
+          }),
+        })
+      );
     });
   });
 

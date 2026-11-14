@@ -26,6 +26,8 @@ export interface SurfboardCardProps {
   onPressDelete?: () => void;
   isOwnerView?: boolean;
   isFeatured?: boolean;
+  isCompared?: boolean;
+  onToggleCompare?: () => void;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
@@ -43,6 +45,8 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
   onPressDelete,
   isOwnerView = false,
   isFeatured = false,
+  isCompared = false,
+  onToggleCompare,
   style,
   testID,
 }) => {
@@ -325,27 +329,57 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
               <Text style={[styles.priceUnit, { color: theme.muted }]}> / hr</Text>
             </View>
 
-            <TouchableOpacity
-              activeOpacity={0.88}
-              onPress={(e) => {
-                e.stopPropagation();
-                handleReservePress();
-              }}
-              style={[styles.reserveBtnWrapper, { shadowColor: theme.primary }]}
-              {...(Platform.OS === 'web'
-                ? ({ dataSet: { surfReserve: 'true', luxuryBtn: 'primary' } } as any)
-                : {})}
-              testID={`board-3d-reserve-${board.id}`}
-            >
-              <LinearGradient
-                colors={isDark ? ['#51CCD5', '#38BDC7', '#2499A3'] : ['#13828C', '#0E6B74', '#08444A']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.reserveBtnGradient}
+            <View style={styles.footerActions}>
+              {onToggleCompare && (
+                <TouchableOpacity
+                  activeOpacity={0.85}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    triggerHaptic();
+                    onToggleCompare();
+                  }}
+                  style={[
+                    styles.compareBtn,
+                    {
+                      backgroundColor: isCompared ? theme.primarySubtle : theme.surfaceElevated,
+                      borderColor: isCompared ? theme.primaryBorder : theme.border,
+                    },
+                  ]}
+                  testID={`btn-compare-${board.id}`}
+                >
+                  <Text
+                    style={[
+                      styles.compareBtnText,
+                      { color: isCompared ? (isDark ? theme.primaryHover : theme.primary) : theme.subtext },
+                    ]}
+                  >
+                    {isCompared ? '✓ Comparando' : 'Comparar'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              <TouchableOpacity
+                activeOpacity={0.88}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  handleReservePress();
+                }}
+                style={[styles.reserveBtnWrapper, { shadowColor: theme.primary }]}
+                {...(Platform.OS === 'web'
+                  ? ({ dataSet: { surfReserve: 'true', luxuryBtn: 'primary' } } as any)
+                  : {})}
+                testID={`board-3d-reserve-${board.id}`}
               >
-                <Text style={[styles.reserveBtnText, { color: theme.primaryText }]}>Reservar</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+                <LinearGradient
+                  colors={isDark ? ['#51CCD5', '#38BDC7', '#2499A3'] : ['#13828C', '#0E6B74', '#08444A']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.reserveBtnGradient}
+                >
+                  <Text style={[styles.reserveBtnText, { color: theme.primaryText }]}>Reservar</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       </View>
@@ -521,6 +555,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0.8,
+  },
+  footerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  compareBtn: {
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  compareBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
   },
   ownerActionsRow: {
     flexDirection: 'row',

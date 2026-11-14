@@ -3,6 +3,7 @@ import { BoardStatus, Prisma, Role } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '../../config/prisma';
 import { BUSINESS } from '../../constants/business';
+import { resolvePlanCommission, SaasPlanTier } from '../../constants/saasPlans';
 import { AppError } from '../../middlewares/errorHandler';
 import {
   adminCreateAgencySchema,
@@ -131,6 +132,9 @@ export class AdminService {
         activeZones: zones.filter((z) => z.activa).length,
         totalAgencies: agencies.length,
         activeAgencies: agencies.filter((a) => a.activa).length,
+        pendingApprovalCount: agencies.filter(
+          (a) => !a.verificada || String(a.planEstado || '').includes('PENDIENTE')
+        ).length,
         totalUsers: users.length,
         agencyAccounts: users.filter((u) => u.role === 'AGENCIA').length,
         totalBoards: boards.length,
@@ -253,6 +257,12 @@ export class AdminService {
 
     const passwordHash = email && password ? await bcrypt.hash(password, 12) : undefined;
 
+    const planTier = input.planTier as SaasPlanTier | undefined;
+    const resolvedCommission =
+      input.comisionPorcentaje ?? (planTier ? resolvePlanCommission(planTier) : 5);
+    const resolvedPlanEstado =
+      input.planEstado || (planTier ? `${planTier}_ACTIVA` : 'ACTIVA');
+
     const result = await prisma.$transaction(async (tx) => {
       const agency = await tx.agency.create({
         data: {
@@ -265,8 +275,12 @@ export class AdminService {
           whatsapp: input.whatsapp?.trim() || null,
           horario: input.horario?.trim() || 'Todos los días 08:00 a 20:00',
           accentColor: input.accentColor || '#0E6B74',
-          comisionPorcentaje: new Prisma.Decimal(input.comisionPorcentaje ?? 5),
+          latitud: input.latitud ?? zone.latitud,
+          longitud: input.longitud ?? zone.longitud,
+          comisionPorcentaje: new Prisma.Decimal(resolvedCommission),
           multaSalitreArs: new Prisma.Decimal(input.multaSalitreArs ?? 10000),
+          mpCollectorId: input.mpCollectorId?.trim() || null,
+          planEstado: resolvedPlanEstado,
           zoneId: zone.id,
           verificada: input.verificada ?? true,
           activa: input.activa ?? true,
@@ -326,6 +340,20 @@ export class AdminService {
       }
     }
 
+    const resolvedCommissionUpdate =
+      input.comisionPorcentaje !== undefined
+        ? input.comisionPorcentaje
+        : input.planTier
+        ? resolvePlanCommission(input.planTier as SaasPlanTier)
+        : undefined;
+
+    const resolvedPlanEstadoUpdate =
+      input.planEstado !== undefined
+        ? input.planEstado
+        : input.planTier
+        ? `${input.planTier}_ACTIVA`
+        : undefined;
+
     const updated = await prisma.agency.update({
       where: { id },
       data: {
@@ -335,9 +363,13 @@ export class AdminService {
         whatsapp: input.whatsapp !== undefined ? input.whatsapp?.trim() || null : undefined,
         horario: input.horario !== undefined ? input.horario?.trim() || '08:00 a 20:00 hs' : undefined,
         accentColor: input.accentColor,
+        latitud: input.latitud,
+        longitud: input.longitud,
+        mpCollectorId: input.mpCollectorId !== undefined ? input.mpCollectorId?.trim() || null : undefined,
+        planEstado: resolvedPlanEstadoUpdate,
         comisionPorcentaje:
-          input.comisionPorcentaje !== undefined
-            ? new Prisma.Decimal(input.comisionPorcentaje)
+          resolvedCommissionUpdate !== undefined
+            ? new Prisma.Decimal(resolvedCommissionUpdate)
             : undefined,
         multaSalitreArs:
           input.multaSalitreArs !== undefined

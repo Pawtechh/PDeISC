@@ -6,6 +6,7 @@ import { prisma } from '../../config/prisma';
 import { JWT_CONFIG } from '../../config/jwt';
 import { AppError } from '../../middlewares/errorHandler';
 import { saveImageAsset } from '../../utils/fileStorage';
+import { resolvePlanCommission, SaasPlanTier } from '../../constants/saasPlans';
 import { RegisterAgencyInput, UpdateMyAgencyInput } from './agencies.schemas';
 
 const toSlug = (text: string): string =>
@@ -79,25 +80,56 @@ export class AgenciesService {
             nombre: true,
             accentColor: true,
             verificada: true,
+            latitud: true,
+            longitud: true,
+            direccion: true,
+            _count: {
+              select: { boards: true },
+            },
+            boards: {
+              where: { estado: 'DISPONIBLE' },
+              orderBy: { precioHora: 'asc' },
+              take: 1,
+              select: { precioHora: true },
+            },
           },
-          take: 6,
+          take: 12,
         },
       },
     });
 
-    return zones.map((z) => ({
-      id: z.id,
-      slug: z.slug,
-      ciudad: z.ciudad,
-      nombre: z.nombre,
-      pais: z.pais,
-      latitud: z.latitud,
-      longitud: z.longitud,
-      timezone: z.timezone,
-      agencyCount: z._count.agencies,
-      boardCount: z._count.boards,
-      agenciesPreview: z.agencies,
-    }));
+    return zones.map((z) => {
+      const mappedAgencies = (z.agencies || []).map((ag: any, idx: number) => {
+        const minBoard = Array.isArray(ag.boards) && ag.boards[0] ? Number(ag.boards[0].precioHora) : null;
+        return {
+          id: ag.id,
+          slug: ag.slug,
+          nombre: ag.nombre,
+          accentColor: ag.accentColor,
+          verificada: ag.verificada,
+          direccion: ag.direccion,
+          latitud: typeof ag.latitud === 'number' ? ag.latitud : z.latitud + idx * 0.0018,
+          longitud: typeof ag.longitud === 'number' ? ag.longitud : z.longitud - idx * 0.0016,
+          boardCount: ag._count?.boards ?? 0,
+          minPriceArs: minBoard,
+        };
+      });
+      const prices = mappedAgencies.map((a) => a.minPriceArs).filter((p): p is number => typeof p === 'number');
+      return {
+        id: z.id,
+        slug: z.slug,
+        ciudad: z.ciudad,
+        nombre: z.nombre,
+        pais: z.pais,
+        latitud: z.latitud,
+        longitud: z.longitud,
+        timezone: z.timezone,
+        agencyCount: z._count.agencies,
+        boardCount: z._count.boards,
+        minPriceArs: prices.length ? Math.min(...prices) : null,
+        agenciesPreview: mappedAgencies,
+      };
+    });
   }
 
   /**
@@ -132,6 +164,12 @@ export class AgenciesService {
       orderBy: [{ verificada: 'desc' }, { createdAt: 'asc' }],
       include: {
         zone: true,
+        boards: {
+          where: { estado: 'DISPONIBLE' },
+          orderBy: { precioHora: 'asc' },
+          take: 1,
+          select: { precioHora: true },
+        },
         _count: {
           select: {
             boards: true,
@@ -141,13 +179,31 @@ export class AgenciesService {
       },
     });
 
-    return agencies.map((ag) => ({
-      ...ag,
-      comisionPorcentaje: Number(ag.comisionPorcentaje),
-      multaSalitreArs: Number(ag.multaSalitreArs),
-      boardCount: ag._count.boards,
-      rentalCount: ag._count.rentals,
-    }));
+    return agencies.map((ag: any, idx: number) => {
+      const minBoard = Array.isArray(ag.boards) && ag.boards[0] ? Number(ag.boards[0].precioHora) : null;
+      const { mpCollectorId, boards: _boards, ...publicAg } = ag;
+      return {
+        ...publicAg,
+        latitud:
+          typeof ag.latitud === 'number'
+            ? ag.latitud
+            : typeof ag.zone?.latitud === 'number'
+            ? ag.zone.latitud + idx * 0.0018
+            : null,
+        longitud:
+          typeof ag.longitud === 'number'
+            ? ag.longitud
+            : typeof ag.zone?.longitud === 'number'
+            ? ag.zone.longitud - idx * 0.0016
+            : null,
+        comisionPorcentaje: Number(ag.comisionPorcentaje),
+        multaSalitreArs: Number(ag.multaSalitreArs),
+        mpSplitConfigured: Boolean(mpCollectorId),
+        minPriceArs: minBoard,
+        boardCount: ag._count.boards,
+        rentalCount: ag._count.rentals,
+      };
+    });
   }
 
   /**
@@ -243,24 +299,31 @@ export class AgenciesService {
   async registerAgency(input: RegisterAgencyInput, authenticatedUserId?: string) {
     // 1. Validar zona: existente o creación dinámica de zona/ciudad costera
     let zoneId = input.zoneId?.trim() || '';
+    let resolvedLat = input.latitud ?? -38.0278;
+    let resolvedLon = input.longitud ?? -57.5306;
+
     if (zoneId) {
       const existingZone = await prisma.zone.findUnique({ where: { id: zoneId } });
       if (!existingZone) {
         throw new AppError('ZONE_NOT_FOUND', 'La zona seleccionada no existe.', 404);
       }
+      if (input.latitud === undefined) resolvedLat = existingZone.latitud;
+      if (input.longitud === undefined) resolvedLon = existingZone.longitud;
     } else if (input.ciudad && input.nombreZona) {
       const zoneSlug = toSlug(`${input.ciudad}-${input.nombreZona}`);
       const existingBySlug = await prisma.zone.findUnique({ where: { slug: zoneSlug } });
       if (existingBySlug) {
         zoneId = existingBySlug.id;
+        if (input.latitud === undefined) resolvedLat = existingBySlug.latitud;
+        if (input.longitud === undefined) resolvedLon = existingBySlug.longitud;
       } else {
         const createdZone = await prisma.zone.create({
           data: {
             slug: zoneSlug,
             ciudad: input.ciudad.trim(),
             nombre: input.nombreZona.trim(),
-            latitud: input.latitud ?? -38.0278,
-            longitud: input.longitud ?? -57.5306,
+            latitud: resolvedLat,
+            longitud: resolvedLon,
             activa: true,
           },
         });
@@ -272,7 +335,12 @@ export class AgenciesService {
         throw new AppError('ZONE_REQUIRED', 'Debés seleccionar una ciudad o zona costera.', 400);
       }
       zoneId = fallbackZone.id;
+      if (input.latitud === undefined) resolvedLat = fallbackZone.latitud;
+      if (input.longitud === undefined) resolvedLon = fallbackZone.longitud;
     }
+
+    const planTier = (input.planTier || 'STARTER') as SaasPlanTier;
+    const planCommission = input.comisionPorcentaje ?? resolvePlanCommission(planTier);
 
     // 2. Resolver slug único de la agencia
     const baseSlug = toSlug(input.nombre);
@@ -348,11 +416,14 @@ export class AgenciesService {
           direccion: input.direccion.trim(),
           whatsapp: input.whatsapp?.trim() || null,
           horario: input.horario?.trim() || 'Todos los días 08:00 a 20:00',
+          latitud: resolvedLat,
+          longitud: resolvedLon,
           multaSalitreArs: new Prisma.Decimal(input.multaSalitreArs ?? 10000),
-          comisionPorcentaje: new Prisma.Decimal(input.comisionPorcentaje ?? 5),
+          comisionPorcentaje: new Prisma.Decimal(planCommission),
           mpCollectorId: input.mpCollectorId?.trim() || null,
+          planEstado: `${planTier}_PENDIENTE`,
           zoneId,
-          verificada: true,
+          verificada: false,
           activa: true,
         },
         include: { zone: true },
@@ -483,6 +554,8 @@ export class AgenciesService {
             : undefined,
         mpCollectorId:
           input.mpCollectorId !== undefined ? input.mpCollectorId?.trim() || null : undefined,
+        latitud: input.latitud !== undefined ? input.latitud : undefined,
+        longitud: input.longitud !== undefined ? input.longitud : undefined,
         zoneId: input.zoneId || undefined,
       },
       include: { zone: true },

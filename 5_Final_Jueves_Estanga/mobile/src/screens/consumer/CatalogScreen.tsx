@@ -1,17 +1,31 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal, RefreshControl, Platform } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal, RefreshControl, Platform, Share, useWindowDimensions } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Star, Search, LayoutGrid, Award, Shield, Clock, Waves } from 'lucide-react-native';
+import {
+  Star,
+  Search,
+  LayoutGrid,
+  Award,
+  Shield,
+  Clock,
+  Waves,
+  Scale,
+  Share2,
+  Check,
+  PlusCircle,
+} from 'lucide-react-native';
 import { safeHaptic } from '../../utils/haptics';
-import { Screen, Stack, Row, Text, Input, Badge, Button, EmptyState, GlassCard, Card } from '../../components/ui';
+import { Screen, Stack, Row, Text, Input, Badge, Button, EmptyState, GlassCard, Card, CatalogSkeletonGrid } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useGetBoardsQuery, Board } from '../../api/boardsApi';
 import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { BoardCard } from '../../components/boards/BoardCard';
 import { Board3DCarousel } from '../../components/boards/Board3DCarousel';
+import { QuiverCompareModal } from '../../components/boards/QuiverCompareModal';
+import { RegisterAgencyModal } from '../../components/agencies/RegisterAgencyModal';
 import { BoardDetailScreen } from './BoardDetailScreen';
 import { useResponsive } from '../../hooks/useResponsive';
 import { MarineForecastCard } from '../../components/marine/MarineForecastCard';
@@ -24,6 +38,7 @@ import { getContrastInk } from '../../theme/ThemeContext';
 import { useAppSelector, useAppDispatch } from '../../store';
 import { setGuestMode } from '../../store/slices/authSlice';
 import { setActiveZone } from '../../store/slices/uiSlice';
+import { parseInitialWebRoute, syncWebPath, buildPublicShareUrl } from '../../utils/deepLinks';
 
 const FILTER_TYPES = ['Todos', 'Longboard', 'Fish', 'Funboard', 'Shortboard', 'Bodyboard', 'SUP'];
 
@@ -34,12 +49,27 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('Todos');
+  const initialWebRouteRef = useRef(parseInitialWebRoute());
+  const appliedInitialZoneRef = useRef(false);
+
   const [selectedZoneId, setSelectedZoneId] = useState<string>('');
-  const [selectedAgencySlug, setSelectedAgencySlug] = useState<string | null>(null);
+  const [selectedAgencySlug, setSelectedAgencySlug] = useState<string | null>(
+    () => initialWebRouteRef.current.agencySlug ?? null
+  );
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const { numColumns } = useResponsive();
+  const { width } = useWindowDimensions();
+  const isDesktopLayout = Platform.OS === 'web' && width >= 768;
   const catalogScrollRef = useRef<any>(null);
   const [mapSectionY, setMapSectionY] = useState(0);
+
+  // Comparador de Quiver (hasta 3 tablas lado a lado)
+  const [comparedMap, setComparedMap] = useState<Record<string, Board>>({});
+  const [showCompareModal, setShowCompareModal] = useState(false);
+
+  // Modal de auto-registro para guarderías / surf shops
+  const [showRegisterAgency, setShowRegisterAgency] = useState(false);
+  const [copiedSpotLink, setCopiedSpotLink] = useState(false);
 
   const triggerHaptic = useCallback(() => {
     safeHaptic.impact();
@@ -57,6 +87,27 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   );
 
   useEffect(() => {
+    if (!appliedInitialZoneRef.current && zones.length > 0 && initialWebRouteRef.current.zoneSlug) {
+      appliedInitialZoneRef.current = true;
+      const targetSlug = initialWebRouteRef.current.zoneSlug;
+      const matched = zones.find((z) => z.slug === targetSlug);
+      if (matched) {
+        setSelectedZoneId(matched.id);
+      }
+    }
+  }, [zones]);
+
+  useEffect(() => {
+    if (initialWebRouteRef.current.zoneSlug && !appliedInitialZoneRef.current) {
+      return;
+    }
+    syncWebPath({
+      zoneSlug: selectedZone?.slug ?? null,
+      agencySlug: selectedAgencySlug ?? null,
+    });
+  }, [selectedZone, selectedAgencySlug]);
+
+  useEffect(() => {
     dispatch(
       setActiveZone(
         selectedZone
@@ -72,6 +123,48 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
       )
     );
   }, [selectedZone, dispatch]);
+
+  const comparedBoards = useMemo(() => Object.values(comparedMap), [comparedMap]);
+
+  const toggleCompareBoard = useCallback((board: Board) => {
+    setComparedMap((prev) => {
+      if (prev[board.id]) {
+        const next = { ...prev };
+        delete next[board.id];
+        return next;
+      }
+      const existingKeys = Object.keys(prev);
+      const next = { ...prev };
+      if (existingKeys.length >= 3) {
+        delete next[existingKeys[0]];
+      }
+      next[board.id] = board;
+      return next;
+    });
+  }, []);
+
+  const handleShareSpot = async () => {
+    const slug = selectedZone?.slug || zones[0]?.slug || 'playa-grande';
+    const shareUrl = buildPublicShareUrl('spot', slug);
+    if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopiedSpotLink(true);
+        setTimeout(() => setCopiedSpotLink(false), 2200);
+        return;
+      } catch {
+        // Fallback below
+      }
+    }
+    try {
+      await Share.share({
+        message: `Mirá las tablas disponibles en ${selectedZone?.nombre || 'la costa'}: ${shareUrl}`,
+        url: shareUrl,
+      });
+    } catch {
+      // Cancelled
+    }
+  };
 
   const boardsQueryArgs = useMemo(() => {
     const params: { tipo?: string; zoneId?: string } = {};
@@ -126,11 +219,12 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   };
 
   return (
-    <Screen
-      atmosphericGradient={true}
-      scrollable
-      scrollRef={catalogScrollRef}
-      showScrollToTop={true}
+    <View style={{ flex: 1 }}>
+      <Screen
+        atmosphericGradient={true}
+        scrollable
+        scrollRef={catalogScrollRef}
+        showScrollToTop={true}
       refreshControl={
         <RefreshControl
           refreshing={isFetching}
@@ -238,10 +332,40 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                   EXPLORAR POR ZONA / CIUDAD
                 </Text>
               </Row>
-              <Row spacing="xs" align="center">
+              <Row spacing="xs" align="center" style={{ flexWrap: 'wrap' }}>
                 <Text variant="caption" color={theme.subtext}>
                   {selectedZone ? `${selectedZone.ciudad} (${selectedZone.boardCount} tablas)` : `${zones.length} zonas activas`}
                 </Text>
+                {selectedZone && (
+                  <RNPressable
+                    onPress={handleShareSpot}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 4,
+                      paddingHorizontal: 10,
+                      paddingVertical: 4,
+                      borderRadius: radii.full,
+                      backgroundColor: copiedSpotLink ? theme.successBg : theme.surfaceElevated,
+                      borderWidth: 1,
+                      borderColor: copiedSpotLink ? theme.successBorder : theme.border,
+                    }}
+                    testID="btn-share-zone-link"
+                  >
+                    {copiedSpotLink ? (
+                      <Check size={11} color={theme.successText} />
+                    ) : (
+                      <Share2 size={11} color={isDark ? theme.primaryHover : theme.primary} />
+                    )}
+                    <Text
+                      variant="caption"
+                      color={copiedSpotLink ? theme.successText : isDark ? theme.primaryHover : theme.primary}
+                      style={{ fontWeight: '700', fontSize: 11 }}
+                    >
+                      {copiedSpotLink ? '¡Copiado!' : 'Compartir Spot'}
+                    </Text>
+                  </RNPressable>
+                )}
                 <RNPressable
                   onPress={() => {
                     if (mapSectionY > 0) {
@@ -362,68 +486,94 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           </Stack>
         )}
 
-        {/* Agencies Directory in Selected Zone */}
-        {agencies.length > 0 && (
+        {/* Agencies Directory in Selected Zone + Self-Service CTA */}
+        {(agencies.length > 0 || zones.length > 0) && (
           <Stack spacing="xs" style={styles.zoneSection}>
-            <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
+            <Row justify="space-between" align="center" style={[styles.sectionHeaderRow, { flexWrap: 'wrap', gap: 8 }]}>
               <Row spacing="xs" align="center">
                 <AgencyStoreIcon size={15} color={theme.primary} />
                 <Text variant="label" color={theme.primary} style={styles.sectionTitle}>
                   AGENCIAS EN {selectedZone ? selectedZone.ciudad.toUpperCase() : 'LA COSTA'}
                 </Text>
+                <Text variant="caption" color={theme.subtext}>
+                  · {agencies.length} {agencies.length === 1 ? 'tienda' : 'tiendas'}
+                </Text>
               </Row>
-              <Text variant="caption" color={theme.subtext}>
-                {agencies.length} {agencies.length === 1 ? 'tienda' : 'tiendas'}
-              </Text>
+              <RNPressable
+                onPress={() => setShowRegisterAgency(true)}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 5,
+                  paddingHorizontal: 12,
+                  paddingVertical: 5,
+                  borderRadius: radii.full,
+                  backgroundColor: theme.primarySubtle,
+                  borderWidth: 1,
+                  borderColor: theme.primaryBorder,
+                }}
+                testID="btn-open-register-agency"
+              >
+                <PlusCircle size={13} color={isDark ? theme.primaryHover : theme.primary} />
+                <Text
+                  variant="caption"
+                  color={isDark ? theme.primaryHover : theme.primary}
+                  style={{ fontWeight: '800', fontSize: 11.5 }}
+                >
+                  Sumar Mi Guardería +
+                </Text>
+              </RNPressable>
             </Row>
-            <RNScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.agenciesScrollContent}
-            >
-              {agencies.map((ag) => {
-                const accent = ag.accentColor || theme.primary;
-                const ink = getContrastInk(accent);
-                return (
-                  <RNPressable
-                    key={ag.id}
-                    onPress={() => setSelectedAgencySlug(ag.slug || ag.id)}
-                    style={[
-                      styles.agencyCard,
-                      {
-                        backgroundColor: theme.surfaceElevated,
-                        borderColor: theme.border,
-                      },
-                    ]}
-                  >
-                    <View style={[styles.agencyAccentStripe, { backgroundColor: accent }]} />
-                    <Stack spacing="xs" style={{ padding: spacing.sm + 2 }}>
-                      <Row justify="space-between" align="center" spacing="xs">
-                        <Text variant="label" color={theme.text} numberOfLines={1} style={{ flex: 1, fontWeight: '800' }}>
-                          {ag.nombre}
+            {agencies.length > 0 && (
+              <RNScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.agenciesScrollContent}
+              >
+                {agencies.map((ag) => {
+                  const accent = ag.accentColor || theme.primary;
+                  const ink = getContrastInk(accent);
+                  return (
+                    <RNPressable
+                      key={ag.id}
+                      onPress={() => setSelectedAgencySlug(ag.slug || ag.id)}
+                      style={[
+                        styles.agencyCard,
+                        {
+                          backgroundColor: theme.surfaceElevated,
+                          borderColor: theme.border,
+                        },
+                      ]}
+                    >
+                      <View style={[styles.agencyAccentStripe, { backgroundColor: accent }]} />
+                      <Stack spacing="xs" style={{ padding: spacing.sm + 2 }}>
+                        <Row justify="space-between" align="center" spacing="xs">
+                          <Text variant="label" color={theme.text} numberOfLines={1} style={{ flex: 1, fontWeight: '800' }}>
+                            {ag.nombre}
+                          </Text>
+                          {ag.verificada && (
+                            <View style={[styles.agencyVerifiedDot, { backgroundColor: accent }]}>
+                              <AgencyCheckIcon size={11} color={ink} />
+                            </View>
+                          )}
+                        </Row>
+                        <Text variant="caption" color={theme.subtext} numberOfLines={1}>
+                          {ag.zone ? `${ag.zone.ciudad} · ${ag.zone.nombre}` : ag.direccion}
                         </Text>
-                        {ag.verificada && (
-                          <View style={[styles.agencyVerifiedDot, { backgroundColor: accent }]}>
-                            <AgencyCheckIcon size={11} color={ink} />
-                          </View>
-                        )}
-                      </Row>
-                      <Text variant="caption" color={theme.subtext} numberOfLines={1}>
-                        {ag.zone ? `${ag.zone.ciudad} · ${ag.zone.nombre}` : ag.direccion}
-                      </Text>
-                      <Row justify="space-between" align="center" style={{ marginTop: 2 }}>
-                        <Text variant="caption" color={theme.primary} style={{ fontWeight: '700' }}>
-                          {ag.boardCount ?? 0} {(ag.boardCount ?? 0) === 1 ? 'tabla' : 'tablas'}
-                        </Text>
-                        <Text variant="caption" color={theme.primary} style={{ fontWeight: '700' }}>
-                          Ver tienda →
-                        </Text>
-                      </Row>
-                    </Stack>
-                  </RNPressable>
-                );
-              })}
-            </RNScrollView>
+                        <Row justify="space-between" align="center" style={{ marginTop: 2 }}>
+                          <Text variant="caption" color={theme.primary} style={{ fontWeight: '700' }}>
+                            {ag.boardCount ?? 0} {(ag.boardCount ?? 0) === 1 ? 'tabla' : 'tablas'}
+                          </Text>
+                          <Text variant="caption" color={theme.primary} style={{ fontWeight: '700' }}>
+                            Ver tienda →
+                          </Text>
+                        </Row>
+                      </Stack>
+                    </RNPressable>
+                  );
+                })}
+              </RNScrollView>
+            )}
           </Stack>
         )}
 
@@ -590,11 +740,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
 
           {/* Cuadrícula de Tablas */}
           {isLoading && boardsList.length === 0 ? (
-            <View style={styles.loadingContainer}>
-              <Text variant="body" style={styles.loadingText}>
-                Cargando tablas desde la sede central...
-              </Text>
-            </View>
+            <CatalogSkeletonGrid numColumns={numColumns} count={numColumns >= 3 ? 6 : 4} />
           ) : isError && boardsList.length === 0 ? (
             <EmptyState
               title="Conectando con la sede central..."
@@ -633,6 +779,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                     onPressDetail={() => setSelectedBoard(board)}
                     onPressReserve={() => setSelectedBoard(board)}
                     onPressAgency={(slugOrId) => setSelectedAgencySlug(slugOrId)}
+                    isCompared={Boolean(comparedMap[board.id])}
+                    onToggleCompare={() => toggleCompareBoard(board)}
                   />
                 </View>
               ))}
@@ -660,6 +808,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
               latitude={selectedZone?.latitud ?? agencies[0]?.zone?.latitud}
               longitude={selectedZone?.longitud ?? agencies[0]?.zone?.longitud}
               badgeLabel={selectedZone ? `SPOT • ${selectedZone.ciudad.toUpperCase()}` : undefined}
+              agencies={agencies}
+              onSelectAgency={(slugOrId) => setSelectedAgencySlug(slugOrId)}
             />
           </View>
       </Stack>
@@ -722,7 +872,100 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           </View>
         )}
       </Modal>
-    </Screen>
+
+      {/* Quiver Side-by-Side Comparison Modal */}
+      <QuiverCompareModal
+        visible={showCompareModal}
+        boards={comparedBoards}
+        onClose={() => setShowCompareModal(false)}
+        onRemoveBoard={(boardId) =>
+          setComparedMap((prev) => {
+            const next = { ...prev };
+            delete next[boardId];
+            if (Object.keys(next).length === 0) {
+              setShowCompareModal(false);
+            }
+            return next;
+          })
+        }
+        onSelectReserve={(board) => {
+          setShowCompareModal(false);
+          setSelectedBoard(board);
+        }}
+      />
+
+      {/* Self-Service Guardería Registration Modal */}
+      <RegisterAgencyModal
+        visible={showRegisterAgency}
+        onClose={() => setShowRegisterAgency(false)}
+      />
+      </Screen>
+
+      {/* Floating Bottom Quiver Comparison Tray */}
+      {comparedBoards.length > 0 && (
+        <View
+          style={[
+            styles.compareTrayWrap,
+            {
+              bottom: isDesktopLayout ? 18 : 96,
+            },
+          ]}
+          pointerEvents="box-none"
+        >
+          <View
+            style={[
+              styles.compareTrayCard,
+              {
+                backgroundColor: isDark ? 'rgba(13, 21, 32, 0.96)' : 'rgba(255, 255, 255, 0.98)',
+                borderColor: theme.primaryBorder,
+                shadowColor: theme.primary,
+              },
+            ]}
+            testID="quiver-compare-tray"
+          >
+            <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 10 }}>
+              <Row spacing="sm" align="center" style={{ flex: 1 }}>
+                <View style={[styles.compareIconCircle, { backgroundColor: theme.primarySubtle }]}>
+                  <Scale size={16} color={isDark ? theme.primaryHover : theme.primary} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text variant="label" color={theme.text} style={{ fontWeight: '800' }}>
+                    Comparador de Quiver ({comparedBoards.length}/3)
+                  </Text>
+                  <Text variant="caption" color={theme.subtext} numberOfLines={1}>
+                    {comparedBoards.map((b) => b.titulo).join(' • ')}
+                  </Text>
+                </View>
+              </Row>
+
+              <Row spacing="xs" align="center">
+                <TouchableOpacity
+                  onPress={() => setComparedMap({})}
+                  style={[
+                    styles.compareClearBtn,
+                    { borderColor: theme.border, backgroundColor: theme.surfaceElevated },
+                  ]}
+                  testID="btn-clear-quiver-compare"
+                >
+                  <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700' }}>
+                    Limpiar
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setShowCompareModal(true)}
+                  style={[styles.compareOpenBtn, { backgroundColor: theme.primary }]}
+                  testID="btn-open-quiver-compare"
+                >
+                  <Text variant="caption" color={getContrastInk(theme.primary)} style={{ fontWeight: '800' }}>
+                    Comparar ({comparedBoards.length}) →
+                  </Text>
+                </TouchableOpacity>
+              </Row>
+            </Row>
+          </View>
+        </View>
+      )}
+    </View>
   );
 };
 
@@ -1020,5 +1263,42 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  compareTrayWrap: {
+    position: Platform.OS === 'web' ? ('fixed' as any) : 'absolute',
+    left: spacing.md,
+    right: spacing.md,
+    alignItems: 'center',
+    zIndex: 90,
+  },
+  compareTrayCard: {
+    width: '100%',
+    maxWidth: 680,
+    borderRadius: radii.xl,
+    borderWidth: 1.5,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm + 2,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.25,
+    shadowRadius: 24,
+    elevation: 14,
+  },
+  compareIconCircle: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  compareClearBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: radii.full,
+    borderWidth: 1,
+  },
+  compareOpenBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: radii.full,
   },
 });

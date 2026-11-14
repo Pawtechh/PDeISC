@@ -8,6 +8,11 @@ export interface ZoneAgencyPreview {
   nombre: string;
   accentColor?: string | null;
   verificada: boolean;
+  direccion?: string;
+  latitud?: number | null;
+  longitud?: number | null;
+  boardCount?: number;
+  minPriceArs?: number | null;
 }
 
 export interface ZoneSummary {
@@ -21,6 +26,7 @@ export interface ZoneSummary {
   timezone: string;
   agencyCount: number;
   boardCount: number;
+  minPriceArs?: number | null;
   agenciesPreview?: ZoneAgencyPreview[];
 }
 
@@ -35,9 +41,14 @@ export interface AgencySummary {
   direccion: string;
   whatsapp?: string | null;
   horario?: string | null;
+  latitud?: number | null;
+  longitud?: number | null;
   comisionPorcentaje: number;
   multaSalitreArs: number;
   mpCollectorId?: string | null;
+  mpSplitConfigured?: boolean;
+  planEstado?: string;
+  minPriceArs?: number | null;
   verificada: boolean;
   activa: boolean;
   zoneId: string;
@@ -69,6 +80,8 @@ export interface RegisterAgencyRequest {
   portadaUrl?: string;
   multaSalitreArs?: number;
   comisionPorcentaje?: number;
+  planTier?: 'STARTER' | 'PRO' | 'ENTERPRISE';
+  mpCollectorId?: string;
   zoneId?: string;
   ciudad?: string;
   nombreZona?: string;
@@ -98,6 +111,8 @@ export interface UpdateMyAgencyRequest {
   logoUrl?: string | null;
   portadaUrl?: string | null;
   multaSalitreArs?: number;
+  latitud?: number;
+  longitud?: number;
   mpCollectorId?: string | null;
   zoneId?: string;
 }
