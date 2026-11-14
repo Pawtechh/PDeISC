@@ -907,7 +907,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           style={[
             styles.compareTrayWrap,
             {
-              bottom: isDesktopLayout ? 18 : 96,
+              bottom: isDesktopLayout ? 104 : 88,
             },
           ]}
           pointerEvents="box-none"
@@ -916,7 +916,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
             style={[
               styles.compareTrayCard,
               {
-                backgroundColor: isDark ? 'rgba(13, 21, 32, 0.96)' : 'rgba(255, 255, 255, 0.98)',
+                backgroundColor: isDark ? 'rgba(35, 42, 46, 0.97)' : 'rgba(255, 255, 255, 0.98)',
                 borderColor: theme.primaryBorder,
                 shadowColor: theme.primary,
               },
