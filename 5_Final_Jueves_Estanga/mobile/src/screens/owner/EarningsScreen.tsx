@@ -117,7 +117,7 @@ export const EarningsScreen: React.FC = () => {
   };
 
   const cardSurfaceStyle = {
-    borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
+    borderColor: theme.border,
   };
 
   return (
@@ -155,15 +155,9 @@ export const EarningsScreen: React.FC = () => {
               styles.feedbackBanner,
               {
                 backgroundColor:
-                  payoutFeedback.type === 'success'
-                    ? isDark
-                      ? '#064E3B'
-                      : '#D1FAE5'
-                    : isDark
-                    ? '#450A0A'
-                    : '#FEE2E2',
+                  payoutFeedback.type === 'success' ? theme.successBg : theme.dangerBg,
                 borderColor:
-                  payoutFeedback.type === 'success' ? '#34D399' : '#F87171',
+                  payoutFeedback.type === 'success' ? theme.successBorder : theme.dangerBorder,
               },
             ]}
           >
@@ -171,13 +165,7 @@ export const EarningsScreen: React.FC = () => {
               <Text
                 variant="body"
                 color={
-                  payoutFeedback.type === 'success'
-                    ? isDark
-                      ? '#D1FAE5'
-                      : '#065F46'
-                    : isDark
-                    ? '#FECACA'
-                    : '#991B1B'
+                  payoutFeedback.type === 'success' ? theme.successText : theme.dangerText
                 }
                 style={{ flex: 1, fontWeight: '600' }}
               >
@@ -187,13 +175,7 @@ export const EarningsScreen: React.FC = () => {
                 <Text
                   variant="body"
                   color={
-                    payoutFeedback.type === 'success'
-                      ? isDark
-                        ? '#D1FAE5'
-                        : '#065F46'
-                      : isDark
-                      ? '#FECACA'
-                      : '#991B1B'
+                    payoutFeedback.type === 'success' ? theme.successText : theme.dangerText
                   }
                   style={{ fontWeight: '700', paddingLeft: spacing.sm }}
                 >
@@ -205,7 +187,7 @@ export const EarningsScreen: React.FC = () => {
         )}
 
         {isLoading && !earningsData ? (
-          <ActivityIndicator size="large" color="#FF5A36" />
+          <ActivityIndicator size="large" color={theme.primary} />
         ) : (
           <>
             {/* Card Principal: Saldo Disponible & Desglose 95% / 5% */}
@@ -214,7 +196,7 @@ export const EarningsScreen: React.FC = () => {
               style={[
                 styles.heroCard,
                 {
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                  borderColor: theme.border,
                 },
               ]}
             >
@@ -234,7 +216,7 @@ export const EarningsScreen: React.FC = () => {
                     <Text variant="caption" color={theme.subtext}>
                       TU GANANCIA ({resumen.porcentajeOwner ?? 95}%)
                     </Text>
-                    <Text variant="h3" color={isDark ? '#34D399' : colors.semantic.success}>
+                    <Text variant="h3" color={theme.success}>
                       ${resumen.gananciaOwner.toLocaleString('es-AR')}
                     </Text>
                   </View>
@@ -242,7 +224,7 @@ export const EarningsScreen: React.FC = () => {
                     <Text variant="caption" color={theme.subtext}>
                       TOTAL RETIRADO
                     </Text>
-                    <Text variant="h3" color={isDark ? '#FB923C' : colors.sunset[600]}>
+                    <Text variant="h3" color={theme.champagne}>
                       ${(resumen.totalRetirado || 0).toLocaleString('es-AR')}
                     </Text>
                   </View>
@@ -258,7 +240,7 @@ export const EarningsScreen: React.FC = () => {
                     <Text variant="caption" color={theme.subtext}>
                       FACTURACIÓN BRUTA
                     </Text>
-                    <Text variant="h3" color={isDark ? '#F5F5F7' : '#111115'}>
+                    <Text variant="h3" color={theme.text}>
                       ${resumen.totalBruto.toLocaleString('es-AR')}
                     </Text>
                   </View>
@@ -272,8 +254,8 @@ export const EarningsScreen: React.FC = () => {
               style={[
                 styles.subCard,
                 {
-                  backgroundColor: isDark ? 'rgba(16, 185, 129, 0.09)' : '#F0FDF4',
-                  borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#BBF7D0',
+                  backgroundColor: theme.successBg,
+                  borderColor: theme.successBorder,
                 },
               ]}
             >
@@ -281,7 +263,7 @@ export const EarningsScreen: React.FC = () => {
                 <Row justify="space-between" align="flex-start" spacing="xs">
                   <Text
                     variant="h3"
-                    color={isDark ? '#ECFDF5' : '#111115'}
+                    color={theme.text}
                     style={{ flex: 1, paddingRight: spacing.xs }}
                   >
                     Membresía Owner en Sede
@@ -295,28 +277,28 @@ export const EarningsScreen: React.FC = () => {
                     variant={suscripcion.estado === 'BONIFICADA_GRATIS' ? 'success' : 'ocean'}
                   />
                 </Row>
-                <Text variant="body" color={isDark ? '#D1FAE5' : colors.sand[900]}>
+                <Text variant="body" color={theme.successText}>
                   {suscripcion.descripcion}
                 </Text>
                 <Row justify="space-between" style={{ marginTop: spacing.xs }}>
-                  <Text variant="caption" color={isDark ? '#A7F3D0' : colors.sand[500]}>
+                  <Text variant="caption" color={theme.subtext}>
                     Costo mensual regular:
                   </Text>
                   <Text
                     variant="caption"
-                    color={isDark ? '#ECFDF5' : colors.sand[700]}
+                    color={theme.text}
                     style={{ fontWeight: '700' }}
                   >
                     $1.000 ARS / mes
                   </Text>
                 </Row>
                 <Row justify="space-between">
-                  <Text variant="caption" color={isDark ? '#A7F3D0' : colors.sand[500]}>
+                  <Text variant="caption" color={theme.subtext}>
                     Custodia y mostrador en Playa Grande:
                   </Text>
                   <Text
                     variant="caption"
-                    color={isDark ? '#6EE7B7' : colors.semantic.success}
+                    color={theme.successText}
                     style={{ fontWeight: '700' }}
                   >
                     Incluido 100%
@@ -380,7 +362,7 @@ export const EarningsScreen: React.FC = () => {
                         </Text>
                       </View>
                       <View style={{ alignItems: 'flex-end' }}>
-                        <Text variant="h3" color={isDark ? '#FB923C' : colors.sunset[600]}>
+                        <Text variant="h3" color={theme.champagne}>
                           -${payout.monto.toLocaleString('es-AR')}
                         </Text>
                         <Text variant="caption" color={theme.subtext}>
@@ -417,7 +399,7 @@ export const EarningsScreen: React.FC = () => {
                         </Text>
                       </View>
                       <View style={{ alignItems: 'flex-end' }}>
-                        <Text variant="h3" color={isDark ? '#34D399' : colors.semantic.success}>
+                        <Text variant="h3" color={theme.success}>
                           +${alq.gananciaOwner.toLocaleString('es-AR')}
                         </Text>
                         <Text variant="caption" color={theme.subtext}>
@@ -447,7 +429,7 @@ export const EarningsScreen: React.FC = () => {
                 Solicitar Liquidación
               </Text>
               <TouchableOpacity onPress={() => setShowPayoutModal(false)}>
-                <Text variant="body" color="#FF5A36">
+                <Text variant="body" color={isDark ? theme.primaryHover : theme.primary}>
                   Cerrar
                 </Text>
               </TouchableOpacity>
@@ -457,14 +439,14 @@ export const EarningsScreen: React.FC = () => {
               <Card
                 padding="sm"
                 style={{
-                  backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
-                  borderColor: '#F87171',
+                  backgroundColor: theme.dangerBg,
+                  borderColor: theme.dangerBorder,
                   borderWidth: 1,
                 }}
               >
                 <Text
                   variant="body"
-                  color={isDark ? '#FECACA' : '#991B1B'}
+                  color={theme.dangerText}
                   style={{ fontWeight: '600' }}
                 >
                   {modalError}
@@ -477,15 +459,15 @@ export const EarningsScreen: React.FC = () => {
               style={[
                 styles.balanceInfoCard,
                 {
-                  backgroundColor: isDark ? '#242834' : '#F5F5F7',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                  backgroundColor: theme.surfaceElevated,
+                  borderColor: theme.border,
                 },
               ]}
             >
               <Text variant="caption" color={theme.subtext}>
                 SALDO MÁXIMO RETIRABLE:
               </Text>
-              <Text variant="h2" color={isDark ? '#34D399' : colors.semantic.success}>
+              <Text variant="h2" color={theme.success}>
                 ${resumen.saldoDisponible.toLocaleString('es-AR')} ARS
               </Text>
             </Card>
@@ -498,8 +480,8 @@ export const EarningsScreen: React.FC = () => {
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDark ? '#242834' : colors.sand[50],
-                    borderColor: theme.border,
+                    backgroundColor: theme.inputBg,
+                    borderColor: theme.inputBorder,
                     color: theme.text,
                   },
                 ]}
@@ -510,7 +492,7 @@ export const EarningsScreen: React.FC = () => {
                   if (modalError) setModalError(null);
                 }}
                 placeholder="50000"
-                placeholderTextColor={colors.sand[500]}
+                placeholderTextColor={theme.muted}
               />
             </Stack>
 
@@ -522,8 +504,8 @@ export const EarningsScreen: React.FC = () => {
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDark ? '#242834' : colors.sand[50],
-                    borderColor: theme.border,
+                    backgroundColor: theme.inputBg,
+                    borderColor: theme.inputBorder,
                     color: theme.text,
                   },
                 ]}
@@ -533,7 +515,7 @@ export const EarningsScreen: React.FC = () => {
                   if (modalError) setModalError(null);
                 }}
                 placeholder="SURF.MDP.OWNER"
-                placeholderTextColor={colors.sand[500]}
+                placeholderTextColor={theme.muted}
                 autoCapitalize="characters"
               />
               <Text variant="caption" color={theme.subtext}>

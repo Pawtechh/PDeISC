@@ -12,7 +12,7 @@ export const ReadingProgressBar: React.FC<ReadingProgressBarProps> = ({
   progress = 0,
   visible = true,
 }) => {
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
 
   if (!visible) return null;
 
@@ -20,12 +20,12 @@ export const ReadingProgressBar: React.FC<ReadingProgressBarProps> = ({
   const widthPercent = `${(clampedProgress * 100).toFixed(1)}%`;
 
   const gradientColors = isDark
-    ? (['#FF5A36', '#FF8F6B', '#FBBF24'] as const)
-    : (['#E04320', '#FF5A36', '#3E8E87'] as const);
+    ? ([theme.primaryDeep, theme.primary, theme.champagne] as const)
+    : ([theme.primaryDeep, theme.primary, theme.champagne] as const);
 
   return (
     <View style={styles.container} pointerEvents="none">
-      <View style={[styles.bar, { width: widthPercent as any }]}>
+      <View style={[styles.bar, { width: widthPercent as any, shadowColor: theme.primary }]}>
         <LinearGradient
           colors={gradientColors}
           start={{ x: 0, y: 0 }}
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     height: '100%',
-    shadowColor: '#FF5A36',
+    shadowColor: '#E06343',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.45,
     shadowRadius: 3,

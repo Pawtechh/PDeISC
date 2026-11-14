@@ -130,7 +130,7 @@ export const MandatoryKycModal: React.FC = () => {
         style={[
           styles.overlay,
           {
-            backgroundColor: isDark ? 'rgba(5, 5, 7, 0.78)' : 'rgba(17, 17, 21, 0.36)',
+            backgroundColor: isDark ? 'rgba(20, 19, 17, 0.80)' : 'rgba(28, 27, 24, 0.38)',
             ...(Platform.OS === 'web'
               ? ({ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' } as any)
               : {}),
@@ -142,7 +142,7 @@ export const MandatoryKycModal: React.FC = () => {
             styles.card,
             {
               backgroundColor: theme.card,
-              borderColor: isDark ? 'rgba(255, 90, 54, 0.32)' : theme.border,
+              borderColor: isDark ? theme.primaryBorder : theme.border,
               ...(Platform.OS === 'web'
                 ? ({ backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)' } as any)
                 : {}),
@@ -154,7 +154,7 @@ export const MandatoryKycModal: React.FC = () => {
               {/* Encabezado */}
               <Row justify="space-between" align="center">
                 <Badge label="VERIFICACIÓN OBLIGATORIA" variant="warning" />
-                <ShieldAlert size={24} color="#D97706" />
+                <ShieldAlert size={24} color={theme.warning} />
               </Row>
 
               <Stack spacing="xs">
@@ -175,20 +175,20 @@ export const MandatoryKycModal: React.FC = () => {
                   style={[
                     styles.input,
                     {
-                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
-                      borderColor: dni && !isDniValid ? colors.semantic.danger : isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.09)',
+                      backgroundColor: theme.inputBg,
+                      borderColor: dni && !isDniValid ? theme.danger : theme.border,
                       color: theme.text,
                     },
                   ]}
                   value={dni}
                   onChangeText={(text) => setDni(text.replace(/\D/g, ''))}
                   placeholder="Ej. 42111222"
-                  placeholderTextColor={isDark ? '#71717A' : '#A1A1AA'}
+                  placeholderTextColor={theme.muted}
                   keyboardType="numeric"
                   maxLength={8}
                 />
                 {dni.length > 0 && !isDniValid && (
-                  <Text variant="caption" color={colors.semantic.danger}>
+                  <Text variant="caption" color={theme.dangerText}>
                     El DNI debe contener exactamente 7 u 8 números.
                   </Text>
                 )}
@@ -205,14 +205,14 @@ export const MandatoryKycModal: React.FC = () => {
                     style={[
                       styles.photoPreviewCard,
                       {
-                        backgroundColor: isDark ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.08)',
-                        borderColor: colors.semantic.success,
+                        backgroundColor: theme.successBg,
+                        borderColor: theme.successBorder,
                       },
                     ]}
                   >
                     <Row spacing="sm" align="center" style={{ marginBottom: spacing.xs }}>
-                      <CheckCircle2 size={18} color={colors.semantic.success} />
-                      <Text variant="caption" color={colors.semantic.success} style={{ fontWeight: '700' }}>
+                      <CheckCircle2 size={18} color={theme.success} />
+                      <Text variant="caption" color={theme.successText} style={{ fontWeight: '700' }}>
                         Foto de DNI cargada correctamente
                       </Text>
                     </Row>
@@ -226,12 +226,12 @@ export const MandatoryKycModal: React.FC = () => {
                     style={[
                       styles.photoPlaceholder,
                       {
-                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
-                        borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.09)',
+                        backgroundColor: theme.inputBg,
+                        borderColor: theme.border,
                       },
                     ]}
                   >
-                    <FileText size={32} color={isDark ? '#94A3B8' : '#64748B'} style={{ marginBottom: 8 }} />
+                    <FileText size={32} color={theme.subtext} style={{ marginBottom: 8 }} />
                     <Text variant="caption" color={theme.subtext} align="center" style={{ marginBottom: 12 }}>
                       Sube una foto clara de tu DNI o cédula de identidad
                     </Text>
@@ -256,7 +256,7 @@ export const MandatoryKycModal: React.FC = () => {
               {/* Mensaje de Error */}
               {errorMessage && (
                 <View style={styles.errorBox}>
-                  <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '600' }}>
+                  <Text variant="caption" color={theme.dangerText} style={{ fontWeight: '600' }}>
                     {errorMessage}
                   </Text>
                 </View>
@@ -270,17 +270,17 @@ export const MandatoryKycModal: React.FC = () => {
                 style={[
                   styles.submitButton,
                   {
-                    backgroundColor: canSubmit ? '#10B981' : isDark ? '#27272A' : '#E4E4E7',
+                    backgroundColor: canSubmit ? theme.success : theme.surfaceElevated,
                     opacity: canSubmit ? 1 : 0.65,
                   },
                 ]}
               >
                 {isLoading ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={isDark ? '#161513' : '#FDFCFA'} />
                 ) : (
                   <Row spacing="sm" align="center" justify="center">
-                    <CheckCircle2 size={18} color={canSubmit || isDark ? '#FFFFFF' : '#52525B'} />
-                    <Text style={[styles.submitButtonText, !canSubmit && !isDark && { color: '#52525B' }]}>Verificar y Activar Cuenta</Text>
+                    <CheckCircle2 size={18} color={canSubmit ? (isDark ? '#161513' : '#FDFCFA') : theme.subtext} />
+                    <Text style={[styles.submitButtonText, { color: canSubmit ? (isDark ? '#161513' : '#FDFCFA') : theme.subtext }]}>Verificar y Activar Cuenta</Text>
                   </Row>
                 )}
               </TouchableOpacity>
@@ -288,8 +288,8 @@ export const MandatoryKycModal: React.FC = () => {
               {/* Opción Salir / Cerrar Sesión */}
               <TouchableOpacity activeOpacity={0.7} onPress={handleLogout} style={styles.logoutRow}>
                 <Row spacing="xs" align="center" justify="center">
-                  <LogOut size={14} color={isDark ? '#94A3B8' : '#64748B'} />
-                  <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'}>
+                  <LogOut size={14} color={theme.subtext} />
+                  <Text variant="caption" color={theme.subtext}>
                     Cerrar sesión y verificar más tarde
                   </Text>
                 </Row>

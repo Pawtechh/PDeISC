@@ -50,12 +50,8 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
       style={[
         styles.container,
         {
-          borderColor: isSigned
-            ? colors.semantic.success
-            : isDark
-            ? 'rgba(255, 255, 255, 0.12)'
-            : 'rgba(0, 0, 0, 0.08)',
-          backgroundColor: isDark ? '#242834' : '#FFFFFF',
+          borderColor: isSigned ? theme.successBorder : theme.border,
+          backgroundColor: theme.surface,
         },
       ]}
     >
@@ -63,9 +59,9 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
         <Row justify="space-between" align="center">
           <Row spacing="xs" align="center">
             {useNativeBiometrics ? (
-              <Fingerprint size={18} color={isDark ? '#FF7A59' : '#E04320'} />
+              <Fingerprint size={18} color={isDark ? theme.primaryHover : theme.primary} />
             ) : (
-              <FileCheck2 size={18} color={isDark ? '#FF7A59' : '#E04320'} />
+              <FileCheck2 size={18} color={isDark ? theme.primaryHover : theme.primary} />
             )}
             <Text variant="h3" color={theme.text}>
               {useNativeBiometrics
@@ -78,10 +74,10 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
               styles.badge,
               {
                 backgroundColor: isSigned
-                  ? 'rgba(34, 197, 94, 0.15)'
+                  ? theme.successBg
                   : isDark
-                  ? 'rgba(245, 158, 11, 0.15)'
-                  : 'rgba(10, 102, 212, 0.12)',
+                  ? theme.warningBg
+                  : theme.infoBg,
               },
             ]}
           >
@@ -89,10 +85,10 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
               variant="caption"
               color={
                 isSigned
-                  ? colors.semantic.success
+                  ? theme.successText
                   : isDark
                   ? theme.champagne
-                  : '#E04320'
+                  : theme.infoText
               }
               style={styles.badgeText}
             >
@@ -108,11 +104,11 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
         </Text>
 
         {isSigned ? (
-          <View style={[styles.signedBox, { backgroundColor: isDark ? '#122018' : '#ECFDF5' }]}>
+          <View style={[styles.signedBox, { backgroundColor: theme.successBg, borderColor: theme.successBorder }]}>
             <Stack spacing="xs">
               <Row spacing="xs" align="center">
-                <ShieldCheck size={18} color={colors.semantic.success} />
-                <Text variant="body" color={colors.semantic.success} style={{ fontWeight: '700' }}>
+                <ShieldCheck size={18} color={theme.success} />
+                <Text variant="body" color={theme.successText} style={{ fontWeight: '700' }}>
                   {useNativeBiometrics
                     ? 'Identidad Biométrica Verificada con Éxito'
                     : 'Contrato Rubricado Digitalmente con Éxito'}
@@ -137,7 +133,7 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
             style={[
               styles.scanButton,
               {
-                backgroundColor: isDark ? theme.champagne : '#E04320',
+                backgroundColor: isDark ? theme.champagne : theme.primary,
               },
             ]}
             onPress={handlePressScan}
@@ -147,10 +143,10 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
             <Row spacing="sm" align="center" justify="center">
               {isAuthenticating ? (
                 <>
-                  <ActivityIndicator size="small" color={isDark ? '#0B0F17' : '#FFFFFF'} />
+                  <ActivityIndicator size="small" color={isDark ? '#161513' : '#FDFCFA'} />
                   <Text
                     variant="button"
-                    color={isDark ? '#0B0F17' : '#FFFFFF'}
+                    color={isDark ? '#161513' : '#FDFCFA'}
                     style={{ fontWeight: '700' }}
                   >
                     {useNativeBiometrics
@@ -161,13 +157,13 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
               ) : (
                 <>
                   {useNativeBiometrics ? (
-                    <Fingerprint size={18} color={isDark ? '#0B0F17' : '#FFFFFF'} />
+                    <Fingerprint size={18} color={isDark ? '#161513' : '#FDFCFA'} />
                   ) : (
-                    <FileCheck2 size={18} color={isDark ? '#0B0F17' : '#FFFFFF'} />
+                    <FileCheck2 size={18} color={isDark ? '#161513' : '#FDFCFA'} />
                   )}
                   <Text
                     variant="button"
-                    color={isDark ? '#0B0F17' : '#FFFFFF'}
+                    color={isDark ? '#161513' : '#FDFCFA'}
                     style={{ fontWeight: '700' }}
                   >
                     {useNativeBiometrics

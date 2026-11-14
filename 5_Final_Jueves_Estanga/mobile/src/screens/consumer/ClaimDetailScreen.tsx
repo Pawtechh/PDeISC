@@ -127,8 +127,8 @@ export const ClaimDetailScreen: React.FC = () => {
     return (
       <Screen>
         <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#FF5A36" />
-          <Text variant="body" color={colors.sand[500]}>
+          <ActivityIndicator size="large" color={theme.primary} />
+          <Text variant="body" color={theme.subtext}>
             Consultando registros de peritaje...
           </Text>
         </Stack>
@@ -176,10 +176,10 @@ export const ClaimDetailScreen: React.FC = () => {
         </Row>
 
         {/* ALERTA DE REGLA NO NEGOCIABLE: 24 HORAS */}
-        <Card padding="md" style={[styles.ruleCard, isDark && { backgroundColor: 'rgba(245, 158, 11, 0.12)', borderColor: 'rgba(245, 158, 11, 0.35)' }]}>
+        <Card padding="md" style={[styles.ruleCard, { backgroundColor: theme.warningBg, borderColor: theme.warningBorder }]}>
           <Stack spacing="xs">
             <Row justify="space-between" align="center">
-              <Text variant="caption" color={colors.sunset[600]} style={{ fontWeight: '700' }}>
+              <Text variant="caption" color={theme.warningText} style={{ fontWeight: '700' }}>
                 PLAZO PERENTORIO DE 24 HORAS
               </Text>
               <Badge
@@ -288,7 +288,7 @@ export const ClaimDetailScreen: React.FC = () => {
         onRequestClose={() => setShowDisputeModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <Card padding="lg" style={[styles.disputeCard, isDark && { backgroundColor: 'rgba(34, 38, 48, 0.96)', borderColor: 'rgba(255, 255, 255, 0.12)' }]}>
+          <Card padding="lg" style={[styles.disputeCard, { backgroundColor: theme.surface, borderColor: theme.border, borderWidth: 1 }]}>
             <Stack spacing="md">
               <Text variant="h2" color={theme.text}>
                 Presentar Descargo
@@ -298,7 +298,7 @@ export const ClaimDetailScreen: React.FC = () => {
               </Text>
 
               <TextInput
-                style={[styles.textArea, { backgroundColor: theme.inputBg, borderColor: theme.border, color: theme.text }]}
+                style={[styles.textArea, { backgroundColor: theme.inputBg, borderColor: theme.inputBorder, color: theme.text }]}
                 placeholderTextColor={theme.subtext}
                 multiline
                 numberOfLines={4}
@@ -333,9 +333,9 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   ruleCard: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: 'rgba(164, 112, 28, 0.10)',
     borderWidth: 1,
-    borderColor: '#FCD34D',
+    borderColor: 'rgba(164, 112, 28, 0.28)',
     borderRadius: radii.md,
   },
   amountCard: {
@@ -353,12 +353,12 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(28, 27, 24, 0.6)',
     justifyContent: 'center',
     padding: spacing.lg,
   },
   disputeCard: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.sand[50],
     borderRadius: radii.xl,
   },
   textArea: {

@@ -169,14 +169,14 @@ export const PointsScreen: React.FC = () => {
               width: 72,
               height: 72,
               borderRadius: 36,
-              backgroundColor: isDark ? 'rgba(251, 191, 36, 0.14)' : '#FEF3C7',
+              backgroundColor: theme.warningBg,
               borderWidth: 1,
-              borderColor: isDark ? 'rgba(251, 191, 36, 0.35)' : '#FDE68A',
+              borderColor: theme.warningBorder,
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Award size={34} color={isDark ? '#FBBF24' : '#D97706'} />
+            <Award size={34} color={theme.champagne} />
           </View>
           <Text variant="h1" color={theme.text} align="center">
             Club Surf MDP • Puntos
@@ -221,8 +221,8 @@ export const PointsScreen: React.FC = () => {
         <Row justify="space-between" align="center">
           <View>
             <Row spacing="xs" align="center">
-              <Award size={15} color="#F59E0B" />
-              <Text variant="caption" style={styles.eyebrowText}>
+              <Award size={15} color={theme.champagne} />
+              <Text variant="caption" style={[styles.eyebrowText, { color: theme.champagne }]}>
                 PROGRAMA DE FIDELIDAD • PLAYA GRANDE
               </Text>
             </Row>
@@ -243,45 +243,45 @@ export const PointsScreen: React.FC = () => {
           <Card
             padding="md"
             style={{
-              backgroundColor: isDark ? 'rgba(6, 78, 59, 0.45)' : '#D1FAE5',
-              borderColor: '#34D399',
+              backgroundColor: theme.successBg,
+              borderColor: theme.successBorder,
               borderWidth: 1,
             }}
           >
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                <CheckCircle2 size={16} color={isDark ? '#34D399' : '#065F46'} />
+                <CheckCircle2 size={16} color={theme.success} />
                 <Text
                   variant="body"
-                  color={isDark ? '#D1FAE5' : '#065F46'}
+                  color={theme.successText}
                   style={{ flex: 1, fontWeight: '600' }}
                 >
                   {feedbackBanner}
                 </Text>
               </Row>
               <TouchableOpacity onPress={() => setFeedbackBanner(null)}>
-                <X size={18} color={isDark ? '#D1FAE5' : '#065F46'} />
+                <X size={18} color={theme.successText} />
               </TouchableOpacity>
             </Row>
           </Card>
         )}
 
         {loadingLoyalty ? (
-          <ActivityIndicator size="large" color="#FF5A36" />
+          <ActivityIndicator size="large" color={theme.primary} />
         ) : (
           <>
             {/* Card Principal: Puntos y Nivel de Rider */}
             <View style={[
               styles.heroCardWrapper,
               {
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.07)',
+                borderColor: theme.border,
               },
             ]}>
               <LinearGradient
                 colors={
                   isDark
-                    ? ['rgba(34, 38, 48, 0.94)', 'rgba(42, 34, 38, 0.94)', 'rgba(32, 36, 46, 0.92)']
-                    : ['#FFFFFF', '#FFF8F6', '#F5F5F7']
+                    ? ['rgba(45, 43, 40, 0.96)', 'rgba(54, 44, 38, 0.96)', 'rgba(42, 41, 38, 0.94)']
+                    : ['#FDFCFA', '#FAF3EE', '#EFEAE1']
                 }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -289,7 +289,7 @@ export const PointsScreen: React.FC = () => {
               >
                 <Stack spacing="md" align="center">
                   <Row spacing="xs" align="center">
-                    <Sparkles size={14} color="#F59E0B" />
+                    <Sparkles size={14} color={theme.champagne} />
                     <Badge
                       label={`RIDER ${loyalty?.nivel?.nombre?.toUpperCase() || 'PRINCIPIANTE'}`}
                       variant="warning"
@@ -297,7 +297,7 @@ export const PointsScreen: React.FC = () => {
                   </Row>
                   <Text
                     variant="display"
-                    color={isDark ? '#FF7A59' : '#FF5A36'}
+                    color={isDark ? theme.primaryHover : theme.primary}
                     style={{ fontSize: 44, fontWeight: '900' }}
                   >
                     {loyalty?.puntos ?? 0} pts
@@ -311,9 +311,9 @@ export const PointsScreen: React.FC = () => {
 
                   {/* Barra de Progreso al Siguiente Nivel */}
                   <View style={styles.progressContainer}>
-                    <View style={[styles.progressTrack, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : colors.sand[200] }]}>
+                    <View style={[styles.progressTrack, { backgroundColor: isDark ? 'rgba(245, 242, 236, 0.10)' : colors.sand[200] }]}>
                       <LinearGradient
-                        colors={['#FF5A36', '#F59E0B']}
+                        colors={[theme.primary, theme.champagne]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                         style={[
@@ -328,7 +328,7 @@ export const PointsScreen: React.FC = () => {
                       <Text variant="caption" color={theme.subtext}>
                         Nivel {loyalty?.nivel?.nivel || 1}
                       </Text>
-                      <Text variant="caption" color="#F59E0B" style={{ fontWeight: '700' }}>
+                      <Text variant="caption" color={theme.warningText} style={{ fontWeight: '700' }}>
                         Próximo: {loyalty?.nivel?.proximoNivelPuntos || 100} pts
                       </Text>
                     </Row>
@@ -343,19 +343,19 @@ export const PointsScreen: React.FC = () => {
               style={[
                 styles.expirationCard,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.07)',
+                  backgroundColor: theme.cardHighlight,
+                  borderColor: theme.border,
                 },
               ]}
             >
               <Row justify="space-between" align="center">
                 <Row spacing="sm" align="center" style={{ flex: 1 }}>
-                  <Clock size={18} color="#FF7A59" />
+                  <Clock size={18} color={isDark ? theme.primaryHover : theme.primary} />
                   <View style={{ flex: 1 }}>
-                    <Text variant="button" color={isDark ? '#F5F5F7' : '#111115'}>
+                    <Text variant="button" color={theme.text}>
                       Vigencia de Puntos (12 Meses)
                     </Text>
-                    <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[700]}>
+                    <Text variant="caption" color={theme.subtext}>
                       Tus puntos tienen una validez de 12 meses desde la última actividad.
                     </Text>
                   </View>
@@ -374,17 +374,17 @@ export const PointsScreen: React.FC = () => {
                 style={[
                   styles.sanctionCard,
                   {
-                    backgroundColor: isDark ? 'rgba(127, 29, 29, 0.3)' : '#FEF2F2',
-                    borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FECACA',
+                    backgroundColor: theme.dangerBg,
+                    borderColor: theme.dangerBorder,
                   },
                 ]}
               >
                 <Row justify="space-between" align="center">
                   <View style={{ flex: 1 }}>
-                    <Text variant="button" color={colors.semantic.danger}>
+                    <Text variant="button" color={theme.dangerText}>
                       Puntos de Sanción: {loyalty.puntosSancion} pts
                     </Text>
-                    <Text variant="caption" color={isDark ? '#FCA5A5' : colors.sand[700]}>
+                    <Text variant="caption" color={theme.dangerText}>
                       {loyalty.cuentaRestringida
                         ? 'Cuenta restringida por acumulación de sanciones (salitre/daños).'
                         : 'Evitá sanciones enjuagando siempre la tabla en mostrador de sede.'}
@@ -400,7 +400,7 @@ export const PointsScreen: React.FC = () => {
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center">
-                    <Calculator size={16} color="#FF7A59" />
+                    <Calculator size={16} color={isDark ? theme.primaryHover : theme.primary} />
                     <Text variant="h3" color={theme.text}>
                       Calculadora de Canje
                     </Text>
@@ -427,19 +427,15 @@ export const PointsScreen: React.FC = () => {
                           paddingVertical: 6,
                           borderRadius: radii.full,
                           backgroundColor: isSelected
-                            ? (isDark ? 'rgba(255, 90, 54, 0.22)' : '#FF5A36')
-                            : isDark
-                            ? 'rgba(34, 38, 48, 0.78)'
-                            : '#FFFFFF',
+                            ? (isDark ? theme.primarySubtle : theme.primary)
+                            : theme.surfaceElevated,
                           borderWidth: 1,
-                          borderColor: isSelected
-                            ? '#FF5A36'
-                            : (isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)'),
+                          borderColor: isSelected ? theme.primary : theme.border,
                         }}
                       >
                         <Text
                           variant="caption"
-                          color={isSelected ? '#FFFFFF' : theme.text}
+                          color={isSelected ? '#FDFCFA' : theme.text}
                           style={{ fontWeight: isSelected ? '700' : '500' }}
                         >
                           {preset} pts (${(parseInt(preset, 10) * 10).toLocaleString('es-AR')})
@@ -454,8 +450,8 @@ export const PointsScreen: React.FC = () => {
                     style={[
                       styles.input,
                       {
-                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : theme.inputBg,
-                        borderColor: calculatorError ? colors.semantic.danger : (isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border),
+                        backgroundColor: theme.inputBg,
+                        borderColor: calculatorError ? theme.danger : theme.border,
                         color: theme.text,
                       },
                     ]}
@@ -480,8 +476,8 @@ export const PointsScreen: React.FC = () => {
                 {calculatorError && (
                   <View
                     style={{
-                      backgroundColor: isDark ? 'rgba(127, 29, 29, 0.35)' : '#FEE2E2',
-                      borderColor: '#F87171',
+                      backgroundColor: theme.dangerBg,
+                      borderColor: theme.dangerBorder,
                       borderWidth: 1,
                       borderRadius: radii.sm,
                       padding: spacing.sm,
@@ -490,10 +486,10 @@ export const PointsScreen: React.FC = () => {
                       gap: 6,
                     }}
                   >
-                    <AlertCircle size={14} color={isDark ? '#FECACA' : '#991B1B'} />
+                    <AlertCircle size={14} color={theme.danger} />
                     <Text
                       variant="caption"
-                      color={isDark ? '#FECACA' : '#991B1B'}
+                      color={theme.dangerText}
                       style={{ fontWeight: '600', flex: 1 }}
                     >
                       {calculatorError}
@@ -507,17 +503,11 @@ export const PointsScreen: React.FC = () => {
                       styles.discountResult,
                       {
                         backgroundColor: calculatedDiscount.alcanzaSaldo
-                          ? isDark
-                            ? 'rgba(6, 78, 59, 0.4)'
-                            : '#F0FDF4'
-                          : isDark
-                          ? 'rgba(69, 26, 3, 0.45)'
-                          : '#FEF3C7',
+                          ? theme.successBg
+                          : theme.warningBg,
                         borderColor: calculatedDiscount.alcanzaSaldo
-                          ? isDark
-                            ? '#10B981'
-                            : '#BBF7D0'
-                          : '#F59E0B',
+                          ? theme.successBorder
+                          : theme.warningBorder,
                       },
                     ]}
                   >
@@ -526,24 +516,16 @@ export const PointsScreen: React.FC = () => {
                         size={15}
                         color={
                           calculatedDiscount.alcanzaSaldo
-                            ? isDark
-                              ? '#6EE7B7'
-                              : colors.semantic.success
-                            : isDark
-                            ? '#FDE68A'
-                            : '#92400E'
+                            ? theme.success
+                            : theme.warning
                         }
                       />
                       <Text
                         variant="body"
                         color={
                           calculatedDiscount.alcanzaSaldo
-                            ? isDark
-                              ? '#6EE7B7'
-                              : colors.semantic.success
-                            : isDark
-                            ? '#FDE68A'
-                            : '#92400E'
+                            ? theme.successText
+                            : theme.warningText
                         }
                         style={{ fontWeight: '700' }}
                       >
@@ -555,12 +537,8 @@ export const PointsScreen: React.FC = () => {
                       variant="caption"
                       color={
                         calculatedDiscount.alcanzaSaldo
-                          ? isDark
-                            ? '#D1FAE5'
-                            : colors.sand[700]
-                          : isDark
-                          ? '#FEF3C7'
-                          : '#78350F'
+                          ? theme.successText
+                          : theme.warningText
                       }
                       style={{ marginTop: 4 }}
                     >
@@ -610,7 +588,7 @@ export const PointsScreen: React.FC = () => {
             {/* Historial de Puntos */}
             <Stack spacing="sm">
               <Row spacing="xs" align="center">
-                <TrendingUp size={16} color="#F59E0B" />
+                <TrendingUp size={16} color={theme.warning} />
                 <Text variant="h2" color={theme.text}>
                   Historial de Actividad
                 </Text>
@@ -626,7 +604,7 @@ export const PointsScreen: React.FC = () => {
                         </Text>
                       </View>
                       <View style={{ alignItems: 'flex-end' }}>
-                        <Text variant="h3" color="#34D399">
+                        <Text variant="h3" color={theme.success}>
                           +{h.puntosGanados} pts
                         </Text>
                         {h.puntosUsados > 0 && (
@@ -669,7 +647,7 @@ export const PointsScreen: React.FC = () => {
             </Row>
 
             {selectedRental && (
-              <Card padding="md" style={[styles.modalBoardCard, { backgroundColor: isDark ? '#111824' : colors.sand[50], borderColor: theme.border }]}>
+              <Card padding="md" style={[styles.modalBoardCard, { backgroundColor: theme.surfaceElevated, borderColor: theme.border }]}>
                 <Text variant="h3" color={theme.text}>{selectedRental.board.titulo}</Text>
                 <Text variant="caption" color={theme.subtext}>
                   Alquiler completado en Sede Central • {selectedRental.horas} hs de uso
@@ -703,16 +681,16 @@ export const PointsScreen: React.FC = () => {
               <Card
                 padding="sm"
                 style={{
-                  backgroundColor: isDark ? 'rgba(127, 29, 29, 0.35)' : '#FEE2E2',
-                  borderColor: '#F87171',
+                  backgroundColor: theme.dangerBg,
+                  borderColor: theme.dangerBorder,
                   borderWidth: 1,
                 }}
               >
                 <Row spacing="xs" align="center">
-                  <AlertCircle size={15} color={isDark ? '#FECACA' : '#991B1B'} />
+                  <AlertCircle size={15} color={theme.danger} />
                   <Text
                     variant="body"
-                    color={isDark ? '#FECACA' : '#991B1B'}
+                    color={theme.dangerText}
                     style={{ fontWeight: '600' }}
                   >
                     {reviewModalError}
@@ -765,7 +743,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   eyebrowText: {
-    color: '#F59E0B',
+    color: colors.champagne[400],
     fontWeight: '800',
     letterSpacing: 1.5,
     fontSize: 10.5,
@@ -774,7 +752,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.35)',
+    borderColor: 'rgba(219, 168, 76, 0.32)',
   },
   heroGradient: {
     padding: spacing.xl,

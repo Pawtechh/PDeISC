@@ -196,7 +196,7 @@ export const AgencyDashboardScreen: React.FC = () => {
         <Stack spacing="xs">
           <Row justify="space-between" align="flex-start" style={{ flexWrap: 'wrap', gap: 6 }}>
             <View style={{ flex: 1, paddingRight: spacing.xs }}>
-              <Text variant="caption" style={styles.eyebrowText}>
+              <Text variant="caption" style={[styles.eyebrowText, { color: theme.champagne }]}>
                 CENTRO DE CONTROL OPERATIVO • MAR DEL PLATA
               </Text>
               <Text variant="h1" color={theme.text}>
@@ -214,8 +214,8 @@ export const AgencyDashboardScreen: React.FC = () => {
         <Row spacing="sm">
           <Card padding="md" style={styles.metricCard}>
             <Stack spacing="xs" align="center">
-              <Waves size={18} color="#FF7A59" />
-              <Text variant="h1" color={isDark ? '#F5F5F7' : '#111115'}>
+              <Waves size={18} color={isDark ? theme.primaryHover : theme.primary} />
+              <Text variant="h1" color={theme.text}>
                 {metrics.enElAguaCount}
               </Text>
               <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center', fontWeight: '600' }}>
@@ -226,8 +226,8 @@ export const AgencyDashboardScreen: React.FC = () => {
 
           <Card padding="md" style={styles.metricCard}>
             <Stack spacing="xs" align="center">
-              <CalendarCheck size={18} color="#F59E0B" />
-              <Text variant="h1" color={isDark ? '#FBBF24' : colors.sunset[500]}>
+              <CalendarCheck size={18} color={theme.warning} />
+              <Text variant="h1" color={theme.warningText}>
                 {metrics.reservasHoyCount}
               </Text>
               <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center', fontWeight: '600' }}>
@@ -247,25 +247,25 @@ export const AgencyDashboardScreen: React.FC = () => {
               style={[
                 styles.metricCard,
                 {
-                  borderColor: isDark ? 'rgba(255, 90, 54, 0.42)' : 'rgba(255, 90, 54, 0.35)',
+                  borderColor: theme.primaryBorder,
                   borderWidth: 1.5,
                 },
               ]}
             >
               <Stack spacing="xs" align="center">
-                <Percent size={18} color="#34D399" />
-                <Text variant="h1" color={isDark ? '#34D399' : colors.semantic.success}>
+                <Percent size={18} color={theme.success} />
+                <Text variant="h1" color={theme.success}>
                   {metrics.comisionAgenciaPorcentaje}%
                 </Text>
                 <Row spacing="xs" align="center">
                   <Text
                     variant="caption"
-                    color={isDark ? '#FF7A59' : '#E04320'}
+                    color={isDark ? theme.primaryHover : theme.primary}
                     style={{ textAlign: 'center', fontWeight: '700' }}
                   >
                     Comisión Sede
                   </Text>
-                  <Edit3 size={11} color={isDark ? '#FF7A59' : '#E04320'} />
+                  <Edit3 size={11} color={isDark ? theme.primaryHover : theme.primary} />
                 </Row>
               </Stack>
             </Card>
@@ -278,8 +278,8 @@ export const AgencyDashboardScreen: React.FC = () => {
           style={[
             styles.commissionCard,
             {
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+              backgroundColor: theme.surfaceElevated,
+              borderColor: theme.border,
             },
           ]}
         >
@@ -287,7 +287,7 @@ export const AgencyDashboardScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <View style={{ flex: 1, marginRight: spacing.sm }}>
                 <Row spacing="xs" align="center">
-                  <Sliders size={16} color="#FF7A59" />
+                  <Sliders size={16} color={isDark ? theme.primaryHover : theme.primary} />
                   <Text variant="h3" color={theme.text}>
                     Política de Retención de Sede
                   </Text>
@@ -317,18 +317,18 @@ export const AgencyDashboardScreen: React.FC = () => {
           style={[
             styles.washNoticeCard,
             {
-              backgroundColor: isDark ? 'rgba(127, 29, 29, 0.25)' : '#FEF2F2',
-              borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FECACA',
+              backgroundColor: theme.dangerBg,
+              borderColor: theme.dangerBorder,
             },
           ]}
         >
           <Stack spacing="xs">
             <Row justify="space-between" align="flex-start" style={{ flexWrap: 'wrap', gap: 6 }}>
               <Row spacing="xs" align="center" style={{ flex: 1, flexShrink: 1, paddingRight: spacing.xs }}>
-                <AlertTriangle size={16} color={isDark ? '#F87171' : colors.semantic.danger} />
+                <AlertTriangle size={16} color={theme.danger} />
                 <Text
                   variant="button"
-                  color={isDark ? '#FECACA' : colors.semantic.danger}
+                  color={theme.dangerText}
                   style={{ flex: 1 }}
                 >
                   Protocolo de Salitre ($10.000 ARS)
@@ -336,10 +336,10 @@ export const AgencyDashboardScreen: React.FC = () => {
               </Row>
               <Badge label={`${metrics.cantidadMultas} multas cobradas`} variant="danger" />
             </Row>
-            <Text variant="caption" color={isDark ? '#FCA5A5' : colors.sand[700]}>
+            <Text variant="caption" color={isDark ? theme.dangerText : theme.subtext}>
               El operador debe verificar que cada tabla sea enjuagada en las duchas de la sede con agua dulce antes de reingresar al inventario.
             </Text>
-            <Text variant="caption" color={isDark ? '#FECACA' : colors.sand[500]} style={{ fontWeight: '700' }}>
+            <Text variant="caption" color={theme.dangerText} style={{ fontWeight: '700' }}>
               Recaudación por multas este mes: ${metrics.totalMultasRecaudadas.toLocaleString('es-AR')} ARS
             </Text>
           </Stack>
@@ -349,7 +349,7 @@ export const AgencyDashboardScreen: React.FC = () => {
         <Stack spacing="sm">
           <Row justify="space-between" align="center">
             <Row spacing="xs" align="center">
-              <Clock size={16} color="#F59E0B" />
+              <Clock size={16} color={theme.warning} />
               <Text variant="h2" color={theme.text}>
                 Cronograma de Sede
               </Text>
@@ -358,7 +358,7 @@ export const AgencyDashboardScreen: React.FC = () => {
               title="Escanear QR"
               variant="primary"
               size="sm"
-              iconLeft={<QrCode size={14} color="#FFFFFF" />}
+              iconLeft={<QrCode size={14} color={theme.primaryText} />}
               onPress={() => setIsScanningQr(true)}
               testID="btn-dashboard-scan-qr"
             />
@@ -368,37 +368,15 @@ export const AgencyDashboardScreen: React.FC = () => {
             <Card
               padding="md"
               style={{
-                backgroundColor:
-                  qrBanner.type === 'success'
-                    ? isDark
-                      ? 'rgba(16, 185, 129, 0.12)'
-                      : '#ECFDF5'
-                    : isDark
-                    ? 'rgba(239, 68, 68, 0.14)'
-                    : '#FEF2F2',
-                borderColor:
-                  qrBanner.type === 'success'
-                    ? isDark
-                      ? 'rgba(16, 185, 129, 0.4)'
-                      : '#34D399'
-                    : isDark
-                    ? 'rgba(239, 68, 68, 0.45)'
-                    : '#F87171',
+                backgroundColor: qrBanner.type === 'success' ? theme.successBg : theme.dangerBg,
+                borderColor: qrBanner.type === 'success' ? theme.successBorder : theme.dangerBorder,
                 borderWidth: 1,
               }}
             >
               <Row justify="space-between" align="center">
                 <Text
                   variant="caption"
-                  color={
-                    qrBanner.type === 'success'
-                      ? isDark
-                        ? '#A7F3D0'
-                        : '#065F46'
-                      : isDark
-                      ? '#FCA5A5'
-                      : '#991B1B'
-                  }
+                  color={qrBanner.type === 'success' ? theme.successText : theme.dangerText}
                   style={{ flex: 1, fontWeight: '700' }}
                 >
                   {qrBanner.text}
@@ -455,7 +433,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                       )}
                     </Row>
                     {t.isEarly && (
-                      <Text variant="caption" color={isDark ? '#FBBF24' : '#B45309'} style={{ fontWeight: '600' }}>
+                      <Text variant="caption" color={theme.warningText} style={{ fontWeight: '600' }}>
                         Faltan {t.tiempoFaltanteStr} para el horario de retiro (se habilita 15 min antes).
                       </Text>
                     )}
@@ -521,20 +499,22 @@ export const AgencyDashboardScreen: React.FC = () => {
                     {
                       backgroundColor:
                         commissionFeedback.type === 'success'
-                          ? isDark
-                            ? '#064E3B'
-                            : '#ECFDF5'
-                          : isDark
-                          ? '#450A0A'
-                          : '#FEF2F2',
+                          ? theme.successBg
+                          : theme.dangerBg,
                       borderColor:
-                        commissionFeedback.type === 'success' ? '#10B981' : '#EF4444',
+                        commissionFeedback.type === 'success'
+                          ? theme.successBorder
+                          : theme.dangerBorder,
                     },
                   ]}
                 >
                   <Text
                     variant="caption"
-                    color={commissionFeedback.type === 'success' ? '#10B981' : '#EF4444'}
+                    color={
+                      commissionFeedback.type === 'success'
+                        ? theme.successText
+                        : theme.dangerText
+                    }
                     style={{ fontWeight: '600' }}
                   >
                     {commissionFeedback.message}
@@ -550,23 +530,23 @@ export const AgencyDashboardScreen: React.FC = () => {
                   style={[
                     styles.input,
                     {
-                      backgroundColor: isDark ? '#242834' : '#F4F4F5',
+                      backgroundColor: theme.inputBg,
                       color: theme.text,
-                      borderColor: theme.border,
+                      borderColor: theme.inputBorder,
                     },
                   ]}
                   value={newPercentage}
                   onChangeText={setNewPercentage}
                   keyboardType="numeric"
                   placeholder="Ej: 8"
-                  placeholderTextColor={theme.subtext}
+                  placeholderTextColor={theme.muted}
                   testID="input-commission-percent"
                 />
                 <Row justify="space-between" style={{ marginTop: 2 }}>
-                  <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'}>
+                  <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary}>
                     Agencia: {parsedNewPct}%
                   </Text>
-                  <Text variant="caption" color={isDark ? '#34D399' : colors.semantic.success}>
+                  <Text variant="caption" color={theme.success}>
                     Propietarios (Owners): {ownerResultPct}%
                   </Text>
                 </Row>
@@ -574,7 +554,7 @@ export const AgencyDashboardScreen: React.FC = () => {
 
               <Stack spacing="xs">
                 <Row spacing="xs" align="center">
-                  <Lock size={14} color="#F59E0B" />
+                  <Lock size={14} color={theme.warning} />
                   <Text variant="label" color={theme.text}>
                     Contraseña Especial de Autorización:
                   </Text>
@@ -583,16 +563,16 @@ export const AgencyDashboardScreen: React.FC = () => {
                   style={[
                     styles.input,
                     {
-                      backgroundColor: isDark ? '#242834' : '#F4F4F5',
+                      backgroundColor: theme.inputBg,
                       color: theme.text,
-                      borderColor: theme.border,
+                      borderColor: theme.inputBorder,
                     },
                   ]}
                   value={specialPassword}
                   onChangeText={setSpecialPassword}
                   secureTextEntry
                   placeholder="Ingresá la clave maestra (ej: surf2026)"
-                  placeholderTextColor={theme.subtext}
+                  placeholderTextColor={theme.muted}
                   testID="input-special-password"
                 />
                 <Text variant="caption" color={theme.subtext}>
@@ -633,7 +613,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   eyebrowText: {
-    color: '#F59E0B',
     fontWeight: '800',
     letterSpacing: 1.5,
     fontSize: 10.5,

@@ -71,14 +71,14 @@ export const ProfileScreen: React.FC = () => {
                   width: 72,
                   height: 72,
                   borderRadius: 36,
-                  backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.10)',
+                  backgroundColor: theme.primarySubtle,
                   borderWidth: 1,
-                  borderColor: isDark ? 'rgba(255, 90, 54, 0.28)' : 'rgba(255, 90, 54, 0.22)',
+                  borderColor: theme.primaryBorder,
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <Waves size={32} color={isDark ? '#FF7A59' : '#FF5A36'} />
+                <Waves size={32} color={isDark ? theme.primaryHover : theme.primary} />
               </View>
               <Badge label="MODO INVITADO • PLAYA GRANDE" variant="ocean" />
               <Text variant="h2" align="center" color={theme.text}>
@@ -514,12 +514,12 @@ export const ProfileScreen: React.FC = () => {
         <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 12 }}>
           <View>
             <Row spacing="xs" align="center">
-              <ShieldCheck size={14} color={isDark ? '#FF7A59' : '#E04320'} />
+              <ShieldCheck size={14} color={isDark ? theme.primaryHover : theme.primary} />
               <Text
                 variant="caption"
                 style={[
                   styles.eyebrowText,
-                  { color: isDark ? '#FF7A59' : '#E04320' },
+                  { color: isDark ? theme.primaryHover : theme.primary },
                 ]}
               >
                 CUENTA VERIFICADA • PLAYA GRANDE
@@ -599,14 +599,12 @@ export const ProfileScreen: React.FC = () => {
                 borderWidth: 1.5,
                 borderColor:
                   vendorStatus === 'APROBADO'
-                    ? colors.semantic.success
+                    ? theme.successBorder
                     : vendorStatus === 'PENDIENTE'
-                    ? colors.semantic.warning
+                    ? theme.warningBorder
                     : vendorStatus === 'RECHAZADO'
-                    ? colors.semantic.danger
-                    : isDark
-                    ? 'rgba(245, 158, 11, 0.4)'
-                    : 'rgba(255, 90, 54, 0.45)',
+                    ? theme.dangerBorder
+                    : theme.primaryBorder,
               }}
             >
               <Stack spacing="md">
@@ -618,7 +616,7 @@ export const ProfileScreen: React.FC = () => {
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
                     <Sparkles
                       size={18}
-                      color={isDark ? '#FF7A59' : '#E04320'}
+                      color={isDark ? theme.primaryHover : theme.primary}
                     />
                     <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                       Permiso de Publicación (Perfil de Vendedor)
@@ -643,16 +641,14 @@ export const ProfileScreen: React.FC = () => {
                     style={[
                       styles.statusNotice,
                       {
-                        backgroundColor: isDark
-                          ? 'rgba(16, 185, 129, 0.14)'
-                          : '#ECFDF5',
-                        borderColor: colors.semantic.success,
+                        backgroundColor: theme.successBg,
+                        borderColor: theme.successBorder,
                       },
                     ]}
                   >
                     <Text
                       variant="caption"
-                      color={colors.semantic.success}
+                      color={theme.successText}
                       style={{ fontWeight: '700' }}
                     >
                       {vendorSuccessMsg}
@@ -684,18 +680,16 @@ export const ProfileScreen: React.FC = () => {
                       style={[
                         styles.statusNotice,
                         {
-                          backgroundColor: isDark
-                            ? 'rgba(245, 158, 11, 0.12)'
-                            : '#FFFBEB',
-                          borderColor: colors.semantic.warning,
+                          backgroundColor: theme.warningBg,
+                          borderColor: theme.warningBorder,
                         },
                       ]}
                     >
                       <Row spacing="xs" align="center">
-                        <Clock size={15} color={colors.semantic.warning} />
+                        <Clock size={15} color={theme.warning} />
                         <Text
                           variant="caption"
-                          color={colors.semantic.warning}
+                          color={theme.warningText}
                           style={{ fontWeight: '700', flex: 1 }}
                         >
                           Tu solicitud está pendiente de aprobación por el operador de la
@@ -738,18 +732,16 @@ export const ProfileScreen: React.FC = () => {
                       style={[
                         styles.statusNotice,
                         {
-                          backgroundColor: isDark
-                            ? 'rgba(239, 68, 68, 0.12)'
-                            : '#FEF2F2',
-                          borderColor: colors.semantic.danger,
+                          backgroundColor: theme.dangerBg,
+                          borderColor: theme.dangerBorder,
                         },
                       ]}
                     >
                       <Row spacing="xs" align="center">
-                        <XCircle size={15} color={colors.semantic.danger} />
+                        <XCircle size={15} color={theme.danger} />
                         <Text
                           variant="caption"
-                          color={colors.semantic.danger}
+                          color={theme.dangerText}
                           style={{ fontWeight: '700', flex: 1 }}
                         >
                           Solicitud observada por la Agencia:{' '}
@@ -773,18 +765,16 @@ export const ProfileScreen: React.FC = () => {
                       style={[
                         styles.statusNotice,
                         {
-                          backgroundColor: isDark
-                            ? 'rgba(16, 185, 129, 0.12)'
-                            : '#ECFDF5',
-                          borderColor: colors.semantic.success,
+                          backgroundColor: theme.successBg,
+                          borderColor: theme.successBorder,
                         },
                       ]}
                     >
                       <Row spacing="xs" align="center">
-                        <CheckCircle2 size={15} color={colors.semantic.success} />
+                        <CheckCircle2 size={15} color={theme.success} />
                         <Text
                           variant="caption"
-                          color={colors.semantic.success}
+                          color={theme.successText}
                           style={{ fontWeight: '700', flex: 1 }}
                         >
                           Perfil de Vendedor verificado y habilitado por la Agencia. Las
@@ -844,7 +834,7 @@ export const ProfileScreen: React.FC = () => {
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
                     <Users
                       size={16}
-                      color={isDark ? '#FF7A59' : '#E04320'}
+                      color={isDark ? theme.primaryHover : theme.primary}
                     />
                     <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                       Cambiar Modo de Perfil (Usuario ↔ Vendedor)
@@ -890,9 +880,9 @@ export const ProfileScreen: React.FC = () => {
             <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
               <Row spacing="xs" align="center" style={{ flex: 1 }}>
                 {isDark ? (
-                  <Moon size={16} color="#FF7A59" />
+                  <Moon size={16} color={theme.primaryHover} />
                 ) : (
-                  <Sun size={16} color="#E04320" />
+                  <Sun size={16} color={theme.primary} />
                 )}
                 <Text variant="h3" color={theme.text}>
                   Tema de la Aplicación
@@ -914,7 +904,7 @@ export const ProfileScreen: React.FC = () => {
                 iconLeft={
                   <Sun
                     size={14}
-                    color={!isDark ? '#FFFFFF' : '#F5F5F7'}
+                    color={!isDark ? theme.primaryText : theme.text}
                   />
                 }
                 style={styles.flexBtn}
@@ -927,7 +917,7 @@ export const ProfileScreen: React.FC = () => {
                 iconLeft={
                   <Moon
                     size={14}
-                    color={isDark ? '#FFFFFF' : colors.sand[900]}
+                    color={isDark ? theme.primaryText : theme.text}
                   />
                 }
                 style={styles.flexBtn}
@@ -941,16 +931,16 @@ export const ProfileScreen: React.FC = () => {
         <Card
           padding="lg"
           style={{
-            borderColor: colors.semantic.danger,
+            borderColor: theme.dangerBorder,
             borderWidth: 1.5,
-            backgroundColor: isDark ? 'rgba(239, 68, 68, 0.08)' : '#FEF2F2',
+            backgroundColor: theme.dangerBg,
             marginTop: spacing.sm,
           }}
         >
           <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 12 }}>
             <Stack spacing="xs" style={{ flex: 1, minWidth: 200 }}>
               <Row spacing="xs" align="center">
-                <LogOut size={18} color={colors.semantic.danger} />
+                <LogOut size={18} color={theme.danger} />
                 <Text variant="h3" color={theme.text}>
                   Finalizar Sesión
                 </Text>
@@ -986,8 +976,8 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.vendorModalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
+                backgroundColor: theme.surface,
+                borderColor: theme.border,
               },
             ]}
           >
@@ -995,7 +985,7 @@ export const ProfileScreen: React.FC = () => {
               <Stack spacing="md">
                 <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 6 }}>
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                    <Briefcase size={18} color={isDark ? '#FF7A59' : '#E04320'} />
+                    <Briefcase size={18} color={isDark ? theme.primaryHover : theme.primary} />
                     <Text variant="h2" color={theme.text} style={{ flex: 1 }}>
                       Crear Perfil de Vendedor
                     </Text>
@@ -1037,18 +1027,16 @@ export const ProfileScreen: React.FC = () => {
                     {
                       borderColor:
                         fotosTablas.length > 0
-                          ? colors.semantic.success
-                          : isDark
-                          ? 'rgba(255, 255, 255, 0.12)'
-                          : 'rgba(0, 0, 0, 0.10)',
-                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
+                          ? theme.successBorder
+                          : theme.border,
+                      backgroundColor: theme.surfaceElevated,
                     },
                   ]}
                 >
                   <Stack spacing="sm">
                     <Row justify="space-between" align="center">
                       <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                        <Camera size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
+                        <Camera size={16} color={isDark ? theme.primaryHover : theme.primary} />
                         <Text
                           variant="caption"
                           color={theme.text}
@@ -1085,7 +1073,7 @@ export const ProfileScreen: React.FC = () => {
                         variant="secondary"
                         size="sm"
                         iconLeft={
-                          <Upload size={14} color={isDark ? '#F5F5F7' : '#111115'} />
+                          <Upload size={14} color={theme.text} />
                         }
                         onPress={handleUploadFromDevice}
                       />
@@ -1094,7 +1082,7 @@ export const ProfileScreen: React.FC = () => {
                         variant="ghost"
                         size="sm"
                         iconLeft={
-                          <Sparkles size={14} color={isDark ? '#FF7A59' : '#FF5A36'} />
+                          <Sparkles size={14} color={isDark ? theme.primaryHover : theme.primary} />
                         }
                         onPress={handleLoadDemoPhotos}
                       />
@@ -1115,7 +1103,7 @@ export const ProfileScreen: React.FC = () => {
                         size="sm"
                         variant="secondary"
                         iconLeft={
-                          <Plus size={14} color={isDark ? '#F5F5F7' : '#111115'} />
+                          <Plus size={14} color={theme.text} />
                         }
                         onPress={handleAddCustomPhoto}
                       />
@@ -1148,7 +1136,7 @@ export const ProfileScreen: React.FC = () => {
                     ) : (
                       <Text
                         variant="caption"
-                        color={colors.semantic.warning}
+                        color={theme.warningText}
                         style={{ textAlign: 'center', marginTop: 2 }}
                       >
                         Aún no subiste ninguna foto de tu tabla.
@@ -1159,10 +1147,10 @@ export const ProfileScreen: React.FC = () => {
 
                 {vendorFormError && (
                   <Row spacing="xs" align="center">
-                    <AlertCircle size={15} color={colors.semantic.danger} />
+                    <AlertCircle size={15} color={theme.danger} />
                     <Text
                       variant="caption"
-                      color={colors.semantic.danger}
+                      color={theme.dangerText}
                       style={{ fontWeight: '700', flex: 1 }}
                     >
                       {vendorFormError}
@@ -1206,7 +1194,7 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.logoutModalCard,
               {
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.09)',
+                borderColor: theme.border,
               },
             ]}
           >
@@ -1215,7 +1203,7 @@ export const ProfileScreen: React.FC = () => {
                 <Row spacing="xs" align="center" style={{ flex: 1 }}>
                   <ShieldCheck
                     size={20}
-                    color={isDark ? '#FF7A59' : '#FF5A36'}
+                    color={isDark ? theme.primaryHover : theme.primary}
                   />
                   <Text variant="h2" color={theme.text} style={{ flex: 1 }}>
                     Pasar a Perfil de{' '}
@@ -1240,10 +1228,8 @@ export const ProfileScreen: React.FC = () => {
                       size={15}
                       color={
                         switchAuthMethod === 'BIOMETRIC'
-                          ? '#FFFFFF'
-                          : isDark
-                          ? '#F1F5F9'
-                          : colors.sand[900]
+                          ? theme.primaryText
+                          : theme.text
                       }
                     />
                   }
@@ -1262,10 +1248,8 @@ export const ProfileScreen: React.FC = () => {
                       size={15}
                       color={
                         switchAuthMethod === 'PASSWORD'
-                          ? '#FFFFFF'
-                          : isDark
-                          ? '#F1F5F9'
-                          : colors.sand[900]
+                          ? theme.primaryText
+                          : theme.text
                       }
                     />
                   }
@@ -1283,18 +1267,18 @@ export const ProfileScreen: React.FC = () => {
                     styles.biometricBox,
                     {
                       borderColor: switchBiometricProof
-                        ? colors.semantic.success
+                        ? theme.successBorder
                         : theme.border,
-                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
+                      backgroundColor: theme.surfaceElevated,
                     },
                   ]}
                 >
                   {switchBiometricProof ? (
                     <Stack spacing="xs" align="center">
-                      <CheckCircle2 size={24} color={colors.semantic.success} />
+                      <CheckCircle2 size={24} color={theme.success} />
                       <Text
                         variant="body"
-                        color={colors.semantic.success}
+                        color={theme.successText}
                         style={{ fontWeight: '700', textAlign: 'center' }}
                       >
                         Huella Dactilar Verificada
@@ -1328,7 +1312,7 @@ export const ProfileScreen: React.FC = () => {
                         iconLeft={
                           <Fingerprint
                             size={18}
-                            color={isDark ? '#FF7A59' : '#FF5A36'}
+                            color={isDark ? theme.primaryHover : theme.primary}
                           />
                         }
                         onPress={handleScanForRoleSwitch}
@@ -1351,10 +1335,10 @@ export const ProfileScreen: React.FC = () => {
 
               {switchError && (
                 <Row spacing="xs" align="center">
-                  <AlertCircle size={15} color={colors.semantic.danger} />
+                  <AlertCircle size={15} color={theme.danger} />
                   <Text
                     variant="caption"
-                    color={colors.semantic.danger}
+                    color={theme.dangerText}
                     style={{ fontWeight: '700', flex: 1 }}
                   >
                     {switchError}
@@ -1443,8 +1427,8 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.vendorModalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
+                backgroundColor: theme.surface,
+                borderColor: theme.border,
               },
             ]}
           >
@@ -1523,14 +1507,14 @@ export const ProfileScreen: React.FC = () => {
                     style={[
                       styles.statusNotice,
                       {
-                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                        borderColor: colors.semantic.danger,
+                        backgroundColor: theme.dangerBg,
+                        borderColor: theme.dangerBorder,
                       },
                     ]}
                   >
                     <Text
                       variant="caption"
-                      color={colors.semantic.danger}
+                      color={theme.dangerText}
                       style={{ fontWeight: '600' }}
                     >
                       {editProfileError}
@@ -1543,14 +1527,14 @@ export const ProfileScreen: React.FC = () => {
                     style={[
                       styles.statusNotice,
                       {
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        borderColor: colors.semantic.success,
+                        backgroundColor: theme.successBg,
+                        borderColor: theme.successBorder,
                       },
                     ]}
                   >
                     <Text
                       variant="caption"
-                      color={colors.semantic.success}
+                      color={theme.successText}
                       style={{ fontWeight: '600' }}
                     >
                       {editProfileSuccess}
@@ -1601,7 +1585,7 @@ const styles = StyleSheet.create({
     width: 86,
     height: 62,
     borderRadius: radii.sm,
-    backgroundColor: '#242834',
+    backgroundColor: colors.ocean[700],
   },
   uploadSectionBox: {
     padding: spacing.md,
@@ -1623,7 +1607,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     right: 4,
-    backgroundColor: 'rgba(239, 68, 68, 0.92)',
+    backgroundColor: colors.semantic.danger,
     width: 24,
     height: 24,
     borderRadius: 12,
@@ -1637,7 +1621,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.68)',
+    backgroundColor: 'rgba(28, 27, 24, 0.66)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.md,
@@ -1659,7 +1643,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -2,
     right: -2,
-    backgroundColor: '#FF5A36',
+    backgroundColor: colors.coral[600],
     width: 28,
     height: 28,
     borderRadius: 14,

@@ -121,7 +121,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
     <Screen scrollable>
       <Stack spacing="lg" style={styles.container}>
         <Stack spacing="xs">
-          <Text variant="caption" style={{ fontWeight: '800', letterSpacing: 1.5, color: isDark ? '#FF7A59' : '#E04320' }}>
+          <Text variant="caption" style={{ fontWeight: '800', letterSpacing: 1.5, color: isDark ? theme.primaryHover : theme.primary }}>
             NUEVA MEMBRESÍA
           </Text>
           <Text variant="h1" color={theme.text}>
@@ -215,7 +215,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
                     title="📷 Subir Foto DNI"
                     size="sm"
                     variant="secondary"
-                    iconLeft={<Camera size={14} color={isDark ? '#FF7A59' : '#FF5A36'} />}
+                    iconLeft={<Camera size={14} color={isDark ? theme.primaryHover : theme.primary} />}
                     onPress={handlePickDniPhoto}
                     testID="btn-upload-dni-foto"
                   />
@@ -284,8 +284,8 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
                   style={[
                     styles.checkbox,
                     {
-                      backgroundColor: aceptaTerminos ? '#FF5A36' : theme.inputBg,
-                      borderColor: errors.aceptaTerminos ? colors.semantic.danger : (isDark ? 'rgba(255, 90, 54, 0.7)' : '#FF5A36'),
+                      backgroundColor: aceptaTerminos ? theme.primary : theme.inputBg,
+                      borderColor: errors.aceptaTerminos ? theme.danger : theme.primaryBorder,
                     },
                   ]}
                 >
@@ -299,19 +299,19 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
               <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center' }}>
                 <Text variant="caption" color={theme.subtext}>Acepto los </Text>
                 <TouchableOpacity onPress={() => setLegalModal('terminos')}>
-                  <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
+                  <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
                     Términos y Condiciones
                   </Text>
                 </TouchableOpacity>
                 <Text variant="caption" color={theme.subtext}>, la </Text>
                 <TouchableOpacity onPress={() => setLegalModal('ley')}>
-                  <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
+                  <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
                     Ley 25.506
                   </Text>
                 </TouchableOpacity>
                 <Text variant="caption" color={theme.subtext}> y la </Text>
                 <TouchableOpacity onPress={() => setLegalModal('cancelacion')}>
-                  <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
+                  <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '700', textDecorationLine: 'underline' }}>
                     Política de Cancelación en MDP
                   </Text>
                 </TouchableOpacity>
@@ -339,7 +339,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
                 ¿Ya tenés cuenta?
               </Text>
               <TouchableOpacity onPress={() => navigation?.goBack?.()}>
-                <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={styles.link}>
+                <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={styles.link}>
                   Iniciá sesión
                 </Text>
               </TouchableOpacity>
@@ -361,9 +361,9 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
             <Stack spacing="md">
               <Row justify="space-between" align="center">
                 <Row spacing="xs" align="center">
-                  {legalModal === 'terminos' && <FileText size={20} color={isDark ? '#FF7A59' : '#FF5A36'} />}
-                  {legalModal === 'ley' && <Scale size={20} color={isDark ? '#FF7A59' : '#FF5A36'} />}
-                  {legalModal === 'cancelacion' && <ShieldCheck size={20} color={isDark ? '#FF7A59' : '#FF5A36'} />}
+                  {legalModal === 'terminos' && <FileText size={20} color={isDark ? theme.primaryHover : theme.primary} />}
+                  {legalModal === 'ley' && <Scale size={20} color={isDark ? theme.primaryHover : theme.primary} />}
+                  {legalModal === 'cancelacion' && <ShieldCheck size={20} color={isDark ? theme.primaryHover : theme.primary} />}
                   <Text variant="h3" color={theme.text}>
                     {legalModal === 'terminos' && 'Términos y Condiciones del Servicio'}
                     {legalModal === 'ley' && 'Ley Nacional 25.506 de Firma Digital'}
@@ -450,8 +450,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.4)',
-    backgroundColor: 'rgba(16, 185, 129, 0.06)',
+    borderColor: 'rgba(82, 176, 151, 0.42)',
+    backgroundColor: 'rgba(82, 176, 151, 0.08)',
   },
   dniPreviewImg: {
     width: '100%',
@@ -469,15 +469,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   errorBox: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: 'rgba(226, 110, 102, 0.14)',
     padding: spacing.sm,
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: '#F87171',
+    borderColor: 'rgba(226, 110, 102, 0.42)',
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.65)',
+    backgroundColor: 'rgba(20, 19, 17, 0.68)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.md,
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: radii.sm,
     borderWidth: 1.5,
-    borderColor: '#FF5A36',
+    borderColor: colors.coral[500],
     alignItems: 'center',
     justifyContent: 'center',
   },

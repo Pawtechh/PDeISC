@@ -239,21 +239,9 @@ export const ReturnsScreen: React.FC = () => {
             padding="md"
             style={{
               backgroundColor:
-                feedbackBanner.type === 'success'
-                  ? isDark
-                    ? 'rgba(16, 185, 129, 0.12)'
-                    : '#ECFDF5'
-                  : isDark
-                  ? 'rgba(239, 68, 68, 0.12)'
-                  : '#FEF2F2',
+                feedbackBanner.type === 'success' ? theme.successBg : theme.dangerBg,
               borderColor:
-                feedbackBanner.type === 'success'
-                  ? isDark
-                    ? 'rgba(16, 185, 129, 0.4)'
-                    : '#34D399'
-                  : isDark
-                  ? 'rgba(239, 68, 68, 0.4)'
-                  : '#F87171',
+                feedbackBanner.type === 'success' ? theme.successBorder : theme.dangerBorder,
               borderWidth: 1,
             }}
           >
@@ -261,13 +249,7 @@ export const ReturnsScreen: React.FC = () => {
               <Text
                 variant="body"
                 color={
-                  feedbackBanner.type === 'success'
-                    ? isDark
-                      ? '#A7F3D0'
-                      : '#065F46'
-                    : isDark
-                    ? '#FCA5A5'
-                    : '#991B1B'
+                  feedbackBanner.type === 'success' ? theme.successText : theme.dangerText
                 }
                 style={{ flex: 1, fontWeight: '600' }}
               >
@@ -283,18 +265,18 @@ export const ReturnsScreen: React.FC = () => {
           padding="md"
           style={[
             styles.saltRuleCard,
-            isDark && {
-              backgroundColor: 'rgba(245, 158, 11, 0.08)',
-              borderColor: 'rgba(245, 158, 11, 0.32)',
+            {
+              backgroundColor: theme.warningBg,
+              borderColor: theme.warningBorder,
             },
           ]}
         >
           <Row justify="space-between" align="center">
             <View style={{ flex: 1, paddingRight: spacing.sm }}>
-              <Text variant="button" color={isDark ? '#FBBF24' : colors.sunset[600]}>
+              <Text variant="button" color={theme.warningText}>
                 Regla Antisalitre Obligatoria
               </Text>
-              <Text variant="caption" color={isDark ? '#E2E8F0' : colors.sand[700]}>
+              <Text variant="caption" color={isDark ? theme.subtext : theme.warningText}>
                 Si la tabla no fue enjuagada con agua dulce antes de entregar, se debita una multa automática de $10.000 ARS de la pre-autorización.
               </Text>
             </View>
@@ -414,7 +396,11 @@ export const ReturnsScreen: React.FC = () => {
             padding="lg"
             style={[
               styles.modalCard,
-              isDark && { backgroundColor: 'rgba(34, 38, 48, 0.96)', borderColor: 'rgba(255, 255, 255, 0.10)', borderWidth: 1 },
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+                borderWidth: 1,
+              },
             ]}
           >
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -430,12 +416,12 @@ export const ReturnsScreen: React.FC = () => {
                   <Card
                     padding="sm"
                     style={{
-                      backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
-                      borderColor: '#F87171',
+                      backgroundColor: theme.dangerBg,
+                      borderColor: theme.dangerBorder,
                       borderWidth: 1,
                     }}
                   >
-                    <Text variant="caption" color={isDark ? '#FECACA' : '#991B1B'} style={{ fontWeight: '600' }}>
+                    <Text variant="caption" color={theme.dangerText} style={{ fontWeight: '600' }}>
                       {modalError}
                     </Text>
                   </Card>
@@ -452,16 +438,28 @@ export const ReturnsScreen: React.FC = () => {
                 <TouchableOpacity
                   style={[
                     styles.checkItem,
-                    isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.10)' },
+                    {
+                      backgroundColor: theme.surfaceElevated,
+                      borderColor: theme.border,
+                    },
                   ]}
                   onPress={() => setIsWashed(!isWashed)}
                 >
-                  <View style={[styles.checkbox, isWashed && styles.checkboxActive]}>
-                    {isWashed && <Text style={{ color: 'white', fontWeight: 'bold' }}>✓</Text>}
+                  <View
+                    style={[
+                      styles.checkbox,
+                      { borderColor: theme.border },
+                      isWashed && {
+                        backgroundColor: theme.success,
+                        borderColor: theme.success,
+                      },
+                    ]}
+                  >
+                    {isWashed && <Text style={{ color: theme.primaryText, fontWeight: 'bold' }}>✓</Text>}
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text variant="button" color={theme.text}>1. ¿Fue enjuagada con agua dulce?</Text>
-                    <Text variant="caption" color={isWashed ? colors.semantic.success : colors.semantic.danger}>
+                    <Text variant="caption" color={isWashed ? theme.success : theme.danger}>
                       {isWashed ? 'LAVADA: Sin salitre verificado.' : 'NO LAVADA: Aplica multa de $10.000 ARS.'}
                     </Text>
                   </View>
@@ -471,19 +469,31 @@ export const ReturnsScreen: React.FC = () => {
                 <TouchableOpacity
                   style={[
                     styles.checkItem,
-                    isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.10)' },
+                    {
+                      backgroundColor: theme.surfaceElevated,
+                      borderColor: theme.border,
+                    },
                   ]}
                   onPress={() => {
                     setHasDamage(!hasDamage);
                     if (modalError) setModalError(null);
                   }}
                 >
-                  <View style={[styles.checkbox, hasDamage && styles.checkboxActiveDanger]}>
-                    {hasDamage && <Text style={{ color: 'white', fontWeight: 'bold' }}>✓</Text>}
+                  <View
+                    style={[
+                      styles.checkbox,
+                      { borderColor: theme.border },
+                      hasDamage && {
+                        backgroundColor: theme.danger,
+                        borderColor: theme.danger,
+                      },
+                    ]}
+                  >
+                    {hasDamage && <Text style={{ color: theme.primaryText, fontWeight: 'bold' }}>✓</Text>}
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text variant="button" color={theme.text}>2. ¿Presenta fisuras, golpes o roturas?</Text>
-                    <Text variant="caption" color={hasDamage ? colors.semantic.danger : theme.subtext}>
+                    <Text variant="caption" color={hasDamage ? theme.danger : theme.subtext}>
                       {hasDamage
                         ? 'DETECCIÓN: Pasa a PENDIENTE DE REVISIÓN para peritaje de dueño.'
                         : 'Estado visual impecable (sin observaciones).'}
@@ -497,9 +507,9 @@ export const ReturnsScreen: React.FC = () => {
                     spacing="sm"
                     style={[
                       styles.damageBox,
-                      isDark && {
-                        backgroundColor: 'rgba(239, 68, 68, 0.10)',
-                        borderColor: 'rgba(239, 68, 68, 0.38)',
+                      {
+                        backgroundColor: theme.dangerBg,
+                        borderColor: theme.dangerBorder,
                       },
                     ]}
                   >
@@ -513,7 +523,11 @@ export const ReturnsScreen: React.FC = () => {
                       <TextInput
                         style={[
                           styles.input,
-                          isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.12)', color: '#F5F5F7' },
+                          {
+                            backgroundColor: theme.inputBg,
+                            borderColor: theme.inputBorder,
+                            color: theme.text,
+                          },
                         ]}
                         value={damageDescription}
                         onChangeText={(val) => {
@@ -521,7 +535,7 @@ export const ReturnsScreen: React.FC = () => {
                           if (modalError) setModalError(null);
                         }}
                         placeholder="Ej: Golpe de 4cm en el deck, quilla izquierda astillada..."
-                        placeholderTextColor={colors.sand[500]}
+                        placeholderTextColor={theme.muted}
                         multiline
                         numberOfLines={2}
                       />
@@ -547,9 +561,14 @@ export const ReturnsScreen: React.FC = () => {
                               key={preset.id}
                               style={[
                                 styles.presetPill,
-                                isSelected && styles.presetPillActive,
-                                isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.10)' },
-                                isSelected && isDark && { backgroundColor: '#FF5A36', borderColor: '#FF7A59' },
+                                {
+                                  backgroundColor: theme.surfaceElevated,
+                                  borderColor: theme.border,
+                                },
+                                isSelected && {
+                                  backgroundColor: theme.primary,
+                                  borderColor: theme.primaryBorder,
+                                },
                               ]}
                               onPress={() => {
                                 setDamagePhotoUrl(preset.url);
@@ -559,7 +578,7 @@ export const ReturnsScreen: React.FC = () => {
                             >
                               <Text
                                 variant="caption"
-                                color={isSelected ? colors.white : (isDark ? '#E2E8F0' : colors.sand[700])}
+                                color={isSelected ? theme.primaryText : theme.text}
                                 style={{ fontWeight: isSelected ? '700' : '500' }}
                               >
                                 {preset.label}
@@ -573,8 +592,12 @@ export const ReturnsScreen: React.FC = () => {
                       <TextInput
                         style={[
                           styles.input,
-                          { marginTop: spacing.xs },
-                          isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.12)', color: '#F5F5F7' },
+                          {
+                            marginTop: spacing.xs,
+                            backgroundColor: theme.inputBg,
+                            borderColor: theme.inputBorder,
+                            color: theme.text,
+                          },
                         ]}
                         value={customPhotoInput}
                         onChangeText={(val) => {
@@ -582,7 +605,7 @@ export const ReturnsScreen: React.FC = () => {
                           if (modalError) setModalError(null);
                         }}
                         placeholder="O ingresá URL de foto capturada en sede (https://...)"
-                        placeholderTextColor={colors.sand[500]}
+                        placeholderTextColor={theme.muted}
                       />
 
                       {/* Preview de la foto de daño seleccionada */}
@@ -645,9 +668,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   saltRuleCard: {
-    backgroundColor: '#FFFBEB',
     borderWidth: 1,
-    borderColor: '#FDE68A',
     borderRadius: radii.md,
   },
   modalOverlay: {
@@ -658,7 +679,6 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
   modalCard: {
-    backgroundColor: colors.white,
     borderRadius: radii.xl,
     width: '100%',
     maxWidth: 580,
@@ -670,17 +690,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.sm,
     padding: spacing.sm,
-    backgroundColor: colors.sand[50],
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: colors.sand[200],
   },
   checkbox: {
     width: 24,
     height: 24,
     borderRadius: radii.sm,
     borderWidth: 2,
-    borderColor: colors.sand[300],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -693,32 +710,24 @@ const styles = StyleSheet.create({
     borderColor: colors.semantic.danger,
   },
   damageBox: {
-    backgroundColor: '#FEF2F2',
     borderWidth: 1,
-    borderColor: '#FECACA',
     borderRadius: radii.md,
     padding: spacing.md,
   },
   input: {
-    backgroundColor: colors.white,
-    borderColor: colors.sand[200],
     borderWidth: 1,
     borderRadius: radii.sm,
     padding: spacing.sm,
-    color: colors.sand[900],
     fontSize: 14,
   },
   presetPill: {
     paddingHorizontal: spacing.sm,
     paddingVertical: 6,
     borderRadius: radii.full,
-    backgroundColor: colors.sand[100],
     borderWidth: 1,
-    borderColor: colors.sand[200],
   },
   presetPillActive: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#E04320',
+    borderWidth: 1,
   },
   photoPreviewWrapper: {
     marginTop: spacing.xs,

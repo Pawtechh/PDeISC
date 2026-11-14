@@ -151,7 +151,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
     const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${allPaths
       .map(
         (p) =>
-          `<path d="${p}" fill="none" stroke="#052A57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`
+          `<path d="${p}" fill="none" stroke="#1C1B18" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`
       )
       .join('')}</svg>`;
     const signatureData = `data:image/svg+xml;utf8,${encodeURIComponent(svgContent)}`;
@@ -167,7 +167,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
     <Card style={styles.cardContainer} testID="legal-signature-card">
       <Stack spacing="xs">
         <Row justify="space-between" align="center">
-          <Text variant="button" style={{ fontWeight: '700', color: '#111115', fontSize: 15 }}>
+          <Text variant="button" style={{ fontWeight: '700', color: '#1C1B18', fontSize: 15 }}>
             Recuadro de Firma Digital
           </Text>
           <View style={styles.lawPill}>
@@ -205,7 +205,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
               <Path
                 key={i}
                 d={d}
-                stroke="#111115"
+                stroke="#1C1B18"
                 strokeWidth={3}
                 fill="none"
                 strokeLinecap="round"
@@ -215,7 +215,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
             {currentPath ? (
               <Path
                 d={currentPath}
-                stroke="#111115"
+                stroke="#1C1B18"
                 strokeWidth={3}
                 fill="none"
                 strokeLinecap="round"
@@ -265,7 +265,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
                 style={styles.quickSignBtn}
                 testID="legal-signature-btn-quick"
               >
-                <Text variant="caption" style={{ color: '#E04320', fontWeight: '600', fontSize: 12 }}>
+                <Text variant="caption" style={{ color: colors.coral[600], fontWeight: '600', fontSize: 12 }}>
                   Firma Rápida
                 </Text>
               </TouchableOpacity>
@@ -322,7 +322,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 const styles = StyleSheet.create({
   cardContainer: {
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: 'rgba(201, 74, 41, 0.24)',
     backgroundColor: colors.white,
     padding: spacing.md,
     borderRadius: radii.lg,
@@ -330,15 +330,15 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   lawPill: {
-    backgroundColor: 'rgba(255, 90, 54, 0.06)',
+    backgroundColor: 'rgba(201, 74, 41, 0.08)',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: 'rgba(201, 74, 41, 0.24)',
   },
   lawText: {
-    color: '#E04320',
+    color: colors.coral[600],
     fontWeight: '600',
     fontSize: 10,
   },
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 2,
     borderStyle: 'solid',
-    borderColor: 'rgba(255, 90, 54, 0.45)',
+    borderColor: 'rgba(201, 74, 41, 0.42)',
     position: 'relative',
     overflow: 'hidden',
     marginTop: spacing.xs,
@@ -362,14 +362,14 @@ const styles = StyleSheet.create({
       : {}),
   },
   canvasWrapperDrawing: {
-    borderColor: '#FF5A36',
+    borderColor: colors.coral[600],
     borderWidth: 2,
     backgroundColor: '#FFFFFF',
   },
   canvasWrapperSigned: {
     borderColor: colors.semantic.success,
     borderWidth: 2,
-    backgroundColor: '#FCFFFC',
+    backgroundColor: '#F6FBF9',
   },
   placeholderContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   watermarkBadgeText: {
-    color: '#111115',
+    color: '#1C1B18',
     fontWeight: '700',
     fontSize: 11,
     letterSpacing: 0.5,
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: radii.sm,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#FAE8E6',
   },
   actionBtnDisabled: {
     backgroundColor: colors.sand[100],
@@ -411,9 +411,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: radii.sm,
-    backgroundColor: 'rgba(255, 90, 54, 0.06)',
+    backgroundColor: 'rgba(201, 74, 41, 0.08)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: 'rgba(201, 74, 41, 0.24)',
   },
   statusBadge: {
     paddingVertical: 4,
@@ -424,8 +424,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.sand[100],
   },
   statusBadgeSigned: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: '#E5F2EE',
     borderWidth: 1,
-    borderColor: '#86EFAC',
+    borderColor: '#9CD3C3',
   },
 });

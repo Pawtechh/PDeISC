@@ -214,21 +214,9 @@ export const DeliveriesScreen: React.FC = () => {
             padding="md"
             style={{
               backgroundColor:
-                feedbackBanner.type === 'success'
-                  ? isDark
-                    ? 'rgba(16, 185, 129, 0.12)'
-                    : '#ECFDF5'
-                  : isDark
-                  ? 'rgba(239, 68, 68, 0.12)'
-                  : '#FEF2F2',
+                feedbackBanner.type === 'success' ? theme.successBg : theme.dangerBg,
               borderColor:
-                feedbackBanner.type === 'success'
-                  ? isDark
-                    ? 'rgba(16, 185, 129, 0.4)'
-                    : '#34D399'
-                  : isDark
-                  ? 'rgba(239, 68, 68, 0.4)'
-                  : '#F87171',
+                feedbackBanner.type === 'success' ? theme.successBorder : theme.dangerBorder,
               borderWidth: 1,
             }}
           >
@@ -236,13 +224,7 @@ export const DeliveriesScreen: React.FC = () => {
               <Text
                 variant="body"
                 color={
-                  feedbackBanner.type === 'success'
-                    ? isDark
-                      ? '#A7F3D0'
-                      : '#065F46'
-                    : isDark
-                    ? '#FCA5A5'
-                    : '#991B1B'
+                  feedbackBanner.type === 'success' ? theme.successText : theme.dangerText
                 }
                 style={{ flex: 1, fontWeight: '600' }}
               >
@@ -310,14 +292,14 @@ export const DeliveriesScreen: React.FC = () => {
                         <Card
                           padding="xs"
                           style={{
-                            backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
-                            borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
+                            backgroundColor: theme.warningBg,
+                            borderColor: theme.warningBorder,
                             borderWidth: 1,
                           }}
                         >
                           <Text
                             variant="caption"
-                            color={isDark ? '#FDE68A' : '#92400E'}
+                            color={theme.warningText}
                             style={{ fontWeight: '600', fontSize: 11 }}
                           >
                             Retiro anticipado no permitido: Horario pactado el {fechaPactada} a las {horaPactada} hs (se habilita 15 min antes, faltan {tiempoFaltanteStr}).
@@ -386,8 +368,8 @@ export const DeliveriesScreen: React.FC = () => {
             style={[
               styles.modalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
+                backgroundColor: theme.card,
+                borderColor: theme.border,
                 borderWidth: 1,
               },
             ]}
@@ -414,12 +396,12 @@ export const DeliveriesScreen: React.FC = () => {
                 <Card
                   padding="sm"
                   style={{
-                    backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
-                    borderColor: '#F87171',
+                    backgroundColor: theme.dangerBg,
+                    borderColor: theme.dangerBorder,
                     borderWidth: 1,
                   }}
                 >
-                  <Text variant="caption" color={isDark ? '#FECACA' : '#991B1B'} style={{ fontWeight: '600' }}>
+                  <Text variant="caption" color={theme.dangerText} style={{ fontWeight: '600' }}>
                     {modalError}
                   </Text>
                 </Card>
@@ -431,10 +413,13 @@ export const DeliveriesScreen: React.FC = () => {
                   style={[
                     styles.prereqPill,
                     {
-                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
+                      backgroundColor: theme.surfaceElevated,
                       borderColor: theme.border,
                     },
-                    dniChecked && styles.prereqPillActive,
+                    dniChecked && {
+                      backgroundColor: theme.primary,
+                      borderColor: theme.primary,
+                    },
                   ]}
                   onPress={() => {
                     setDniChecked(!dniChecked);
@@ -444,7 +429,7 @@ export const DeliveriesScreen: React.FC = () => {
                 >
                   <Text
                     variant="caption"
-                    color={dniChecked ? colors.white : theme.text}
+                    color={dniChecked ? theme.primaryText : theme.text}
                     style={{ fontWeight: '700', fontSize: 11 }}
                   >
                     {dniChecked ? '✓ DNI +18 Constatado' : '○ DNI Pendiente'}
@@ -455,10 +440,13 @@ export const DeliveriesScreen: React.FC = () => {
                   style={[
                     styles.prereqPill,
                     {
-                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
+                      backgroundColor: theme.surfaceElevated,
                       borderColor: theme.border,
                     },
-                    hasPhotos && styles.prereqPillActive,
+                    hasPhotos && {
+                      backgroundColor: theme.primary,
+                      borderColor: theme.primary,
+                    },
                   ]}
                   onPress={() => {
                     setHasPhotos(!hasPhotos);
@@ -468,7 +456,7 @@ export const DeliveriesScreen: React.FC = () => {
                 >
                   <Text
                     variant="caption"
-                    color={hasPhotos ? colors.white : theme.text}
+                    color={hasPhotos ? theme.primaryText : theme.text}
                     style={{ fontWeight: '700', fontSize: 11 }}
                   >
                     {hasPhotos ? '✓ 4 Fotos Check-in' : '○ Fotos Pendientes'}
@@ -479,14 +467,14 @@ export const DeliveriesScreen: React.FC = () => {
                   style={[
                     styles.lawPill,
                     {
-                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-                      borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                      backgroundColor: theme.surfaceElevated,
+                      borderColor: theme.border,
                     },
                   ]}
                 >
                   <Text
                     variant="caption"
-                    color={isDark ? '#FF7A59' : '#E04320'}
+                    color={isDark ? theme.primaryHover : theme.primary}
                     style={styles.lawText}
                   >
                     Ley 25.506
@@ -502,15 +490,15 @@ export const DeliveriesScreen: React.FC = () => {
                     style={[
                       styles.methodTab,
                       {
-                        borderColor: signMethod === 'biometric' ? '#FF5A36' : theme.border,
-                        backgroundColor: signMethod === 'biometric' ? (isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? '#242834' : '#F4F4F5'),
+                        borderColor: signMethod === 'biometric' ? theme.primary : theme.border,
+                        backgroundColor: signMethod === 'biometric' ? theme.primarySubtle : theme.surfaceElevated,
                       },
                     ]}
                     testID="tab-sign-biometric"
                   >
                     <Text
                       variant="caption"
-                      color={signMethod === 'biometric' ? (isDark ? '#FF7A59' : '#E04320') : theme.subtext}
+                      color={signMethod === 'biometric' ? (isDark ? theme.primaryHover : theme.primary) : theme.subtext}
                       style={{ fontWeight: '700', fontSize: 11 }}
                     >
                       Huella Digital (Teléfono)
@@ -522,15 +510,15 @@ export const DeliveriesScreen: React.FC = () => {
                     style={[
                       styles.methodTab,
                       {
-                        borderColor: signMethod === 'pad' ? '#FF5A36' : theme.border,
-                        backgroundColor: signMethod === 'pad' ? (isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? '#242834' : '#F4F4F5'),
+                        borderColor: signMethod === 'pad' ? theme.primary : theme.border,
+                        backgroundColor: signMethod === 'pad' ? theme.primarySubtle : theme.surfaceElevated,
                       },
                     ]}
                     testID="tab-sign-pad"
                   >
                     <Text
                       variant="caption"
-                      color={signMethod === 'pad' ? (isDark ? '#FF7A59' : '#E04320') : theme.subtext}
+                      color={signMethod === 'pad' ? (isDark ? theme.primaryHover : theme.primary) : theme.subtext}
                       style={{ fontWeight: '700', fontSize: 11 }}
                     >
                       Firma Manuscrita en Pantalla
@@ -636,8 +624,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   prereqPillActive: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#E04320',
+    borderWidth: 1,
   },
   lawPill: {
     paddingHorizontal: 8,

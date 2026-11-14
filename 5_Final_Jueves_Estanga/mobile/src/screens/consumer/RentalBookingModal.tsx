@@ -144,32 +144,32 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
 
   if (bookingSuccess) {
     return (
-      <View style={[styles.container, styles.content, { alignItems: 'center', justifyContent: 'center', paddingVertical: spacing['2xl'] }]}>
+      <View style={[styles.container, styles.content, { backgroundColor: theme.background, alignItems: 'center', justifyContent: 'center', paddingVertical: spacing['2xl'] }]}>
         <Card padding="xl" style={{ width: '100%', maxWidth: 450, alignItems: 'center' }}>
           <Stack spacing="md" align="center">
-            <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: '#DCFCE7', alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ fontSize: 32 }}></Text>
+            <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: theme.successBg, borderWidth: 1, borderColor: theme.successBorder, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ fontSize: 32, color: theme.success }}>✓</Text>
             </View>
-            <Text variant="h1" color={colors.semantic.success} style={{ textAlign: 'center' }}>
+            <Text variant="h1" color={theme.successText} style={{ textAlign: 'center' }}>
               ¡Reserva Confirmada!
             </Text>
-            <Text variant="body" color={colors.sand[700]} style={{ textAlign: 'center' }}>
+            <Text variant="body" color={theme.subtext} style={{ textAlign: 'center' }}>
               Tu tabla <Text style={{ fontWeight: '700' }}>"{board.titulo}"</Text> te espera en la Sede Central Playa Grande para tu sesión.
             </Text>
-            <Card padding="md" style={{ width: '100%', backgroundColor: colors.sand[50], borderColor: colors.sand[200], borderWidth: 1 }}>
+            <Card padding="md" style={{ width: '100%', backgroundColor: theme.surfaceElevated, borderColor: theme.border, borderWidth: 1 }}>
               <Stack spacing="xs">
-                <Text variant="caption" color={colors.sand[500]}>Horas reservadas: {selectedHoras} hs</Text>
-                <Text variant="caption" color={colors.sand[500]}>Total abonado: ${quote?.precioTotal || 0} ARS</Text>
-                <Text variant="caption" color={colors.semantic.success} style={{ fontWeight: '600' }}>
+                <Text variant="caption" color={theme.subtext}>Horas reservadas: {selectedHoras} hs</Text>
+                <Text variant="caption" color={theme.subtext}>Total abonado: ${quote?.precioTotal || 0} ARS</Text>
+                <Text variant="caption" color={theme.successText} style={{ fontWeight: '600' }}>
                   ✓ Ya podés ver tu código QR de retiro en "Mis Alquileres"
                 </Text>
               </Stack>
             </Card>
             {biometricSignature && (
-              <Card padding="sm" style={{ width: '100%', backgroundColor: '#F0FDF4', borderColor: '#86EFAC', borderWidth: 1 }}>
+              <Card padding="sm" style={{ width: '100%', backgroundColor: theme.successBg, borderColor: theme.successBorder, borderWidth: 1 }}>
                 <Row spacing="xs" align="center">
-                  <ShieldCheck size={16} color={colors.semantic.success} />
-                  <Text variant="caption" color={colors.semantic.success} style={{ fontWeight: '700' }}>
+                  <ShieldCheck size={16} color={theme.success} />
+                  <Text variant="caption" color={theme.successText} style={{ fontWeight: '700' }}>
                     Contrato Rubricado con Huella Digital ({biometricSignature.signature_hash?.slice(0, 14)}...)
                   </Text>
                 </Row>
@@ -195,13 +195,13 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={[styles.container, { backgroundColor: theme.background }]} contentContainerStyle={styles.content}>
       <Row justify="space-between" align="center">
         <View>
           <Text variant="h1" color={theme.text}>
             Confirmar Reserva
           </Text>
-          <Text variant="caption" color={colors.sand[700]}>
+          <Text variant="caption" color={theme.subtext}>
             Sede Central Playa Grande (6:00 a 21:00 hs)
           </Text>
         </View>
@@ -212,7 +212,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
         <Row justify="space-between" align="center">
           <View>
             <Text variant="h3">{board.titulo}</Text>
-            <Text variant="caption" color={colors.sand[500]}>
+            <Text variant="caption" color={theme.subtext}>
               {board.marca} • {board.tipoTabla} • ${board.precioHora}/h
             </Text>
           </View>
@@ -233,12 +233,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                 style={[
                   styles.optionRow,
                   {
-                    backgroundColor: isSelected
-                      ? (theme.isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.08)')
-                      : (theme.isDark ? 'rgba(34, 38, 48, 0.78)' : colors.white),
-                    borderColor: isSelected
-                      ? '#FF5A36'
-                      : (theme.isDark ? 'rgba(255, 255, 255, 0.09)' : colors.sand[200]),
+                    backgroundColor: isSelected ? theme.primarySubtle : theme.surface,
+                    borderColor: isSelected ? theme.primary : theme.border,
                   },
                 ]}
               >
@@ -246,7 +242,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                   <Text
                     variant="body"
                     style={isSelected ? styles.bold : undefined}
-                    color={isSelected ? (theme.isDark ? '#FF7A59' : '#E04320') : theme.text}
+                    color={isSelected ? (theme.isDark ? theme.primaryHover : theme.primary) : theme.text}
                   >
                     {dur.label}
                   </Text>
@@ -266,12 +262,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
             style={[
               styles.pill,
               {
-                backgroundColor: !isEarlyBooking
-                  ? '#FF5A36'
-                  : (theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[100]),
-                borderColor: !isEarlyBooking
-                  ? '#FF5A36'
-                  : (theme.isDark ? 'rgba(255, 255, 255, 0.10)' : colors.sand[200]),
+                backgroundColor: !isEarlyBooking ? theme.primary : theme.surfaceElevated,
+                borderColor: !isEarlyBooking ? theme.primary : theme.border,
               },
               { flex: 1 },
             ]}
@@ -279,7 +271,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
           >
             <Text
               variant="caption"
-              color={!isEarlyBooking ? '#FFFFFF' : theme.text}
+              color={!isEarlyBooking ? theme.primaryText : theme.text}
               style={!isEarlyBooking ? styles.bold : undefined}
             >
               Mañana ({String(selectedHora).padStart(2, '0')}:00 hs)
@@ -290,12 +282,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
             style={[
               styles.pill,
               {
-                backgroundColor: isEarlyBooking
-                  ? '#FF5A36'
-                  : (theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[100]),
-                borderColor: isEarlyBooking
-                  ? '#FF5A36'
-                  : (theme.isDark ? 'rgba(255, 255, 255, 0.10)' : colors.sand[200]),
+                backgroundColor: isEarlyBooking ? theme.primary : theme.surfaceElevated,
+                borderColor: isEarlyBooking ? theme.primary : theme.border,
               },
               { flex: 1 },
             ]}
@@ -303,7 +291,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
           >
             <Text
               variant="caption"
-              color={isEarlyBooking ? '#FFFFFF' : theme.text}
+              color={isEarlyBooking ? theme.primaryText : theme.text}
               style={isEarlyBooking ? styles.bold : undefined}
             >
               En 8 días (10% OFF anticipada)
@@ -322,12 +310,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
               style={[
                 styles.pill,
                 {
-                  backgroundColor: selectedHora === h
-                    ? '#FF5A36'
-                    : (theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[100]),
-                  borderColor: selectedHora === h
-                    ? '#FF5A36'
-                    : (theme.isDark ? 'rgba(255, 255, 255, 0.10)' : colors.sand[200]),
+                  backgroundColor: selectedHora === h ? theme.primary : theme.surfaceElevated,
+                  borderColor: selectedHora === h ? theme.primary : theme.border,
                   paddingHorizontal: spacing.md,
                   marginBottom: spacing.xs,
                 },
@@ -336,7 +320,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
             >
               <Text
                 variant="caption"
-                color={selectedHora === h ? '#FFFFFF' : theme.text}
+                color={selectedHora === h ? theme.primaryText : theme.text}
                 style={selectedHora === h ? styles.bold : undefined}
               >
                 {`${String(h).padStart(2, '0')}:00 hs`}
@@ -358,19 +342,15 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                 style={[
                   styles.pointPill,
                   {
-                    backgroundColor: isSelected
-                      ? '#FF5A36'
-                      : (theme.isDark ? 'rgba(34, 38, 48, 0.78)' : '#FFFFFF'),
-                    borderColor: isSelected
-                      ? '#FF5A36'
-                      : (theme.isDark ? 'rgba(255, 255, 255, 0.09)' : colors.sand[200]),
+                    backgroundColor: isSelected ? theme.primary : theme.surface,
+                    borderColor: isSelected ? theme.primary : theme.border,
                   },
                 ]}
                 onPress={() => setSelectedPoints(opt.pts)}
               >
                 <Text
                   variant="caption"
-                  color={isSelected ? '#FFFFFF' : theme.subtext}
+                  color={isSelected ? theme.primaryText : theme.subtext}
                   style={isSelected ? styles.bold : undefined}
                 >
                   {opt.label}
@@ -387,8 +367,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
         style={[
           styles.quoteCard,
           {
-            backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-            borderColor: theme.isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+            backgroundColor: theme.surfaceElevated,
+            borderColor: theme.border,
           },
         ]}
       >
@@ -403,10 +383,10 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
 
           {quote && quote.descuentoTotal > 0 && (
             <Row justify="space-between">
-              <Text variant="body" color={colors.semantic.success} style={styles.bold}>
+              <Text variant="body" color={theme.successText} style={styles.bold}>
                 Descuentos aplicados:
               </Text>
-              <Text variant="body" color={colors.semantic.success} style={styles.bold}>
+              <Text variant="body" color={theme.successText} style={styles.bold}>
                 -${quote.descuentoTotal} ARS
               </Text>
             </Row>
@@ -418,7 +398,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
             <Text variant="h2" color={theme.text}>
               Total a Pagar:
             </Text>
-            <Text variant="display" color={theme.isDark ? '#FF7A59' : '#FF5A36'}>
+            <Text variant="display" color={theme.isDark ? theme.primaryHover : theme.primary}>
               ${quote?.precioTotal || 0}
               <Text variant="caption" color={theme.subtext}>
                 {' '}ARS
@@ -459,8 +439,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
         style={[
           styles.termsCard,
           {
-            backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-            borderColor: theme.isDark ? 'rgba(255, 255, 255, 0.08)' : colors.sand[200],
+            backgroundColor: theme.surfaceElevated,
+            borderColor: theme.border,
           },
         ]}
       >
@@ -469,7 +449,15 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
             style={styles.checkboxRow}
             onPress={() => setAcceptedTerms(!acceptedTerms)}
           >
-            <View style={[styles.checkbox, acceptedTerms && styles.checkboxActive]}>
+            <View
+              style={[
+                styles.checkbox,
+                {
+                  borderColor: acceptedTerms ? theme.primary : theme.muted,
+                  backgroundColor: acceptedTerms ? theme.primary : 'transparent',
+                },
+              ]}
+            >
               {acceptedTerms && <Text style={{ color: 'white', fontSize: 11 }}>✓</Text>}
             </View>
             <Text variant="caption" color={theme.text} style={{ flex: 1 }}>
@@ -496,13 +484,15 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
               onPress={() => setSignMethod('biometric')}
               style={[
                 styles.methodPill,
-                signMethod === 'biometric' && styles.methodPillActive,
-                { borderColor: signMethod === 'biometric' ? '#FF5A36' : (theme.isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.10)') },
+                {
+                  backgroundColor: signMethod === 'biometric' ? theme.primarySubtle : 'transparent',
+                  borderColor: signMethod === 'biometric' ? theme.primary : theme.border,
+                },
               ]}
             >
               <Text
                 variant="caption"
-                color={signMethod === 'biometric' ? (theme.isDark ? '#FF7A59' : '#E04320') : theme.subtext}
+                color={signMethod === 'biometric' ? (theme.isDark ? theme.primaryHover : theme.primary) : theme.subtext}
                 style={signMethod === 'biometric' ? styles.bold : undefined}
               >
                 Huella Digital {isPhone ? '(Teléfono)' : ''}
@@ -513,13 +503,15 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                 onPress={() => setSignMethod('digital')}
                 style={[
                   styles.methodPill,
-                  signMethod === 'digital' && styles.methodPillActive,
-                  { borderColor: signMethod === 'digital' ? '#FF5A36' : (theme.isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.10)') },
+                  {
+                    backgroundColor: signMethod === 'digital' ? theme.primarySubtle : 'transparent',
+                    borderColor: signMethod === 'digital' ? theme.primary : theme.border,
+                  },
                 ]}
               >
                 <Text
                   variant="caption"
-                  color={signMethod === 'digital' ? (theme.isDark ? '#FF7A59' : '#E04320') : theme.subtext}
+                  color={signMethod === 'digital' ? (theme.isDark ? theme.primaryHover : theme.primary) : theme.subtext}
                   style={signMethod === 'digital' ? styles.bold : undefined}
                 >
                   Firma PC
@@ -539,8 +531,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
           <Card
             padding="sm"
             style={{
-              backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-              borderColor: theme.isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+              backgroundColor: theme.surfaceElevated,
+              borderColor: theme.border,
               borderWidth: 1,
             }}
           >
@@ -562,10 +554,10 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
 
       {/* Error de Reserva justo arriba del botón para máxima visibilidad */}
       {bookingError ? (
-        <Card padding="md" style={styles.bookingErrorCard}>
+        <Card padding="md" style={[styles.bookingErrorCard, { backgroundColor: theme.dangerBg, borderColor: theme.dangerBorder, borderLeftColor: theme.danger }]}>
           <Row spacing="xs" align="center">
             <Text style={{ fontSize: 18 }}></Text>
-            <Text variant="body" color={colors.semantic.danger} style={{ fontWeight: '600', flex: 1 }}>
+            <Text variant="body" color={theme.dangerText} style={{ fontWeight: '600', flex: 1 }}>
               {bookingError}
             </Text>
           </Row>
@@ -587,14 +579,14 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
 
 const styles = StyleSheet.create({
   bookingErrorCard: {
-    backgroundColor: '#FEF2F2',
-    borderColor: '#FCA5A5',
+    backgroundColor: 'rgba(182, 57, 51, 0.10)',
+    borderColor: 'rgba(182, 57, 51, 0.25)',
     borderLeftWidth: 4,
     borderLeftColor: colors.semantic.danger,
   },
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.sand[50],
   },
   content: {
     padding: spacing.lg,
@@ -612,8 +604,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   optionRowSelected: {
-    borderColor: '#FF5A36',
-    backgroundColor: 'rgba(255, 90, 54, 0.08)',
+    borderColor: colors.coral[600],
+    backgroundColor: colors.coral.subtle,
   },
   pill: {
     paddingVertical: spacing.sm,
@@ -625,8 +617,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pillSelected: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#E04320',
+    backgroundColor: colors.coral[600],
+    borderColor: colors.coral[700],
   },
   pointPill: {
     paddingVertical: spacing.xs,
@@ -641,9 +633,9 @@ const styles = StyleSheet.create({
     borderColor: colors.sunset[600],
   },
   quoteCard: {
-    backgroundColor: 'rgba(255, 90, 54, 0.06)',
+    backgroundColor: colors.coral.subtle,
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: colors.coral.border,
   },
   termsCard: {
     backgroundColor: colors.sand[50],
@@ -665,8 +657,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkboxActive: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#E04320',
+    backgroundColor: colors.coral[600],
+    borderColor: colors.coral[700],
   },
   bold: {
     fontWeight: '700',
@@ -678,6 +670,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   methodPillActive: {
-    backgroundColor: 'rgba(255, 90, 54, 0.12)',
+    backgroundColor: colors.coral.subtle,
   },
 });

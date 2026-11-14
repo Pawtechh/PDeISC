@@ -316,19 +316,19 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
                 <Row spacing="xs" align="center">
                   <TouchableOpacity
                     onPress={() => setViewYear((y) => Math.max(minYear, y - 1))}
-                    style={[styles.navButtonSmall, { backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[50] }]}
+                    style={[styles.navButtonSmall, { backgroundColor: theme.surfaceElevated }]}
                     testID="datepicker-prev-year"
                   >
-                    <Text variant="caption" color={theme.isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+                    <Text variant="caption" color={theme.isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                       « -1a
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={handlePrevMonth}
-                    style={[styles.navButton, { backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[100] }]}
+                    style={[styles.navButton, { backgroundColor: theme.surfaceElevated }]}
                     testID="datepicker-prev-month"
                   >
-                    <Text variant="body" color={theme.isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+                    <Text variant="body" color={theme.isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                       ‹
                     </Text>
                   </TouchableOpacity>
@@ -347,10 +347,10 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
                 <Row spacing="xs" align="center">
                   <TouchableOpacity
                     onPress={handleNextMonth}
-                    style={[styles.navButton, { backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[100] }]}
+                    style={[styles.navButton, { backgroundColor: theme.surfaceElevated }]}
                     testID="datepicker-next-month"
                   >
-                    <Text variant="body" color={theme.isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+                    <Text variant="body" color={theme.isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                       ›
                     </Text>
                   </TouchableOpacity>
@@ -359,10 +359,10 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
                       const nextY = viewYear + 1;
                       if (nextY <= maxYear) setViewYear(nextY);
                     }}
-                    style={[styles.navButtonSmall, { backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[50] }]}
+                    style={[styles.navButtonSmall, { backgroundColor: theme.surfaceElevated }]}
                     testID="datepicker-next-year"
                   >
-                    <Text variant="caption" color={theme.isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+                    <Text variant="caption" color={theme.isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                       +1a »
                     </Text>
                   </TouchableOpacity>
@@ -371,7 +371,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
 
               {/* Selector desplegable de año si está activado */}
               {showYearPicker ? (
-                <View style={[styles.yearPickerBox, { backgroundColor: theme.isDark ? '#242834' : colors.sand[50] }]}>
+                <View style={[styles.yearPickerBox, { backgroundColor: theme.surfaceElevated }]}>
                   <Text variant="caption" color={theme.subtext} style={{ marginBottom: 4 }}>
                     {isBirthDate ? 'Seleccioná tu año de nacimiento:' : 'Seleccioná el año:'}
                   </Text>
@@ -387,15 +387,15 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
                           style={[
                             styles.yearItem,
                             {
-                              backgroundColor: y === viewYear ? '#FF5A36' : (theme.isDark ? '#1D1D22' : colors.white),
-                              borderColor: y === viewYear ? '#FF5A36' : (theme.isDark ? 'rgba(255, 255, 255, 0.10)' : colors.sand[200]),
+                              backgroundColor: y === viewYear ? theme.primary : theme.surface,
+                              borderColor: y === viewYear ? theme.primary : theme.border,
                             },
                           ]}
                           testID={`datepicker-year-${y}`}
                         >
                           <Text
                             variant="caption"
-                            color={y === viewYear ? '#FFFFFF' : theme.text}
+                            color={y === viewYear ? theme.primaryText : theme.text}
                             style={y === viewYear ? styles.bold : undefined}
                           >
                             {y}
@@ -414,7 +414,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
                       <Text
                         key={dia}
                         variant="caption"
-                        color={theme.isDark ? '#94A3B8' : colors.sand[500]}
+                        color={theme.subtext}
                         style={styles.weekDayText}
                       >
                         {dia}
@@ -451,9 +451,9 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
                           style={[
                             styles.dayCell,
                             isSelected && {
-                              backgroundColor: '#FF5A36',
+                              backgroundColor: theme.primary,
                               borderWidth: 1,
-                              borderColor: '#FF7A59',
+                              borderColor: theme.primaryHover,
                             },
                             isDisabled && styles.dayCellDisabled,
                           ]}
@@ -463,9 +463,9 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
                             variant="caption"
                             color={
                               isSelected
-                                ? '#FFFFFF'
+                                ? theme.primaryText
                                 : isDisabled
-                                ? (theme.isDark ? '#52525B' : colors.sand[300])
+                                ? theme.muted
                                 : theme.text
                             }
                             style={isSelected ? styles.bold : undefined}
@@ -480,12 +480,12 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
               )}
 
               {/* Resumen de selección actual y edad */}
-              <Card padding="sm" style={[styles.summaryBox, { backgroundColor: theme.isDark ? '#242834' : colors.sand[50], borderColor: theme.border, borderWidth: 1 }]}>
+              <Card padding="sm" style={[styles.summaryBox, { backgroundColor: theme.surfaceElevated, borderColor: theme.border, borderWidth: 1 }]}>
                 <Row justify="space-between" align="center">
                   <Text variant="caption" color={theme.subtext}>
                     Seleccionado:
                   </Text>
-                  <Text variant="caption" color={theme.isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+                  <Text variant="caption" color={theme.isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                     {tempSelected ? formatearFechaVisual(tempSelected) : 'Ninguno'}
                   </Text>
                 </Row>
@@ -657,8 +657,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   yearItemSelected: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#E04320',
+    backgroundColor: colors.coral[600],
+    borderColor: colors.coral[700],
   },
   calendarBody: {
     marginTop: spacing.xs,
@@ -685,7 +685,7 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   dayCellSelected: {
-    backgroundColor: '#FF5A36',
+    backgroundColor: colors.coral[600],
   },
   dayCellDisabled: {
     opacity: 0.3,

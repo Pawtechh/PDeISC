@@ -66,9 +66,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   onSuccess,
 }) => {
   const { theme, isDark } = useTheme();
-  const labelColor = isDark ? '#E2E8F0' : colors.sand[700];
-  const titleColor = isDark ? '#F5F5F7' : '#111115';
-  const subtextColor = isDark ? '#94A3B8' : colors.sand[500];
+  const labelColor = isDark ? theme.sand : colors.sand[700];
+  const titleColor = theme.text;
+  const subtextColor = theme.subtext;
   const [createRentalApi] = useCreateRentalMutation();
   const scrollRef = useRef<ScrollView>(null);
 
@@ -469,15 +469,16 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             padding="xl"
             style={[
               styles.successCard,
-              isDark && {
-                borderColor: 'rgba(255, 255, 255, 0.09)',
+              {
+                backgroundColor: theme.surface,
+                borderColor: theme.border,
                 borderWidth: 1,
               },
             ]}
             testID="checkout-success-card"
           >
             <Stack spacing="md" align="center">
-              <View style={styles.checkCircle}>
+              <View style={[styles.checkCircle, { backgroundColor: theme.success }]}>
                 <Text style={{ fontSize: 36, color: colors.white }}>✓</Text>
               </View>
 
@@ -505,13 +506,13 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 </Row>
                 <Row justify="space-between">
                   <Text variant="caption" color={subtextColor}>Total abonado:</Text>
-                  <Text variant="body" color={isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+                  <Text variant="body" color={isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                     ${receiptData.total.toLocaleString('es-AR')} ARS
                   </Text>
                 </Row>
                 <Row justify="space-between">
                   <Text variant="caption" color={subtextColor}>Garantía de cuidado:</Text>
-                  <Text variant="caption" color={colors.semantic.success} style={styles.bold}>
+                  <Text variant="caption" color={theme.successText} style={styles.bold}>
                     Pre-autorizada ($50.000 ARS)
                   </Text>
                 </Row>
@@ -559,13 +560,13 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
         {/* Global Banner Error si intentó confirmar con fallas */}
         {globalBannerError && (
-          <Card padding="sm" style={styles.globalErrorBanner} testID="banner-error-checkout">
+          <Card padding="sm" style={[styles.globalErrorBanner, { backgroundColor: theme.dangerBg, borderColor: theme.dangerBorder }]} testID="banner-error-checkout">
             <Row justify="space-between" align="center">
-              <Text variant="caption" color={colors.semantic.danger} style={styles.bold}>
+              <Text variant="caption" color={theme.dangerText} style={styles.bold}>
                 {globalBannerError}
               </Text>
               <TouchableOpacity onPress={() => setGlobalBannerError(null)}>
-                <Text variant="caption" color={colors.sand[500]}>✕</Text>
+                <Text variant="caption" color={theme.subtext}>✕</Text>
               </TouchableOpacity>
             </Row>
           </Card>
@@ -576,8 +577,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           padding="md"
           style={[
             styles.boardCard,
-            isDark && {
-              borderColor: 'rgba(255, 255, 255, 0.09)',
+            {
+              backgroundColor: theme.surfaceElevated,
+              borderColor: theme.border,
               borderWidth: 1,
             },
           ]}
@@ -598,7 +600,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               <Text variant="caption" color={subtextColor}>
                 {board.marca} • {board.medidas}
               </Text>
-              <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+              <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                 Sede Central Playa Grande
               </Text>
             </Stack>
@@ -620,17 +622,16 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     onPress={() => setSelectedHoras(h)}
                     style={[
                       styles.hourPill,
-                      isDark && {
-                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                        borderColor: 'rgba(255, 255, 255, 0.10)',
+                      {
+                        backgroundColor: isSelected ? theme.primary : theme.surface,
+                        borderColor: isSelected ? theme.primaryHover : theme.border,
                       },
-                      isSelected && styles.hourPillSelected,
                     ]}
                     testID={`checkout-duration-${h}h`}
                   >
                     <Text
                       variant="caption"
-                      color={isSelected ? colors.white : (isDark ? '#94A3B8' : colors.sand[700])}
+                      color={isSelected ? theme.primaryText : theme.subtext}
                       style={isSelected ? styles.bold : undefined}
                     >
                       {h} hs {h === 8 ? '(25% OFF)' : ''}
@@ -680,8 +681,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.viewModeToggle,
                         {
-                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
-                          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                          backgroundColor: theme.surfaceElevated,
+                          borderColor: theme.border,
                         },
                       ]}
                       accessibilityRole="button"
@@ -698,104 +699,50 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 {/* Filtro Rápido por Franjas Horarias (Tabs) */}
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginVertical: 2 }}>
                   <Row spacing="xs">
-                    <TouchableOpacity
-                      onPress={() => setSlotPeriodFilter('DISPONIBLES')}
-                      style={[
-                        styles.filterPeriodPill,
-                        slotPeriodFilter === 'DISPONIBLES' && styles.filterPeriodPillActive,
-                      ]}
-                    >
-                      <Text
-                        variant="caption"
-                        style={[
-                          styles.filterPeriodText,
-                          slotPeriodFilter === 'DISPONIBLES' && styles.filterPeriodTextActive,
-                        ]}
-                      >
-                        Solo Libres ({countDisponibles})
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={() => setSlotPeriodFilter('TODOS')}
-                      style={[
-                        styles.filterPeriodPill,
-                        slotPeriodFilter === 'TODOS' && styles.filterPeriodPillActive,
-                      ]}
-                    >
-                      <Text
-                        variant="caption"
-                        style={[
-                          styles.filterPeriodText,
-                          slotPeriodFilter === 'TODOS' && styles.filterPeriodTextActive,
-                        ]}
-                      >
-                        Todos ({availableSlots.length})
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={() => setSlotPeriodFilter('MANANA')}
-                      style={[
-                        styles.filterPeriodPill,
-                        slotPeriodFilter === 'MANANA' && styles.filterPeriodPillActive,
-                      ]}
-                    >
-                      <Text
-                        variant="caption"
-                        style={[
-                          styles.filterPeriodText,
-                          slotPeriodFilter === 'MANANA' && styles.filterPeriodTextActive,
-                        ]}
-                      >
-                        Mañana (06 - 12h)
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={() => setSlotPeriodFilter('TARDE')}
-                      style={[
-                        styles.filterPeriodPill,
-                        slotPeriodFilter === 'TARDE' && styles.filterPeriodPillActive,
-                      ]}
-                    >
-                      <Text
-                        variant="caption"
-                        style={[
-                          styles.filterPeriodText,
-                          slotPeriodFilter === 'TARDE' && styles.filterPeriodTextActive,
-                        ]}
-                      >
-                        Tarde (12 - 18h)
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={() => setSlotPeriodFilter('NOCHE')}
-                      style={[
-                        styles.filterPeriodPill,
-                        slotPeriodFilter === 'NOCHE' && styles.filterPeriodPillActive,
-                      ]}
-                    >
-                      <Text
-                        variant="caption"
-                        style={[
-                          styles.filterPeriodText,
-                          slotPeriodFilter === 'NOCHE' && styles.filterPeriodTextActive,
-                        ]}
-                      >
-                        Noche (18 - 21h)
-                      </Text>
-                    </TouchableOpacity>
+                    {[
+                      { id: 'DISPONIBLES' as const, label: `Solo Libres (${countDisponibles})` },
+                      { id: 'TODOS' as const, label: `Todos (${availableSlots.length})` },
+                      { id: 'MANANA' as const, label: 'Mañana (06 - 12h)' },
+                      { id: 'TARDE' as const, label: 'Tarde (12 - 18h)' },
+                      { id: 'NOCHE' as const, label: 'Noche (18 - 21h)' },
+                    ].map((pill) => {
+                      const active = slotPeriodFilter === pill.id;
+                      return (
+                        <TouchableOpacity
+                          key={pill.id}
+                          onPress={() => setSlotPeriodFilter(pill.id)}
+                          style={[
+                            styles.filterPeriodPill,
+                            {
+                              backgroundColor: active ? theme.primary : theme.surfaceElevated,
+                              borderColor: active ? theme.primaryHover : theme.border,
+                            },
+                          ]}
+                        >
+                          <Text
+                            variant="caption"
+                            style={[
+                              styles.filterPeriodText,
+                              {
+                                color: active ? theme.primaryText : theme.subtext,
+                                fontWeight: active ? '700' : '600',
+                              },
+                            ]}
+                          >
+                            {pill.label}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
                   </Row>
                 </ScrollView>
 
                 {/* Mensaje de Horario Seleccionado */}
                 {horaRetiro ? (
-                  <View style={styles.selectedSlotNotice}>
+                  <View style={[styles.selectedSlotNotice, { backgroundColor: theme.primarySubtle, borderColor: theme.primaryBorder }]}>
                     <Row align="center" spacing="xs">
                       <Text style={{ fontSize: 13 }}></Text>
-                      <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '600' }}>
+                      <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '600' }}>
                         Horario de retiro seleccionado: <Text style={{ fontWeight: '800' }}>{horaRetiro} hs</Text>
                       </Text>
                     </Row>
@@ -803,8 +750,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 ) : null}
 
                 {availableSlots.every((s) => !s.disponible) ? (
-                  <Card padding="sm" style={styles.warningCard} testID="banner-slots-agotados">
-                    <Text variant="caption" color={colors.sunset[600]}>
+                  <Card padding="sm" style={[styles.warningCard, { backgroundColor: theme.warningBg, borderColor: theme.warningBorder }]} testID="banner-slots-agotados">
+                    <Text variant="caption" color={theme.warningText}>
                       No quedan horarios disponibles para hoy. Elegí otra fecha en el calendario.
                     </Text>
                   </Card>
@@ -834,8 +781,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.scrollArrowBtn,
                         {
-                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
-                          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                          backgroundColor: theme.surfaceElevated,
+                          borderColor: theme.border,
                         },
                       ]}
                       accessibilityLabel="Desplazar horarios anteriores"
@@ -874,8 +821,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.scrollArrowBtn,
                         {
-                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
-                          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                          backgroundColor: theme.surfaceElevated,
+                          borderColor: theme.border,
                         },
                       ]}
                       accessibilityLabel="Desplazar horarios siguientes"
@@ -908,10 +855,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               style={[
                 styles.accessoryItem,
                 {
-                  backgroundColor: isDark ? theme.surface : colors.sand[50],
-                  borderColor: isDark ? theme.border : colors.sand[200],
+                  backgroundColor: incluyeNeoprene ? theme.primarySubtle : theme.surfaceElevated,
+                  borderColor: incluyeNeoprene ? theme.primary : theme.border,
                 },
-                incluyeNeoprene && (isDark ? { backgroundColor: 'rgba(255, 90, 54, 0.16)', borderColor: '#FF5A36' } : styles.accessoryItemActive),
               ]}
               testID="toggle-accessory-neoprene"
             >
@@ -928,15 +874,11 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   style={[
                     styles.accessoryCheck,
                     {
-                      backgroundColor: incluyeNeoprene
-                        ? '#FF5A36'
-                        : isDark
-                        ? theme.border
-                        : colors.sand[200],
+                      backgroundColor: incluyeNeoprene ? theme.primary : theme.border,
                     },
                   ]}
                 >
-                  <Text style={{ color: incluyeNeoprene ? colors.white : theme.subtext, fontWeight: 'bold' }}>
+                  <Text style={{ color: incluyeNeoprene ? theme.primaryText : theme.subtext, fontWeight: 'bold' }}>
                     {incluyeNeoprene ? '✓' : '+'}
                   </Text>
                 </View>
@@ -951,18 +893,14 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.tallePill,
                         {
-                          backgroundColor: talleNeoprene === t
-                            ? '#FF5A36'
-                            : isDark
-                            ? theme.card
-                            : colors.sand[200],
+                          backgroundColor: talleNeoprene === t ? theme.primary : theme.surface,
                         },
                       ]}
                     >
                       <Text
                         variant="caption"
                         style={{
-                          color: talleNeoprene === t ? colors.white : theme.text,
+                          color: talleNeoprene === t ? theme.primaryText : theme.text,
                           fontWeight: '600',
                         }}
                       >
@@ -980,10 +918,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               style={[
                 styles.accessoryItem,
                 {
-                  backgroundColor: isDark ? theme.surface : colors.sand[50],
-                  borderColor: isDark ? theme.border : colors.sand[200],
+                  backgroundColor: incluyeLeash ? theme.primarySubtle : theme.surfaceElevated,
+                  borderColor: incluyeLeash ? theme.primary : theme.border,
                 },
-                incluyeLeash && (isDark ? { backgroundColor: 'rgba(255, 90, 54, 0.16)', borderColor: '#FF5A36' } : styles.accessoryItemActive),
               ]}
               testID="toggle-accessory-leash"
             >
@@ -1000,15 +937,11 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   style={[
                     styles.accessoryCheck,
                     {
-                      backgroundColor: incluyeLeash
-                        ? '#FF5A36'
-                        : isDark
-                        ? theme.border
-                        : colors.sand[200],
+                      backgroundColor: incluyeLeash ? theme.primary : theme.border,
                     },
                   ]}
                 >
-                  <Text style={{ color: incluyeLeash ? colors.white : theme.subtext, fontWeight: 'bold' }}>
+                  <Text style={{ color: incluyeLeash ? theme.primaryText : theme.subtext, fontWeight: 'bold' }}>
                     {incluyeLeash ? '✓' : '+'}
                   </Text>
                 </View>
@@ -1021,10 +954,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               style={[
                 styles.accessoryItem,
                 {
-                  backgroundColor: isDark ? theme.surface : colors.sand[50],
-                  borderColor: isDark ? theme.border : colors.sand[200],
+                  backgroundColor: incluyeParafina ? theme.primarySubtle : theme.surfaceElevated,
+                  borderColor: incluyeParafina ? theme.primary : theme.border,
                 },
-                incluyeParafina && (isDark ? { backgroundColor: 'rgba(255, 90, 54, 0.16)', borderColor: '#FF5A36' } : styles.accessoryItemActive),
               ]}
               testID="toggle-accessory-parafina"
             >
@@ -1041,15 +973,11 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   style={[
                     styles.accessoryCheck,
                     {
-                      backgroundColor: incluyeParafina
-                        ? '#FF5A36'
-                        : isDark
-                        ? theme.border
-                        : colors.sand[200],
+                      backgroundColor: incluyeParafina ? theme.primary : theme.border,
                     },
                   ]}
                 >
-                  <Text style={{ color: incluyeParafina ? colors.white : theme.subtext, fontWeight: 'bold' }}>
+                  <Text style={{ color: incluyeParafina ? theme.primaryText : theme.subtext, fontWeight: 'bold' }}>
                     {incluyeParafina ? '✓' : '+'}
                   </Text>
                 </View>
@@ -1064,8 +992,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           style={[
             styles.breakdownCard,
             {
-              backgroundColor: isDark ? theme.card : '#F5F5F7',
-              borderColor: isDark ? theme.border : 'rgba(0, 0, 0, 0.08)',
+              backgroundColor: theme.surfaceElevated,
+              borderColor: theme.border,
             },
           ]}
           testID="checkout-price-breakdown"
@@ -1083,10 +1011,10 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
             {descuento > 0 && (
               <Row justify="space-between">
-                <Text variant="body" color={colors.semantic.success} style={styles.bold}>
+                <Text variant="body" color={theme.successText} style={styles.bold}>
                   Descuento día completo (25% OFF):
                 </Text>
-                <Text variant="body" color={colors.semantic.success} style={styles.bold}>
+                <Text variant="body" color={theme.successText} style={styles.bold}>
                   -${descuento.toLocaleString('es-AR')} ARS
                 </Text>
               </Row>
@@ -1094,10 +1022,10 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
             {precioAccesorios > 0 && (
               <Row justify="space-between">
-                <Text variant="body" color={isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+                <Text variant="body" color={isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                   Accesorios seleccionados:
                 </Text>
-                <Text variant="body" color={isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
+                <Text variant="body" color={isDark ? theme.primaryHover : theme.primary} style={styles.bold}>
                   +${precioAccesorios.toLocaleString('es-AR')} ARS
                 </Text>
               </Row>
@@ -1118,7 +1046,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               <Text variant="h2" color={theme.text}>
                 TOTAL A PAGAR HOY:
               </Text>
-              <Text variant="display" color={isDark ? '#FF7A59' : '#E04320'} testID="checkout-total-price">
+              <Text variant="display" color={isDark ? theme.primaryHover : theme.primary} testID="checkout-total-price">
                 ${totalAPagar.toLocaleString('es-AR')} ARS
               </Text>
             </Row>
@@ -1135,14 +1063,14 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 style={[
                   styles.debitBanner,
                   {
-                    backgroundColor: isDark ? 'rgba(255, 90, 54, 0.10)' : 'rgba(255, 90, 54, 0.06)',
-                    borderColor: isDark ? 'rgba(255, 90, 54, 0.35)' : 'rgba(255, 90, 54, 0.24)',
+                    backgroundColor: theme.primarySubtle,
+                    borderColor: theme.primaryBorder,
                   },
                 ]}
               >
                 <Row spacing="xs" align="center">
                   <Text style={{ fontSize: 18 }}>ℹ️</Text>
-                  <Text variant="caption" color={isDark ? '#F5F5F7' : '#111115'} style={{ flex: 1, fontWeight: '600' }}>
+                  <Text variant="caption" color={theme.text} style={{ flex: 1, fontWeight: '600' }}>
                     Solo aceptamos TARJETA DE DÉBITO. No aceptamos crédito.
                   </Text>
                 </Row>
@@ -1154,8 +1082,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 style={[
                   styles.testCardsBox,
                   {
-                    backgroundColor: isDark ? theme.surface : colors.sand[50],
-                    borderColor: isDark ? theme.border : colors.sand[200],
+                    backgroundColor: theme.surfaceElevated,
+                    borderColor: theme.border,
                   },
                 ]}
               >
@@ -1167,11 +1095,11 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   <Row justify="space-between" align="center">
                     <Row spacing="xs" align="center">
                       <Text style={{ fontSize: 14 }}></Text>
-                      <Text variant="caption" color={isDark ? '#F5F5F7' : '#111115'} style={styles.bold}>
+                      <Text variant="caption" color={theme.text} style={styles.bold}>
                         Números de prueba válidos (Sandbox DEV)
                       </Text>
                     </Row>
-                    <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'}>
+                    <Text variant="caption" color={theme.subtext}>
                       {showTestCardsAccordion ? '▲ Ocultar' : '▼ Ver'}
                     </Text>
                   </Row>
@@ -1228,7 +1156,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
               {/* Advertencia si la marca es desconocida (Bloque 2.5) */}
               {digits.length >= 6 && marca === 'desconocida' && (
-                <Text variant="caption" color={colors.sunset[600]}>
+                <Text variant="caption" color={theme.warningText}>
                   No pudimos detectar la marca. Verificá que el número esté bien escrito.
                 </Text>
               )}
@@ -1241,8 +1169,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 <View
                   style={[
                     styles.inputBox,
+                    { backgroundColor: theme.inputBg, borderColor: theme.inputBorder },
                     touched.numeroTarjeta &&
-                      (isCardNumberValid ? styles.inputValid : styles.inputInvalid),
+                      (isCardNumberValid ? { borderColor: theme.success } : { borderColor: theme.danger }),
                   ]}
                 >
                   <TextInput
@@ -1250,9 +1179,10 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     onChangeText={handleNumeroChange}
                     onBlur={() => setTouched((prev) => ({ ...prev, numeroTarjeta: true }))}
                     placeholder="4509 9535 6623 3704"
+                    placeholderTextColor={theme.muted}
                     keyboardType="numeric"
                     maxLength={19}
-                    style={styles.textInput}
+                    style={[styles.textInput, { color: theme.text }]}
                     testID="checkout-input-card-number"
                   />
                   {touched.numeroTarjeta && (
@@ -1265,7 +1195,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 {touched.numeroTarjeta && (
                   <Text
                     variant="caption"
-                    color={isCardNumberValid ? colors.semantic.success : colors.semantic.danger}
+                    color={isCardNumberValid ? theme.successText : theme.dangerText}
                     testID="feedback-card-number"
                   >
                     {isCardNumberValid
@@ -1283,8 +1213,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 <View
                   style={[
                     styles.inputBox,
+                    { backgroundColor: theme.inputBg, borderColor: theme.inputBorder },
                     touched.nombreTitular &&
-                      (isNameValid ? styles.inputValid : styles.inputInvalid),
+                      (isNameValid ? { borderColor: theme.success } : { borderColor: theme.danger }),
                   ]}
                 >
                   <TextInput
@@ -1295,8 +1226,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     }}
                     onBlur={() => setTouched((prev) => ({ ...prev, nombreTitular: true }))}
                     placeholder="LUCAS PERALTA"
+                    placeholderTextColor={theme.muted}
                     autoCapitalize="characters"
-                    style={styles.textInput}
+                    style={[styles.textInput, { color: theme.text }]}
                     testID="checkout-input-card-name"
                   />
                   {touched.nombreTitular && (
@@ -1308,7 +1240,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 {touched.nombreTitular && (
                   <Text
                     variant="caption"
-                    color={isNameValid ? colors.semantic.success : colors.semantic.danger}
+                    color={isNameValid ? theme.successText : theme.dangerText}
                     testID="feedback-card-name"
                   >
                     {isNameValid ? 'Válido' : `${fieldErrors.nombreTitular}`}
@@ -1325,8 +1257,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   <View
                     style={[
                       styles.inputBox,
+                      { backgroundColor: theme.inputBg, borderColor: theme.inputBorder },
                       touched.vencimiento &&
-                        (isExpValid ? styles.inputValid : styles.inputInvalid),
+                        (isExpValid ? { borderColor: theme.success } : { borderColor: theme.danger }),
                     ]}
                   >
                     <TextInput
@@ -1334,9 +1267,10 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       onChangeText={handleVencimientoChange}
                       onBlur={() => setTouched((prev) => ({ ...prev, vencimiento: true }))}
                       placeholder="12/28"
+                      placeholderTextColor={theme.muted}
                       keyboardType="numeric"
                       maxLength={5}
-                      style={styles.textInput}
+                      style={[styles.textInput, { color: theme.text }]}
                       testID="checkout-input-card-exp"
                     />
                     {touched.vencimiento && (
@@ -1348,7 +1282,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   {touched.vencimiento && (
                     <Text
                       variant="caption"
-                      color={isExpValid ? colors.semantic.success : colors.semantic.danger}
+                      color={isExpValid ? theme.successText : theme.dangerText}
                       testID="feedback-card-exp"
                     >
                       {isExpValid
@@ -1365,8 +1299,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   <View
                     style={[
                       styles.inputBox,
+                      { backgroundColor: theme.inputBg, borderColor: theme.inputBorder },
                       touched.cvv &&
-                        (isCvvValid ? styles.inputValid : styles.inputInvalid),
+                        (isCvvValid ? { borderColor: theme.success } : { borderColor: theme.danger }),
                     ]}
                   >
                     <TextInput
@@ -1374,10 +1309,11 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       onChangeText={handleCvvChange}
                       onBlur={() => setTouched((prev) => ({ ...prev, cvv: true }))}
                       placeholder={marca === 'amex' ? '1234' : '123'}
+                      placeholderTextColor={theme.muted}
                       keyboardType="numeric"
                       secureTextEntry
                       maxLength={maxCvvLen}
-                      style={styles.textInput}
+                      style={[styles.textInput, { color: theme.text }]}
                       testID="checkout-input-card-cvv"
                     />
                     {touched.cvv && (
@@ -1389,7 +1325,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   {touched.cvv && (
                     <Text
                       variant="caption"
-                      color={isCvvValid ? colors.semantic.success : colors.semantic.danger}
+                      color={isCvvValid ? theme.successText : theme.dangerText}
                       testID="feedback-card-cvv"
                     >
                       {isCvvValid ? 'Válido' : `${maxCvvLen} dígitos requeridos`}
@@ -1406,8 +1342,9 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 <View
                   style={[
                     styles.inputBox,
+                    { backgroundColor: theme.inputBg, borderColor: theme.inputBorder },
                     touched.dniTitular &&
-                      (isDniValid ? styles.inputValid : styles.inputInvalid),
+                      (isDniValid ? { borderColor: theme.success } : { borderColor: theme.danger }),
                   ]}
                 >
                   <TextInput
@@ -1415,9 +1352,10 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     onChangeText={handleDniChange}
                     onBlur={() => setTouched((prev) => ({ ...prev, dniTitular: true }))}
                     placeholder="38123456"
+                    placeholderTextColor={theme.muted}
                     keyboardType="numeric"
                     maxLength={8}
-                    style={styles.textInput}
+                    style={[styles.textInput, { color: theme.text }]}
                     testID="checkout-input-card-dni"
                   />
                   {touched.dniTitular && (
@@ -1429,7 +1367,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 {touched.dniTitular && (
                   <Text
                     variant="caption"
-                    color={isDniValid ? colors.semantic.success : colors.semantic.danger}
+                    color={isDniValid ? theme.successText : theme.dangerText}
                     testID="feedback-card-dni"
                   >
                     {isDniValid ? 'Válido' : 'DNI debe tener 7 u 8 dígitos'}
@@ -1448,13 +1386,13 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     style={[
                       styles.checkbox,
                       {
-                        backgroundColor: aceptaGarantia ? '#FF5A36' : colors.white,
-                        borderColor: aceptaGarantia ? '#FF5A36' : colors.sand[500],
+                        backgroundColor: aceptaGarantia ? theme.primary : theme.inputBg,
+                        borderColor: aceptaGarantia ? theme.primary : theme.muted,
                       },
                     ]}
                   >
                     {aceptaGarantia && (
-                      <Text variant="caption" color={colors.white} style={{ fontWeight: '700' }}>
+                      <Text variant="caption" color={theme.primaryText} style={{ fontWeight: '700' }}>
                         ✓
                       </Text>
                     )}
@@ -1474,7 +1412,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             padding="md"
             style={[
               styles.signatureSectionCard,
-              isDark && {
+              {
                 backgroundColor: theme.card,
                 borderColor: theme.border,
               },
@@ -1502,16 +1440,16 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           padding="md"
           style={[
             isFormValid ? styles.summaryCardValid : styles.summaryCardInvalid,
-            isDark && {
-              backgroundColor: isFormValid ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
-              borderColor: isDark ? (isFormValid ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)') : undefined,
+            {
+              backgroundColor: isFormValid ? theme.successBg : theme.warningBg,
+              borderColor: isFormValid ? theme.successBorder : theme.warningBorder,
             },
           ]}
           testID="checkout-validation-panel"
         >
           <Stack spacing="xs">
             <Row justify="space-between" align="center">
-              <Text variant="button" color={isFormValid ? colors.semantic.success : titleColor}>
+              <Text variant="button" color={isFormValid ? theme.successText : titleColor}>
                 {isFormValid ? '✓ Todo Listo para Confirmar' : 'Estado de Validación:'}
               </Text>
               <Badge
@@ -1560,16 +1498,18 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 spacing="xs"
                 style={[
                   styles.errorList,
-                  isDark && {
-                    backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                  {
+                    backgroundColor: theme.dangerBg,
+                    borderColor: theme.dangerBorder,
+                    borderWidth: 1,
                   },
                 ]}
               >
-                <Text variant="caption" color={colors.semantic.danger} style={styles.bold}>
+                <Text variant="caption" color={theme.dangerText} style={styles.bold}>
                   Faltan corregir o completar:
                 </Text>
                 {Object.entries(fieldErrors).map(([field, msg]) => (
-                  <Text key={field} variant="caption" color={colors.semantic.danger} style={{ fontSize: 11 }}>
+                  <Text key={field} variant="caption" color={theme.dangerText} style={{ fontSize: 11 }}>
                     • {msg}
                   </Text>
                 ))}
@@ -1601,7 +1541,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
         {/* Nota Legal al Pie */}
         <Card padding="sm" style={styles.legalBox} testID="checkout-legal-notice">
-          <Text variant="caption" color={colors.sand[500]} style={{ textAlign: 'center', fontSize: 11 }}>
+          <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center', fontSize: 11 }}>
             Transacción procesada bajo protocolo encriptado SSL • Garantía pre-autorizada.{'\n'}
             Conforme a la Ley 24.240 de Defensa del Consumidor.
           </Text>
@@ -1622,7 +1562,7 @@ const getBrandBadgeStyle = (brand: CardBrand) => {
     case 'amex':
       return { backgroundColor: '#006FCF' };
     default:
-      return { backgroundColor: '#64748B' };
+      return { backgroundColor: colors.sand[500] };
   }
 };
 
@@ -1635,14 +1575,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     borderRadius: radii.full,
-    backgroundColor: 'rgba(255, 90, 54, 0.06)',
+    backgroundColor: colors.coral.subtle,
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: colors.coral.border,
   },
   globalErrorBanner: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: 'rgba(182, 57, 51, 0.10)',
     borderWidth: 1,
-    borderColor: '#F87171',
+    borderColor: 'rgba(182, 57, 51, 0.25)',
     borderRadius: radii.md,
   },
   boardCard: {
@@ -1666,18 +1606,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   hourPillSelected: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#E04320',
+    backgroundColor: colors.coral[600],
+    borderColor: colors.coral[700],
   },
   breakdownCard: {
-    backgroundColor: 'rgba(255, 90, 54, 0.05)',
+    backgroundColor: colors.coral.subtle,
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.20)',
+    borderColor: colors.coral.border,
   },
   debitBanner: {
-    backgroundColor: 'rgba(255, 90, 54, 0.06)',
+    backgroundColor: colors.coral.subtle,
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: colors.coral.border,
     borderRadius: radii.md,
   },
   testCardsBox: {
@@ -1697,7 +1637,7 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   useCardButton: {
-    backgroundColor: '#FF5A36',
+    backgroundColor: colors.coral[600],
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     borderRadius: radii.sm,
@@ -1743,25 +1683,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   summaryCardValid: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: 'rgba(36, 115, 96, 0.09)',
     borderWidth: 1,
-    borderColor: '#86EFAC',
+    borderColor: 'rgba(36, 115, 96, 0.24)',
     borderRadius: radii.md,
   },
   summaryCardInvalid: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: 'rgba(164, 112, 28, 0.09)',
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: 'rgba(164, 112, 28, 0.24)',
     borderRadius: radii.md,
   },
   warningCard: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: 'rgba(164, 112, 28, 0.09)',
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: 'rgba(164, 112, 28, 0.24)',
     borderRadius: radii.sm,
   },
   errorList: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: 'rgba(182, 57, 51, 0.08)',
     padding: spacing.xs,
     borderRadius: radii.sm,
     marginTop: 4,
@@ -1786,7 +1726,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(28, 27, 24, 0.62)',
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.md,
@@ -1814,8 +1754,8 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   accessoryItemActive: {
-    backgroundColor: '#EFF8FF',
-    borderColor: 'rgba(255, 90, 54, 0.45)',
+    backgroundColor: colors.coral.subtle,
+    borderColor: colors.coral.border,
   },
   accessoryCheck: {
     width: 28,
@@ -1826,7 +1766,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   accessoryCheckActive: {
-    backgroundColor: '#FF5A36',
+    backgroundColor: colors.coral[600],
   },
   tallePill: {
     paddingHorizontal: 10,
@@ -1835,7 +1775,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.sand[200],
   },
   tallePillActive: {
-    backgroundColor: '#FF5A36',
+    backgroundColor: colors.coral[600],
   },
   viewModeToggle: {
     paddingHorizontal: 8,
@@ -1853,8 +1793,8 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   filterPeriodPillActive: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#E04320',
+    backgroundColor: colors.coral[600],
+    borderColor: colors.coral[700],
   },
   filterPeriodText: {
     fontSize: 11,
@@ -1869,9 +1809,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: radii.sm,
-    backgroundColor: 'rgba(255, 90, 54, 0.10)',
+    backgroundColor: colors.coral.subtle,
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.28)',
+    borderColor: colors.coral.border,
   },
   slotsWrapContainer: {
     flexDirection: 'row',
@@ -1902,6 +1842,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   sigMethodPillActive: {
-    backgroundColor: 'rgba(255, 90, 54, 0.12)',
+    backgroundColor: colors.coral.subtle,
   },
 });

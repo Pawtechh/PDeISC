@@ -41,7 +41,7 @@ const syncUserFromMeResponse = async (
 
 export function RootNavigator() {
   const dispatch = useAppDispatch();
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
   const [isInitializing, setIsInitializing] = useState(true);
 
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
@@ -356,9 +356,7 @@ export function RootNavigator() {
             backgroundColor:
               Platform.OS === 'web'
                 ? 'transparent'
-                : isDark
-                ? '#222630'
-                : '#F5F6F8',
+                : theme.background,
           },
         ]}
       >
@@ -366,8 +364,8 @@ export function RootNavigator() {
           style={[
             styles.splashCard,
             {
-              backgroundColor: isDark ? 'rgba(34, 38, 48, 0.86)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+              backgroundColor: isDark ? 'rgba(42, 41, 38, 0.94)' : theme.card,
+              borderColor: theme.border,
             },
           ]}
         >
@@ -375,25 +373,25 @@ export function RootNavigator() {
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.10)',
-                borderColor: isDark ? 'rgba(255, 90, 54, 0.36)' : 'rgba(255, 90, 54, 0.25)',
+                backgroundColor: theme.primarySubtle,
+                borderColor: theme.primaryBorder,
               },
             ]}
           >
-            <Waves size={32} color={isDark ? '#FF7A59' : '#FF5A36'} strokeWidth={2.2} />
+            <Waves size={32} color={isDark ? theme.primaryHover : theme.primary} strokeWidth={2.2} />
           </View>
-          <Text style={[styles.brandTitle, { color: isDark ? '#F5F5F7' : '#111115' }]}>
+          <Text style={[styles.brandTitle, { color: theme.text }]}>
             SURF RENTAL
           </Text>
-          <Text style={[styles.brandSubtitle, { color: isDark ? '#FF7A59' : '#E04320' }]}>
+          <Text style={[styles.brandSubtitle, { color: isDark ? theme.primaryHover : theme.primary }]}>
             SEDE PLAYA GRANDE • MAR DEL PLATA
           </Text>
           <ActivityIndicator
             size="small"
-            color={isDark ? '#FF7A59' : '#FF5A36'}
+            color={isDark ? theme.primaryHover : theme.primary}
             style={{ marginTop: 18 }}
           />
-          <Text style={[styles.loadingHint, { color: isDark ? '#A1A1AA' : '#52525B' }]}>
+          <Text style={[styles.loadingHint, { color: theme.subtext }]}>
             Sincronizando catálogo y telemetría costera...
           </Text>
         </View>
@@ -406,8 +404,8 @@ export function RootNavigator() {
     ...baseNavTheme,
     colors: {
       ...baseNavTheme.colors,
-      background: Platform.OS === 'web' ? 'transparent' : isDark ? '#222630' : '#F5F6F8',
-      card: Platform.OS === 'web' ? 'transparent' : isDark ? '#222630' : '#FFFFFF',
+      background: Platform.OS === 'web' ? 'transparent' : theme.background,
+      card: Platform.OS === 'web' ? 'transparent' : theme.surface,
     },
   };
 

@@ -148,8 +148,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           style={[
             styles.palette,
             {
-              backgroundColor: isDark ? '#222630' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.09)',
+              backgroundColor: theme.surface,
+              borderColor: theme.border,
             },
           ]}
         >
@@ -190,7 +190,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   key={item.id}
                   style={[
                     styles.actionItem,
-                    { borderBottomColor: isDark ? 'rgba(255,255,255,0.06)' : colors.sand[200] },
+                    { borderBottomColor: theme.border },
                   ]}
                   onPress={item.action}
                   activeOpacity={0.7}
@@ -214,18 +214,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       style={[
                         styles.shortcutBadge,
                         {
-                          backgroundColor: isDark
-                            ? 'rgba(255, 90, 54, 0.14)'
-                            : 'rgba(255, 90, 54, 0.08)',
-                          borderColor: isDark
-                            ? 'rgba(255, 90, 54, 0.30)'
-                            : 'rgba(255, 90, 54, 0.20)',
+                          backgroundColor: theme.primarySubtle,
+                          borderColor: theme.primaryBorder,
                         },
                       ]}
                     >
                       <Text
                         variant="caption"
-                        color={isDark ? '#FF7A59' : '#E04320'}
+                        color={isDark ? theme.primaryHover : theme.primary}
                         style={{ fontSize: 10, fontWeight: '700' }}
                       >
                         {item.shortcut}
@@ -238,13 +234,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           </ScrollView>
 
           {/* Footer Informativo */}
-          <View style={[styles.footer, { backgroundColor: isDark ? '#0C0C10' : '#F4F4F5' }]}>
+          <View style={[styles.footer, { backgroundColor: theme.cardHighlight }]}>
             <Row justify="space-between" align="center">
               <Text variant="caption" color={theme.subtext} style={{ fontSize: 11 }}>
                 Tip: Navegá con el teclado o tocá una acción
               </Text>
-              <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontSize: 11, fontWeight: '700' }}>
-                SURF RENTAL MDP • OBSIDIAN LUXE
+              <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontSize: 11, fontWeight: '700' }}>
+                SURF RENTAL MDP • PLAYA GRANDE
               </Text>
             </Row>
           </View>

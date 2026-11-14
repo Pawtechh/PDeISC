@@ -19,39 +19,26 @@ export const Badge: React.FC<BadgeProps> = ({
   style,
   icon,
 }) => {
-  const { isDark } = useTheme();
+  const { theme } = useTheme();
 
   const getBadgeColors = (): { bg: string; border: string; text: string } => {
-    if (isDark) {
-      switch (variant) {
-        case 'success':
-          return { bg: 'rgba(34, 168, 107, 0.14)', border: 'rgba(34, 168, 107, 0.28)', text: '#57C992' };
-        case 'warning':
-          return { bg: 'rgba(217, 155, 56, 0.14)', border: 'rgba(217, 155, 56, 0.28)', text: '#E5B869' };
-        case 'danger':
-          return { bg: 'rgba(223, 78, 78, 0.14)', border: 'rgba(223, 78, 78, 0.28)', text: '#EE7A7A' };
-        case 'info':
-          return { bg: 'rgba(148, 163, 184, 0.14)', border: 'rgba(148, 163, 184, 0.26)', text: '#CBD5E1' };
-        case 'ocean':
-          return { bg: 'rgba(226, 91, 60, 0.14)', border: 'rgba(226, 91, 60, 0.28)', text: '#EA7357' };
-        case 'sand':
-          return { bg: 'rgba(255, 255, 255, 0.07)', border: 'rgba(255, 255, 255, 0.14)', text: '#D1D5DB' };
-      }
-    }
-
     switch (variant) {
       case 'success':
-        return { bg: '#ECFDF5', border: '#A7F3D0', text: '#065F46' };
+        return { bg: theme.successBg, border: theme.successBorder, text: theme.success };
       case 'warning':
-        return { bg: '#FEF9EE', border: '#FDE6B8', text: '#8C5808' };
+        return { bg: theme.warningBg, border: theme.warningBorder, text: theme.warning };
       case 'danger':
-        return { bg: '#FEF2F2', border: '#FECACA', text: '#991B1B' };
+        return { bg: theme.dangerBg, border: theme.dangerBorder, text: theme.danger };
       case 'info':
-        return { bg: '#F1F5F9', border: '#E2E8F0', text: '#334155' };
+        return { bg: theme.infoBg, border: theme.infoBorder, text: theme.info };
       case 'ocean':
-        return { bg: 'rgba(226, 91, 60, 0.10)', border: 'rgba(226, 91, 60, 0.24)', text: '#CC482A' };
+        return { bg: theme.primarySubtle, border: theme.primaryBorder, text: theme.primary };
       case 'sand':
-        return { bg: '#F1F5F9', border: '#E2E8F0', text: '#475569' };
+        return {
+          bg: theme.isDark ? 'rgba(245, 242, 236, 0.07)' : theme.cardHighlight,
+          border: theme.border,
+          text: theme.subtext,
+        };
     }
   };
 

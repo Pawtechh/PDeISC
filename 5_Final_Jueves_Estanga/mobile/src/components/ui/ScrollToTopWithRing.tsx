@@ -19,7 +19,7 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
   visible = true,
   style,
 }) => {
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
 
   if (!visible) return null;
 
@@ -41,8 +41,8 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
     onPress();
   };
 
-  const primaryColor = isDark ? '#FF5A36' : '#E04320';
-  const trackColor = isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)';
+  const primaryColor = theme.primary;
+  const trackColor = isDark ? 'rgba(245, 242, 236, 0.12)' : 'rgba(28, 27, 24, 0.10)';
 
   return (
     <TouchableOpacity
@@ -52,9 +52,9 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? 'rgba(34, 38, 48, 0.88)' : 'rgba(255, 255, 255, 0.94)',
+          backgroundColor: isDark ? 'rgba(42, 41, 38, 0.92)' : 'rgba(253, 252, 250, 0.96)',
           shadowColor: '#000000',
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
+          borderColor: theme.border,
         },
         style,
       ]}
@@ -90,7 +90,7 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
         <Text
           style={[
             styles.arrowIcon,
-            { color: isDark ? '#FF7A59' : '#E04320' },
+            { color: isDark ? theme.primaryHover : theme.primary },
           ]}
         >
           ↑

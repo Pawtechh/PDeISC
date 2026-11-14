@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Star } from 'lucide-react-native';
 import { spacing } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 
 export interface RatingStarsProps {
   rating: number;
@@ -18,6 +19,7 @@ export const RatingStars: React.FC<RatingStarsProps> = ({
   interactive = false,
   onRatingChange,
 }) => {
+  const { theme } = useTheme();
   const stars = [];
 
   for (let i = 1; i <= maxStars; i++) {
@@ -26,8 +28,8 @@ export const RatingStars: React.FC<RatingStarsProps> = ({
       <View key={i} style={styles.starWrapper}>
         <Star
           size={size}
-          color={isFilled ? '#F59E0B' : '#475569'}
-          fill={isFilled ? '#F59E0B' : 'transparent'}
+          color={isFilled ? theme.champagne : theme.muted}
+          fill={isFilled ? theme.champagne : 'transparent'}
           strokeWidth={1.5}
         />
       </View>

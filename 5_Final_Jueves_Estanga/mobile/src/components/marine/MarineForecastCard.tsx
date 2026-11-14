@@ -8,7 +8,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { useGetMarineForecastQuery } from '../../api/weatherApi';
 
 export const MarineForecastCard: React.FC = () => {
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
   const { data, isLoading } = useGetMarineForecastQuery(undefined, {
     pollingInterval: 60000,
   });
@@ -21,14 +21,14 @@ export const MarineForecastCard: React.FC = () => {
         style={[
           styles.loadingContainer,
           {
-            backgroundColor: isDark ? 'rgba(45, 50, 64, 0.94)' : '#FFFFFF',
-            borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(15, 23, 42, 0.08)',
+            backgroundColor: theme.card,
+            borderColor: theme.border,
           },
         ]}
       >
         <Row align="center" justify="center" spacing="sm">
-          <ActivityIndicator size="small" color={isDark ? '#EA7357' : '#E25B3C'} />
-          <Text variant="caption" color={isDark ? '#B4BAC6' : '#5B6270'}>
+          <ActivityIndicator size="small" color={isDark ? theme.primaryHover : theme.primary} />
+          <Text variant="caption" color={theme.subtext}>
             Sincronizando boya oceanográfica de Playa Grande...
           </Text>
         </Row>
@@ -49,16 +49,16 @@ export const MarineForecastCard: React.FC = () => {
       style={[
         styles.instrumentContainer,
         {
-          backgroundColor: isDark ? 'rgba(45, 50, 64, 0.94)' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(15, 23, 42, 0.08)',
+          backgroundColor: theme.card,
+          borderColor: theme.border,
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(24px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+              backdropFilter: 'blur(24px) saturate(155%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(155%)',
               boxShadow: isDark
-                ? '0 16px 38px -12px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.07)'
-                : '0 12px 32px -12px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95)',
+                ? '0 16px 38px -12px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(245, 242, 236, 0.06)'
+                : '0 12px 32px -12px rgba(28, 27, 24, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95)',
             } as any)
           : {},
       ]}
@@ -69,16 +69,19 @@ export const MarineForecastCard: React.FC = () => {
           <Row align="center" spacing="sm" style={{ flex: 1, minWidth: 190 }}>
             <View
               {...(Platform.OS === 'web' ? ({ dataSet: { radarPulse: 'true' } } as any) : {})}
-              style={styles.radarPulse}
+              style={[
+                styles.radarPulse,
+                { backgroundColor: theme.successBg, borderColor: theme.successBorder },
+              ]}
             >
-              <View style={styles.radarDot} />
+              <View style={[styles.radarDot, { backgroundColor: theme.success }]} />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={[styles.stationLabel, { color: isDark ? '#94A3B8' : '#64748B' }]}>
+              <Text style={[styles.stationLabel, { color: theme.accent }]}>
                 ESTACIÓN TELEMÉTRICA EN VIVO
               </Text>
               <Text
-                style={[styles.spotTitle, { color: isDark ? '#F3F4F6' : '#16181E' }]}
+                style={[styles.spotTitle, { color: theme.text }]}
                 numberOfLines={2}
               >
                 {forecast.spotName} • Mar del Plata
@@ -91,7 +94,7 @@ export const MarineForecastCard: React.FC = () => {
           />
         </Row>
 
-        <Text style={[styles.conditionSummary, { color: isDark ? '#B4BAC6' : '#5B6270' }]}>
+        <Text style={[styles.conditionSummary, { color: theme.subtext }]}>
           {forecast.conditionText}
         </Text>
 
@@ -103,22 +106,22 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.dialTile,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.045)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.07)',
+                backgroundColor: isDark ? 'rgba(245, 242, 236, 0.045)' : theme.cardHighlight,
+                borderColor: theme.border,
               },
             ]}
           >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Waves size={14} color={isDark ? '#94A3B8' : '#64748B'} />
-              <Text style={[styles.dialLabel, { color: isDark ? '#9CA3AF' : '#64748B' }]}>ALTURA OLA</Text>
+              <Waves size={14} color={theme.accent} />
+              <Text style={[styles.dialLabel, { color: theme.muted }]}>ALTURA OLA</Text>
             </Row>
             <View style={styles.dialValueRow}>
-              <Text style={[styles.dialValue, { color: isDark ? '#F3F4F6' : '#16181E' }]}>
+              <Text style={[styles.dialValue, { color: theme.text }]}>
                 {forecast.waveHeightMeters}
               </Text>
-              <Text style={[styles.dialUnit, { color: isDark ? '#94A3B8' : '#64748B' }]}>m</Text>
+              <Text style={[styles.dialUnit, { color: theme.accent }]}>m</Text>
             </View>
-            <Text style={[styles.dialSubtext, { color: isDark ? '#8B93A3' : '#64748B' }]}>Swell Sur-Sudeste</Text>
+            <Text style={[styles.dialSubtext, { color: theme.muted }]}>Swell Sur-Sudeste</Text>
           </View>
 
           {/* Periodo */}
@@ -127,22 +130,22 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.dialTile,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.045)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.07)',
+                backgroundColor: isDark ? 'rgba(245, 242, 236, 0.045)' : theme.cardHighlight,
+                borderColor: theme.border,
               },
             ]}
           >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Timer size={14} color={isDark ? '#EA7357' : '#CC482A'} />
-              <Text style={[styles.dialLabel, { color: isDark ? '#9CA3AF' : '#64748B' }]}>PERIODO</Text>
+              <Timer size={14} color={isDark ? theme.primaryHover : theme.primary} />
+              <Text style={[styles.dialLabel, { color: theme.muted }]}>PERIODO</Text>
             </Row>
             <View style={styles.dialValueRow}>
-              <Text style={[styles.dialValue, { color: isDark ? '#F3F4F6' : '#16181E' }]}>
+              <Text style={[styles.dialValue, { color: theme.text }]}>
                 {forecast.wavePeriodSeconds}
               </Text>
-              <Text style={[styles.dialUnit, { color: isDark ? '#94A3B8' : '#64748B' }]}>s</Text>
+              <Text style={[styles.dialUnit, { color: theme.accent }]}>s</Text>
             </View>
-            <Text style={[styles.dialSubtext, { color: isDark ? '#8B93A3' : '#64748B' }]}>Olas espaciadas</Text>
+            <Text style={[styles.dialSubtext, { color: theme.muted }]}>Olas espaciadas</Text>
           </View>
 
           {/* Viento */}
@@ -151,22 +154,22 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.dialTile,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.045)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.07)',
+                backgroundColor: isDark ? 'rgba(245, 242, 236, 0.045)' : theme.cardHighlight,
+                borderColor: theme.border,
               },
             ]}
           >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Wind size={14} color={isDark ? '#94A3B8' : '#64748B'} />
-              <Text style={[styles.dialLabel, { color: isDark ? '#9CA3AF' : '#64748B' }]}>VIENTO</Text>
+              <Wind size={14} color={theme.accent} />
+              <Text style={[styles.dialLabel, { color: theme.muted }]}>VIENTO</Text>
             </Row>
             <View style={styles.dialValueRow}>
-              <Text style={[styles.dialValue, { color: isDark ? '#F3F4F6' : '#16181E' }]}>
+              <Text style={[styles.dialValue, { color: theme.text }]}>
                 {forecast.windSpeedKmh}
               </Text>
-              <Text style={[styles.dialUnit, { color: isDark ? '#94A3B8' : '#64748B' }]}>km/h</Text>
+              <Text style={[styles.dialUnit, { color: theme.accent }]}>km/h</Text>
             </View>
-            <Text style={[styles.dialSubtext, { color: isDark ? '#8B93A3' : '#64748B' }]}>Offshore suave</Text>
+            <Text style={[styles.dialSubtext, { color: theme.muted }]}>Offshore suave</Text>
           </View>
 
           {/* Agua */}
@@ -175,22 +178,22 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.dialTile,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.045)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.07)',
+                backgroundColor: isDark ? 'rgba(245, 242, 236, 0.045)' : theme.cardHighlight,
+                borderColor: theme.border,
               },
             ]}
           >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Thermometer size={14} color={isDark ? '#E5B869' : '#B87E22'} />
-              <Text style={[styles.dialLabel, { color: isDark ? '#9CA3AF' : '#64748B' }]}>TEMP. AGUA</Text>
+              <Thermometer size={14} color={theme.champagne} />
+              <Text style={[styles.dialLabel, { color: theme.muted }]}>TEMP. AGUA</Text>
             </Row>
             <View style={styles.dialValueRow}>
-              <Text style={[styles.dialValue, { color: isDark ? '#F3F4F6' : '#16181E' }]}>
+              <Text style={[styles.dialValue, { color: theme.text }]}>
                 {forecast.waterTemperatureCelsius}
               </Text>
-              <Text style={[styles.dialUnit, { color: isDark ? '#94A3B8' : '#64748B' }]}>°C</Text>
+              <Text style={[styles.dialUnit, { color: theme.accent }]}>°C</Text>
             </View>
-            <Text style={[styles.dialSubtext, { color: isDark ? '#8B93A3' : '#64748B' }]}>Traje 3/2 mm</Text>
+            <Text style={[styles.dialSubtext, { color: theme.muted }]}>Traje 3/2 mm</Text>
           </View>
         </View>
 
@@ -202,13 +205,13 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.shaperTipRow,
               {
-                borderTopColor: isDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(15, 23, 42, 0.07)',
+                borderTopColor: theme.divider,
                 flexWrap: 'wrap',
                 rowGap: 6,
               },
             ]}
           >
-            <Text style={[styles.shaperTipLabel, { color: isDark ? '#9CA3AF' : '#5B6270' }]}>
+            <Text style={[styles.shaperTipLabel, { color: theme.muted }]}>
               Tablas sugeridas para hoy:
             </Text>
             <Row spacing="xs" style={{ flexWrap: 'wrap' }}>
@@ -218,12 +221,12 @@ export const MarineForecastCard: React.FC = () => {
                   style={[
                     styles.recomPill,
                     {
-                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9',
-                      borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(15, 23, 42, 0.09)',
+                      backgroundColor: isDark ? 'rgba(245, 242, 236, 0.06)' : theme.cardHighlight,
+                      borderColor: theme.border,
                     },
                   ]}
                 >
-                  <Text style={[styles.recomPillText, { color: isDark ? '#E5E7EB' : '#334155' }]}>
+                  <Text style={[styles.recomPillText, { color: theme.subtext }]}>
                     {type.toUpperCase()}
                   </Text>
                 </View>
@@ -256,9 +259,9 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: 'rgba(16, 185, 129, 0.14)',
+    backgroundColor: 'rgba(82, 176, 151, 0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.30)',
+    borderColor: 'rgba(82, 176, 151, 0.30)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -266,12 +269,12 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#10B981',
+    backgroundColor: '#52B097',
   },
   stationLabel: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#94A3B8',
+    color: '#9E988D',
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
@@ -295,7 +298,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.07)',
+    borderColor: 'rgba(245, 242, 236, 0.08)',
   },
   dialHeader: {
     marginBottom: 4,
@@ -303,7 +306,7 @@ const styles = StyleSheet.create({
   dialLabel: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#A1A1AA',
+    color: '#B6B0A5',
     letterSpacing: 1.2,
   },
   dialValueRow: {
@@ -319,35 +322,35 @@ const styles = StyleSheet.create({
   dialUnit: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#94A3B8',
+    color: '#B6B0A5',
   },
   dialSubtext: {
     fontSize: 10,
-    color: '#71717A',
+    color: '#9E988D',
     marginTop: 2,
   },
   shaperTipRow: {
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.06)',
+    borderTopColor: 'rgba(245, 242, 236, 0.07)',
   },
   shaperTipLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#A1A1AA',
+    color: '#B6B0A5',
   },
   recomPill: {
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: 'rgba(255, 90, 54, 0.12)',
+    backgroundColor: 'rgba(224, 99, 67, 0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.28)',
+    borderColor: 'rgba(224, 99, 67, 0.30)',
   },
   recomPillText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FF7A59',
+    color: '#EA7D60',
     letterSpacing: 0.5,
   },
 });

@@ -14,7 +14,7 @@ export interface BoardQrModalProps {
 }
 
 export const BoardQrModal: React.FC<BoardQrModalProps> = ({ board, visible, onClose }) => {
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
 
   if (!board) return null;
 
@@ -38,23 +38,23 @@ export const BoardQrModal: React.FC<BoardQrModalProps> = ({ board, visible, onCl
           style={[
             styles.modalCard,
             {
-              backgroundColor: isDark ? '#222630' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
+              backgroundColor: theme.surface,
+              borderColor: theme.border,
             },
           ]}
         >
           {/* Header */}
           <Row justify="space-between" align="center" style={styles.headerRow}>
             <View style={{ flex: 1 }}>
-              <Text variant="h2" color={isDark ? '#F5F5F7' : '#111115'}>
+              <Text variant="h2" color={theme.text}>
                 Pase de Retiro QR
               </Text>
-              <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'}>
+              <Text variant="caption" color={theme.subtext}>
                 Etiqueta oficial de mostrador • Sede Playa Grande
               </Text>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeIconBtn} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-              <Text style={{ fontSize: 18, color: isDark ? '#A1A1AA' : '#52525B', fontWeight: '700' }}>✕</Text>
+              <Text style={{ fontSize: 18, color: theme.subtext, fontWeight: '700' }}>✕</Text>
             </TouchableOpacity>
           </Row>
 
@@ -70,16 +70,16 @@ export const BoardQrModal: React.FC<BoardQrModalProps> = ({ board, visible, onCl
             style={[
               styles.codeBadge,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-                borderColor: isDark ? 'rgba(255, 90, 54, 0.45)' : 'rgba(255, 90, 54, 0.35)',
+                backgroundColor: theme.cardHighlight,
+                borderColor: theme.primaryBorder,
               },
             ]}
           >
-            <Text style={styles.codeLabel}>CÓDIGO DE RETIRO</Text>
+            <Text style={[styles.codeLabel, { color: theme.champagne }]}>CÓDIGO DE RETIRO</Text>
             <Text
               style={[
                 styles.codeText,
-                { color: isDark ? '#FF7A59' : '#E04320' },
+                { color: isDark ? theme.primaryHover : theme.primary },
               ]}
               selectable
             >
@@ -91,13 +91,13 @@ export const BoardQrModal: React.FC<BoardQrModalProps> = ({ board, visible, onCl
           <View style={styles.boardInfoBox}>
             <Text
               variant="body"
-              color={isDark ? '#F5F5F7' : '#111115'}
+              color={theme.text}
               style={styles.boardTitle}
               numberOfLines={1}
             >
               {board.titulo}
             </Text>
-            <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[500]}>
+            <Text variant="caption" color={theme.subtext}>
               {board.marca} • {board.tipoTabla} {board.medidas ? `• ${board.medidas}` : ''}
             </Text>
           </View>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
     borderWidth: 2,
-    borderColor: '#E2E8F0',
+    borderColor: colors.sand[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1.5,
-    color: '#F59E0B',
+    color: colors.champagne[400],
     marginBottom: 2,
   },
   codeText: {

@@ -37,22 +37,22 @@ export const Input: React.FC<InputProps> = ({
   const { theme, isDark } = useTheme();
 
   const getBorderColor = (): string => {
-    if (error) return colors.semantic.danger;
-    if (isFocused) return '#FF5A36';
-    return isDark ? 'rgba(255, 255, 255, 0.10)' : theme.inputBorder;
+    if (error) return theme.danger;
+    if (isFocused) return theme.primary;
+    return theme.inputBorder;
   };
 
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
         <View style={styles.labelRow}>
-          <Text variant="caption" color={error ? colors.semantic.danger : theme.subtext} style={styles.label}>
+          <Text variant="caption" color={error ? theme.danger : theme.subtext} style={styles.label}>
             {label}
           </Text>
           {error && (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-              <AlertCircle size={12} color={colors.semantic.danger} />
-              <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '700' }}>
+              <AlertCircle size={12} color={theme.danger} />
+              <Text variant="caption" color={theme.danger} style={{ fontWeight: '700' }}>
                 Requerido
               </Text>
             </View>
@@ -70,9 +70,9 @@ export const Input: React.FC<InputProps> = ({
             borderColor: getBorderColor(),
             borderWidth: error ? 1.5 : 1,
             backgroundColor: error
-              ? (isDark ? 'rgba(127, 29, 29, 0.35)' : '#FEF2F2')
+              ? theme.dangerBg
               : editable
-              ? (isDark ? 'rgba(255, 255, 255, 0.04)' : theme.inputBg)
+              ? theme.inputBg
               : theme.surface,
           },
         ]}
@@ -80,7 +80,7 @@ export const Input: React.FC<InputProps> = ({
         {iconLeft && <View style={styles.icon}>{iconLeft}</View>}
         <TextInput
           editable={editable}
-          placeholderTextColor={error ? colors.semantic.danger : theme.subtext}
+          placeholderTextColor={error ? theme.danger : theme.muted}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           style={[styles.input, { color: theme.text }, style]}
@@ -90,20 +90,20 @@ export const Input: React.FC<InputProps> = ({
           <View style={styles.icon}>{iconRight}</View>
         ) : error ? (
           <View style={styles.icon}>
-            <AlertCircle size={16} color={colors.semantic.danger} />
+            <AlertCircle size={16} color={theme.danger} />
           </View>
         ) : null}
       </View>
 
       {error ? (
         <View style={[styles.helper, { flexDirection: 'row', alignItems: 'center', gap: 4 }]}>
-          <AlertCircle size={12} color={colors.semantic.danger} />
-          <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '600' }}>
+          <AlertCircle size={12} color={theme.danger} />
+          <Text variant="caption" color={theme.danger} style={{ fontWeight: '600' }}>
             {error}
           </Text>
         </View>
       ) : helperText ? (
-        <Text variant="caption" color={colors.sand[500]} style={styles.helper}>
+        <Text variant="caption" color={theme.muted} style={styles.helper}>
           {helperText}
         </Text>
       ) : null}

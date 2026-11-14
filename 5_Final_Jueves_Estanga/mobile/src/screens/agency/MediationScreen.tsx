@@ -114,10 +114,10 @@ export const MediationScreen: React.FC = () => {
         </Row>
 
         {/* Rol de la Agencia */}
-        <Card padding="md" style={[styles.arbitrationInfo, isDark && { backgroundColor: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.10)' }]}>
+        <Card padding="md" style={[styles.arbitrationInfo, { backgroundColor: theme.primarySubtle, borderColor: theme.primaryBorder }]}>
           <Stack spacing="xs">
             <Row justify="space-between" align="center">
-              <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '700' }}>
+              <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '700' }}>
                 ARBITRAJE DE SEDE CENTRAL PLAYA GRANDE
               </Text>
               <Badge label="INAPELABLE" variant="sand" />
@@ -130,7 +130,7 @@ export const MediationScreen: React.FC = () => {
 
         {/* Lista de Casos en Disputa */}
         {isLoading && claims.length === 0 ? (
-          <ActivityIndicator size="large" color="#FF5A36" />
+          <ActivityIndicator size="large" color={theme.primary} />
         ) : claims.length === 0 ? (
           <EmptyState
             title="Sin disputas en mediación"
@@ -166,7 +166,7 @@ export const MediationScreen: React.FC = () => {
                       <Text variant="caption" color={theme.subtext}>
                         MONTO RECLAMADO:
                       </Text>
-                      <Text variant="h2" color={colors.semantic.danger}>
+                      <Text variant="h2" color={theme.danger}>
                         ${claim.montoReclamado.toLocaleString('es-AR')}
                       </Text>
                       <Badge label="Garantía: $30.000" variant="sand" />
@@ -174,7 +174,7 @@ export const MediationScreen: React.FC = () => {
                   </Row>
 
                   {/* Argumentos de Ambas Partes */}
-                  <Card padding="sm" style={isDark ? { backgroundColor: 'rgba(34, 38, 48, 0.80)' } : { backgroundColor: '#F5F5F7' }}>
+                  <Card padding="sm" style={{ backgroundColor: theme.surfaceElevated, borderColor: theme.border, borderWidth: 1 }}>
                     <Stack spacing="xs">
                       <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700' }}>
                         REPORTE DEL DUEÑO:
@@ -185,7 +185,7 @@ export const MediationScreen: React.FC = () => {
                       {claim.resolucionAgencia && (
                         <>
                           <Divider />
-                          <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '700' }}>
+                          <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '700' }}>
                             DESCARGO DEL SURFISTA:
                           </Text>
                           <Text variant="caption" color={theme.text}>
@@ -246,7 +246,7 @@ export const MediationScreen: React.FC = () => {
                 Laudo Arbitral de Agencia
               </Text>
               <TouchableOpacity onPress={() => setShowResolutionModal(false)}>
-                <Text variant="body" color={isDark ? '#FF7A59' : '#E04320'}>
+                <Text variant="body" color={isDark ? theme.primaryHover : theme.primary}>
                   Cerrar
                 </Text>
               </TouchableOpacity>
@@ -267,14 +267,14 @@ export const MediationScreen: React.FC = () => {
                   Monto Final Aprobado a Debitar (ARS):
                 </Text>
                 <TextInput
-                  style={[styles.input, { backgroundColor: theme.inputBg, borderColor: theme.border, color: theme.text }]}
+                  style={[styles.input, { backgroundColor: theme.inputBg, borderColor: theme.inputBorder, color: theme.text }]}
                   keyboardType="numeric"
                   value={approvedAmount}
                   onChangeText={setApprovedAmount}
                   placeholder="18000"
-                  placeholderTextColor={colors.sand[300]}
+                  placeholderTextColor={theme.muted}
                 />
-                <Text variant="caption" color={colors.sand[500]}>
+                <Text variant="caption" color={theme.subtext}>
                   Se debitará de la pre-autorización retenida de $30.000 ARS.
                 </Text>
               </Stack>
@@ -285,13 +285,13 @@ export const MediationScreen: React.FC = () => {
                 Fundamentos Técnicos del Dictamen:
               </Text>
               <TextInput
-                style={[styles.input, styles.textArea, { backgroundColor: theme.inputBg, borderColor: theme.border, color: theme.text }]}
+                style={[styles.input, styles.textArea, { backgroundColor: theme.inputBg, borderColor: theme.inputBorder, color: theme.text }]}
                 multiline
                 numberOfLines={4}
                 value={resolutionNotes}
                 onChangeText={setResolutionNotes}
                 placeholder="Detallá el fundamento basado en las fotos de mostrador..."
-                placeholderTextColor={colors.sand[300]}
+                placeholderTextColor={theme.muted}
               />
             </Stack>
 
@@ -314,9 +314,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   arbitrationInfo: {
-    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
     borderRadius: radii.md,
   },
   partiesRow: {

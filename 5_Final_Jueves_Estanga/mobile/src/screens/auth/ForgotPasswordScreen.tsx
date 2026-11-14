@@ -86,8 +86,8 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navi
       <Stack spacing="xl" style={styles.container}>
         <Stack spacing="xs">
           <Row spacing="xs" align="center">
-            <KeyRound size={20} color={isDark ? '#FF7A59' : '#FF5A36'} />
-            <Text variant="caption" style={{ fontWeight: '700', letterSpacing: 1, color: isDark ? '#FF7A59' : '#E04320' }}>
+            <KeyRound size={20} color={isDark ? theme.primaryHover : theme.primary} />
+            <Text variant="caption" style={{ fontWeight: '700', letterSpacing: 1, color: isDark ? theme.primaryHover : theme.primary }}>
               SEGURIDAD & ACCESO
             </Text>
           </Row>
@@ -137,12 +137,12 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navi
                   style={[
                     styles.codeBox,
                     {
-                      backgroundColor: isDark ? '#242834' : '#FFF7ED',
-                      borderColor: isDark ? 'rgba(255, 90, 54, 0.42)' : '#FF5A36',
+                      backgroundColor: theme.warningBg,
+                      borderColor: theme.warningBorder,
                     },
                   ]}
                 >
-                  <Text variant="caption" color={isDark ? '#F59E0B' : '#B45309'} style={{ fontWeight: '700' }}>
+                  <Text variant="caption" color={theme.warningText} style={{ fontWeight: '700' }}>
                     CÓDIGO DE RECUPERACIÓN: <Text style={{ letterSpacing: 2, fontSize: 16 }}>{recoveryCode}</Text>
                   </Text>
                 </View>

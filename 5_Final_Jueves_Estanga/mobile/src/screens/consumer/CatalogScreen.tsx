@@ -89,8 +89,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         <RefreshControl
           refreshing={isFetching}
           onRefresh={refetch}
-          tintColor="#FF5A36"
-          colors={['#FF5A36', '#FBBF24']}
+          tintColor={theme.primary}
+          colors={[theme.primary, theme.champagne]}
         />
       }
     >
@@ -108,9 +108,9 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           />
           <LinearGradient
             colors={[
-              'rgba(25, 27, 34, 0.22)',
-              'rgba(28, 31, 40, 0.72)',
-              'rgba(25, 27, 34, 0.92)',
+              'rgba(26, 25, 23, 0.20)',
+              'rgba(31, 29, 27, 0.72)',
+              'rgba(26, 25, 23, 0.92)',
             ]}
             locations={[0, 0.62, 1]}
             style={StyleSheet.absoluteFillObject}
@@ -140,28 +140,28 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                 {...(Platform.OS === 'web' ? ({ dataSet: { heroChip: 'true' } } as any) : {})}
                 style={styles.kpiChip}
               >
-                <Award size={13} color="#E5B869" />
+                <Award size={13} color={theme.champagne} />
                 <Text style={styles.kpiChipText}>Shapers Marplatenses</Text>
               </View>
               <View
                 {...(Platform.OS === 'web' ? ({ dataSet: { heroChip: 'true' } } as any) : {})}
                 style={styles.kpiChip}
               >
-                <Clock size={13} color="#EA7357" />
+                <Clock size={13} color={colors.coral[400]} />
                 <Text style={styles.kpiChipText}>Retiro Express 5 min</Text>
               </View>
               <View
                 {...(Platform.OS === 'web' ? ({ dataSet: { heroChip: 'true' } } as any) : {})}
                 style={styles.kpiChip}
               >
-                <Star size={13} color="#E5B869" fill="#E5B869" />
+                <Star size={13} color={theme.champagne} fill={theme.champagne} />
                 <Text style={styles.kpiChipText}>4.9/5 Calificación</Text>
               </View>
               <View
                 {...(Platform.OS === 'web' ? ({ dataSet: { heroChip: 'true' } } as any) : {})}
                 style={styles.kpiChip}
               >
-                <Shield size={13} color="#CBD5E1" />
+                <Shield size={13} color="#D5CFC5" />
                 <Text style={styles.kpiChipText}>Cobertura Total 100%</Text>
               </View>
             </View>
@@ -176,14 +176,14 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <Card
             padding="md"
             style={{
-              backgroundColor: isDark ? 'rgba(45, 50, 64, 0.94)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(15, 23, 42, 0.08)',
+              backgroundColor: isDark ? theme.card : theme.card,
+              borderColor: theme.border,
               borderWidth: 1,
             }}
           >
             <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
               <View style={{ flex: 1, minWidth: 200 }}>
-                <Text variant="caption" color={isDark ? '#EA7357' : '#CC482A'} style={{ fontWeight: '800' }}>
+                <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '800' }}>
                   MODO INVITADO (SOLO LECTURA)
                 </Text>
                 <Text variant="caption" color={theme.text}>
@@ -213,10 +213,10 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <View style={styles.featuredSection}>
             <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
               <Row align="center" spacing="xs">
-                <Star size={14} color={isDark ? '#E5B869' : '#C48422'} fill={isDark ? '#E5B869' : '#C48422'} />
+                <Star size={14} color={theme.champagne} fill={theme.champagne} />
                 <Text
                   variant="caption"
-                  style={[styles.sectionTitle, { color: isDark ? '#F3F4F6' : '#16181E' }]}
+                  style={[styles.sectionTitle, { color: theme.text }]}
                 >
                   TABLAS DESTACADAS • SELECCIÓN PLAYA GRANDE
                 </Text>
@@ -226,7 +226,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
 
             <Text
               variant="caption"
-              style={[styles.sectionSubtitle, { color: isDark ? '#9CA3AF' : '#64748B' }]}
+              style={[styles.sectionSubtitle, { color: theme.subtext }]}
             >
               Deslizá para explorar las tablas mejor valoradas por nuestra comunidad
             </Text>
@@ -243,10 +243,10 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         <View style={styles.gridSection}>
           <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
             <Row align="center" spacing="xs">
-              <Waves size={14} color={isDark ? '#EA7357' : '#CC482A'} />
+              <Waves size={14} color={isDark ? theme.primaryHover : theme.primary} />
               <Text
                 variant="caption"
-                style={[styles.sectionTitle, { color: isDark ? '#F3F4F6' : '#16181E' }]}
+                style={[styles.sectionTitle, { color: theme.text }]}
               >
                 TODAS LAS TABLAS {selectedType !== 'Todos' ? `• ${selectedType.toUpperCase()}` : ''} ({boardsList.length})
               </Text>
@@ -255,17 +255,17 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
               style={[
                 styles.gridBadge,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(15, 23, 42, 0.08)',
+                  backgroundColor: isDark ? theme.surfaceElevated : theme.cardHighlight,
+                  borderColor: theme.border,
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 4,
                 },
               ]}
             >
-              <LayoutGrid size={11} color={isDark ? '#D1D5DB' : '#475569'} />
+              <LayoutGrid size={11} color={theme.subtext} />
               <Text
-                style={[styles.gridBadgeText, { color: isDark ? '#D1D5DB' : '#475569' }]}
+                style={[styles.gridBadgeText, { color: theme.subtext }]}
               >
                 CUADRÍCULA
               </Text>
@@ -276,19 +276,19 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <View style={styles.searchWrapper}>
             <Input
               placeholder="Buscar por tabla, shaper o modelo..."
-              placeholderTextColor={isDark ? '#64748B' : '#94A3B8'}
+              placeholderTextColor={theme.muted}
               value={search}
               onChangeText={setSearch}
               containerStyle={styles.searchContainer}
               style={[
                 styles.searchInput,
                 {
-                  backgroundColor: isDark ? 'transparent' : '#FFFFFF',
+                  backgroundColor: isDark ? 'transparent' : theme.card,
                   borderColor: 'transparent',
-                  color: isDark ? '#F5F5F7' : '#111115',
+                  color: theme.text,
                 },
               ]}
-              iconLeft={<Search size={15} color={isDark ? '#A1A1AA' : '#52525B'} />}
+              iconLeft={<Search size={15} color={theme.subtext} />}
             />
           </View>
 
@@ -308,8 +308,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                   style={[
                     styles.filterPill,
                     {
-                      backgroundColor: isDark ? 'rgba(34, 38, 48, 0.78)' : '#FFFFFF',
-                      borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+                      backgroundColor: isDark ? 'rgba(42, 41, 38, 0.85)' : theme.card,
+                      borderColor: theme.border,
                     },
                     isSelected &&
                       (isDark ? styles.filterPillSelectedDark : styles.filterPillSelectedLight),
@@ -319,7 +319,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                     variant="caption"
                     style={[
                       styles.filterPillText,
-                      { color: isDark ? '#A1A1AA' : '#52525B' },
+                      { color: theme.subtext },
                       isSelected &&
                         (isDark ? styles.filterPillTextSelectedDark : styles.filterPillTextSelectedLight),
                     ]}
@@ -393,8 +393,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         onRequestClose={() => setSelectedBoard(null)}
       >
         {selectedBoard && (
-          <View style={[styles.modalRoot, { backgroundColor: isDark ? '#222630' : '#F5F6F8' }]}>
-            <View style={[styles.modalHeader, { backgroundColor: isDark ? '#222630' : '#FFFFFF', borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.07)' }]}>
+          <View style={[styles.modalRoot, { backgroundColor: theme.background }]}>
+            <View style={[styles.modalHeader, { backgroundColor: theme.surface, borderBottomColor: theme.border }]}>
               <Button
                 title="✕ Cerrar"
                 variant="ghost"
@@ -432,13 +432,13 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.10)',
+    borderColor: 'rgba(245, 242, 236, 0.10)',
     minHeight: 240,
     justifyContent: 'flex-end',
     padding: spacing.lg,
-    shadowColor: '#FF5A36',
+    shadowColor: '#E06343',
     shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.30,
+    shadowOpacity: 0.24,
     shadowRadius: 28,
     elevation: 10,
   },
@@ -455,46 +455,46 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(34, 38, 48, 0.78)',
+    backgroundColor: 'rgba(28, 26, 24, 0.82)',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.16)',
+    borderColor: 'rgba(245, 242, 236, 0.16)',
   },
   brandLocationDot: {
-    color: '#EA7357',
+    color: colors.coral[400],
     fontSize: 8,
   },
   brandLocationText: {
-    color: '#F3F4F6',
+    color: '#F5F2EC',
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
   stockBadge: {
-    backgroundColor: 'rgba(34, 38, 48, 0.78)',
+    backgroundColor: 'rgba(28, 26, 24, 0.82)',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.18)',
+    borderColor: 'rgba(245, 242, 236, 0.18)',
   },
   stockBadgeText: {
-    color: '#F3F4F6',
+    color: '#F5F2EC',
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
   catalogHeroTitle: {
-    color: '#F8FAFC',
+    color: '#F5F2EC',
     fontSize: 28,
     fontWeight: '800',
     lineHeight: 34,
     letterSpacing: -0.5,
   },
   catalogHeroSubtitle: {
-    color: '#CBD5E1',
+    color: '#D5CFC5',
     fontSize: 13,
     lineHeight: 19,
     maxWidth: 680,
@@ -509,38 +509,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(14, 14, 18, 0.78)',
+    backgroundColor: 'rgba(24, 23, 21, 0.80)',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.10)',
+    borderColor: 'rgba(245, 242, 236, 0.12)',
   },
   kpiChipIcon: {
     fontSize: 12,
   },
   kpiChipText: {
-    color: '#F5F5F7',
+    color: '#F5F2EC',
     fontSize: 11,
     fontWeight: '600',
   },
   headerCard: {
-    backgroundColor: 'rgba(34, 38, 48, 0.78)',
-    borderColor: 'rgba(255, 255, 255, 0.10)',
+    backgroundColor: 'rgba(42, 41, 38, 0.85)',
+    borderColor: 'rgba(245, 242, 236, 0.10)',
   },
   headerTextGroup: {
     flex: 1,
     paddingRight: spacing.sm,
   },
   headerTitle: {
-    color: '#F5F5F7',
+    color: '#F5F2EC',
     fontWeight: '800',
   },
   sparkleIcon: {
     fontSize: 18,
   },
   headerSubtitle: {
-    color: '#94A3B8',
+    color: '#B6B0A5',
     marginTop: 2,
     fontSize: 13,
   },
@@ -552,7 +552,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   sectionTitle: {
-    color: '#F59E0B',
+    color: colors.champagne[400],
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 1.5,
@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   sectionSubtitle: {
-    color: '#94A3B8',
+    color: '#B6B0A5',
     fontSize: 12,
     marginTop: -2,
     marginBottom: spacing.xs,
@@ -577,12 +577,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.045)',
+    backgroundColor: 'rgba(245, 242, 236, 0.05)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.10)',
+    borderColor: 'rgba(245, 242, 236, 0.10)',
   },
   gridBadgeText: {
-    color: '#FF7A59',
+    color: colors.coral[400],
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 1,
@@ -594,9 +594,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   searchInput: {
-    backgroundColor: '#353B49',
-    borderColor: 'rgba(255, 255, 255, 0.12)',
-    color: '#F3F4F6',
+    backgroundColor: '#35332F',
+    borderColor: 'rgba(245, 242, 236, 0.12)',
+    color: '#F5F2EC',
   },
   searchIcon: {
     fontSize: 14,
@@ -611,23 +611,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs + 2,
     borderRadius: radii.full,
-    backgroundColor: 'rgba(45, 50, 64, 0.90)',
+    backgroundColor: 'rgba(42, 41, 38, 0.90)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.12)',
+    borderColor: 'rgba(245, 242, 236, 0.12)',
   },
   filterPillSelectedDark: {
-    backgroundColor: '#E25B3C',
-    borderColor: '#E25B3C',
-    shadowColor: '#E25B3C',
+    backgroundColor: '#E06343',
+    borderColor: '#E06343',
+    shadowColor: '#E06343',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 4,
   },
   filterPillSelectedLight: {
-    backgroundColor: '#E25B3C',
-    borderColor: '#E25B3C',
-    shadowColor: '#E25B3C',
+    backgroundColor: '#C94A29',
+    borderColor: '#C94A29',
+    shadowColor: '#C94A29',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.22,
     shadowRadius: 8,
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: '#A1A1AA',
+    color: '#B6B0A5',
     textAlign: 'center',
   },
   gridContainer: {
@@ -673,14 +673,14 @@ const styles = StyleSheet.create({
   },
   modalRoot: {
     flex: 1,
-    backgroundColor: '#222630',
+    backgroundColor: '#21201E',
   },
   modalHeader: {
-    backgroundColor: 'rgba(35, 39, 49, 0.96)',
+    backgroundColor: 'rgba(42, 41, 38, 0.96)',
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     alignItems: 'flex-end',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.10)',
+    borderBottomColor: 'rgba(245, 242, 236, 0.10)',
   },
 });

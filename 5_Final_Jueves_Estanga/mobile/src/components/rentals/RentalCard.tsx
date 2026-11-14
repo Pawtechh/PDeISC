@@ -139,8 +139,8 @@ export const RentalCard: React.FC<RentalCardProps> = ({
             style={[
               styles.imageFrame,
               {
-                backgroundColor: isDark ? '#111824' : colors.sand[100],
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : colors.sand[200],
+                backgroundColor: theme.surfaceElevated,
+                borderColor: theme.border,
               },
             ]}
           >
@@ -157,24 +157,24 @@ export const RentalCard: React.FC<RentalCardProps> = ({
               {rental.board?.titulo || 'Tabla de Surf'}
             </Text>
             <Row spacing="xs" align="center">
-              <Calendar size={12} color={isDark ? '#94A3B8' : colors.sand[500]} />
+              <Calendar size={12} color={theme.subtext} />
               <Text variant="caption" color={theme.subtext}>
                 {formatDate(rental.fechaInicio)}
               </Text>
-              <Clock size={12} color={isDark ? '#FF7A59' : '#E04320'} />
+              <Clock size={12} color={isDark ? theme.primaryHover : theme.primary} />
               <Text
                 variant="caption"
-                color={isDark ? '#FF7A59' : '#E04320'}
+                color={isDark ? theme.primaryHover : theme.primary}
                 style={{ fontWeight: '700' }}
               >
                 ({rental.horas}h)
               </Text>
             </Row>
             <Row spacing="xs" align="center">
-              <MapPin size={12} color={isDark ? '#FF7A59' : '#E04320'} />
+              <MapPin size={12} color={isDark ? theme.primaryHover : theme.primary} />
               <Text
                 variant="caption"
-                color={isDark ? '#FF7A59' : '#E04320'}
+                color={isDark ? theme.primaryHover : theme.primary}
                 style={styles.locationText}
               >
                 Sede Central Playa Grande
@@ -189,40 +189,20 @@ export const RentalCard: React.FC<RentalCardProps> = ({
             style={[
               styles.windowBanner,
               {
-                backgroundColor: timing.isEarly
-                  ? isDark
-                    ? 'rgba(245, 158, 11, 0.1)'
-                    : '#FFFBEB'
-                  : isDark
-                  ? 'rgba(16, 185, 129, 0.1)'
-                  : '#ECFDF5',
-                borderColor: timing.isEarly
-                  ? isDark
-                    ? 'rgba(245, 158, 11, 0.35)'
-                    : '#FDE68A'
-                  : isDark
-                  ? 'rgba(16, 185, 129, 0.35)'
-                  : '#A7F3D0',
+                backgroundColor: timing.isEarly ? theme.warningBg : theme.successBg,
+                borderColor: timing.isEarly ? theme.warningBorder : theme.successBorder,
               },
             ]}
           >
             <Row spacing="xs" align="center">
               {timing.isEarly ? (
-                <AlertTriangle size={14} color={isDark ? '#FBBF24' : '#B45309'} />
+                <AlertTriangle size={14} color={theme.warning} />
               ) : (
-                <CheckCircle2 size={14} color={isDark ? '#34D399' : '#047857'} />
+                <CheckCircle2 size={14} color={theme.success} />
               )}
               <Text
                 variant="caption"
-                color={
-                  timing.isEarly
-                    ? isDark
-                      ? '#FDE68A'
-                      : '#92400E'
-                    : isDark
-                    ? '#A7F3D0'
-                    : '#065F46'
-                }
+                color={timing.isEarly ? theme.warningText : theme.successText}
                 style={{ flex: 1, fontWeight: '600', fontSize: 11 }}
               >
                 {timing.isEarly
@@ -239,7 +219,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
           style={[
             styles.footer,
             {
-              borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : colors.sand[200],
+              borderTopColor: theme.divider,
               flexWrap: 'wrap',
               gap: spacing.xs,
             },
@@ -249,7 +229,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
             <Text variant="caption" color={theme.subtext}>
               Total pagado
             </Text>
-            <Text variant="h3" color={isDark ? '#F5F5F7' : '#111115'}>
+            <Text variant="h3" color={theme.text}>
               ${Number(rental.precioTotal || 0).toLocaleString('es-AR')} ARS
             </Text>
           </View>

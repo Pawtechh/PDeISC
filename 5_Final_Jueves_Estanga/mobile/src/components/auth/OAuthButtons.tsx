@@ -132,7 +132,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         <View
           style={[
             styles.line,
-            { backgroundColor: isDark ? 'rgba(148, 163, 184, 0.18)' : '#E2E8F0' },
+            { backgroundColor: theme.divider },
           ]}
         />
         <Text variant="caption" color={theme.subtext} style={styles.dividerText}>
@@ -141,7 +141,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         <View
           style={[
             styles.line,
-            { backgroundColor: isDark ? 'rgba(148, 163, 184, 0.18)' : '#E2E8F0' },
+            { backgroundColor: theme.divider },
           ]}
         />
       </Row>
@@ -196,7 +196,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         onPress={() => handleOAuthLogin('github')}
         disabled={loadingProvider !== null}
         {...(Platform.OS === 'web' ? ({ dataSet: { oauthBtn: 'true' } } as any) : {})}
-        style={[styles.oauthBtn, { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.14)' }]}
+        style={[styles.oauthBtn, { backgroundColor: '#21201E', borderColor: 'rgba(245, 242, 236, 0.14)' }]}
         testID="btn-oauth-github"
       >
         {loadingProvider === 'github' ? (

@@ -43,12 +43,12 @@ export const LightboxViewer: React.FC<LightboxViewerProps> = ({
         {Platform.OS !== 'web' ? (
           <BlurView intensity={70} tint="dark" style={StyleSheet.absoluteFillObject} />
         ) : (
-          <View style={[StyleSheet.absoluteFillObject, { backgroundColor: 'rgba(9, 12, 16, 0.92)' }]} />
+          <View style={[StyleSheet.absoluteFillObject, { backgroundColor: 'rgba(20, 19, 17, 0.94)' }]} />
         )}
 
         <View style={styles.header}>
           {title ? (
-            <Text variant="h3" color="#F1F5F9" style={styles.titleText}>
+            <Text variant="h3" color="#F5F2EC" style={styles.titleText}>
               {title}
             </Text>
           ) : <View />}
@@ -59,7 +59,7 @@ export const LightboxViewer: React.FC<LightboxViewerProps> = ({
             accessibilityLabel="Cerrar visor"
             accessibilityRole="button"
           >
-            <Text style={{ fontSize: 18, color: '#F1F5F9', fontWeight: 'bold' }}>✕</Text>
+            <Text style={{ fontSize: 18, color: '#F5F2EC', fontWeight: 'bold' }}>✕</Text>
           </TouchableOpacity>
         </View>
 

@@ -77,15 +77,15 @@ export const NativeSensorsCard: React.FC = () => {
       padding="lg"
       style={[
         styles.container,
-        { borderColor: isDark ? 'rgba(255, 90, 54, 0.35)' : 'rgba(255, 90, 54, 0.30)' },
+        { borderColor: theme.primaryBorder },
       ]}
     >
       <Stack spacing="md">
         {/* Header */}
         <Row justify="space-between" align="center">
           <Row spacing="xs" align="center">
-            <Radio size={16} color={isDark ? '#FF7A59' : '#E04320'} />
-            <Text variant="h3" color={isDark ? '#F5F5F7' : '#111115'}>
+            <Radio size={16} color={isDark ? theme.primaryHover : theme.primary} />
+            <Text variant="h3" color={theme.text}>
               Sensores Nativos del Dispositivo & GPS
             </Text>
           </Row>
@@ -106,15 +106,15 @@ export const NativeSensorsCard: React.FC = () => {
             style={[
               styles.sensorMiniCard,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
+                backgroundColor: theme.cardHighlight,
+                borderColor: theme.border,
               },
             ]}
           >
             <Stack spacing="xs">
               <Row justify="space-between" align="center">
                 <Row spacing="xs" align="center">
-                  <Camera size={14} color="#FF5A36" />
+                  <Camera size={14} color={theme.primary} />
                   <Text variant="caption" color={theme.text} style={styles.sensorTitle}>
                     Cámara Óptica QR
                   </Text>
@@ -130,10 +130,10 @@ export const NativeSensorsCard: React.FC = () => {
 
             <TouchableOpacity onPress={handleTestCamera} style={styles.miniBtn}>
               <Row spacing="xs" align="center">
-                <ScanLine size={13} color={isDark ? '#FF7A59' : '#E04320'} />
+                <ScanLine size={13} color={isDark ? theme.primaryHover : theme.primary} />
                 <Text
                   variant="caption"
-                  color={isDark ? '#FF7A59' : '#E04320'}
+                  color={isDark ? theme.primaryHover : theme.primary}
                   style={{ fontWeight: '700' }}
                 >
                   Abrir Cámara QR
@@ -148,15 +148,15 @@ export const NativeSensorsCard: React.FC = () => {
               style={[
                 styles.sensorMiniCard,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
+                  backgroundColor: theme.cardHighlight,
+                  borderColor: theme.border,
                 },
               ]}
             >
               <Stack spacing="xs">
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center">
-                    <ShieldCheck size={14} color="#F59E0B" />
+                    <ShieldCheck size={14} color={theme.champagne} />
                     <Text variant="caption" color={theme.text} style={styles.sensorTitle}>
                       Biometría Nativa
                     </Text>
@@ -177,10 +177,10 @@ export const NativeSensorsCard: React.FC = () => {
                   <ActivityIndicator size="small" color={theme.champagne} />
                 ) : (
                   <Row spacing="xs" align="center">
-                    <Fingerprint size={13} color={isDark ? '#F59E0B' : colors.sand[700]} />
+                    <Fingerprint size={13} color={theme.warningText} />
                     <Text
                       variant="caption"
-                      color={isDark ? '#F59E0B' : colors.sand[700]}
+                      color={theme.warningText}
                       style={{ fontWeight: '700' }}
                     >
                       {isBiometricVerified ? 'Validar Nuevamente' : 'Probar Lector'}

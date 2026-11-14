@@ -111,7 +111,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
               `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${updated
                 .map(
                   (p) =>
-                    `<path d="${p}" stroke="#052A57" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
+                    `<path d="${p}" stroke="#1C1B18" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
                 )
                 .join('')}</svg>`
             );
@@ -149,7 +149,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
     pathRef.current = '';
     if (onSave) {
       onSave(
-        `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${quickPath}" stroke="#052A57" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${quickPath}" stroke="#1C1B18" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`
       );
     }
   };
@@ -201,7 +201,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
             <Path
               key={i}
               d={d}
-              stroke="#111115"
+              stroke="#1C1B18"
               strokeWidth={3}
               fill="none"
               strokeLinecap="round"
@@ -211,7 +211,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
           {currentPath ? (
             <Path
               d={currentPath}
-              stroke="#111115"
+              stroke="#1C1B18"
               strokeWidth={3}
               fill="none"
               strokeLinecap="round"
@@ -259,7 +259,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
               style={styles.quickSignBtn}
               testID={`${testID}-btn-quick`}
             >
-              <Text variant="caption" color="#E04320" style={{ fontWeight: '600', fontSize: 12 }}>
+              <Text variant="caption" color={colors.coral[600]} style={{ fontWeight: '600', fontSize: 12 }}>
                 Firma Rápida
               </Text>
             </TouchableOpacity>
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: '700',
-    color: '#111115',
+    color: '#1C1B18',
     fontSize: 15,
   },
   helperText: {
@@ -324,21 +324,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   lawPill: {
-    backgroundColor: 'rgba(255, 90, 54, 0.06)',
+    backgroundColor: 'rgba(201, 74, 41, 0.08)',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: 'rgba(201, 74, 41, 0.24)',
   },
   lawText: {
-    color: '#E04320',
+    color: colors.coral[600],
     fontWeight: '600',
     fontSize: 10,
   },
   padContainer: {
     backgroundColor: '#FFFFFF',
-    borderColor: 'rgba(255, 90, 54, 0.45)',
+    borderColor: 'rgba(201, 74, 41, 0.42)',
     borderWidth: 2,
     borderStyle: 'solid',
     borderRadius: radii.md,
@@ -355,14 +355,14 @@ const styles = StyleSheet.create({
       : {}),
   },
   padContainerDrawing: {
-    borderColor: '#FF5A36',
+    borderColor: colors.coral[600],
     borderWidth: 2,
     backgroundColor: '#FFFFFF',
   },
   padContainerSigned: {
     borderColor: colors.semantic.success,
     borderWidth: 2,
-    backgroundColor: '#FCFFFC',
+    backgroundColor: '#F6FBF9',
   },
   placeholderBox: {
     ...StyleSheet.absoluteFillObject,
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   watermarkBadgeText: {
-    color: '#111115',
+    color: '#1C1B18',
     fontWeight: '700',
     fontSize: 11,
     letterSpacing: 0.5,
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: radii.sm,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#FAE8E6',
   },
   actionBtnDisabled: {
     backgroundColor: colors.sand[100],
@@ -409,9 +409,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: radii.sm,
-    backgroundColor: 'rgba(255, 90, 54, 0.06)',
+    backgroundColor: 'rgba(201, 74, 41, 0.08)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: 'rgba(201, 74, 41, 0.24)',
   },
   statusBadge: {
     paddingVertical: 4,
@@ -422,8 +422,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.sand[100],
   },
   statusBadgeSigned: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: '#E5F2EE',
     borderWidth: 1,
-    borderColor: '#86EFAC',
+    borderColor: '#9CD3C3',
   },
 });

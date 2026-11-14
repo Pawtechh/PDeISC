@@ -21,8 +21,8 @@
         height: 100%;
         margin: 0;
         padding: 0;
-        background-color: #030812;
-        color: #F8FAFC;
+        background-color: #21201E;
+        color: #F5F2EC;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
@@ -42,13 +42,13 @@
     <!-- Smoked Graphite & Coral Design Engine -->
     <style id="luxury-coastal-css">
       :root {
-        --sr-abyss-0: #222630;
-        --sr-abyss-1: #2B303C;
-        --sr-cyan: #94A3B8;
-        --sr-biolum: #E25B3C;
-        --sr-seafoam: #64748B;
-        --sr-gold: #E5B869;
-        --sr-glass-border: rgba(255, 255, 255, 0.10);
+        --sr-abyss-0: #21201E;
+        --sr-abyss-1: #2A2926;
+        --sr-cyan: #9E988D;
+        --sr-biolum: #E06343;
+        --sr-seafoam: #52B097;
+        --sr-gold: #DBA84C;
+        --sr-glass-border: rgba(245, 242, 236, 0.09);
       }
 
       *, *::before, *::after {
@@ -66,17 +66,17 @@
         letter-spacing: -0.025em;
       }
 
-      /* Lifted Charcoal Slate Atmospheric Canvas (Clean, Even, Zero Muddy Blobs) */
+      /* Warm Coastal Basalt Atmospheric Canvas (Zero Black Mud, Zero Cool Blue Cast) */
       body {
         position: relative;
-        background-color: #222630 !important;
+        background-color: #21201E !important;
         background-image:
-          radial-gradient(ellipse 90% 45% at 50% -10%, rgba(255, 255, 255, 0.035) 0%, transparent 72%),
-          linear-gradient(180deg, #21252F 0%, #272B36 52%, #222630 100%) !important;
+          radial-gradient(ellipse 90% 45% at 50% -10%, rgba(245, 242, 236, 0.032) 0%, transparent 72%),
+          linear-gradient(180deg, #21201E 0%, #262522 52%, #21201E 100%) !important;
         background-attachment: fixed !important;
       }
 
-      /* Subtle Architectural Top Light Veil (Neutral, zero green/orange fog) */
+      /* Subtle Warm Atelier Top Light Veil */
       body::before {
         content: "";
         position: fixed;
@@ -84,8 +84,8 @@
         pointer-events: none;
         z-index: 0;
         background:
-          radial-gradient(46% 36% at 50% 10%, rgba(255, 255, 255, 0.032) 0%, transparent 72%),
-          radial-gradient(36% 28% at 50% 85%, rgba(226, 91, 60, 0.025) 0%, transparent 74%);
+          radial-gradient(46% 36% at 50% 10%, rgba(245, 242, 236, 0.028) 0%, transparent 72%),
+          radial-gradient(36% 28% at 50% 85%, rgba(224, 99, 67, 0.022) 0%, transparent 74%);
         filter: blur(56px);
         will-change: transform, opacity;
         animation: auroraDriftA 26s ease-in-out infinite alternate;
@@ -99,25 +99,25 @@
         pointer-events: none;
         z-index: 0;
         opacity: 0.22;
-        background: linear-gradient(125deg, rgba(255, 255, 255, 0.022) 0%, transparent 42%, rgba(255, 255, 255, 0.012) 100%);
+        background: linear-gradient(125deg, rgba(245, 242, 236, 0.02) 0%, transparent 42%, rgba(245, 242, 236, 0.01) 100%);
       }
 
-      /* Warm Architectural Stone Light-Mode Adaptation */
+      /* Sunlit Coastal Travertine Light-Mode Adaptation */
       html[data-theme="light"] body {
-        background-color: #F5F6F8 !important;
+        background-color: #F5F1EA !important;
         background-image:
-          radial-gradient(ellipse 85% 45% at 50% -10%, rgba(255, 255, 255, 0.7) 0%, transparent 70%),
-          linear-gradient(180deg, #F9FAFB 0%, #F5F6F8 55%, #F0F2F5 100%) !important;
+          radial-gradient(ellipse 85% 45% at 50% -10%, rgba(253, 252, 250, 0.78) 0%, transparent 70%),
+          linear-gradient(180deg, #F8F5EF 0%, #F5F1EA 55%, #EEE8DF 100%) !important;
       }
 
       html[data-theme="light"] body::before {
         background:
-          radial-gradient(45% 34% at 50% 14%, rgba(255, 255, 255, 0.55) 0%, transparent 72%);
+          radial-gradient(45% 34% at 50% 14%, rgba(253, 252, 250, 0.55) 0%, transparent 72%);
       }
 
       html[data-theme="light"] body::after {
-        opacity: 0.28;
-        background: linear-gradient(125deg, rgba(255, 255, 255, 0.5) 0%, transparent 50%, rgba(15, 23, 42, 0.015) 100%);
+        opacity: 0.24;
+        background: linear-gradient(125deg, rgba(253, 252, 250, 0.5) 0%, transparent 50%, rgba(28, 27, 24, 0.015) 100%);
       }
 
       /* Custom Scrollbars */
@@ -129,39 +129,39 @@
         background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.16);
+        background: rgba(245, 242, 236, 0.16);
         border-radius: 9999px;
         border: 2px solid transparent;
         background-clip: content-box;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: rgba(226, 91, 60, 0.58);
+        background: rgba(224, 99, 67, 0.58);
       }
       html[data-theme="light"] ::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.16);
+        background: rgba(28, 27, 24, 0.16);
       }
       html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
-        background: rgba(226, 91, 60, 0.55);
+        background: rgba(201, 74, 41, 0.55);
       }
       * {
         scrollbar-width: thin;
-        scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+        scrollbar-color: rgba(245, 242, 236, 0.16) transparent;
       }
       html[data-theme="light"] * {
-        scrollbar-color: rgba(0, 0, 0, 0.16) transparent;
+        scrollbar-color: rgba(28, 27, 24, 0.16) transparent;
       }
 
       /* Selection & Accessible Focus */
       ::selection {
-        background: rgba(226, 91, 60, 0.28) !important;
+        background: rgba(224, 99, 67, 0.28) !important;
         color: #FFFFFF !important;
       }
       ::-moz-selection {
-        background: rgba(226, 91, 60, 0.28) !important;
+        background: rgba(224, 99, 67, 0.28) !important;
         color: #FFFFFF !important;
       }
       *:focus-visible {
-        outline: 2px solid #E25B3C !important;
+        outline: 2px solid #E06343 !important;
         outline-offset: 2px;
       }
 
@@ -186,12 +186,12 @@
       }
       [data-brand-logo="true"]:hover {
         transform: scale(1.06);
-        box-shadow: 0 6px 18px rgba(226, 91, 60, 0.22);
+        box-shadow: 0 6px 18px rgba(224, 99, 67, 0.22);
       }
 
       [data-live-dot="true"] {
         position: relative;
-        box-shadow: 0 0 8px rgba(16, 185, 129, 0.72);
+        box-shadow: 0 0 8px rgba(82, 176, 151, 0.65);
         animation: liveBeaconPulse 2.8s ease-in-out infinite;
       }
 
@@ -239,7 +239,7 @@
         position: absolute;
         inset: -3px;
         border-radius: 9999px;
-        border: 1.5px solid rgba(16, 185, 129, 0.65);
+        border: 1.5px solid rgba(82, 176, 151, 0.65);
         pointer-events: none;
         animation: sonarRingExpand 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
       }
@@ -251,10 +251,10 @@
       }
       [data-telemetry-dial="true"]:hover {
         transform: translateY(-2px);
-        border-color: rgba(255, 255, 255, 0.16) !important;
+        border-color: rgba(245, 242, 236, 0.16) !important;
       }
       html[data-theme="light"] [data-telemetry-dial="true"]:hover {
-        border-color: rgba(0, 0, 0, 0.13) !important;
+        border-color: rgba(28, 27, 24, 0.14) !important;
       }
 
       /* Form Inputs & Refined Focus Halo */
@@ -263,8 +263,8 @@
       }
       [data-input-shell]:focus-within,
       [data-input-shell="focused"] {
-        border-color: #E25B3C !important;
-        box-shadow: 0 0 0 3px rgba(226, 91, 60, 0.14) !important;
+        border-color: #E06343 !important;
+        box-shadow: 0 0 0 3px rgba(224, 99, 67, 0.14) !important;
       }
       [data-input-shell] input:focus,
       [data-input-shell] textarea:focus {
@@ -273,8 +273,8 @@
       }
       input:not([data-input-shell] input):focus,
       textarea:not([data-input-shell] textarea):focus {
-        border-color: #E25B3C !important;
-        box-shadow: 0 0 0 3px rgba(226, 91, 60, 0.14) !important;
+        border-color: #E06343 !important;
+        box-shadow: 0 0 0 3px rgba(224, 99, 67, 0.14) !important;
       }
 
       /* Primary & Secondary Silk Sheen Buttons */
@@ -309,19 +309,19 @@
       }
       [data-luxury-btn="primary"]:hover {
         filter: brightness(1.05);
-        box-shadow: 0 10px 26px -6px rgba(226, 91, 60, 0.42),
+        box-shadow: 0 10px 26px -6px rgba(224, 99, 67, 0.40),
                     inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
       }
 
       [data-luxury-btn="secondary"]:hover,
       [data-luxury-btn="ghost"]:hover {
-        border-color: rgba(255, 255, 255, 0.22) !important;
-        background-color: rgba(255, 255, 255, 0.09) !important;
+        border-color: rgba(245, 242, 236, 0.22) !important;
+        background-color: rgba(245, 242, 236, 0.09) !important;
       }
       html[data-theme="light"] [data-luxury-btn="secondary"]:hover,
       html[data-theme="light"] [data-luxury-btn="ghost"]:hover {
-        border-color: rgba(0, 0, 0, 0.16) !important;
-        background-color: #EAEAEF !important;
+        border-color: rgba(28, 27, 24, 0.16) !important;
+        background-color: #E7E1D6 !important;
       }
 
       [data-oauth-btn="true"] {
@@ -387,7 +387,7 @@
       [data-surf-reserve="true"]:hover {
         transform: translateY(-1px);
         filter: brightness(1.06);
-        box-shadow: 0 8px 20px -4px rgba(226, 91, 60, 0.38) !important;
+        box-shadow: 0 8px 20px -4px rgba(224, 99, 67, 0.36) !important;
       }
 
       /* Smooth Card Entrance Animation */
@@ -406,10 +406,10 @@
       }
       [data-filter-pill]:hover {
         transform: translateY(-1.5px);
-        border-color: rgba(226, 91, 60, 0.45) !important;
+        border-color: rgba(224, 99, 67, 0.45) !important;
       }
       [data-filter-pill="active"] {
-        box-shadow: 0 6px 18px -6px rgba(226, 91, 60, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+        box-shadow: 0 6px 18px -6px rgba(224, 99, 67, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
       }
 
       /* Floating Dock Navigation Tabs */
@@ -432,22 +432,22 @@
       }
       [data-scroll-top-btn="true"]:hover {
         transform: translateY(-2.5px) scale(1.04);
-        border-color: rgba(226, 91, 60, 0.45) !important;
+        border-color: rgba(224, 99, 67, 0.45) !important;
         box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55) !important;
       }
 
       /* Hardware Accelerated Smoked Glass Surfaces */
       .glass-card, [data-glass], [data-glass-card="true"] {
-        backdrop-filter: blur(22px) saturate(160%) !important;
-        -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+        backdrop-filter: blur(22px) saturate(155%) !important;
+        -webkit-backdrop-filter: blur(22px) saturate(155%) !important;
         transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
                     border-color 0.28s ease,
                     box-shadow 0.28s ease !important;
       }
       [data-glass-card="true"]:hover {
-        border-color: rgba(255, 255, 255, 0.15) !important;
+        border-color: rgba(245, 242, 236, 0.15) !important;
         box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.72),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.09) !important;
+                    inset 0 1px 0 rgba(245, 242, 236, 0.08) !important;
       }
       [data-theme-toggle="true"] {
         transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
@@ -455,26 +455,26 @@
       }
       [data-theme-toggle="true"]:hover {
         transform: scale(1.07);
-        border-color: rgba(226, 91, 60, 0.42) !important;
+        border-color: rgba(224, 99, 67, 0.42) !important;
       }
 
-      /* Pearl Alabaster Light-Mode Surface Polish */
+      /* Warm Coastal Travertine Light-Mode Surface Polish */
       html[data-theme="light"] [data-surf-card="true"] {
-        box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.08),
+        box-shadow: 0 10px 28px -10px rgba(28, 27, 24, 0.08),
                     inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
       }
       html[data-theme="light"] [data-surf-card="true"]:hover {
-        border-color: rgba(0, 0, 0, 0.14) !important;
-        box-shadow: 0 20px 42px -12px rgba(0, 0, 0, 0.13),
+        border-color: rgba(28, 27, 24, 0.14) !important;
+        box-shadow: 0 20px 42px -12px rgba(28, 27, 24, 0.12),
                     inset 0 1px 0 rgba(255, 255, 255, 1) !important;
       }
       html[data-theme="light"] [data-glass-card="true"]:hover {
-        border-color: rgba(0, 0, 0, 0.12) !important;
-        box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.09),
+        border-color: rgba(28, 27, 24, 0.12) !important;
+        box-shadow: 0 14px 34px -10px rgba(28, 27, 24, 0.09),
                     inset 0 1px 0 rgba(255, 255, 255, 1) !important;
       }
       html[data-theme="light"] [data-scroll-top-btn="true"] {
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10) !important;
+        box-shadow: 0 10px 24px rgba(28, 27, 24, 0.10) !important;
       }
 
       /* Root Entrance Animation */
@@ -585,11 +585,11 @@
       @keyframes splashLogoFloat {
         0%, 100% {
           transform: translateY(0px);
-          box-shadow: 0 18px 44px rgba(0, 0, 0, 0.72), 0 0 28px rgba(255, 90, 54, 0.22);
+          box-shadow: 0 18px 44px rgba(0, 0, 0, 0.56), 0 0 24px rgba(224, 99, 67, 0.20);
         }
         50% {
           transform: translateY(-5px);
-          box-shadow: 0 24px 52px rgba(0, 0, 0, 0.78), 0 0 38px rgba(255, 90, 54, 0.34);
+          box-shadow: 0 24px 52px rgba(0, 0, 0, 0.65), 0 0 34px rgba(224, 99, 67, 0.30);
         }
       }
 
@@ -634,29 +634,29 @@
   <body>
     <!-- Fallback for JavaScript-disabled environments -->
     <noscript>
-      <div style="background:#222630;color:#F5F5F7;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;padding:24px;text-align:center;">
+      <div style="background:#21201E;color:#F5F2EC;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;padding:24px;text-align:center;">
         <div>
-          <h2 style="color:#E25B3C;margin-bottom:12px;">JavaScript Requerido</h2>
-          <p style="color:#B4B8C4;">Por favor activá JavaScript en tu navegador para ingresar a Surf Rental Mar del Plata.</p>
+          <h2 style="color:#E06343;margin-bottom:12px;">JavaScript Requerido</h2>
+          <p style="color:#B6B0A5;">Por favor activá JavaScript en tu navegador para ingresar a Surf Rental Mar del Plata.</p>
         </div>
       </div>
     </noscript>
 
-    <!-- The root element for React Native Web app (Balanced Slate & Terracotta Splash Loader) -->
+    <!-- The root element for React Native Web app (Coastal Basalt & Terracotta Splash Loader) -->
     <div id="root">
-      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#222630;color:#F5F5F7;font-family:'Outfit',sans-serif;text-align:center;padding:24px;">
-        <div style="width:82px;height:82px;border-radius:24px;background:rgba(45,50,64,0.92);border:1.5px solid rgba(226,91,60,0.40);display:flex;align-items:center;justify-content:center;margin-bottom:22px;animation:splashLogoFloat 3s ease-in-out infinite;">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#21201E;color:#F5F2EC;font-family:'Outfit',sans-serif;text-align:center;padding:24px;">
+        <div style="width:82px;height:82px;border-radius:24px;background:rgba(42,41,38,0.94);border:1.5px solid rgba(224,99,67,0.38);display:flex;align-items:center;justify-content:center;margin-bottom:22px;animation:splashLogoFloat 3s ease-in-out infinite;">
           <svg width="44" height="44" viewBox="0 0 120 120" fill="none">
-            <path d="M60 12C73 34 79 58 75 88C73 100 67 106 60 108C53 106 47 100 45 88C41 58 47 34 60 12Z" fill="rgba(226,91,60,0.20)" stroke="#E25B3C" stroke-width="3.5"/>
-            <line x1="60" y1="16" x2="60" y2="105" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M18 82C32 72 46 72 60 80C74 88 88 88 102 78" stroke="#E25B3C" stroke-width="5" stroke-linecap="round"/>
+            <path d="M60 12C73 34 79 58 75 88C73 100 67 106 60 108C53 106 47 100 45 88C41 58 47 34 60 12Z" fill="rgba(224,99,67,0.18)" stroke="#E06343" stroke-width="3.5"/>
+            <line x1="60" y1="16" x2="60" y2="105" stroke="#52B097" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M18 82C32 72 46 72 60 80C74 88 88 88 102 78" stroke="#E06343" stroke-width="5" stroke-linecap="round"/>
           </svg>
         </div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:3.8px;color:#B4B8C4;margin-bottom:6px;">BALNEARIO PLAYA GRANDE</div>
-        <div style="font-size:26px;font-weight:800;letter-spacing:4.5px;background:linear-gradient(90deg,#F5F5F7,#EA7357);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;">SURF RENTAL</div>
-        <div style="font-size:12px;color:#9CA3AF;letter-spacing:1px;margin-bottom:18px;">Iniciando plataforma y telemetría costera...</div>
-        <div style="width:160px;height:3px;border-radius:9999px;background:rgba(255,255,255,0.10);overflow:hidden;position:relative;">
-          <div style="width:55%;height:100%;border-radius:9999px;background:linear-gradient(90deg,transparent,#E25B3C,#EA7357);animation:splashWaveBar 1.4s ease-in-out infinite;"></div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:3.8px;color:#B6B0A5;margin-bottom:6px;">BALNEARIO PLAYA GRANDE</div>
+        <div style="font-size:26px;font-weight:800;letter-spacing:4.5px;background:linear-gradient(90deg,#F5F2EC,#EA7D60);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;">SURF RENTAL</div>
+        <div style="font-size:12px;color:#9E988D;letter-spacing:1px;margin-bottom:18px;">Iniciando plataforma y telemetría costera...</div>
+        <div style="width:160px;height:3px;border-radius:9999px;background:rgba(245,242,236,0.10);overflow:hidden;position:relative;">
+          <div style="width:55%;height:100%;border-radius:9999px;background:linear-gradient(90deg,transparent,#E06343,#DBA84C);animation:splashWaveBar 1.4s ease-in-out infinite;"></div>
         </div>
       </div>
     </div>

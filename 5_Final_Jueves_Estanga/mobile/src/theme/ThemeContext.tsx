@@ -7,12 +7,18 @@ export type ThemeMode = 'light' | 'dark';
 export interface ThemeColors {
   background: string;
   surface: string;
+  surfaceElevated: string;
   card: string;
   champagne: string;
   primary: string;
+  primaryHover: string;
+  primaryDeep: string;
+  primarySubtle: string;
+  primaryBorder: string;
   primaryText: string;
   text: string;
   subtext: string;
+  muted: string;
   sand: string;
   border: string;
   accent: string;
@@ -21,46 +27,106 @@ export interface ThemeColors {
   cardHighlight: string;
   inputBg: string;
   inputBorder: string;
+  success: string;
+  successBg: string;
+  successBorder: string;
+  successText: string;
+  warning: string;
+  warningBg: string;
+  warningBorder: string;
+  warningText: string;
+  danger: string;
+  dangerBg: string;
+  dangerBorder: string;
+  dangerText: string;
+  info: string;
+  infoBg: string;
+  infoBorder: string;
+  infoText: string;
   isDark: boolean;
 }
 
 export const lightTheme: ThemeColors = {
-  background: '#F5F6F8', // Warm Architectural Stone White
-  surface: '#FFFFFF',
-  card: '#FFFFFF',
-  champagne: '#C48422', // Warm brushed sandstone
-  primary: '#E25B3C',   // Signature Warm Terracotta
+  background: '#F5F1EA', // Sunlit Coastal Travertine Limestone
+  surface: '#FDFCFA',    // Warm Gallery Chalk Paper
+  surfaceElevated: '#EFEAE1', // Soft Sand Wash
+  card: '#FDFCFA',
+  champagne: '#A4701C',  // Deep Brushed Sun-Brass
+  primary: '#C94A29',    // Fired Clay Terracotta (4.92:1 WCAG AA w/ white)
+  primaryHover: '#D95A38',
+  primaryDeep: '#A83A1E',
+  primarySubtle: 'rgba(201, 74, 41, 0.09)',
+  primaryBorder: 'rgba(201, 74, 41, 0.24)',
   primaryText: '#FFFFFF',
-  text: '#16181E',      // Softened Charcoal Ink
-  subtext: '#5B6270',   // Balanced Slate Secondary
-  sand: '#E5E7EB',
-  border: 'rgba(15, 23, 42, 0.08)',
-  accent: '#64748B',    // Neutral Slate Chrome
-  accentLight: 'rgba(100, 116, 139, 0.09)',
-  divider: 'rgba(15, 23, 42, 0.06)',
-  cardHighlight: '#F8FAFC',
+  text: '#1C1B18',       // Deep Espresso Umber Ink
+  subtext: '#666056',    // Weathered Driftwood Secondary
+  muted: '#7A7368',
+  sand: '#E8E2D7',
+  border: 'rgba(28, 27, 24, 0.09)',
+  accent: '#7A7368',     // Warm Pebble Telemetry Chrome
+  accentLight: 'rgba(122, 115, 104, 0.10)',
+  divider: 'rgba(28, 27, 24, 0.06)',
+  cardHighlight: '#EFEAE1',
   inputBg: '#FFFFFF',
-  inputBorder: 'rgba(15, 23, 42, 0.12)',
+  inputBorder: 'rgba(28, 27, 24, 0.14)',
+  success: '#247360',    // Deep Coastal Sea-Kelp
+  successBg: 'rgba(36, 115, 96, 0.09)',
+  successBorder: 'rgba(36, 115, 96, 0.22)',
+  successText: '#1A5648',
+  warning: '#A4701C',    // Brushed Ochre Brass
+  warningBg: 'rgba(164, 112, 28, 0.09)',
+  warningBorder: 'rgba(164, 112, 28, 0.24)',
+  warningText: '#7C5210',
+  danger: '#B63933',     // Muted Rust Sienna
+  dangerBg: 'rgba(182, 57, 51, 0.08)',
+  dangerBorder: 'rgba(182, 57, 51, 0.22)',
+  dangerText: '#8B2621',
+  info: '#3B657E',       // Deep Atlantic Slate
+  infoBg: 'rgba(59, 101, 126, 0.09)',
+  infoBorder: 'rgba(59, 101, 126, 0.22)',
+  infoText: '#2A4A5D',
   isDark: false,
 };
 
 export const darkTheme: ThemeColors = {
-  background: '#222630', // Lifted Charcoal Slate (Not harsh black)
-  surface: '#2B303C',    // Elevated Graphite Surface
-  card: 'rgba(45, 50, 64, 0.94)',
-  champagne: '#E5B869',  // Muted Warm Sandstone
-  primary: '#E25B3C',    // Signature Warm Terracotta
+  background: '#21201E', // Lifted Coastal Basalt Graphite (Zero pitch black, zero blue cast)
+  surface: '#2A2926',    // Warm Mineral Surface
+  surfaceElevated: '#35332F', // Elevated Basalt Recessed Tile
+  card: 'rgba(45, 43, 40, 0.96)',
+  champagne: '#DBA84C',  // Brushed Sun-Wax Brass
+  primary: '#E06343',    // Sunlit Terracotta Accent
+  primaryHover: '#EA7D60',
+  primaryDeep: '#C94A29',
+  primarySubtle: 'rgba(224, 99, 67, 0.13)',
+  primaryBorder: 'rgba(224, 99, 67, 0.30)',
   primaryText: '#FFFFFF',
-  text: '#F3F4F6',       // Crisp Soft White
-  subtext: '#B4BAC6',    // Mineral Slate Secondary
-  sand: '#D1D5DB',
-  border: 'rgba(255, 255, 255, 0.10)',
-  accent: '#94A3B8',     // Calm Slate Telemetry
-  accentLight: 'rgba(148, 163, 184, 0.12)',
-  divider: 'rgba(255, 255, 255, 0.08)',
-  cardHighlight: 'rgba(255, 255, 255, 0.05)',
-  inputBg: '#343A48',
-  inputBorder: 'rgba(255, 255, 255, 0.12)',
+  text: '#F5F2EC',       // Warm Chalk White
+  subtext: '#B6B0A5',    // Driftwood Stone Secondary
+  muted: '#9E988D',
+  sand: '#D6CFC3',
+  border: 'rgba(245, 242, 236, 0.09)',
+  accent: '#9E988D',     // Calm Mineral Telemetry Chrome
+  accentLight: 'rgba(158, 152, 141, 0.13)',
+  divider: 'rgba(245, 242, 236, 0.07)',
+  cardHighlight: 'rgba(245, 242, 236, 0.05)',
+  inputBg: '#35332F',
+  inputBorder: 'rgba(245, 242, 236, 0.13)',
+  success: '#52B097',    // Sea-Kelp Mineral Sage (Split-complement vs Terracotta)
+  successBg: 'rgba(82, 176, 151, 0.12)',
+  successBorder: 'rgba(82, 176, 151, 0.28)',
+  successText: '#B5E2D5',
+  warning: '#DBA84C',    // Brushed Brass
+  warningBg: 'rgba(219, 168, 76, 0.12)',
+  warningBorder: 'rgba(219, 168, 76, 0.28)',
+  warningText: '#F3D9A6',
+  danger: '#E26E66',     // Dusty Rust Clay
+  dangerBg: 'rgba(226, 110, 102, 0.12)',
+  dangerBorder: 'rgba(226, 110, 102, 0.28)',
+  dangerText: '#F4BEBA',
+  info: '#88A9BE',       // Softened Atlantic Slate
+  infoBg: 'rgba(136, 169, 190, 0.12)',
+  infoBorder: 'rgba(136, 169, 190, 0.26)',
+  infoText: '#CBDDE8',
   isDark: true,
 };
 

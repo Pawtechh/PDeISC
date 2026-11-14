@@ -155,15 +155,9 @@ export const MyBoardsScreen: React.FC = () => {
             padding="md"
             style={{
               backgroundColor:
-                bannerMsg.type === 'success'
-                  ? isDark
-                    ? '#064E3B'
-                    : '#F0FDF4'
-                  : isDark
-                  ? '#450A0A'
-                  : '#FEF2F2',
+                bannerMsg.type === 'success' ? theme.successBg : theme.dangerBg,
               borderColor:
-                bannerMsg.type === 'success' ? '#34D399' : '#F87171',
+                bannerMsg.type === 'success' ? theme.successBorder : theme.dangerBorder,
               borderWidth: 1,
             }}
           >
@@ -171,13 +165,7 @@ export const MyBoardsScreen: React.FC = () => {
               <Text
                 variant="body"
                 color={
-                  bannerMsg.type === 'success'
-                    ? isDark
-                      ? '#D1FAE5'
-                      : colors.semantic.success
-                    : isDark
-                    ? '#FECACA'
-                    : colors.semantic.danger
+                  bannerMsg.type === 'success' ? theme.successText : theme.dangerText
                 }
                 style={{ fontWeight: '600', flex: 1 }}
               >
@@ -194,8 +182,8 @@ export const MyBoardsScreen: React.FC = () => {
           style={[
             styles.summaryCard,
             {
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+              backgroundColor: theme.surfaceElevated,
+              borderColor: theme.border,
             },
           ]}
         >
@@ -203,7 +191,7 @@ export const MyBoardsScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <Text
                 variant="caption"
-                color={isDark ? '#FF7A59' : '#E04320'}
+                color={isDark ? theme.primaryHover : theme.primary}
                 style={{ fontWeight: '700' }}
               >
                 SUSCRIPCIÓN OWNER
@@ -225,8 +213,8 @@ export const MyBoardsScreen: React.FC = () => {
           style={[
             styles.maintenanceCard,
             {
-              backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
-              borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
+              backgroundColor: theme.warningBg,
+              borderColor: theme.warningBorder,
             },
           ]}
         >
@@ -234,11 +222,11 @@ export const MyBoardsScreen: React.FC = () => {
             <View style={{ flex: 1, paddingRight: spacing.sm }}>
               <Text
                 variant="button"
-                color={isDark ? '#FBBF24' : colors.sunset[600]}
+                color={theme.warningText}
               >
                 Ciclo de Mantenimiento Obligatorio (45 Días)
               </Text>
-              <Text variant="caption" color={isDark ? '#E2E8F0' : colors.sand[700]}>
+              <Text variant="caption" color={isDark ? theme.subtext : theme.warningText}>
                 Toda tabla debe inspeccionarse cada 45 días. Cada inspección técnica aprobada renueva la vigencia reglamentaria a 45 días.
               </Text>
             </View>
@@ -248,7 +236,7 @@ export const MyBoardsScreen: React.FC = () => {
 
         {/* Lista de Tablas del Owner */}
         {isLoading && boards.length === 0 ? (
-          <ActivityIndicator size="large" color="#FF5A36" />
+          <ActivityIndicator size="large" color={theme.primary} />
         ) : boards.length === 0 ? (
           <EmptyState
             title="No tenés tablas registradas"
@@ -282,7 +270,7 @@ export const MyBoardsScreen: React.FC = () => {
                     <Card
                       padding="md"
                       style={{
-                        borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
+                        borderColor: theme.border,
                         borderWidth: 1,
                       }}
                     >
@@ -309,17 +297,17 @@ export const MyBoardsScreen: React.FC = () => {
                             styles.maintBoxBase,
                             isOverdue
                               ? {
-                                  backgroundColor: isDark ? 'rgba(239, 68, 68, 0.10)' : '#FEE2E2',
-                                  borderColor: isDark ? 'rgba(239, 68, 68, 0.35)' : '#FCA5A5',
+                                  backgroundColor: theme.dangerBg,
+                                  borderColor: theme.dangerBorder,
                                 }
                               : needsSoon
                               ? {
-                                  backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FEF3C7',
-                                  borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FCD34D',
+                                  backgroundColor: theme.warningBg,
+                                  borderColor: theme.warningBorder,
                                 }
                               : {
-                                  backgroundColor: isDark ? 'rgba(16, 185, 129, 0.10)' : '#F0FDF4',
-                                  borderColor: isDark ? 'rgba(16, 185, 129, 0.32)' : '#BBF7D0',
+                                  backgroundColor: theme.successBg,
+                                  borderColor: theme.successBorder,
                                 },
                           ]}
                         >
@@ -329,16 +317,10 @@ export const MyBoardsScreen: React.FC = () => {
                                 variant="caption"
                                 color={
                                   isOverdue
-                                    ? isDark
-                                      ? '#FECACA'
-                                      : '#991B1B'
+                                    ? theme.dangerText
                                     : needsSoon
-                                    ? isDark
-                                      ? '#FDE68A'
-                                      : '#92400E'
-                                    : isDark
-                                    ? '#A7F3D0'
-                                    : '#065F46'
+                                    ? theme.warningText
+                                    : theme.successText
                                 }
                                 style={{ fontWeight: '700' }}
                               >
@@ -352,16 +334,12 @@ export const MyBoardsScreen: React.FC = () => {
                                 variant="caption"
                                 color={
                                   isOverdue
-                                    ? isDark
-                                      ? '#FCA5A5'
-                                      : '#7F1D1D'
+                                    ? theme.dangerText
                                     : needsSoon
-                                    ? isDark
-                                      ? '#FEF3C7'
-                                      : '#78350F'
+                                    ? theme.warningText
                                     : isDark
-                                    ? '#ECFDF5'
-                                    : colors.sand[700]
+                                    ? theme.successText
+                                    : theme.subtext
                                 }
                                 style={{ fontWeight: '600' }}
                               >
@@ -425,8 +403,8 @@ export const MyBoardsScreen: React.FC = () => {
             style={[
               styles.actionModalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
+                backgroundColor: theme.surface,
+                borderColor: theme.border,
                 borderWidth: 1,
                 maxHeight: '90%',
               },
@@ -450,8 +428,8 @@ export const MyBoardsScreen: React.FC = () => {
                 <Card
                   padding="sm"
                   style={{
-                    backgroundColor: isDark ? theme.surface : colors.sand[50],
-                    borderColor: isDark ? theme.border : colors.sand[200],
+                    backgroundColor: theme.surfaceElevated,
+                    borderColor: theme.border,
                     borderWidth: 1,
                   }}
                 >
@@ -468,7 +446,7 @@ export const MyBoardsScreen: React.FC = () => {
                     <Text variant="caption" color={theme.subtext}>
                       {inspectingBoard?.marca} • {inspectingBoard?.modelo} • Medidas: {inspectingBoard?.medidas}
                     </Text>
-                    <Text variant="caption" color={isDark ? '#FDE68A' : '#92400E'} style={{ fontWeight: '600' }}>
+                    <Text variant="caption" color={theme.warningText} style={{ fontWeight: '600' }}>
                       Estado actual del ciclo: {localDaysOverride[inspectingBoard?.id || ''] ?? inspectingBoard?.mantenimiento?.diasRestantes ?? 45} días restantes
                     </Text>
                   </Stack>
@@ -487,15 +465,15 @@ export const MyBoardsScreen: React.FC = () => {
                         paddingVertical: spacing.xs,
                         paddingHorizontal: spacing.sm,
                         borderRadius: radii.md,
-                        backgroundColor: inspectorType === 'SELF' ? (isDark ? 'rgba(255, 90, 54, 0.18)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? theme.surface : colors.sand[100]),
-                        borderColor: inspectorType === 'SELF' ? '#FF5A36' : (isDark ? theme.border : 'rgba(0, 0, 0, 0.08)'),
+                        backgroundColor: inspectorType === 'SELF' ? theme.primarySubtle : theme.surfaceElevated,
+                        borderColor: inspectorType === 'SELF' ? theme.primary : theme.border,
                         borderWidth: 1,
                         alignItems: 'center',
                       }}
                     >
                       <Text
                         variant="caption"
-                        color={inspectorType === 'SELF' ? (isDark ? '#FF7A59' : '#E04320') : theme.subtext}
+                        color={inspectorType === 'SELF' ? (isDark ? theme.primaryHover : theme.primary) : theme.subtext}
                         style={{ fontWeight: inspectorType === 'SELF' ? '700' : '500', textAlign: 'center' }}
                       >
                         Yo mismo (Dueño / Shaper)
@@ -509,15 +487,15 @@ export const MyBoardsScreen: React.FC = () => {
                         paddingVertical: spacing.xs,
                         paddingHorizontal: spacing.sm,
                         borderRadius: radii.md,
-                        backgroundColor: inspectorType === 'DELEGATED' ? (isDark ? 'rgba(255, 90, 54, 0.18)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? theme.surface : colors.sand[100]),
-                        borderColor: inspectorType === 'DELEGATED' ? '#FF5A36' : (isDark ? theme.border : 'rgba(0, 0, 0, 0.08)'),
+                        backgroundColor: inspectorType === 'DELEGATED' ? theme.primarySubtle : theme.surfaceElevated,
+                        borderColor: inspectorType === 'DELEGATED' ? theme.primary : theme.border,
                         borderWidth: 1,
                         alignItems: 'center',
                       }}
                     >
                       <Text
                         variant="caption"
-                        color={inspectorType === 'DELEGATED' ? (isDark ? '#FF7A59' : '#E04320') : theme.subtext}
+                        color={inspectorType === 'DELEGATED' ? (isDark ? theme.primaryHover : theme.primary) : theme.subtext}
                         style={{ fontWeight: inspectorType === 'DELEGATED' ? '700' : '500', textAlign: 'center' }}
                       >
                         Técnico / Encargado
@@ -555,7 +533,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkQuillas ? (
-                      <CheckSquare size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
+                      <CheckSquare size={16} color={isDark ? theme.primaryHover : theme.primary} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}
@@ -569,7 +547,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkDeckFibra ? (
-                      <CheckSquare size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
+                      <CheckSquare size={16} color={isDark ? theme.primaryHover : theme.primary} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}
@@ -583,7 +561,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkParafina ? (
-                      <CheckSquare size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
+                      <CheckSquare size={16} color={isDark ? theme.primaryHover : theme.primary} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}
@@ -599,20 +577,20 @@ export const MyBoardsScreen: React.FC = () => {
                   style={{
                     padding: spacing.sm,
                     borderRadius: radii.md,
-                    backgroundColor: inspectionSigned ? (isDark ? 'rgba(16, 185, 129, 0.15)' : '#F0FDF4') : (isDark ? theme.surface : colors.sand[100]),
-                    borderColor: inspectionSigned ? (isDark ? '#10B981' : '#BBF7D0') : (isDark ? theme.border : colors.sand[200]),
+                    backgroundColor: inspectionSigned ? theme.successBg : theme.surfaceElevated,
+                    borderColor: inspectionSigned ? theme.successBorder : theme.border,
                     borderWidth: 1,
                   }}
                 >
                   <Row spacing="xs" align="center">
                     <ShieldCheck
                       size={18}
-                      color={inspectionSigned ? (isDark ? '#34D399' : '#059669') : theme.subtext}
+                      color={inspectionSigned ? theme.success : theme.subtext}
                     />
                     <View style={{ flex: 1 }}>
                       <Text
                         variant="caption"
-                        color={inspectionSigned ? (isDark ? '#A7F3D0' : '#065F46') : theme.text}
+                        color={inspectionSigned ? theme.successText : theme.text}
                         style={{ fontWeight: '700' }}
                       >
                         {inspectionSigned ? 'Firma Digital y Declaración Jurada Aceptada' : 'Tocar para Firmar Declaración Técnica'}
@@ -628,21 +606,21 @@ export const MyBoardsScreen: React.FC = () => {
                 <Card
                   padding="xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-                    borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+                    backgroundColor: theme.surfaceElevated,
+                    borderColor: theme.border,
                     borderWidth: 1,
                   }}
                 >
                   <Row spacing="xs" align="center">
-                    <Info size={14} color={isDark ? '#FF7A59' : '#E04320'} />
-                    <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'} style={{ flex: 1 }}>
+                    <Info size={14} color={isDark ? theme.primaryHover : theme.primary} />
+                    <Text variant="caption" color={theme.subtext} style={{ flex: 1 }}>
                       El ciclo de mantenimiento preventivo queda renovado a 45 días exactos a partir de la fecha de hoy.
                     </Text>
                   </Row>
                 </Card>
 
                 {inspectionError && (
-                  <Text variant="caption" color={colors.semantic.danger} style={{ fontWeight: '700' }}>
+                  <Text variant="caption" color={theme.dangerText} style={{ fontWeight: '700' }}>
                     {inspectionError}
                   </Text>
                 )}
@@ -685,15 +663,15 @@ export const MyBoardsScreen: React.FC = () => {
             style={[
               styles.actionModalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(248, 113, 113, 0.35)' : theme.border,
+                backgroundColor: theme.surface,
+                borderColor: theme.dangerBorder,
                 borderWidth: 1,
               },
             ]}
           >
             <Stack spacing="md">
               <Row justify="space-between" align="center">
-                <Text variant="h2" color={isDark ? '#F87171' : colors.semantic.danger}>
+                <Text variant="h2" color={theme.dangerText}>
                   Retirar Tabla de la Sede
                 </Text>
                 <Button title="✕" variant="ghost" size="sm" onPress={() => setDecommissioningBoard(null)} />
@@ -708,12 +686,12 @@ export const MyBoardsScreen: React.FC = () => {
               <Card
                 padding="md"
                 style={{
-                  backgroundColor: isDark ? '#450A0A' : '#FEF2F2',
-                  borderColor: isDark ? '#EF4444' : '#FECACA',
+                  backgroundColor: theme.dangerBg,
+                  borderColor: theme.dangerBorder,
                   borderWidth: 1,
                 }}
               >
-                <Text variant="caption" color={isDark ? '#FECACA' : colors.semantic.danger}>
+                <Text variant="caption" color={theme.dangerText}>
                   La tabla ya no estará disponible para nuevas reservas. Si tiene alquileres en curso, deberás esperar a su devolución en recepción.
                 </Text>
               </Card>
@@ -726,7 +704,7 @@ export const MyBoardsScreen: React.FC = () => {
                 <Button
                   title="Sí, dar de baja"
                   variant="primary"
-                  style={{ backgroundColor: colors.semantic.danger }}
+                  style={{ backgroundColor: theme.danger }}
                   onPress={handleConfirmDecommission}
                 />
               </Row>
@@ -744,7 +722,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(28, 27, 24, 0.66)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.md,

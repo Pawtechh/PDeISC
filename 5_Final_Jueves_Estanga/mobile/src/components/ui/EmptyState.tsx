@@ -21,7 +21,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   actionTitle,
   onAction,
 }) => {
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
 
   return (
     <View style={styles.container}>
@@ -29,19 +29,19 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         {icon && typeof icon !== 'string' ? (
           icon
         ) : (
-          <Waves size={36} color={isDark ? '#FF7A59' : '#FF5A36'} strokeWidth={1.75} />
+          <Waves size={36} color={isDark ? theme.primaryHover : theme.primary} strokeWidth={1.75} />
         )}
       </View>
       <Text
         variant="h3"
-        style={[styles.title, { color: isDark ? '#F5F5F7' : '#111115' }]}
+        style={[styles.title, { color: theme.text }]}
       >
         {title}
       </Text>
       {description && (
         <Text
           variant="body"
-          style={[styles.description, { color: isDark ? '#A1A1AA' : '#52525B' }]}
+          style={[styles.description, { color: theme.subtext }]}
         >
           {description}
         </Text>
@@ -70,9 +70,9 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: 'rgba(255, 90, 54, 0.10)',
+    backgroundColor: 'rgba(224, 99, 67, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.24)',
+    borderColor: 'rgba(224, 99, 67, 0.28)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.md,

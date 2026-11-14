@@ -356,22 +356,14 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                       style={[
                         styles.typePill,
                         {
-                          backgroundColor: isSelected
-                            ? '#FF5A36'
-                            : isDark
-                            ? theme.surface
-                            : colors.sand[100],
-                          borderColor: isSelected
-                            ? '#E04320'
-                            : isDark
-                            ? theme.border
-                            : colors.sand[200],
+                          backgroundColor: isSelected ? theme.primary : theme.surfaceElevated,
+                          borderColor: isSelected ? theme.primaryHover : theme.border,
                         },
                       ]}
                     >
                       <Text
                         variant="caption"
-                        color={isSelected ? colors.white : isDark ? theme.text : colors.sand[900]}
+                        color={isSelected ? theme.primaryText : theme.text}
                         style={isSelected ? styles.bold : undefined}
                       >
                         {type}
@@ -426,18 +418,16 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                 {
                   borderColor:
                     fotosSeleccionadas.length > 0
-                      ? colors.semantic.success
-                      : isDark
-                      ? 'rgba(255, 255, 255, 0.14)'
-                      : 'rgba(255, 90, 54, 0.45)',
-                  backgroundColor: isDark ? '#242834' : '#F5F5F7',
+                      ? theme.successBorder
+                      : theme.primaryBorder,
+                  backgroundColor: theme.surfaceElevated,
                 },
               ]}
             >
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                    <Camera size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
+                    <Camera size={16} color={isDark ? theme.primaryHover : theme.primary} />
                     <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                       Fotografías de la Tabla ({fotosSeleccionadas.length}) *
                     </Text>
@@ -460,7 +450,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                     title="🖼️ Galería / Archivos"
                     variant="secondary"
                     size="sm"
-                    iconLeft={<Upload size={14} color={isDark ? '#F5F5F7' : '#111115'} />}
+                    iconLeft={<Upload size={14} color={theme.text} />}
                     onPress={handleUploadFromDevice}
                   />
                   <Button
@@ -588,7 +578,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   errorCard: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: 'rgba(182, 57, 51, 0.09)',
     borderLeftWidth: 4,
     borderLeftColor: colors.semantic.danger,
     marginTop: spacing.sm,
@@ -597,7 +587,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: '#DCFCE7',
+    backgroundColor: 'rgba(36, 115, 96, 0.14)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.xs,
@@ -662,7 +652,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     right: 4,
-    backgroundColor: 'rgba(239, 68, 68, 0.92)',
+    backgroundColor: colors.semantic.danger,
     width: 22,
     height: 22,
     borderRadius: 11,

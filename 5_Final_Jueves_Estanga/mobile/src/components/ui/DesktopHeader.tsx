@@ -15,7 +15,7 @@ import { logout } from '../../store/auth/thunks';
 
 export const DesktopHeader: React.FC = () => {
   const { width } = useWindowDimensions();
-  const { isDark, toggleTheme } = useTheme();
+  const { theme, isDark, toggleTheme } = useTheme();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth?.user);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -42,8 +42,8 @@ export const DesktopHeader: React.FC = () => {
       style={[
         styles.headerContainer,
         {
-          backgroundColor: isDark ? 'rgba(35, 39, 49, 0.92)' : 'rgba(255, 255, 255, 0.90)',
-          borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 23, 42, 0.07)',
+          backgroundColor: isDark ? 'rgba(37, 35, 32, 0.92)' : 'rgba(253, 252, 250, 0.92)',
+          borderBottomColor: theme.border,
         },
         Platform.OS === 'web'
           ? ({
@@ -51,7 +51,7 @@ export const DesktopHeader: React.FC = () => {
               WebkitBackdropFilter: 'blur(24px) saturate(150%)',
               boxShadow: isDark
                 ? '0 8px 24px rgba(0, 0, 0, 0.28)'
-                : '0 4px 18px rgba(15, 23, 42, 0.05)',
+                : '0 4px 18px rgba(28, 27, 24, 0.05)',
               position: 'sticky',
               top: 0,
               zIndex: 1000,
@@ -67,21 +67,21 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(226, 91, 60, 0.14)' : 'rgba(226, 91, 60, 0.10)',
-                borderColor: isDark ? 'rgba(226, 91, 60, 0.30)' : 'rgba(226, 91, 60, 0.26)',
+                backgroundColor: theme.primarySubtle,
+                borderColor: theme.primaryBorder,
               },
             ]}
           >
-            <Waves size={18} color={isDark ? '#EA7357' : '#CC482A'} strokeWidth={2.2} />
+            <Waves size={18} color={isDark ? theme.primaryHover : theme.primary} strokeWidth={2.2} />
           </View>
           <View style={styles.brandTexts}>
-            <Text style={[styles.brandTitle, { color: isDark ? '#F3F4F6' : '#16181E' }]}>
+            <Text style={[styles.brandTitle, { color: theme.text }]}>
               SURF RENTAL
             </Text>
             <Text
               style={[
                 styles.brandSubtitle,
-                { color: isDark ? '#9CA3AF' : '#64748B' },
+                { color: theme.muted },
               ]}
             >
               MAR DEL PLATA • EST. 2026
@@ -96,20 +96,20 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.telemetryPill,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 23, 42, 0.08)',
+                backgroundColor: isDark ? 'rgba(245, 242, 236, 0.05)' : theme.cardHighlight,
+                borderColor: theme.border,
               },
             ]}
           >
             <View
               {...(Platform.OS === 'web' ? ({ dataSet: { liveDot: 'true' } } as any) : {})}
-              style={styles.livePulseDot}
+              style={[styles.livePulseDot, { backgroundColor: theme.success }]}
             />
-            <Compass size={13} color={isDark ? '#94A3B8' : '#64748B'} />
+            <Compass size={13} color={theme.accent} />
             <Text
               style={[
                 styles.telemetryText,
-                { color: isDark ? '#D1D5DB' : '#334155' },
+                { color: theme.subtext },
               ]}
             >
               PLAYA GRANDE • OLA 1.3M • 14KT OFFSHORE • AGUA 16.5°C
@@ -124,16 +124,16 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.roleBadgeGroup,
                 {
-                  backgroundColor: isDark ? 'rgba(226, 91, 60, 0.12)' : 'rgba(226, 91, 60, 0.08)',
-                  borderColor: isDark ? 'rgba(226, 91, 60, 0.26)' : 'rgba(226, 91, 60, 0.22)',
+                  backgroundColor: theme.primarySubtle,
+                  borderColor: theme.primaryBorder,
                 },
               ]}
             >
-              <ShieldCheck size={13} color={isDark ? '#EA7357' : '#CC482A'} />
+              <ShieldCheck size={13} color={isDark ? theme.primaryHover : theme.primary} />
               <Text
                 style={[
                   styles.roleBadgeText,
-                  { color: isDark ? '#EA7357' : '#CC482A' },
+                  { color: isDark ? theme.primaryHover : theme.primary },
                 ]}
               >
                 {roleBadgeLabel}
@@ -145,22 +145,22 @@ export const DesktopHeader: React.FC = () => {
                 style={[
                   styles.userAvatar,
                   {
-                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#F4F4F6',
-                    borderColor: isDark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.09)',
+                    backgroundColor: isDark ? 'rgba(245, 242, 236, 0.08)' : theme.cardHighlight,
+                    borderColor: theme.border,
                   },
                 ]}
               >
                 <Text
                   style={[
                     styles.avatarLetter,
-                    { color: isDark ? '#F5F5F7' : '#111115' },
+                    { color: theme.text },
                   ]}
                 >
                   {(user.nombre || user.email || 'S').charAt(0).toUpperCase()}
                 </Text>
               </View>
               <Text
-                style={[styles.userName, { color: isDark ? '#F5F5F7' : '#111115' }]}
+                style={[styles.userName, { color: theme.text }]}
                 numberOfLines={1}
               >
                 {user.nombre || user.email?.split('@')[0]}
@@ -173,17 +173,17 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.logoutBtn,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F6',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.08)',
+                  backgroundColor: isDark ? 'rgba(245, 242, 236, 0.06)' : theme.cardHighlight,
+                  borderColor: theme.border,
                 },
               ]}
               accessibilityLabel={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
               testID="desktop-theme-toggle"
             >
               {isDark ? (
-                <Sun size={15} color="#FBBF24" />
+                <Sun size={15} color={theme.champagne} />
               ) : (
-                <Moon size={15} color="#111115" />
+                <Moon size={15} color={theme.text} />
               )}
             </TouchableOpacity>
 
@@ -193,14 +193,14 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.logoutBtn,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F6',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.08)',
+                  backgroundColor: isDark ? 'rgba(245, 242, 236, 0.06)' : theme.cardHighlight,
+                  borderColor: theme.border,
                 },
               ]}
               accessibilityLabel="Cerrar sesión"
               testID="desktop-header-logout"
             >
-              <LogOut size={15} color={isDark ? '#A1A1AA' : '#52525B'} />
+              <LogOut size={15} color={theme.subtext} />
             </TouchableOpacity>
           </View>
         ) : (
@@ -212,17 +212,17 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.logoutBtn,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F6',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.08)',
+                  backgroundColor: isDark ? 'rgba(245, 242, 236, 0.06)' : theme.cardHighlight,
+                  borderColor: theme.border,
                 },
               ]}
               accessibilityLabel={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
               testID="desktop-theme-toggle"
             >
               {isDark ? (
-                <Sun size={15} color="#FBBF24" />
+                <Sun size={15} color={theme.champagne} />
               ) : (
-                <Moon size={15} color="#111115" />
+                <Moon size={15} color={theme.text} />
               )}
             </TouchableOpacity>
 
@@ -230,16 +230,16 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.guestPill,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F4F4F6',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                  backgroundColor: isDark ? 'rgba(245, 242, 236, 0.05)' : theme.cardHighlight,
+                  borderColor: theme.border,
                 },
               ]}
             >
-              <Shield size={12} color={isDark ? '#FF7A59' : '#D93D1B'} />
+              <Shield size={12} color={isDark ? theme.primaryHover : theme.primary} />
               <Text
                 style={[
                   styles.guestText,
-                  { color: isDark ? '#D4D4D8' : '#3F3F46' },
+                  { color: theme.subtext },
                 ]}
               >
                 SEDE CENTRAL • BALNEARIO PLAYA GRANDE
@@ -261,8 +261,8 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.logoutModalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.94)' : 'rgba(255, 255, 255, 0.96)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.09)',
+                backgroundColor: isDark ? 'rgba(42, 41, 38, 0.96)' : 'rgba(253, 252, 250, 0.98)',
+                borderColor: theme.border,
               },
               Platform.OS === 'web'
                 ? ({
@@ -273,12 +273,12 @@ export const DesktopHeader: React.FC = () => {
             ]}
           >
             <View style={styles.modalHeaderRow}>
-              <LogOut size={20} color="#EF4444" />
-              <Text style={[styles.modalTitle, { color: isDark ? '#F5F5F7' : '#111115' }]}>
+              <LogOut size={20} color={theme.danger} />
+              <Text style={[styles.modalTitle, { color: theme.text }]}>
                 Cerrar Sesión
               </Text>
             </View>
-            <Text style={[styles.modalMessage, { color: isDark ? '#94A3B8' : '#475569' }]}>
+            <Text style={[styles.modalMessage, { color: theme.subtext }]}>
               ¿Estás seguro de que deseás cerrar tu sesión actual?
             </Text>
             <View style={styles.modalActionsRow}>
@@ -287,10 +287,10 @@ export const DesktopHeader: React.FC = () => {
                 onPress={() => setShowLogoutModal(false)}
                 style={[
                   styles.modalCancelBtn,
-                  { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9' },
+                  { backgroundColor: isDark ? 'rgba(245, 242, 236, 0.07)' : theme.cardHighlight },
                 ]}
               >
-                <Text style={[styles.modalCancelText, { color: isDark ? '#F5F5F7' : '#111115' }]}>
+                <Text style={[styles.modalCancelText, { color: theme.text }]}>
                   Cancelar
                 </Text>
               </TouchableOpacity>
@@ -300,7 +300,7 @@ export const DesktopHeader: React.FC = () => {
                   setShowLogoutModal(false);
                   dispatch(logout() as any);
                 }}
-                style={styles.modalConfirmBtn}
+                style={[styles.modalConfirmBtn, { backgroundColor: isDark ? '#D0554E' : theme.danger }]}
               >
                 <Text style={styles.modalConfirmText}>Sí, Cerrar Sesión</Text>
               </TouchableOpacity>
@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: '#10B981',
+    backgroundColor: '#52B097',
   },
   telemetryText: {
     fontSize: 10.5,
@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   modalConfirmBtn: {
-    backgroundColor: '#EF4444',
+    backgroundColor: '#D0554E',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,

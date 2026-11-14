@@ -228,9 +228,9 @@ export const RevisionsScreen: React.FC = () => {
           style={[
             styles.segmentContainer,
             {
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+              backgroundColor: theme.surfaceElevated,
               borderWidth: 1,
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+              borderColor: theme.border,
             },
           ]}
         >
@@ -239,7 +239,7 @@ export const RevisionsScreen: React.FC = () => {
               styles.segmentBtn,
               activeSection === 'PENDIENTES' && styles.segmentBtnActive,
               activeSection === 'PENDIENTES' && {
-                backgroundColor: '#FF5A36',
+                backgroundColor: theme.primary,
               },
             ]}
             onPress={() => setActiveSection('PENDIENTES')}
@@ -247,7 +247,7 @@ export const RevisionsScreen: React.FC = () => {
           >
             <Text
               variant="button"
-              color={activeSection === 'PENDIENTES' ? '#FFFFFF' : theme.text}
+              color={activeSection === 'PENDIENTES' ? theme.primaryText : theme.text}
               style={{ fontWeight: activeSection === 'PENDIENTES' ? '800' : '600' }}
             >
               Inspecciones Pendientes ({revisions.length})
@@ -259,7 +259,7 @@ export const RevisionsScreen: React.FC = () => {
               styles.segmentBtn,
               activeSection === 'RECLAMOS' && styles.segmentBtnActive,
               activeSection === 'RECLAMOS' && {
-                backgroundColor: '#FF5A36',
+                backgroundColor: theme.primary,
               },
             ]}
             onPress={() => setActiveSection('RECLAMOS')}
@@ -267,7 +267,7 @@ export const RevisionsScreen: React.FC = () => {
           >
             <Text
               variant="button"
-              color={activeSection === 'RECLAMOS' ? '#FFFFFF' : theme.text}
+              color={activeSection === 'RECLAMOS' ? theme.primaryText : theme.text}
               style={{ fontWeight: activeSection === 'RECLAMOS' ? '800' : '600' }}
             >
               Reclamos y Mediación ({claims.length})
@@ -281,12 +281,12 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.feedbackBanner,
               feedbackBanner?.type === 'success' && {
-                backgroundColor: isDark ? 'rgba(16, 185, 129, 0.12)' : '#D1FAE5',
-                borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : '#34D399',
+                backgroundColor: theme.successBg,
+                borderColor: theme.successBorder,
               },
               feedbackBanner?.type === 'error' && {
-                backgroundColor: isDark ? 'rgba(239, 68, 68, 0.12)' : '#FEE2E2',
-                borderColor: isDark ? 'rgba(239, 68, 68, 0.4)' : '#F87171',
+                backgroundColor: theme.dangerBg,
+                borderColor: theme.dangerBorder,
               },
             ]}
           >
@@ -296,12 +296,8 @@ export const RevisionsScreen: React.FC = () => {
                   variant="body"
                   color={
                     feedbackBanner?.type === 'success'
-                      ? isDark
-                        ? '#A7F3D0'
-                        : '#065F46'
-                      : isDark
-                      ? '#FCA5A5'
-                      : '#991B1B'
+                      ? theme.successText
+                      : theme.dangerText
                   }
                   style={{ fontWeight: '600' }}
                 >
@@ -314,7 +310,7 @@ export const RevisionsScreen: React.FC = () => {
                   >
                     <Text
                       variant="caption"
-                      color={isDark ? '#FF7A59' : '#E04320'}
+                      color={isDark ? theme.primaryHover : theme.primary}
                       style={{ fontWeight: '700', textDecorationLine: 'underline' }}
                     >
                       {feedbackBanner.actionLabel}
@@ -327,12 +323,8 @@ export const RevisionsScreen: React.FC = () => {
                   variant="caption"
                   color={
                     feedbackBanner?.type === 'success'
-                      ? isDark
-                        ? '#A7F3D0'
-                        : '#065F46'
-                      : isDark
-                      ? '#FCA5A5'
-                      : '#991B1B'
+                      ? theme.successText
+                      : theme.dangerText
                   }
                   style={{ fontWeight: '700', paddingLeft: spacing.sm }}
                 >
@@ -354,8 +346,8 @@ export const RevisionsScreen: React.FC = () => {
               style={[
                 styles.ruleCard,
                 {
-                  backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
-                  borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
+                  backgroundColor: theme.warningBg,
+                  borderColor: theme.warningBorder,
                 },
               ]}
             >
@@ -363,19 +355,19 @@ export const RevisionsScreen: React.FC = () => {
                 <Row justify="space-between" align="center">
                   <Text
                     variant="caption"
-                    color={isDark ? '#FBBF24' : colors.sunset[600]}
+                    color={theme.warningText}
                     style={{ fontWeight: '800', letterSpacing: 0.5 }}
                   >
                     REGLA DE PERITAJE RÁPIDO (24 HORAS)
                   </Text>
                   <Badge label="REGLA NO NEGOCIABLE" variant="warning" />
                 </Row>
-                <Text variant="caption" color={isDark ? '#E2E8F0' : colors.sand[900]}>
+                <Text variant="caption" color={isDark ? theme.subtext : theme.text}>
                   Revisá las fotos dentro de las 24 hs de devuelta la tabla. El silencio del cliente
                   tras ser notificado constituye{' '}
                   <Text
                     variant="caption"
-                    color={isDark ? '#FBBF24' : colors.sand[900]}
+                    color={theme.warningText}
                     style={{ fontWeight: '700' }}
                   >
                     aceptación tácita del daño
@@ -386,7 +378,7 @@ export const RevisionsScreen: React.FC = () => {
             </Card>
 
             {isLoading && revisions.length === 0 ? (
-              <ActivityIndicator size="large" color="#FF5A36" />
+              <ActivityIndicator size="large" color={theme.primary} />
             ) : revisions.length === 0 ? (
               <EmptyState
                 title="Sin revisiones pendientes"
@@ -440,8 +432,8 @@ export const RevisionsScreen: React.FC = () => {
                           style={[
                             styles.damageNoticeBox,
                             {
-                              backgroundColor: isDark ? 'rgba(239, 68, 68, 0.10)' : '#FEF2F2',
-                              borderColor: isDark ? 'rgba(239, 68, 68, 0.38)' : '#FECACA',
+                              backgroundColor: theme.dangerBg,
+                              borderColor: theme.dangerBorder,
                             },
                           ]}
                         >
@@ -450,7 +442,7 @@ export const RevisionsScreen: React.FC = () => {
                           </Row>
                           <Text
                             variant="body"
-                            color={isDark ? '#FCA5A5' : colors.semantic.danger}
+                            color={theme.dangerText}
                             style={{ fontWeight: '600' }}
                           >
                             "{rev.descripcionDanio}"
@@ -505,8 +497,8 @@ export const RevisionsScreen: React.FC = () => {
               style={[
                 styles.protocolCard,
                 {
-                  backgroundColor: isDark ? '#242834' : '#F5F5F7',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                  backgroundColor: theme.surfaceElevated,
+                  borderColor: theme.border,
                 },
               ]}
             >
@@ -514,30 +506,30 @@ export const RevisionsScreen: React.FC = () => {
                 <Row justify="space-between" align="flex-start" spacing="xs">
                   <Text
                     variant="caption"
-                    color={isDark ? '#FF7A59' : '#E04320'}
+                    color={isDark ? theme.primaryHover : theme.primary}
                     style={{ fontWeight: '700', flex: 1, paddingRight: spacing.xs }}
                   >
                     PROTOCOLO TRIPARTITO DE GARANTÍA Y MEDIACIÓN (SURF RENTAL MDP)
                   </Text>
                   <Badge label="3 PARTES" variant="ocean" />
                 </Row>
-                <Text variant="caption" color={isDark ? '#E2E8F0' : colors.sand[900]}>
+                <Text variant="caption" color={theme.text}>
                   ¿A dónde va el reclamo cuando pedís la garantía?
                 </Text>
                 <View
                   style={[
                     styles.flowDiagram,
                     {
-                      backgroundColor: isDark ? 'rgba(34, 38, 48, 0.80)' : 'rgba(255, 255, 255, 0.88)',
+                      backgroundColor: theme.surface,
                       borderWidth: 1,
-                      borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+                      borderColor: theme.border,
                     },
                   ]}
                 >
                   <Text variant="caption" color={theme.text} style={styles.flowStep}>
                     <Text
                       variant="caption"
-                      color={isDark ? '#FF7A59' : '#E04320'}
+                      color={isDark ? theme.primaryHover : theme.primary}
                       style={{ fontWeight: '700' }}
                     >
                       1. DUEÑO:
@@ -550,7 +542,7 @@ export const RevisionsScreen: React.FC = () => {
                   <Text variant="caption" color={theme.text} style={styles.flowStep}>
                     <Text
                       variant="caption"
-                      color={isDark ? '#FBBF24' : colors.sunset[600]}
+                      color={theme.warningText}
                       style={{ fontWeight: '700' }}
                     >
                       2. SURFISTA:
@@ -564,7 +556,7 @@ export const RevisionsScreen: React.FC = () => {
                   <Text variant="caption" color={theme.text} style={styles.flowStep}>
                     <Text
                       variant="caption"
-                      color={isDark ? '#F87171' : colors.semantic.danger}
+                      color={theme.danger}
                       style={{ fontWeight: '700' }}
                     >
                       3. AGENCIA SEDE CENTRAL:
@@ -577,7 +569,7 @@ export const RevisionsScreen: React.FC = () => {
             </Card>
 
             {isLoadingClaims && claims.length === 0 ? (
-              <ActivityIndicator size="large" color="#FF5A36" />
+              <ActivityIndicator size="large" color={theme.primary} />
             ) : claims.length === 0 ? (
               <EmptyState
                 title="Sin reclamos ni mediaciones activas"
@@ -593,9 +585,9 @@ export const RevisionsScreen: React.FC = () => {
                     style={[
                       styles.revisionCard,
                       {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
-              },
+                        backgroundColor: theme.card,
+                        borderColor: theme.border,
+                      },
                     ]}
                   >
                     <Stack spacing="md">
@@ -625,7 +617,7 @@ export const RevisionsScreen: React.FC = () => {
                             </Text>
                             <Text
                               variant="h2"
-                              color={isDark ? '#F87171' : colors.semantic.danger}
+                              color={theme.danger}
                               style={{ fontWeight: '700' }}
                             >
                               ${claim.montoReclamado.toLocaleString('es-AR')} ARS
@@ -642,7 +634,7 @@ export const RevisionsScreen: React.FC = () => {
                         style={[
                           styles.claimDescBox,
                           {
-                            backgroundColor: isDark ? '#242834' : colors.sand[50],
+                            backgroundColor: theme.surfaceElevated,
                             borderColor: theme.border,
                           },
                         ]}
@@ -706,24 +698,24 @@ export const RevisionsScreen: React.FC = () => {
                         style={[
                           styles.trackingBox,
                           claim.estado === 'NOTIFICADO' && {
-                            backgroundColor: isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
-                            borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
+                            backgroundColor: theme.warningBg,
+                            borderColor: theme.warningBorder,
                           },
                           (claim.estado === 'EN_MEDIACION' || claim.estado === 'DISPUTADO') && {
-                            backgroundColor: isDark ? 'rgba(255, 90, 54, 0.08)' : 'rgba(255, 90, 54, 0.05)',
-                            borderColor: isDark ? 'rgba(255, 90, 54, 0.28)' : 'rgba(255, 90, 54, 0.25)',
+                            backgroundColor: theme.infoBg,
+                            borderColor: theme.infoBorder,
                           },
                           claim.estado === 'RESUELTO_OWNER' && {
-                            backgroundColor: isDark ? 'rgba(16, 185, 129, 0.10)' : '#ECFDF5',
-                            borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#34D399',
+                            backgroundColor: theme.successBg,
+                            borderColor: theme.successBorder,
                           },
                           claim.estado === 'RESUELTO_CONSUMER' && {
-                            backgroundColor: isDark ? 'rgba(239, 68, 68, 0.10)' : '#FEF2F2',
-                            borderColor: isDark ? 'rgba(239, 68, 68, 0.35)' : '#F87171',
+                            backgroundColor: theme.dangerBg,
+                            borderColor: theme.dangerBorder,
                           },
                           (claim.estado === 'ACEPTADO' || claim.estado === 'COBRADO') && {
-                            backgroundColor: isDark ? 'rgba(16, 185, 129, 0.10)' : '#ECFDF5',
-                            borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#34D399',
+                            backgroundColor: theme.successBg,
+                            borderColor: theme.successBorder,
                           },
                         ]}
                       >
@@ -736,35 +728,27 @@ export const RevisionsScreen: React.FC = () => {
                           }}
                           color={
                             claim.estado === 'NOTIFICADO'
-                              ? isDark
-                                ? '#FDE68A'
-                                : '#92400E'
+                              ? theme.warningText
                               : claim.estado === 'EN_MEDIACION' || claim.estado === 'DISPUTADO'
-                              ? isDark
-                                ? '#93C5FD'
-                                : '#1E40AF'
+                              ? theme.infoText
                               : claim.estado === 'RESUELTO_OWNER' ||
                                 claim.estado === 'COBRADO' ||
                                 claim.estado === 'ACEPTADO'
-                              ? isDark
-                                ? '#6EE7B7'
-                                : '#065F46'
-                              : isDark
-                              ? '#FCA5A5'
-                              : '#991B1B'
+                              ? theme.successText
+                              : theme.dangerText
                           }
                         >
                           Estado del Seguimiento:
                         </Text>
 
                         {claim.estado === 'NOTIFICADO' && (
-                          <Text variant="body" color={isDark ? '#FEF3C7' : '#78350F'}>
+                          <Text variant="body" color={theme.warningText}>
                             {(claim.horasRestantesDisputa ?? 24) <= 0 ? (
                               <>
                                 {' '}
                                 <Text
                                   variant="body"
-                                  color={isDark ? '#FDE68A' : '#78350F'}
+                                  color={theme.warningText}
                                   style={{ fontWeight: '700' }}
                                 >
                                   Plazo Reglamentario de 24 Horas Vencido:
@@ -772,7 +756,7 @@ export const RevisionsScreen: React.FC = () => {
                                 El surfista no objetó dentro de las 24 horas reglamentarias. Se aplicó la regla de{' '}
                                 <Text
                                   variant="body"
-                                  color={isDark ? '#FDE68A' : '#78350F'}
+                                  color={theme.warningText}
                                   style={{ fontWeight: '700' }}
                                 >
                                   "Silencio = Aceptación"
@@ -784,7 +768,7 @@ export const RevisionsScreen: React.FC = () => {
                                 {' '}
                                 <Text
                                   variant="body"
-                                  color={isDark ? '#FDE68A' : '#78350F'}
+                                  color={theme.warningText}
                                   style={{ fontWeight: '700' }}
                                 >
                                   Esperando respuesta del Surfista ({claim.horasRestantesDisputa ?? 24}{' '}
@@ -794,7 +778,7 @@ export const RevisionsScreen: React.FC = () => {
                                 responde dentro de las 24 horas, la regla de{' '}
                                 <Text
                                   variant="body"
-                                  color={isDark ? '#FDE68A' : '#78350F'}
+                                  color={theme.warningText}
                                   style={{ fontWeight: '700' }}
                                 >
                                   "Silencio = Aceptación"
@@ -807,11 +791,11 @@ export const RevisionsScreen: React.FC = () => {
                         )}
 
                         {(claim.estado === 'EN_MEDIACION' || claim.estado === 'DISPUTADO') && (
-                          <Text variant="body" color={isDark ? '#DBEAFE' : '#1E3A8A'}>
+                          <Text variant="body" color={theme.infoText}>
                             {' '}
                             <Text
                               variant="body"
-                              color={isDark ? '#93C5FD' : '#1E3A8A'}
+                              color={theme.infoText}
                               style={{ fontWeight: '700' }}
                             >
                               En Mesa de Mediación Arbitral (Sede Central):
@@ -824,11 +808,11 @@ export const RevisionsScreen: React.FC = () => {
                         )}
 
                         {claim.estado === 'RESUELTO_OWNER' && (
-                          <Text variant="body" color={isDark ? '#D1FAE5' : '#065F46'}>
+                          <Text variant="body" color={theme.successText}>
                             {' '}
                             <Text
                               variant="body"
-                              color={isDark ? '#6EE7B7' : '#065F46'}
+                              color={theme.successText}
                               style={{ fontWeight: '700' }}
                             >
                               Laudo Favorable al Propietario Emitido:
@@ -843,11 +827,11 @@ export const RevisionsScreen: React.FC = () => {
                         )}
 
                         {claim.estado === 'RESUELTO_CONSUMER' && (
-                          <Text variant="body" color={isDark ? '#FEE2E2' : '#991B1B'}>
+                          <Text variant="body" color={theme.dangerText}>
                             {' '}
                             <Text
                               variant="body"
-                              color={isDark ? '#FCA5A5' : '#991B1B'}
+                              color={theme.dangerText}
                               style={{ fontWeight: '700' }}
                             >
                               Laudo Favorable al Surfista:
@@ -861,11 +845,11 @@ export const RevisionsScreen: React.FC = () => {
                         )}
 
                         {(claim.estado === 'ACEPTADO' || claim.estado === 'COBRADO') && (
-                          <Text variant="body" color={isDark ? '#D1FAE5' : '#065F46'}>
+                          <Text variant="body" color={theme.successText}>
                             {' '}
                             <Text
                               variant="body"
-                              color={isDark ? '#6EE7B7' : '#065F46'}
+                              color={theme.successText}
                               style={{ fontWeight: '700' }}
                             >
                               Garantía Cobrada Exitosamente:
@@ -898,8 +882,8 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.confirmCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
+                backgroundColor: theme.card,
+                borderColor: theme.border,
               },
             ]}
           >
@@ -957,8 +941,8 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.claimModalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
+                backgroundColor: theme.card,
+                borderColor: theme.border,
               },
             ]}
           >
@@ -970,7 +954,7 @@ export const RevisionsScreen: React.FC = () => {
                 {/* Header del Modal */}
                 <Row justify="space-between" align="center">
                   <View style={{ flex: 1, paddingRight: spacing.sm }}>
-                    <Text variant="h2" color={isDark ? '#F87171' : colors.semantic.danger}>
+                    <Text variant="h2" color={theme.danger}>
                       {selectedRevision?.descripcionDanio
                         ? 'Aprobar con Daños'
                         : 'Reportar Daño Técnico'}
@@ -995,14 +979,14 @@ export const RevisionsScreen: React.FC = () => {
                     style={[
                       styles.modalErrorBanner,
                       {
-                        backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
-                        borderColor: '#F87171',
+                        backgroundColor: theme.dangerBg,
+                        borderColor: theme.dangerBorder,
                       },
                     ]}
                   >
                     <Text
                       variant="body"
-                      color={isDark ? '#FECACA' : '#991B1B'}
+                      color={theme.dangerText}
                       style={{ fontWeight: '600' }}
                     >
                       {modalError}
@@ -1016,8 +1000,8 @@ export const RevisionsScreen: React.FC = () => {
                     style={[
                       styles.agencyNoticeBanner,
                       {
-                        backgroundColor: isDark ? '#450A0A' : '#FEF2F2',
-                        borderColor: '#F87171',
+                        backgroundColor: theme.dangerBg,
+                        borderColor: theme.dangerBorder,
                       },
                     ]}
                   >
@@ -1026,7 +1010,7 @@ export const RevisionsScreen: React.FC = () => {
                     </Row>
                     <Text
                       variant="body"
-                      color={isDark ? '#FECACA' : colors.semantic.danger}
+                      color={theme.dangerText}
                       style={{ fontWeight: '700' }}
                     >
                       "{selectedRevision?.descripcionDanio}"
@@ -1055,9 +1039,9 @@ export const RevisionsScreen: React.FC = () => {
                     style={[
                       styles.input,
                       {
-                        backgroundColor: isDark ? '#242834' : colors.sand[50],
+                        backgroundColor: theme.inputBg,
                         color: theme.text,
-                        borderColor: theme.border,
+                        borderColor: theme.inputBorder,
                       },
                     ]}
                     keyboardType="numeric"
@@ -1067,7 +1051,7 @@ export const RevisionsScreen: React.FC = () => {
                       if (modalError) setModalError(null);
                     }}
                     placeholder="15000"
-                    placeholderTextColor={colors.sand[500]}
+                    placeholderTextColor={theme.muted}
                     testID="input-claim-amount"
                   />
                   <Row spacing="xs" style={{ flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
@@ -1084,10 +1068,9 @@ export const RevisionsScreen: React.FC = () => {
                           style={[
                             styles.presetAmountPill,
                             {
-                              backgroundColor: isDark ? 'rgba(34, 38, 48, 0.78)' : '#FFFFFF',
-                              borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+                              backgroundColor: isSelected ? theme.primary : theme.surfaceElevated,
+                              borderColor: isSelected ? theme.primaryBorder : theme.border,
                             },
-                            isSelected && styles.presetAmountPillActive,
                           ]}
                           onPress={() => {
                             setClaimAmount(preset.val);
@@ -1096,7 +1079,7 @@ export const RevisionsScreen: React.FC = () => {
                         >
                           <Text
                             variant="caption"
-                            color={isSelected ? colors.white : theme.text}
+                            color={isSelected ? theme.primaryText : theme.text}
                             style={{ fontWeight: isSelected ? '700' : '500' }}
                           >
                             {preset.label}
@@ -1142,9 +1125,9 @@ export const RevisionsScreen: React.FC = () => {
                       styles.input,
                       styles.textArea,
                       {
-                        backgroundColor: isDark ? '#242834' : '#F5F5F7',
+                        backgroundColor: theme.inputBg,
                         color: theme.text,
-                        borderColor: theme.border,
+                        borderColor: theme.inputBorder,
                       },
                     ]}
                     multiline
@@ -1155,7 +1138,7 @@ export const RevisionsScreen: React.FC = () => {
                       if (modalError) setModalError(null);
                     }}
                     placeholder="Detallá la fisura, golpe o quilla dañada..."
-                    placeholderTextColor={colors.sand[300]}
+                    placeholderTextColor={theme.muted}
                     testID="input-claim-description"
                   />
                 </Stack>
@@ -1197,7 +1180,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   segmentContainer: {
-    backgroundColor: colors.sand[100],
     borderRadius: radii.lg,
     padding: 4,
     gap: 4,
@@ -1223,16 +1205,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   feedbackSuccess: {
-    backgroundColor: '#D1FAE5',
-    borderColor: '#34D399',
+    borderWidth: 1,
   },
   feedbackError: {
-    backgroundColor: '#FEE2E2',
-    borderColor: '#F87171',
+    borderWidth: 1,
   },
   modalErrorBanner: {
-    backgroundColor: '#FEE2E2',
-    borderColor: '#F87171',
     borderWidth: 1,
     borderRadius: radii.md,
     padding: spacing.sm,
@@ -1246,7 +1224,6 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
   },
   flowDiagram: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
     borderRadius: radii.sm,
     padding: spacing.sm,
     gap: 4,
@@ -1264,11 +1241,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   claimDescBox: {
-    backgroundColor: colors.sand[50],
     padding: spacing.sm,
     borderRadius: radii.sm,
     borderWidth: 1,
-    borderColor: colors.sand[200],
   },
   thumbnailWrapper: {
     width: 72,
@@ -1276,7 +1251,6 @@ const styles = StyleSheet.create({
     borderRadius: radii.sm,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: colors.sand[200],
   },
   thumbnailImage: {
     width: '100%',
@@ -1288,28 +1262,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   trackingNotificado: {
-    backgroundColor: '#FEF3C7',
-    borderColor: '#FCD34D',
+    borderWidth: 1,
   },
   trackingMediacion: {
-    backgroundColor: 'rgba(255, 90, 54, 0.08)',
-    borderColor: '#93C5FD',
+    borderWidth: 1,
   },
   trackingResueltoOwner: {
-    backgroundColor: '#ECFDF5',
-    borderColor: '#6EE7B7',
+    borderWidth: 1,
   },
   trackingResueltoConsumer: {
-    backgroundColor: '#FEF2F2',
-    borderColor: '#FECACA',
+    borderWidth: 1,
   },
   trackingCobrado: {
-    backgroundColor: '#ECFDF5',
-    borderColor: '#6EE7B7',
+    borderWidth: 1,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(5, 5, 7, 0.78)',
+    backgroundColor: 'rgba(18, 17, 15, 0.76)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.md,
@@ -1355,16 +1324,12 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   damageNoticeBox: {
-    backgroundColor: '#FEF2F2',
     borderWidth: 1,
-    borderColor: '#FECACA',
     borderRadius: radii.md,
     padding: spacing.sm,
   },
   agencyNoticeBanner: {
-    backgroundColor: '#FEF2F2',
     borderWidth: 1,
-    borderColor: '#F87171',
     borderRadius: radii.md,
     padding: spacing.sm,
   },
@@ -1372,13 +1337,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: 5,
     borderRadius: radii.full,
-    backgroundColor: colors.sand[100],
     borderWidth: 1,
-    borderColor: colors.sand[200],
   },
   presetAmountPillActive: {
-    backgroundColor: colors.semantic.danger,
-    borderColor: colors.semantic.danger,
+    borderWidth: 1,
   },
   modalPhotoWrapper: {
     position: 'relative',

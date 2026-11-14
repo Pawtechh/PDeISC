@@ -66,7 +66,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
     <Screen scrollable safeBottom={false}>
       <Stack spacing="lg" style={styles.container}>
         {/* Galería Hero de Alta Resolución */}
-        <View style={[styles.galleryContainer, { height: heroHeight, backgroundColor: isDark ? '#2B303C' : '#F3F4F6' }]}>
+        <View style={[styles.galleryContainer, { height: heroHeight, backgroundColor: isDark ? theme.surfaceElevated : theme.cardHighlight }]}>
           <TouchableOpacity
             activeOpacity={0.92}
             onPress={() => setSelectedLightboxPhoto(fotos[0])}
@@ -79,7 +79,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
               contentFit="cover"
             />
             <LinearGradient
-              colors={['transparent', 'rgba(34, 38, 48, 0.48)']}
+              colors={['transparent', 'rgba(26, 25, 23, 0.50)']}
               locations={[0.62, 1]}
               style={StyleSheet.absoluteFillObject}
             />
@@ -93,7 +93,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         <Stack spacing="xs">
           <Row justify="space-between" align="center">
             <View style={{ flex: 1, paddingRight: spacing.md }}>
-              <Text variant="caption" style={{ color: isDark ? '#EA7357' : '#CC482A', fontWeight: '800', letterSpacing: 1.5 }}>
+              <Text variant="caption" style={{ color: isDark ? theme.primaryHover : theme.primary, fontWeight: '800', letterSpacing: 1.5 }}>
                 {board.marca.toUpperCase()} • SHAPER OFICIAL MAR DEL PLATA
               </Text>
               <Text variant="h1" color={theme.text}>
@@ -101,7 +101,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
               </Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-              <Text variant="display" color={isDark ? '#FF7A59' : '#E04320'}>
+              <Text variant="display" color={isDark ? theme.primaryHover : theme.primary}>
                 ${board.precioHora}
               </Text>
               <Text variant="caption" color={theme.subtext}>
@@ -122,15 +122,15 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                   style={[
                     styles.merchantAvatar,
                     {
-                      backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.08)',
-                      borderColor: isDark ? 'rgba(255, 90, 54, 0.35)' : 'rgba(255, 90, 54, 0.25)',
+                      backgroundColor: theme.primarySubtle,
+                      borderColor: theme.primaryBorder,
                     },
                   ]}
                 >
-                  <Briefcase size={20} color={isDark ? '#FF7A59' : '#E04320'} />
+                  <Briefcase size={20} color={isDark ? theme.primaryHover : theme.primary} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '800', letterSpacing: 1 }}>
+                  <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '800', letterSpacing: 1 }}>
                     COMERCIANTE HABILITADO
                   </Text>
                   <Text variant="h3" color={theme.text}>
@@ -148,14 +148,14 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
 
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <ShieldCheck size={15} color="#10B981" />
+                <ShieldCheck size={15} color={theme.success} />
                 <Text variant="caption" color={theme.subtext}>
                   Identidad y DNI auditados bajo Ley 25.506
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Star size={14} color="#F59E0B" fill="#F59E0B" />
-                <Text variant="caption" color={isDark ? '#F59E0B' : colors.sunset[500]} style={{ fontWeight: '700' }}>
+                <Star size={14} color={theme.champagne} fill={theme.champagne} />
+                <Text variant="caption" color={theme.warningText} style={{ fontWeight: '700' }}>
                   5.0 ★ Reputación
                 </Text>
               </Row>
@@ -175,28 +175,28 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
             </Text>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Ruler size={14} color={isDark ? '#94A3B8' : '#64748B'} />
+                <Ruler size={14} color={theme.accent} />
                 <Text variant="body" color={theme.subtext}>Medidas:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>{board.medidas}</Text>
             </Row>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Droplets size={14} color={isDark ? '#94A3B8' : '#64748B'} />
+                <Droplets size={14} color={theme.accent} />
                 <Text variant="body" color={theme.subtext}>Volumen:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>{board.volumenLitros || '-'} Litros</Text>
             </Row>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <DollarSign size={14} color="#F59E0B" />
+                <DollarSign size={14} color={theme.champagne} />
                 <Text variant="body" color={theme.subtext}>Valor tasado (Agencia):</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>${board.valorTasadoUsd} USD</Text>
             </Row>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <MapPin size={14} color="#F59E0B" />
+                <MapPin size={14} color={theme.champagne} />
                 <Text variant="body" color={theme.subtext}>Sede de retiro:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>Playa Grande (Sede Central)</Text>
@@ -221,8 +221,8 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                   style={[
                     styles.dayBox,
                     {
-                      backgroundColor: isDark ? '#343A48' : '#F1F5F9',
-                      borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : theme.border,
+                      backgroundColor: isDark ? theme.surfaceElevated : theme.cardHighlight,
+                      borderColor: theme.border,
                     },
                   ]}
                 >
@@ -239,12 +239,12 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
           <Stack spacing="sm">
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <ShieldCheck size={16} color="#34D399" />
+                <ShieldCheck size={16} color={theme.success} />
                 <Text variant="h3" color={theme.text}>Reseñas Verificadas</Text>
               </Row>
               <Row align="center" spacing="xs">
-                <Star size={14} color="#F59E0B" fill="#F59E0B" />
-                <Text variant="button" color={isDark ? '#F59E0B' : colors.sunset[500]}>
+                <Star size={14} color={theme.champagne} fill={theme.champagne} />
+                <Text variant="button" color={theme.warningText}>
                   {averageRating} ({totalReviews})
                 </Text>
               </Row>
@@ -272,15 +272,15 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         style={[
           styles.bottomBar,
           {
-            backgroundColor: isDark ? 'rgba(17, 17, 21, 0.94)' : theme.card,
-            borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : theme.border,
+            backgroundColor: isDark ? 'rgba(33, 32, 30, 0.94)' : theme.card,
+            borderTopColor: theme.border,
           },
         ]}
       >
         <Row justify="space-between" align="center" style={{ maxWidth: 1200, width: '100%', alignSelf: 'center' }}>
           <View>
             <Text variant="caption" color={theme.subtext}>Tarifa base (2h)</Text>
-            <Text variant="h2" color={isDark ? '#F5F5F7' : '#111115'}>
+            <Text variant="h2" color={theme.text}>
               ${(Number(board.precioHora) * 2).toLocaleString('es-AR')} ARS
             </Text>
           </View>
@@ -328,8 +328,8 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         <View style={styles.authModalOverlay}>
           <Card padding="xl" style={styles.authModalCard}>
             <Stack spacing="md" align="center">
-              <View style={styles.authIconCircle}>
-                <UserCheck size={36} color="#FF5A36" />
+              <View style={[styles.authIconCircle, { backgroundColor: theme.primarySubtle, borderColor: theme.primaryBorder }]}>
+                <UserCheck size={36} color={theme.primary} />
               </View>
 
               <Text variant="h2" align="center">
@@ -405,9 +405,9 @@ const styles = StyleSheet.create({
     width: 68,
     height: 68,
     borderRadius: 34,
-    backgroundColor: 'rgba(255, 90, 54, 0.12)',
+    backgroundColor: 'rgba(224, 99, 67, 0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.30)',
+    borderColor: 'rgba(224, 99, 67, 0.34)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     position: 'relative',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.25)',
+    borderColor: 'rgba(219, 168, 76, 0.28)',
   },
   badgeOverlay: {
     position: 'absolute',
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#34D399',
+    backgroundColor: colors.semantic.success,
     marginTop: 5,
   },
   dotBusy: {

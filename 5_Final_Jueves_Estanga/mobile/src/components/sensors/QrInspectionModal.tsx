@@ -225,7 +225,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
               {/* Header */}
               <Row justify="space-between" align="center">
                 <Row spacing="xs" align="center">
-                  <QrCode size={18} color={isDark ? '#FF7A59' : '#FF5A36'} />
+                  <QrCode size={18} color={isDark ? theme.primaryHover : theme.primary} />
                   <View>
                     <Text variant="h2" color={theme.text}>
                       Verificador y Escáner QR de Sede
@@ -245,16 +245,16 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                   style={[
                     styles.resultBanner,
                     {
-                      backgroundColor: isDark ? 'rgba(239, 68, 68, 0.14)' : '#FEF2F2',
-                      borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FCA5A5',
+                      backgroundColor: theme.dangerBg,
+                      borderColor: theme.dangerBorder,
                     },
                   ]}
                 >
                   <Row spacing="xs" align="center">
-                    <AlertTriangle size={15} color={isDark ? '#F87171' : '#DC2626'} />
+                    <AlertTriangle size={15} color={theme.danger} />
                     <Text
                       variant="caption"
-                      color={isDark ? '#FCA5A5' : '#991B1B'}
+                      color={theme.dangerText}
                       style={{ flex: 1, fontWeight: '700' }}
                     >
                       {notFoundError}
@@ -279,17 +279,17 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                         />
                       ) : (
                         <View style={styles.cameraFallback}>
-                          <ScanLine size={40} color="#FF5A36" style={{ marginBottom: 8 }} />
+                          <ScanLine size={40} color={theme.primary} style={{ marginBottom: 8 }} />
                           <Text
                             variant="body"
-                            color="#F5F5F7"
+                            color="#F5F2EC"
                             style={{ textAlign: 'center', fontWeight: '700' }}
                           >
                             Cámara Óptica Lista para Escanear
                           </Text>
                           <Text
                             variant="caption"
-                            color="#94A3B8"
+                            color="#B6B0A5"
                             style={{ textAlign: 'center', marginTop: 4 }}
                           >
                             Habilitá el permiso de cámara de tu teléfono para escanear el QR físico del surfista.
@@ -324,7 +324,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       style={[
                         styles.manualInputWrap,
                         {
-                          backgroundColor: isDark ? '#242834' : '#F5F5F7',
+                          backgroundColor: theme.surfaceElevated,
                           borderColor: theme.border,
                         },
                       ]}
@@ -352,15 +352,15 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     style={[
                       styles.simBox,
                       {
-                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-                        borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+                        backgroundColor: theme.cardHighlight,
+                        borderColor: theme.border,
                       },
                     ]}
                   >
                     <Row justify="space-between" align="center">
                       <Text
                         variant="caption"
-                        color={isDark ? '#FF7A59' : '#E04320'}
+                        color={isDark ? theme.primaryHover : theme.primary}
                         style={{ fontWeight: '700' }}
                       >
                         PASES Y RESERVAS EN BASE DE DATOS ({liveQrItems.length}):
@@ -377,14 +377,12 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                           style={[
                             styles.simPill,
                             {
-                              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
+                              backgroundColor: theme.card,
                               borderColor: b.isEarly
-                                ? 'rgba(245, 158, 11, 0.55)'
+                                ? theme.warningBorder
                                 : b.rentalId
-                                ? 'rgba(255, 90, 54, 0.45)'
-                                : isDark
-                                ? 'rgba(255, 255, 255, 0.14)'
-                                : 'rgba(0, 0, 0, 0.12)',
+                                ? theme.primaryBorder
+                                : theme.border,
                             },
                           ]}
                           onPress={() => handleSelectQuickQr(b)}
@@ -394,10 +392,10 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                               variant="caption"
                               color={
                                 b.isEarly
-                                  ? '#FBBF24'
+                                  ? theme.warningText
                                   : isDark
-                                  ? '#FF7A59'
-                                  : '#E04320'
+                                  ? theme.primaryHover
+                                  : theme.primary
                               }
                               style={{ fontWeight: '800', fontFamily: 'monospace' }}
                             >
@@ -407,7 +405,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                               <View
                                 style={[
                                   styles.activeDot,
-                                  { backgroundColor: b.isEarly ? '#F59E0B' : '#10B981' },
+                                  { backgroundColor: b.isEarly ? theme.warning : theme.success },
                                 ]}
                               />
                             )}
@@ -422,7 +420,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                           </Text>
                           <Text
                             variant="caption"
-                            color={b.isEarly ? '#FBBF24' : theme.subtext}
+                            color={b.isEarly ? theme.warningText : theme.subtext}
                             numberOfLines={1}
                             style={{ fontSize: 10, fontWeight: b.isEarly ? '700' : '400' }}
                           >
@@ -443,18 +441,18 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       style={[
                         styles.resultBanner,
                         {
-                          backgroundColor: isDark ? 'rgba(245, 158, 11, 0.15)' : '#FFFBEB',
-                          borderColor: isDark ? '#F59E0B' : '#FBBF24',
+                          backgroundColor: theme.warningBg,
+                          borderColor: theme.warningBorder,
                         },
                       ]}
                     >
                       <Stack spacing="xs">
                         <Row justify="space-between" align="center">
                           <Row spacing="xs" align="center">
-                            <AlertTriangle size={18} color={isDark ? '#FBBF24' : '#B45309'} />
+                            <AlertTriangle size={18} color={theme.warning} />
                             <Text
                               variant="caption"
-                              color={isDark ? '#FDE68A' : '#92400E'}
+                              color={theme.warningText}
                               style={{ fontWeight: '900' }}
                             >
                               RETIRO ANTICIPADO BLOQUEADO POR HORARIO
@@ -464,7 +462,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                         </Row>
                         <Text
                           variant="caption"
-                          color={isDark ? '#FEF3C7' : '#78350F'}
+                          color={theme.warningText}
                           style={{ fontWeight: '600', lineHeight: 17 }}
                         >
                           Esta reserva está programada para el {scannedBoard.fechaPactada} a las{' '}
@@ -478,17 +476,17 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       style={[
                         styles.resultBanner,
                         {
-                          backgroundColor: isDark ? 'rgba(16, 185, 129, 0.12)' : '#ECFDF5',
-                          borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : '#6EE7B7',
+                          backgroundColor: theme.successBg,
+                          borderColor: theme.successBorder,
                         },
                       ]}
                     >
                       <Row justify="space-between" align="center">
                         <Row spacing="xs" align="center">
-                          <CheckCircle2 size={16} color={isDark ? '#34D399' : '#059669'} />
+                          <CheckCircle2 size={16} color={theme.success} />
                           <Text
                             variant="caption"
-                            color={isDark ? '#A7F3D0' : '#065F46'}
+                            color={theme.successText}
                             style={{ fontWeight: '800' }}
                           >
                             {scannedBoard.rentalEstado === 'EN_CURSO'
@@ -508,7 +506,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     <View
                       style={[
                         styles.qrMiniFrame,
-                        { borderColor: scannedBoard.isEarly ? '#F59E0B' : '#FF5A36' },
+                        { borderColor: scannedBoard.isEarly ? theme.warning : theme.primary },
                       ]}
                     >
                       <QrCodeView value={scannedBoard.code} size={96} />
@@ -522,7 +520,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       </Text>
                       <Text
                         variant="caption"
-                        color={isDark ? '#FF7A59' : '#E04320'}
+                        color={isDark ? theme.primaryHover : theme.primary}
                         style={{ fontWeight: '700', marginTop: 4 }}
                       >
                         Medidas: {scannedBoard.medidas}
@@ -534,7 +532,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                     style={[
                       styles.detailCard,
                       {
-                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+                        backgroundColor: theme.cardHighlight,
                         borderColor: theme.border,
                       },
                     ]}
@@ -545,7 +543,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       </Text>
                       <Text
                         variant="body"
-                        color={scannedBoard.isEarly ? '#FBBF24' : theme.text}
+                        color={scannedBoard.isEarly ? theme.warningText : theme.text}
                         style={{ fontWeight: scannedBoard.isEarly ? '700' : '400' }}
                       >
                         {scannedBoard.estadoFisico}
@@ -561,23 +559,11 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       <Row spacing="xs" align="center">
                         <Clock
                           size={13}
-                          color={
-                            scannedBoard.isEarly
-                              ? '#FBBF24'
-                              : isDark
-                              ? '#34D399'
-                              : colors.semantic.success
-                          }
+                          color={scannedBoard.isEarly ? theme.warning : theme.success}
                         />
                         <Text
                           variant="caption"
-                          color={
-                            scannedBoard.isEarly
-                              ? '#FBBF24'
-                              : isDark
-                              ? '#34D399'
-                              : colors.semantic.success
-                          }
+                          color={scannedBoard.isEarly ? theme.warningText : theme.successText}
                           style={{ fontWeight: '700', flex: 1 }}
                         >
                           {scannedBoard.ultimaInspeccion}
@@ -655,16 +641,16 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(148,163,184,0.15)',
+    backgroundColor: 'rgba(182, 176, 165, 0.16)',
   },
   cameraContainer: {
     height: 210,
     borderRadius: radii.lg,
     overflow: 'hidden',
-    backgroundColor: '#222630',
+    backgroundColor: '#21201E',
     position: 'relative',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.14)',
+    borderColor: 'rgba(245, 242, 236, 0.14)',
   },
   camera: {
     flex: 1,
@@ -689,7 +675,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 24,
     height: 24,
-    borderColor: '#FF5A36',
+    borderColor: colors.coral[500],
     borderWidth: 3,
   },
   cornerTL: { top: 0, left: 0, borderRightWidth: 0, borderBottomWidth: 0 },
@@ -733,7 +719,7 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.semantic.success,
   },
   resultBanner: {
     padding: spacing.sm,
@@ -750,7 +736,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: radii.md,
     borderWidth: 2,
-    borderColor: '#FF5A36',
+    borderColor: colors.coral[500],
     alignItems: 'center',
     justifyContent: 'center',
   },

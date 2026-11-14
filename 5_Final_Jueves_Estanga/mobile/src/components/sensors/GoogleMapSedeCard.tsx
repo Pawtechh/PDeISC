@@ -89,8 +89,8 @@ export const GoogleMapSedeCard: React.FC = () => {
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#222630' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+          backgroundColor: theme.card,
+          borderColor: theme.border,
         },
       ]}
     >
@@ -98,8 +98,8 @@ export const GoogleMapSedeCard: React.FC = () => {
         {/* Encabezado */}
         <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
           <Row spacing="sm" align="center">
-            <View style={styles.iconCircle}>
-              <Map size={16} color="#FF5A36" />
+            <View style={[styles.iconCircle, { backgroundColor: theme.primarySubtle, borderColor: theme.primaryBorder }]}>
+              <Map size={16} color={theme.primary} />
             </View>
             <View>
               <Text variant="h3" color={theme.text}>
@@ -135,8 +135,8 @@ export const GoogleMapSedeCard: React.FC = () => {
             style={[
               styles.distanceBanner,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+                backgroundColor: theme.cardHighlight,
+                borderColor: theme.border,
               },
             ]}
           >
@@ -149,7 +149,7 @@ export const GoogleMapSedeCard: React.FC = () => {
                   <>
                     <Text
                       variant="display"
-                      color={isDark ? '#F5F5F7' : '#111115'}
+                      color={theme.text}
                       style={styles.distanceValue}
                     >
                       {gpsData.distanceToPlayaGrande < 1000
@@ -158,9 +158,9 @@ export const GoogleMapSedeCard: React.FC = () => {
                     </Text>
                     <Row spacing="xs" align="center">
                       {gpsData.isNearBeach ? (
-                        <CheckCircle2 size={13} color="#34D399" />
+                        <CheckCircle2 size={13} color={theme.success} />
                       ) : (
-                        <AlertTriangle size={13} color="#FBBF24" />
+                        <AlertTriangle size={13} color={theme.warning} />
                       )}
                       <Text variant="caption" color={theme.subtext}>
                         {gpsData.isNearBeach
@@ -183,17 +183,17 @@ export const GoogleMapSedeCard: React.FC = () => {
                 disabled={isLocating}
                 style={[
                   styles.refreshBtn,
-                  { backgroundColor: isDark ? '#FF5A36' : '#E04320' },
+                  { backgroundColor: theme.primary },
                 ]}
               >
                 {isLocating ? (
-                  <ActivityIndicator size="small" color={isDark ? '#0B0F17' : '#FFFFFF'} />
+                  <ActivityIndicator size="small" color="#FDFCFA" />
                 ) : (
                   <Row spacing="xs" align="center">
-                    <Radio size={13} color={isDark ? '#0B0F17' : '#FFFFFF'} />
+                    <Radio size={13} color="#FDFCFA" />
                     <Text
                       variant="caption"
-                      color={isDark ? '#0B0F17' : '#FFFFFF'}
+                      color="#FDFCFA"
                       style={{ fontWeight: '700' }}
                     >
                       Actualizar GPS
@@ -222,8 +222,8 @@ export const GoogleMapSedeCard: React.FC = () => {
               loading="lazy"
             />
           ) : (
-            <View style={[styles.nativeMapPlaceholder, { backgroundColor: isDark ? '#242834' : '#F5F5F7' }]}>
-              <MapPin size={28} color="#FF5A36" />
+            <View style={[styles.nativeMapPlaceholder, { backgroundColor: theme.surfaceElevated }]}>
+              <MapPin size={28} color={theme.primary} />
               <Text variant="body" color={theme.text} style={{ fontWeight: '700', marginTop: 4 }}>
                 {PLAYA_GRANDE_COORDS.name}
               </Text>
@@ -231,7 +231,7 @@ export const GoogleMapSedeCard: React.FC = () => {
                 {PLAYA_GRANDE_COORDS.address}
               </Text>
               {gpsData && (
-                <Text variant="caption" color="#FF7A59" style={{ marginTop: 6, fontWeight: '700' }}>
+                <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ marginTop: 6, fontWeight: '700' }}>
                   Tu GPS actual: {gpsData.latitude.toFixed(5)}, {gpsData.longitude.toFixed(5)}
                 </Text>
               )}
@@ -257,17 +257,17 @@ export const GoogleMapSedeCard: React.FC = () => {
             style={[
               styles.directionsBtn,
               {
-                backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : '#FF5A36',
-                borderColor: isDark ? 'rgba(255, 90, 54, 0.45)' : '#FF5A36',
+                backgroundColor: isDark ? theme.primarySubtle : theme.primary,
+                borderColor: isDark ? theme.primaryBorder : theme.primary,
               },
             ]}
             testID="btn-google-maps-directions"
           >
             <Row spacing="xs" align="center">
-              <Navigation size={14} color={isDark ? '#FF7A59' : '#FFFFFF'} />
+              <Navigation size={14} color={isDark ? theme.primaryHover : '#FDFCFA'} />
               <Text
                 variant="caption"
-                color={isDark ? '#FF7A59' : '#FFFFFF'}
+                color={isDark ? theme.primaryHover : '#FDFCFA'}
                 style={{ fontWeight: '700' }}
               >
                 Cómo Llegar con Google Maps
@@ -289,9 +289,9 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: 'rgba(255, 90, 54, 0.12)',
+    backgroundColor: 'rgba(224, 99, 67, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 90, 54, 0.28)',
+    borderColor: 'rgba(224, 99, 67, 0.28)',
     alignItems: 'center',
     justifyContent: 'center',
   },

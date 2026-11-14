@@ -54,7 +54,7 @@ export const Button: React.FC<ButtonProps> = ({
   accessibilityLabel,
   testID,
 }) => {
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
   const isDisabled = disabled || isLoading;
   const scale = useSharedValue(1);
 
@@ -84,30 +84,31 @@ export const Button: React.FC<ButtonProps> = ({
     switch (variant) {
       case 'primary':
         return {
-          backgroundColor: '#E25B3C',
+          backgroundColor: theme.primary,
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(234, 115, 87, 0.40)' : '#CC482A',
-          shadowColor: '#E25B3C',
+          borderColor: isDark ? 'rgba(234, 125, 96, 0.40)' : theme.primaryDeep,
+          shadowColor: theme.primary,
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: isDark ? 0.24 : 0.16,
+          shadowOpacity: isDark ? 0.22 : 0.15,
           shadowRadius: 14,
           elevation: 5,
           ...(Platform.OS === 'web'
             ? ({
-                backgroundImage:
-                  'linear-gradient(135deg, #EA6A4C 0%, #E25B3C 55%, #CC482A 100%)',
+                backgroundImage: isDark
+                  ? 'linear-gradient(135deg, #E57355 0%, #E06343 55%, #C94A29 100%)'
+                  : 'linear-gradient(135deg, #D95A38 0%, #C94A29 55%, #B23E20 100%)',
                 boxShadow: isDark
-                  ? '0 8px 20px -6px rgba(226, 91, 60, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.22)'
-                  : '0 8px 18px -6px rgba(204, 72, 42, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.28)',
+                  ? '0 8px 20px -6px rgba(224, 99, 67, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22)'
+                  : '0 8px 18px -6px rgba(201, 74, 41, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.28)',
                 overflow: 'hidden',
               } as any)
             : {}),
         };
       case 'secondary':
         return {
-          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F6',
+          backgroundColor: isDark ? 'rgba(245, 242, 236, 0.06)' : theme.cardHighlight,
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.09)',
+          borderColor: theme.border,
           ...(Platform.OS === 'web'
             ? ({
                 overflow: 'hidden',
@@ -118,16 +119,16 @@ export const Button: React.FC<ButtonProps> = ({
         };
       case 'danger':
         return {
-          backgroundColor: isDark ? '#EF4444' : colors.semantic.danger,
+          backgroundColor: isDark ? '#D0554E' : theme.danger,
           borderWidth: 1,
-          borderColor: '#F87171',
+          borderColor: theme.dangerBorder,
           ...(Platform.OS === 'web' ? ({ overflow: 'hidden' } as any) : {}),
         };
       case 'ghost':
         return {
           backgroundColor: 'transparent',
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.10)',
+          borderColor: theme.border,
           ...(Platform.OS === 'web' ? ({ overflow: 'hidden' } as any) : {}),
         };
     }
@@ -140,9 +141,9 @@ export const Button: React.FC<ButtonProps> = ({
       case 'danger':
         return '#FFFFFF';
       case 'secondary':
-        return isDark ? '#F5F5F7' : '#111115';
+        return theme.text;
       case 'ghost':
-        return isDark ? '#FF7A59' : '#D93D1B';
+        return isDark ? theme.primaryHover : theme.primary;
     }
   };
 

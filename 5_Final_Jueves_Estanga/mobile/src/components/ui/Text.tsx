@@ -27,12 +27,14 @@ export const Text: React.FC<TextProps> = ({
       color === colors.sand[900] ||
       color === colors.ocean[900] ||
       color === '#1F1E19' ||
+      color === '#1C1B18' ||
       color === '#052A57'
     ) {
       resolvedColor = theme.text;
     } else if (
       color === colors.sand[700] ||
       color === '#4A473C' ||
+      color === '#666056' ||
       color === colors.sand[500]
     ) {
       resolvedColor = theme.subtext;

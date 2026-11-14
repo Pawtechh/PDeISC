@@ -33,8 +33,8 @@ export const MyRentalsScreen: React.FC = () => {
     return (
       <Screen scrollable>
         <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center', marginTop: 40 }}>
-          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(255, 90, 54, 0.12)' : 'rgba(255, 90, 54, 0.08)', alignItems: 'center', justifyContent: 'center' }}>
-            <Waves size={32} color={isDark ? '#FF7A59' : '#FF5A36'} />
+          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: theme.primarySubtle, alignItems: 'center', justifyContent: 'center' }}>
+            <Waves size={32} color={isDark ? theme.primaryHover : theme.primary} />
           </View>
           <Text variant="h2" align="center">Alquileres de Tablas</Text>
           <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 460 }}>
@@ -152,8 +152,8 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.successBannerCard,
               {
-                backgroundColor: isDark ? '#064E3B' : '#ECFDF5',
-                borderColor: isDark ? '#10B981' : '#A7F3D0',
+                backgroundColor: theme.successBg,
+                borderColor: theme.successBorder,
               },
             ]}
             testID="banner-cancelacion-exito"
@@ -161,7 +161,7 @@ export const MyRentalsScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <Text
                 variant="caption"
-                color={isDark ? '#D1FAE5' : colors.semantic.success}
+                color={theme.successText}
                 style={{ fontWeight: '700', flex: 1 }}
               >
                 {successBanner}
@@ -187,15 +187,14 @@ export const MyRentalsScreen: React.FC = () => {
                 style={[
                   styles.tabPill,
                   {
-                    backgroundColor: isDark ? 'rgba(34, 38, 48, 0.78)' : '#FFFFFF',
-                    borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
+                    backgroundColor: isSelected ? theme.primary : theme.surface,
+                    borderColor: isSelected ? theme.primaryHover : theme.border,
                   },
-                  isSelected && (isDark ? styles.tabPillSelectedDark : styles.tabPillSelected),
                 ]}
               >
                 <Text
                   variant="caption"
-                  color={isSelected ? colors.white : theme.text}
+                  color={isSelected ? theme.primaryText : theme.text}
                   style={isSelected ? styles.bold : undefined}
                 >
                   {tab}
@@ -254,8 +253,8 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.qrModalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                backgroundColor: theme.surface,
+                borderColor: theme.border,
                 borderWidth: 1,
               },
             ]}
@@ -283,8 +282,8 @@ export const MyRentalsScreen: React.FC = () => {
               {/* Código de Pase Destacado de Alto Contraste */}
               <View
                 style={{
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
-                  borderColor: isDark ? 'rgba(255, 90, 54, 0.45)' : 'rgba(255, 90, 54, 0.35)',
+                  backgroundColor: theme.surfaceElevated,
+                  borderColor: theme.primaryBorder,
                   borderWidth: 1.5,
                   borderRadius: 12,
                   paddingHorizontal: 16,
@@ -293,7 +292,7 @@ export const MyRentalsScreen: React.FC = () => {
                   width: '100%',
                 }}
               >
-                <Text style={{ fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: isDark ? '#FF7A59' : '#E04320', marginBottom: 2 }}>
+                <Text style={{ fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: isDark ? theme.primaryHover : theme.primary, marginBottom: 2 }}>
                   CÓDIGO DE RETIRO
                 </Text>
                 <Text
@@ -302,7 +301,7 @@ export const MyRentalsScreen: React.FC = () => {
                     fontWeight: '900',
                     letterSpacing: 2,
                     fontFamily: 'monospace',
-                    color: isDark ? '#F5F5F7' : '#111115',
+                    color: theme.text,
                   }}
                   selectable
                 >
@@ -328,33 +327,13 @@ export const MyRentalsScreen: React.FC = () => {
                       padding: 10,
                       borderRadius: 10,
                       borderWidth: 1,
-                      backgroundColor: t.isEarly
-                        ? isDark
-                          ? 'rgba(245, 158, 11, 0.12)'
-                          : '#FFFBEB'
-                        : isDark
-                        ? 'rgba(16, 185, 129, 0.12)'
-                        : '#ECFDF5',
-                      borderColor: t.isEarly
-                        ? isDark
-                          ? 'rgba(245, 158, 11, 0.4)'
-                          : '#FDE68A'
-                        : isDark
-                        ? 'rgba(16, 185, 129, 0.4)'
-                        : '#A7F3D0',
+                      backgroundColor: t.isEarly ? theme.warningBg : theme.successBg,
+                      borderColor: t.isEarly ? theme.warningBorder : theme.successBorder,
                     }}
                   >
                     <Text
                       variant="caption"
-                      color={
-                        t.isEarly
-                          ? isDark
-                            ? '#FDE68A'
-                            : '#92400E'
-                          : isDark
-                          ? '#A7F3D0'
-                          : '#065F46'
-                      }
+                      color={t.isEarly ? theme.warningText : theme.successText}
                       style={{ textAlign: 'center', fontWeight: '700' }}
                     >
                       {t.isEarly
@@ -390,15 +369,15 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.qrModalCard,
               {
-                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+                backgroundColor: theme.surface,
+                borderColor: theme.border,
                 borderWidth: 1,
               },
             ]}
           >
             <Stack spacing="md">
               <Row justify="space-between" align="center">
-                <Text variant="h2" color={isDark ? '#F87171' : colors.semantic.danger}>
+                <Text variant="h2" color={theme.dangerText}>
                   Cancelar Alquiler
                 </Text>
                 <Button
@@ -413,12 +392,12 @@ export const MyRentalsScreen: React.FC = () => {
                 <Card
                   padding="sm"
                   style={{
-                    backgroundColor: isDark ? '#450A0A' : '#FEE2E2',
-                    borderColor: '#F87171',
+                    backgroundColor: theme.dangerBg,
+                    borderColor: theme.dangerBorder,
                     borderWidth: 1,
                   }}
                 >
-                  <Text variant="caption" color={isDark ? '#FECACA' : '#991B1B'} style={{ fontWeight: '600' }}>
+                  <Text variant="caption" color={theme.dangerText} style={{ fontWeight: '600' }}>
                     {cancelError}
                   </Text>
                 </Card>
@@ -436,7 +415,7 @@ export const MyRentalsScreen: React.FC = () => {
               <Card
                 padding="md"
                 style={{
-                  backgroundColor: isDark ? '#242834' : colors.sand[50],
+                  backgroundColor: theme.surfaceElevated,
                   borderColor: theme.border,
                   borderWidth: 1,
                 }}
@@ -503,19 +482,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   tabPillSelected: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#0369A1',
+    backgroundColor: colors.coral[600],
+    borderColor: colors.coral[700],
   },
   tabPillSelectedDark: {
-    backgroundColor: 'rgba(255, 90, 54, 0.22)',
-    borderColor: '#FF5A36',
+    backgroundColor: colors.coral.subtle,
+    borderColor: colors.coral[500],
   },
   bold: {
     fontWeight: '700',
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(28, 27, 24, 0.66)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.lg,
@@ -530,7 +509,7 @@ const styles = StyleSheet.create({
     height: 180,
     backgroundColor: '#FFFFFF',
     borderWidth: 2,
-    borderColor: '#0B0F17',
+    borderColor: '#1C1B18',
     borderRadius: radii.md,
     position: 'relative',
     alignItems: 'center',
@@ -544,7 +523,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderWidth: 4,
-    borderColor: '#0B0F17',
+    borderColor: '#1C1B18',
   },
   qrCornerTR: {
     position: 'absolute',
@@ -553,7 +532,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderWidth: 4,
-    borderColor: '#0B0F17',
+    borderColor: '#1C1B18',
   },
   qrCornerBL: {
     position: 'absolute',
@@ -562,7 +541,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderWidth: 4,
-    borderColor: '#0B0F17',
+    borderColor: '#1C1B18',
   },
   qrCenter: {
     alignItems: 'center',

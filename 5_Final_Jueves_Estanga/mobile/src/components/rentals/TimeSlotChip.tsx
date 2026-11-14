@@ -32,16 +32,14 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
         styles.chip,
         {
           backgroundColor: selected
-            ? '#FF5A36'
+            ? theme.primary
             : !disponible
-            ? (isDark ? 'rgba(255, 255, 255, 0.03)' : '#F4F4F5')
-            : (isDark ? 'rgba(255, 255, 255, 0.05)' : colors.white),
+            ? theme.cardHighlight
+            : theme.card,
           borderColor: selected
-            ? '#FF5A36'
-            : !disponible
-            ? (isDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(0, 0, 0, 0.06)')
-            : (isDark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.12)'),
-          opacity: !disponible ? 0.4 : 1,
+            ? theme.primary
+            : theme.border,
+          opacity: !disponible ? 0.45 : 1,
         },
       ]}
       accessibilityRole="button"
@@ -54,10 +52,10 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
           variant="caption"
           color={
             selected
-              ? '#FFFFFF'
+              ? '#FDFCFA'
               : !disponible
-              ? (isDark ? '#71717A' : '#A1A1AA')
-              : (isDark ? '#F5F5F7' : '#111115')
+              ? theme.muted
+              : theme.text
           }
           style={[
             styles.text,
@@ -70,7 +68,7 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
         {!disponible && (
           <Text
             variant="caption"
-            color={isDark ? '#52525B' : '#A1A1AA'}
+            color={theme.muted}
             style={styles.subtext}
           >
             No disp.
@@ -79,7 +77,7 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
         {disponible && !selected && (
           <Text
             variant="caption"
-            color={isDark ? '#10B981' : colors.semantic.success}
+            color={theme.successText}
             style={[styles.subtext, { fontWeight: '600' }]}
           >
             Libre
@@ -109,8 +107,8 @@ const styles = StyleSheet.create({
     }),
   },
   chipSelected: {
-    backgroundColor: '#FF5A36',
-    borderColor: '#E04320',
+    backgroundColor: colors.coral[500],
+    borderColor: colors.coral[600],
   },
   chipDisabled: {
     opacity: 0.45,

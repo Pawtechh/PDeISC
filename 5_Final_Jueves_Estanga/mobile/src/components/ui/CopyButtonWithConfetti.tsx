@@ -48,7 +48,7 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
           particleCount: 45,
           spread: 60,
           origin: { y: 0.8 },
-          colors: ['#E25B3C', '#E5B869', '#CBD5E1', '#F5F6F8'],
+          colors: ['#E06343', '#DBA84C', '#52B097', '#EFEAE1'],
           ticks: 120,
           scalar: 0.85,
         });
@@ -74,16 +74,14 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
         isSmall && styles.buttonSmall,
         {
           backgroundColor: copied
-            ? isDark
-              ? 'rgba(16, 185, 129, 0.2)'
-              : '#ECFDF5'
+            ? theme.successBg
             : isDark
-            ? 'rgba(245, 158, 11, 0.12)'
+            ? 'rgba(219, 168, 76, 0.14)'
             : colors.sand[100],
           borderColor: copied
-            ? '#10B981'
+            ? theme.successBorder
             : isDark
-            ? 'rgba(245, 158, 11, 0.35)'
+            ? 'rgba(219, 168, 76, 0.36)'
             : colors.sand[300],
         },
         style,
@@ -92,7 +90,7 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
       accessibilityRole="button"
     >
       <Text style={{ fontSize: isSmall ? 12 : 14 }}>
-        {copied ? '' : ''}
+        {copied ? '✓' : '📋'}
       </Text>
       <Text
         variant="caption"
@@ -100,10 +98,10 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
           styles.labelText,
           {
             color: copied
-              ? '#10B981'
+              ? theme.successText
               : isDark
-              ? '#F59E0B'
-              : '#E04320',
+              ? theme.champagne
+              : theme.primary,
             fontWeight: copied ? '700' : '600',
           },
         ]}

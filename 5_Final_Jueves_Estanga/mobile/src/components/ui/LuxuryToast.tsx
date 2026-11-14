@@ -27,7 +27,7 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -54,14 +54,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const getBorderColor = (type: ToastType) => {
     switch (type) {
       case 'success':
-        return '#10B981';
+        return theme.success;
       case 'error':
-        return '#EF4444';
+        return theme.danger;
       case 'warning':
-        return '#F59E0B';
+        return theme.warning;
       case 'info':
       default:
-        return isDark ? '#FF7A59' : '#FF5A36';
+        return isDark ? theme.primaryHover : theme.primary;
     }
   };
 
@@ -93,7 +93,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               style={[
                 styles.toastCard,
                 {
-                  backgroundColor: isDark ? 'rgba(34, 38, 48, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+                  backgroundColor: isDark ? 'rgba(42, 41, 38, 0.96)' : 'rgba(253, 252, 250, 0.98)',
                   borderColor,
                   shadowColor: borderColor,
                 },
@@ -102,16 +102,16 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               <Row spacing="sm" align="flex-start">
                 <Text style={{ fontSize: 18, marginTop: 1 }}>{getIcon(toast.type)}</Text>
                 <View style={{ flex: 1 }}>
-                  <Text variant="button" color={isDark ? '#F5F5F7' : '#111115'}>
+                  <Text variant="button" color={theme.text}>
                     {toast.title}
                   </Text>
                   {toast.message && (
-                    <Text variant="caption" color={isDark ? '#94A3B8' : '#64748B'} style={{ marginTop: 2 }}>
+                    <Text variant="caption" color={theme.subtext} style={{ marginTop: 2 }}>
                       {toast.message}
                     </Text>
                   )}
                 </View>
-                <Text variant="caption" color={isDark ? '#64748B' : '#94A3B8'} style={{ fontSize: 13 }}>
+                <Text variant="caption" color={theme.muted} style={{ fontSize: 13 }}>
                   ✕
                 </Text>
               </Row>

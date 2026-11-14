@@ -26,8 +26,8 @@ export const ScrollToTopButton: React.FC<ScrollToTopButtonProps> = ({
       style={[
         styles.button,
         {
-          backgroundColor: isDark ? theme.surface : '#FF5A36',
-          borderColor: isDark ? theme.border : '#E04320',
+          backgroundColor: isDark ? theme.surface : theme.primary,
+          borderColor: isDark ? theme.border : theme.primaryDeep,
         },
         style,
       ]}

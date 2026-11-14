@@ -28,7 +28,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   size = 'md',
   style,
 }) => {
-  const { isDark } = useTheme();
+  const { theme, isDark } = useTheme();
   const dimension = sizeMap[size];
   const initials = name
     .split(' ')
@@ -44,9 +44,9 @@ export const Avatar: React.FC<AvatarProps> = ({
         {
           width: dimension,
           height: dimension,
-          backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.10)',
+          backgroundColor: theme.primarySubtle,
           borderWidth: 1.5,
-          borderColor: isDark ? 'rgba(255, 90, 54, 0.36)' : 'rgba(255, 90, 54, 0.28)',
+          borderColor: theme.primaryBorder,
         },
         style,
       ]}
@@ -61,7 +61,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       ) : (
         <Text
           variant={size === 'xl' ? 'h2' : size === 'lg' ? 'h3' : 'button'}
-          color={isDark ? '#FF7A59' : '#D93D1B'}
+          color={isDark ? theme.primaryHover : theme.primary}
         >
           {initials || 'SR'}
         </Text>

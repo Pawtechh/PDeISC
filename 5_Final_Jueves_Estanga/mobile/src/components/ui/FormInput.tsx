@@ -56,10 +56,10 @@ export function FormInput<T extends FieldValues>({
   const isValid = Boolean(!error && isTouched && hasValue);
 
   const getBorderColor = (): string => {
-    if (isError) return colors.semantic.danger;
-    if (isValid) return colors.semantic.success;
-    if (isFocused) return '#FF5A36';
-    return isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.10)';
+    if (isError) return theme.danger;
+    if (isValid) return theme.success;
+    if (isFocused) return theme.primary;
+    return theme.inputBorder;
   };
 
   const isSecure = secureTextEntry && !showPassword;
@@ -67,7 +67,7 @@ export function FormInput<T extends FieldValues>({
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
-        <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'} style={styles.label}>
+        <Text variant="caption" color={theme.subtext} style={styles.label}>
           {label}
         </Text>
       )}
@@ -80,9 +80,7 @@ export function FormInput<T extends FieldValues>({
           styles.inputContainer,
           {
             borderColor: getBorderColor(),
-            backgroundColor: isDark
-              ? (editable ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.02)')
-              : (editable ? colors.white : colors.sand[100]),
+            backgroundColor: editable ? theme.inputBg : theme.surface,
           },
         ]}
       >
@@ -90,7 +88,7 @@ export function FormInput<T extends FieldValues>({
 
         <TextInput
           editable={editable}
-          placeholderTextColor={isDark ? '#64748B' : colors.sand[500]}
+          placeholderTextColor={theme.muted}
           onFocus={() => setIsFocused(true)}
           onBlur={() => {
             setIsFocused(false);
@@ -99,7 +97,7 @@ export function FormInput<T extends FieldValues>({
           value={value !== undefined && value !== null ? String(value) : ''}
           onChangeText={onChange}
           secureTextEntry={isSecure}
-          style={[styles.input, { color: isDark ? '#F5F5F7' : '#111115' }, style]}
+          style={[styles.input, { color: theme.text }, style]}
           testID={testID || `input-${name}`}
           {...props}
         />
@@ -110,13 +108,13 @@ export function FormInput<T extends FieldValues>({
             style={styles.rightAction}
             activeOpacity={0.7}
           >
-            <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'}>
+            <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary}>
               {showPassword ? 'Ocultar' : 'Ver'}
             </Text>
           </TouchableOpacity>
         ) : isValid && showSuccessIcon ? (
           <View style={styles.rightAction} testID={`valid-check-${name}`}>
-            <Text style={[styles.successCheck, { color: colors.semantic.success }]}>✓</Text>
+            <Text style={[styles.successCheck, { color: theme.success }]}>✓</Text>
           </View>
         ) : null}
       </View>
@@ -124,14 +122,14 @@ export function FormInput<T extends FieldValues>({
       {isError && error?.message ? (
         <Text
           variant="caption"
-          color={colors.semantic.danger}
+          color={theme.danger}
           style={styles.helper}
           testID={`error-${name}`}
         >
           {error.message}
         </Text>
       ) : helperText ? (
-        <Text variant="caption" color={colors.sand[500]} style={styles.helper}>
+        <Text variant="caption" color={theme.muted} style={styles.helper}>
           {helperText}
         </Text>
       ) : null}
