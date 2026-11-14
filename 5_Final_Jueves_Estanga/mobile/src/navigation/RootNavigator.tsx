@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Text, Platform } from 'react-native';
 import * as Linking from 'expo-linking';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { Waves } from 'lucide-react-native';
 import { store, useAppSelector, useAppDispatch } from '../store';
 import { setCredentials, updateUser, setRole } from '../store/slices/authSlice';
@@ -350,15 +350,22 @@ export function RootNavigator() {
       <View
         style={[
           styles.splashContainer,
-          { backgroundColor: isDark ? '#0B0F17' : '#F8FAFC' },
+          {
+            backgroundColor:
+              Platform.OS === 'web'
+                ? 'transparent'
+                : isDark
+                ? '#030812'
+                : '#F2F8FC',
+          },
         ]}
       >
         <View
           style={[
             styles.splashCard,
             {
-              backgroundColor: isDark ? 'rgba(18, 24, 36, 0.85)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : '#E2E8F0',
+              backgroundColor: isDark ? 'rgba(8, 19, 36, 0.85)' : '#FFFFFF',
+              borderColor: isDark ? 'rgba(34, 211, 238, 0.28)' : 'rgba(2, 132, 199, 0.16)',
             },
           ]}
         >
@@ -366,22 +373,22 @@ export function RootNavigator() {
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE',
-                borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#7DD3FC',
+                backgroundColor: isDark ? 'rgba(34, 211, 238, 0.14)' : '#E0F2FE',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.42)' : '#7DD3FC',
               },
             ]}
           >
-            <Waves size={32} color={isDark ? '#38BDF8' : '#0284C7'} strokeWidth={2.2} />
+            <Waves size={32} color={isDark ? '#22D3EE' : '#0284C7'} strokeWidth={2.2} />
           </View>
           <Text style={[styles.brandTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
             SURF RENTAL
           </Text>
-          <Text style={[styles.brandSubtitle, { color: isDark ? '#F59E0B' : '#0284C7' }]}>
+          <Text style={[styles.brandSubtitle, { color: isDark ? '#FBBF24' : '#0284C7' }]}>
             SEDE PLAYA GRANDE • MAR DEL PLATA
           </Text>
           <ActivityIndicator
             size="small"
-            color={isDark ? '#38BDF8' : '#0284C7'}
+            color={isDark ? '#22D3EE' : '#0284C7'}
             style={{ marginTop: 18 }}
           />
           <Text style={[styles.loadingHint, { color: isDark ? '#94A3B8' : '#64748B' }]}>
@@ -392,8 +399,18 @@ export function RootNavigator() {
     );
   }
 
+  const baseNavTheme = isDark ? DarkTheme : DefaultTheme;
+  const navigationTheme = {
+    ...baseNavTheme,
+    colors: {
+      ...baseNavTheme.colors,
+      background: Platform.OS === 'web' ? 'transparent' : isDark ? '#030812' : '#F2F8FC',
+      card: Platform.OS === 'web' ? 'transparent' : isDark ? '#0B182B' : '#FFFFFF',
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={navigationTheme}>
       {renderContent()}
       <MandatoryKycModal />
     </NavigationContainer>

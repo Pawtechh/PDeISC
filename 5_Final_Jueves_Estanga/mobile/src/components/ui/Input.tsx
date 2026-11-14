@@ -6,6 +6,7 @@ import {
   StyleSheet,
   StyleProp,
   ViewStyle,
+  Platform,
 } from 'react-native';
 import { AlertCircle } from 'lucide-react-native';
 import { colors, radii, spacing } from '../../theme';
@@ -37,8 +38,8 @@ export const Input: React.FC<InputProps> = ({
 
   const getBorderColor = (): string => {
     if (error) return colors.semantic.danger;
-    if (isFocused) return theme.primary;
-    return isDark ? 'rgba(255, 255, 255, 0.12)' : theme.border;
+    if (isFocused) return isDark ? '#22D3EE' : theme.primary;
+    return isDark ? 'rgba(56, 189, 248, 0.22)' : theme.border;
   };
 
   return (
@@ -60,6 +61,9 @@ export const Input: React.FC<InputProps> = ({
       )}
 
       <View
+        {...(Platform.OS === 'web'
+          ? ({ dataSet: { inputShell: isFocused ? 'focused' : 'idle' } } as any)
+          : {})}
         style={[
           styles.inputContainer,
           {
@@ -68,7 +72,7 @@ export const Input: React.FC<InputProps> = ({
             backgroundColor: error
               ? (isDark ? 'rgba(127, 29, 29, 0.35)' : '#FEF2F2')
               : editable
-              ? (isDark ? 'rgba(11, 16, 26, 0.85)' : theme.inputBg)
+              ? (isDark ? 'rgba(6, 16, 32, 0.85)' : theme.inputBg)
               : theme.surface,
           },
         ]}

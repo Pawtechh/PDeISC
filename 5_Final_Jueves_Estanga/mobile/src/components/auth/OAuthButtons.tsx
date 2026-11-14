@@ -151,6 +151,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         activeOpacity={0.85}
         onPress={() => handleOAuthLogin('google')}
         disabled={loadingProvider !== null}
+        {...(Platform.OS === 'web' ? ({ dataSet: { oauthBtn: 'true' } } as any) : {})}
         style={[
           styles.googleButton,
           {
@@ -175,6 +176,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         activeOpacity={0.88}
         onPress={() => handleOAuthLogin('facebook')}
         disabled={loadingProvider !== null}
+        {...(Platform.OS === 'web' ? ({ dataSet: { oauthBtn: 'true' } } as any) : {})}
         style={[styles.oauthBtn, { backgroundColor: '#1877F2', borderColor: '#1877F2' }]}
         testID="btn-oauth-facebook"
       >
@@ -193,7 +195,8 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         activeOpacity={0.88}
         onPress={() => handleOAuthLogin('github')}
         disabled={loadingProvider !== null}
-        style={[styles.oauthBtn, { backgroundColor: '#24292F', borderColor: '#24292F' }]}
+        {...(Platform.OS === 'web' ? ({ dataSet: { oauthBtn: 'true' } } as any) : {})}
+        style={[styles.oauthBtn, { backgroundColor: '#161B22', borderColor: 'rgba(56, 189, 248, 0.25)' }]}
         testID="btn-oauth-github"
       >
         {loadingProvider === 'github' ? (

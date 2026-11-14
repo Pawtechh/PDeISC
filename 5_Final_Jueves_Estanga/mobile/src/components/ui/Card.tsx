@@ -26,17 +26,21 @@ export const Card: React.FC<CardProps> = ({
   const content = (
     <View
       testID={testID}
+      {...(Platform.OS === 'web' ? ({ dataSet: { glassCard: 'true' } } as any) : {})}
       style={[
         styles.card,
         {
-          backgroundColor: isDark ? 'rgba(19, 28, 46, 0.82)' : theme.card,
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : theme.border,
+          backgroundColor: isDark ? 'rgba(9, 20, 38, 0.74)' : 'rgba(255, 255, 255, 0.88)',
+          borderColor: isDark ? 'rgba(56, 189, 248, 0.20)' : 'rgba(2, 132, 199, 0.14)',
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(18px)',
-              WebkitBackdropFilter: 'blur(18px)',
-              transition: 'border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease',
+              backdropFilter: 'blur(22px) saturate(170%)',
+              WebkitBackdropFilter: 'blur(22px) saturate(170%)',
+              boxShadow: isDark
+                ? '0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(165, 243, 252, 0.14)'
+                : '0 12px 32px -8px rgba(2, 132, 199, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+              transition: 'border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease',
             } as any)
           : null,
         shadows[shadow],

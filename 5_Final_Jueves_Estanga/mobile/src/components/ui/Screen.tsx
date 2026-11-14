@@ -8,20 +8,19 @@ import {
   ScrollView,
   NativeSyntheticEvent,
   NativeScrollEvent,
-  TouchableOpacity,
   Platform,
   useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { spacing, radii, colors } from '../../theme';
+import { spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScrollToTopWithRing } from './ScrollToTopWithRing';
 import { ReadingProgressBar } from './ReadingProgressBar';
 import { DesktopHeader } from './DesktopHeader';
 
-export const LUXURY_COASTAL_GRADIENT = ['#0B0F17', '#0C131F', '#080B0F'] as const;
-export const LIGHT_COASTAL_GRADIENT = ['#F8FAFC', '#F1F5F9', '#E0F2FE'] as const;
+export const LUXURY_COASTAL_GRADIENT = ['#030812', '#061326', '#081B33'] as const;
+export const LIGHT_COASTAL_GRADIENT = ['#F2F8FC', '#E4F3FA', '#FDF8EE'] as const;
 
 export interface ScreenProps {
   children: React.ReactNode;
@@ -38,7 +37,7 @@ export interface ScreenProps {
    */
   fullWidth?: boolean;
   /**
-   * Optionally wrap the screen in a deep luxury atmospheric coastal gradient ([#0B0F17, #0C131F, #080B0F] in dark, [#F8FAFC, #F1F5F9, #E0F2FE] in light)
+   * Optionally wrap the screen in a deep luxury atmospheric coastal gradient
    */
   atmosphericGradient?: boolean;
   /**
@@ -87,13 +86,36 @@ export const Screen: React.FC<ScreenProps> = ({
 
   const handleScrollToTop = () => {
     activeScrollRef.current?.scrollTo({ y: 0, animated: true });
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch {
+        // safe fallback
+      }
+    }
   };
 
-  const resolvedGradientColors = gradientColors || (isDark ? LUXURY_COASTAL_GRADIENT : LIGHT_COASTAL_GRADIENT);
-  const rootBg = atmosphericGradient
-    ? (isDark ? '#0B0F17' : '#F8FAFC')
-    : (backgroundColor || theme.background);
-  const statusBarBg = rootBg;
+  const resolvedGradientColors =
+    gradientColors ||
+    (Platform.OS === 'web'
+      ? isDark
+        ? (['rgba(3, 8, 18, 0.34)', 'rgba(6, 19, 38, 0.14)', 'rgba(4, 10, 22, 0.48)'] as const)
+        : (['rgba(242, 248, 252, 0.40)', 'rgba(228, 243, 250, 0.16)', 'rgba(253, 248, 238, 0.44)'] as const)
+      : isDark
+      ? LUXURY_COASTAL_GRADIENT
+      : LIGHT_COASTAL_GRADIENT);
+
+  const rootBg =
+    Platform.OS === 'web'
+      ? atmosphericGradient
+        ? 'transparent'
+        : backgroundColor || (isDark ? 'rgba(4, 9, 20, 0.72)' : 'rgba(242, 248, 252, 0.78)')
+      : atmosphericGradient
+      ? isDark
+        ? '#040914'
+        : '#F2F8FC'
+      : backgroundColor || theme.background;
+  const statusBarBg = isDark ? '#040914' : '#F2F8FC';
 
   const dynamicContentContainerStyle = [
     styles.contentContainer,
@@ -126,15 +148,17 @@ export const Screen: React.FC<ScreenProps> = ({
       {atmosphericGradient && isDark && (
         <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
           <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { ambientGlow: 'cyan' } } as any) : {})}
             style={[
               styles.ambientCyanGlow,
               Platform.OS === 'web' ? ({ filter: 'blur(90px)', pointerEvents: 'none' } as any) : {},
             ]}
           />
           <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { ambientGlow: 'gold' } } as any) : {})}
             style={[
               styles.ambientGoldGlow,
-              Platform.OS === 'web' ? ({ filter: 'blur(80px)', pointerEvents: 'none' } as any) : {},
+              Platform.OS === 'web' ? ({ filter: 'blur(85px)', pointerEvents: 'none' } as any) : {},
             ]}
           />
         </View>
@@ -213,7 +237,7 @@ const styles = StyleSheet.create({
     width: 600,
     height: 400,
     borderRadius: 300,
-    backgroundColor: 'rgba(56, 189, 248, 0.05)',
+    backgroundColor: 'rgba(34, 211, 238, 0.09)',
   },
   ambientGoldGlow: {
     position: 'absolute',
@@ -222,6 +246,6 @@ const styles = StyleSheet.create({
     width: 500,
     height: 360,
     borderRadius: 250,
-    backgroundColor: 'rgba(245, 158, 11, 0.035)',
+    backgroundColor: 'rgba(251, 191, 36, 0.06)',
   },
 });

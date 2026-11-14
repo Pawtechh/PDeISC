@@ -7,6 +7,7 @@ import {
   StyleProp,
   ViewStyle,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { Control, useController, FieldValues, Path } from 'react-hook-form';
 import { colors, radii, spacing } from '../../theme';
@@ -57,8 +58,8 @@ export function FormInput<T extends FieldValues>({
   const getBorderColor = (): string => {
     if (isError) return colors.semantic.danger;
     if (isValid) return colors.semantic.success;
-    if (isFocused) return theme.primary;
-    return isDark ? 'rgba(245, 158, 11, 0.28)' : colors.sand[200];
+    if (isFocused) return isDark ? '#22D3EE' : theme.primary;
+    return isDark ? 'rgba(56, 189, 248, 0.22)' : colors.sand[200];
   };
 
   const isSecure = secureTextEntry && !showPassword;
@@ -72,12 +73,15 @@ export function FormInput<T extends FieldValues>({
       )}
 
       <View
+        {...(Platform.OS === 'web'
+          ? ({ dataSet: { inputShell: isFocused ? 'focused' : 'idle' } } as any)
+          : {})}
         style={[
           styles.inputContainer,
           {
             borderColor: getBorderColor(),
             backgroundColor: isDark
-              ? (editable ? 'rgba(13, 19, 29, 0.85)' : 'rgba(9, 12, 16, 0.6)')
+              ? (editable ? 'rgba(6, 16, 32, 0.85)' : 'rgba(5, 11, 22, 0.65)')
               : (editable ? colors.white : colors.sand[100]),
           },
         ]}

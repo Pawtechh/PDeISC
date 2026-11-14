@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Platform } from 'react-native';
 import { colors } from './colors';
 
 export type ThemeMode = 'light' | 'dark';
@@ -24,7 +25,7 @@ export interface ThemeColors {
 }
 
 export const lightTheme: ThemeColors = {
-  background: '#F8FAFC', // Crisp coastal daylight mist
+  background: '#F2F8FC', // Atlantic daylight mist
   surface: '#FFFFFF',
   card: '#FFFFFF',
   champagne: '#D97706', // Warm amber gold
@@ -33,10 +34,10 @@ export const lightTheme: ThemeColors = {
   text: '#0F172A', // Rich slate midnight, maximum contrast & readability
   subtext: '#475569', // Clear secondary slate
   sand: '#E2E8F0',
-  border: '#E2E8F0', // Clean subtle border
-  accent: '#0284C7',
-  accentLight: '#F0F9FF',
-  divider: '#E2E8F0',
+  border: 'rgba(2, 132, 199, 0.15)', // Crystalline sea-glass hairline
+  accent: '#0891B2', // Lagoon teal
+  accentLight: '#ECFEFF',
+  divider: 'rgba(14, 165, 233, 0.12)',
   cardHighlight: '#F0F9FF',
   inputBg: '#FFFFFF',
   inputBorder: '#CBD5E1',
@@ -44,22 +45,22 @@ export const lightTheme: ThemeColors = {
 };
 
 export const darkTheme: ThemeColors = {
-  background: '#0B0F17', // Deep maritime obsidian
-  surface: '#131C2E',    // Elevated deep navy card
-  card: '#131C2E',
-  champagne: '#F59E0B',  // Warm refined golden amber
-  primary: '#0284C7',    // Coastal Ocean Blue
+  background: '#040914', // Abyssal midnight sapphire
+  surface: '#0B182B',    // Smoked ocean glass panel
+  card: '#0B182B',
+  champagne: '#FBBF24',  // Warm Golden Hour amber
+  primary: '#0EA5E9',    // Electric Pacific Ocean
   primaryText: '#FFFFFF',// Crisp pure white
   text: '#F8FAFC',       // Bright high-contrast white
   subtext: '#94A3B8',    // Slate secondary
   sand: '#CBD5E1',
-  border: 'rgba(255, 255, 255, 0.08)', // Frosted subtle border
-  accent: '#38BDF8',     // Sky highlight
-  accentLight: 'rgba(56, 189, 248, 0.12)',
-  divider: 'rgba(255, 255, 255, 0.08)',
-  cardHighlight: 'rgba(56, 189, 248, 0.06)',
-  inputBg: '#0F172A',
-  inputBorder: 'rgba(255, 255, 255, 0.12)',
+  border: 'rgba(56, 189, 248, 0.18)', // Bioluminescent ice border
+  accent: '#22D3EE',     // Bioluminescent cyan highlight
+  accentLight: 'rgba(34, 211, 238, 0.14)',
+  divider: 'rgba(56, 189, 248, 0.12)',
+  cardHighlight: 'rgba(34, 211, 238, 0.08)',
+  inputBg: '#071120',
+  inputBorder: 'rgba(56, 189, 248, 0.20)',
   isDark: true,
 };
 
@@ -101,6 +102,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const theme = mode === 'light' ? lightTheme : darkTheme;
   const isDark = mode === 'dark';
+
+  useEffect(() => {
+    if (Platform.OS === 'web' && typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', mode);
+    }
+  }, [mode]);
 
   return (
     <ThemeContext.Provider value={{ mode, theme, isDark, toggleTheme, setMode }}>

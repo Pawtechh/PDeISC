@@ -38,16 +38,20 @@ export const DesktopHeader: React.FC = () => {
 
   return (
     <View
+      {...(Platform.OS === 'web' ? ({ dataSet: { desktopHeader: 'true' } } as any) : {})}
       style={[
         styles.headerContainer,
         {
-          backgroundColor: isDark ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.96)',
-          borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0',
+          backgroundColor: isDark ? 'rgba(5, 13, 27, 0.78)' : 'rgba(255, 255, 255, 0.88)',
+          borderBottomColor: isDark ? 'rgba(56, 189, 248, 0.18)' : 'rgba(2, 132, 199, 0.14)',
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
+              backdropFilter: 'blur(24px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+              boxShadow: isDark
+                ? '0 8px 30px rgba(0, 0, 0, 0.35)'
+                : '0 6px 24px rgba(2, 132, 199, 0.06)',
               position: 'sticky',
               top: 0,
               zIndex: 1000,
@@ -59,15 +63,16 @@ export const DesktopHeader: React.FC = () => {
         {/* Left: Brand Identity */}
         <View style={styles.brandRow}>
           <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { brandLogo: 'true' } } as any) : {})}
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE',
-                borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#7DD3FC',
+                backgroundColor: isDark ? 'rgba(34, 211, 238, 0.14)' : '#E0F2FE',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.42)' : '#7DD3FC',
               },
             ]}
           >
-            <Waves size={18} color={isDark ? '#38BDF8' : '#0284C7'} strokeWidth={2.2} />
+            <Waves size={18} color={isDark ? '#22D3EE' : '#0284C7'} strokeWidth={2.2} />
           </View>
           <View style={styles.brandTexts}>
             <Text style={[styles.brandTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
@@ -76,7 +81,7 @@ export const DesktopHeader: React.FC = () => {
             <Text
               style={[
                 styles.brandSubtitle,
-                { color: isDark ? '#38BDF8' : '#0284C7' },
+                { color: isDark ? '#22D3EE' : '#0284C7' },
               ]}
             >
               MAR DEL PLATA • EST. 2026
@@ -87,16 +92,20 @@ export const DesktopHeader: React.FC = () => {
         {/* Center: Live Coastal Telemetry Pill */}
         {width >= 1120 && (
           <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { telemetryPill: 'true' } } as any) : {})}
             style={[
               styles.telemetryPill,
               {
-                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.06)' : '#F0F9FF',
-                borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : '#BAE6FD',
+                backgroundColor: isDark ? 'rgba(14, 165, 233, 0.10)' : '#F0F9FF',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.28)' : '#BAE6FD',
               },
             ]}
           >
-            <View style={styles.livePulseDot} />
-            <Compass size={13} color={isDark ? '#38BDF8' : '#0284C7'} />
+            <View
+              {...(Platform.OS === 'web' ? ({ dataSet: { liveDot: 'true' } } as any) : {})}
+              style={styles.livePulseDot}
+            />
+            <Compass size={13} color={isDark ? '#22D3EE' : '#0284C7'} />
             <Text
               style={[
                 styles.telemetryText,

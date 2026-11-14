@@ -81,21 +81,33 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
       activeOpacity={0.93}
       onPress={handleCardPress}
       testID={testID || `board-card-${board.id}`}
+      {...(Platform.OS === 'web'
+        ? ({ dataSet: { surfCard: 'true', staggerCard: 'true' } } as any)
+        : {})}
       style={[
         styles.cardContainer,
         {
-          backgroundColor: isDark ? '#111827' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0',
-          shadowColor: isDark ? '#000000' : '#64748B',
-          shadowOpacity: isDark ? 0.45 : 0.12,
+          backgroundColor: isDark ? 'rgba(9, 21, 39, 0.88)' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(56, 189, 248, 0.20)' : 'rgba(2, 132, 199, 0.14)',
+          shadowColor: isDark ? '#0284C7' : '#0284C7',
+          shadowOpacity: isDark ? 0.28 : 0.10,
         },
-        Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : undefined,
+        Platform.OS === 'web'
+          ? ({
+              cursor: 'pointer',
+              backdropFilter: 'blur(18px) saturate(165%)',
+              WebkitBackdropFilter: 'blur(18px) saturate(165%)',
+            } as any)
+          : undefined,
         style,
       ]}
     >
       {/* 1. Curated Gallery Image Showcase Frame */}
-      <View style={[styles.imageFrame, { backgroundColor: isDark ? '#0B0F17' : '#F1F5F9' }]}>
-        <View style={styles.imageInner}>
+      <View style={[styles.imageFrame, { backgroundColor: isDark ? 'transparent' : '#F4F9FD' }]}>
+        <View
+          {...(Platform.OS === 'web' ? ({ dataSet: { surfImageFrame: 'true' } } as any) : {})}
+          style={styles.imageInner}
+        >
           <Image
             source={{ uri: photoUrl }}
             placeholder={{ blurhash }}
@@ -106,8 +118,8 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
 
           {/* Subtle bottom fade to blend smoothly into card body */}
           <LinearGradient
-            colors={['transparent', isDark ? 'rgba(13, 19, 29, 0.7)' : 'rgba(255, 255, 255, 0.5)']}
-            locations={[0.7, 1.0]}
+            colors={['transparent', isDark ? 'rgba(7, 17, 33, 0.82)' : 'rgba(255, 255, 255, 0.45)']}
+            locations={[0.62, 1.0]}
             style={StyleSheet.absoluteFillObject}
             pointerEvents="none"
           />
@@ -144,13 +156,13 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
       </View>
 
       {/* 2. Editorial Typography & Technical Specs */}
-      <View style={[styles.contentContainer, { backgroundColor: isDark ? '#111827' : '#FFFFFF' }]}>
+      <View style={[styles.contentContainer, { backgroundColor: isDark ? 'transparent' : '#FFFFFF' }]}>
         {/* Brand & Model */}
         <View style={styles.brandRow}>
           <Text
             style={[
               styles.brandSubtitle,
-              { color: isDark ? '#38BDF8' : '#0284C7' },
+              { color: isDark ? '#22D3EE' : '#0284C7' },
             ]}
             numberOfLines={1}
           >
@@ -242,10 +254,13 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
                 handleReservePress();
               }}
               style={styles.reserveBtnWrapper}
+              {...(Platform.OS === 'web'
+                ? ({ dataSet: { surfReserve: 'true', luxuryBtn: 'primary' } } as any)
+                : {})}
               testID={`board-3d-reserve-${board.id}`}
             >
               <LinearGradient
-                colors={isDark ? ['#0284C7', '#0369A1'] : ['#0284C7', '#075985']}
+                colors={isDark ? ['#06B6D4', '#0EA5E9', '#0284C7'] : ['#0EA5E9', '#0284C7', '#0369A1']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.reserveBtnGradient}
@@ -313,13 +328,13 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: 'rgba(9, 12, 16, 0.85)',
+    backgroundColor: 'rgba(6, 16, 32, 0.85)',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.4)',
+    borderColor: 'rgba(251, 191, 36, 0.48)',
     borderRadius: 6,
   },
   featuredBadgeText: {
-    color: '#F59E0B',
+    color: '#FBBF24',
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 1,
@@ -329,9 +344,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: 'rgba(9, 12, 16, 0.75)',
+    backgroundColor: 'rgba(6, 16, 32, 0.78)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderColor: 'rgba(103, 232, 249, 0.25)',
     borderRadius: 6,
     gap: 4,
   },

@@ -43,30 +43,42 @@ export const MarineForecastCard: React.FC = () => {
 
   return (
     <View
+      {...(Platform.OS === 'web'
+        ? ({ dataSet: { telemetryCard: 'true', glassCard: 'true' } } as any)
+        : {})}
       style={[
         styles.instrumentContainer,
         {
-          backgroundColor: isDark ? 'rgba(13, 19, 29, 0.90)' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : '#E2E8F0',
+          backgroundColor: isDark ? 'rgba(8, 19, 36, 0.78)' : 'rgba(255, 255, 255, 0.90)',
+          borderColor: isDark ? 'rgba(34, 211, 238, 0.24)' : 'rgba(2, 132, 199, 0.16)',
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
+              backdropFilter: 'blur(22px) saturate(175%)',
+              WebkitBackdropFilter: 'blur(22px) saturate(175%)',
+              boxShadow: isDark
+                ? '0 18px 42px -12px rgba(0, 0, 0, 0.55), 0 0 28px rgba(6, 182, 212, 0.08), inset 0 1px 0 rgba(165, 243, 252, 0.16)'
+                : '0 14px 34px -10px rgba(2, 132, 199, 0.10)',
             } as any)
           : {},
       ]}
     >
       <Stack spacing="md">
         {/* Top Header: Spot Telemetry & Beach Flag */}
-        <Row justify="space-between" align="center">
-          <Row align="center" spacing="sm">
-            <View style={styles.radarPulse}>
+        <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 10 }}>
+          <Row align="center" spacing="sm" style={{ flex: 1, minWidth: 190 }}>
+            <View
+              {...(Platform.OS === 'web' ? ({ dataSet: { radarPulse: 'true' } } as any) : {})}
+              style={styles.radarPulse}
+            >
               <View style={styles.radarDot} />
             </View>
-            <View>
+            <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={styles.stationLabel}>ESTACIÓN TELEMÉTRICA EN VIVO</Text>
-              <Text style={[styles.spotTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
+              <Text
+                style={[styles.spotTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}
+                numberOfLines={2}
+              >
                 {forecast.spotName} • Mar del Plata
               </Text>
             </View>
@@ -84,9 +96,18 @@ export const MarineForecastCard: React.FC = () => {
         {/* 4 Precision Telemetric Instrument Dials */}
         <View style={styles.telemetryGrid}>
           {/* Ola */}
-          <View style={[styles.dialTile, { backgroundColor: isDark ? 'rgba(8, 12, 20, 0.75)' : '#F8FAFC' }]}>
+          <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { telemetryDial: 'true' } } as any) : {})}
+            style={[
+              styles.dialTile,
+              {
+                backgroundColor: isDark ? 'rgba(5, 14, 28, 0.72)' : '#F4F9FD',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.16)' : 'rgba(2, 132, 199, 0.14)',
+              },
+            ]}
+          >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Waves size={14} color="#38BDF8" />
+              <Waves size={14} color="#22D3EE" />
               <Text style={styles.dialLabel}>ALTURA OLA</Text>
             </Row>
             <View style={styles.dialValueRow}>
@@ -99,7 +120,16 @@ export const MarineForecastCard: React.FC = () => {
           </View>
 
           {/* Periodo */}
-          <View style={[styles.dialTile, { backgroundColor: isDark ? 'rgba(8, 12, 20, 0.75)' : '#F8FAFC' }]}>
+          <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { telemetryDial: 'true' } } as any) : {})}
+            style={[
+              styles.dialTile,
+              {
+                backgroundColor: isDark ? 'rgba(5, 14, 28, 0.72)' : '#F4F9FD',
+                borderColor: isDark ? 'rgba(56, 189, 248, 0.16)' : 'rgba(2, 132, 199, 0.14)',
+              },
+            ]}
+          >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
               <Timer size={14} color="#38BDF8" />
               <Text style={styles.dialLabel}>PERIODO</Text>
@@ -114,31 +144,49 @@ export const MarineForecastCard: React.FC = () => {
           </View>
 
           {/* Viento */}
-          <View style={[styles.dialTile, { backgroundColor: isDark ? 'rgba(8, 12, 20, 0.75)' : '#F8FAFC' }]}>
+          <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { telemetryDial: 'true' } } as any) : {})}
+            style={[
+              styles.dialTile,
+              {
+                backgroundColor: isDark ? 'rgba(5, 14, 28, 0.72)' : '#F4F9FD',
+                borderColor: isDark ? 'rgba(45, 212, 191, 0.16)' : 'rgba(2, 132, 199, 0.14)',
+              },
+            ]}
+          >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Wind size={14} color="#38BDF8" />
+              <Wind size={14} color="#2DD4BF" />
               <Text style={styles.dialLabel}>VIENTO</Text>
             </Row>
             <View style={styles.dialValueRow}>
               <Text style={[styles.dialValue, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
                 {forecast.windSpeedKmh}
               </Text>
-              <Text style={styles.dialUnit}>km/h</Text>
+              <Text style={[styles.dialUnit, { color: '#2DD4BF' }]}>km/h</Text>
             </View>
             <Text style={styles.dialSubtext}>Offshore suave</Text>
           </View>
 
           {/* Agua */}
-          <View style={[styles.dialTile, { backgroundColor: isDark ? 'rgba(8, 12, 20, 0.75)' : '#F8FAFC' }]}>
+          <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { telemetryDial: 'true' } } as any) : {})}
+            style={[
+              styles.dialTile,
+              {
+                backgroundColor: isDark ? 'rgba(5, 14, 28, 0.72)' : '#F4F9FD',
+                borderColor: isDark ? 'rgba(251, 191, 36, 0.16)' : 'rgba(2, 132, 199, 0.14)',
+              },
+            ]}
+          >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Thermometer size={14} color="#38BDF8" />
+              <Thermometer size={14} color="#FBBF24" />
               <Text style={styles.dialLabel}>TEMP. AGUA</Text>
             </Row>
             <View style={styles.dialValueRow}>
               <Text style={[styles.dialValue, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
                 {forecast.waterTemperatureCelsius}
               </Text>
-              <Text style={styles.dialUnit}>°C</Text>
+              <Text style={[styles.dialUnit, { color: '#FBBF24' }]}>°C</Text>
             </View>
             <Text style={styles.dialSubtext}>Traje 3/2 mm</Text>
           </View>
@@ -146,7 +194,7 @@ export const MarineForecastCard: React.FC = () => {
 
         {/* Shaper Recommendation Footer */}
         {forecast.recommendedBoardTypes && forecast.recommendedBoardTypes.length > 0 && (
-          <Row align="center" spacing="xs" style={styles.shaperTipRow}>
+          <Row align="center" spacing="xs" style={[styles.shaperTipRow, { flexWrap: 'wrap', rowGap: 6 }]}>
             <Text style={styles.shaperTipLabel}>Tablas sugeridas para hoy:</Text>
             <Row spacing="xs" style={{ flexWrap: 'wrap' }}>
               {forecast.recommendedBoardTypes.map((type: string, idx: number) => (

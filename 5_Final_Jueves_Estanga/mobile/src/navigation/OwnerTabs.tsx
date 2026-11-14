@@ -25,34 +25,37 @@ export const OwnerTabs: React.FC = () => {
         width: 520,
         height: 64,
         borderRadius: 32,
-        backgroundColor: isDark ? 'rgba(17, 24, 39, 0.88)' : 'rgba(255, 255, 255, 0.94)',
+        backgroundColor: isDark ? 'rgba(6, 16, 32, 0.84)' : 'rgba(255, 255, 255, 0.94)',
         borderWidth: 1,
-        borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
+        borderColor: isDark ? 'rgba(34, 211, 238, 0.24)' : 'rgba(2, 132, 199, 0.14)',
         paddingBottom: 8,
         paddingTop: 6,
-        shadowColor: '#000',
+        shadowColor: '#06B6D4',
         shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.35,
+        shadowOpacity: 0.32,
         shadowRadius: 24,
         elevation: 20,
         ...(Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
+              backdropFilter: 'blur(24px) saturate(185%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(185%)',
+              boxShadow: isDark
+                ? '0 16px 42px rgba(0, 0, 0, 0.58), 0 0 28px rgba(34, 211, 238, 0.16), inset 0 1px 0 rgba(165, 243, 252, 0.18)'
+                : '0 14px 36px rgba(2, 132, 199, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
             } as any)
           : {}),
       }
     : {
-        backgroundColor: isDark ? 'rgba(17, 24, 39, 0.95)' : 'rgba(255, 255, 255, 0.96)',
-        borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+        backgroundColor: isDark ? 'rgba(6, 16, 32, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+        borderTopColor: isDark ? 'rgba(34, 211, 238, 0.22)' : 'rgba(2, 132, 199, 0.12)',
         borderTopWidth: 1,
-        height: 64,
-        paddingBottom: 8,
+        height: 68,
+        paddingBottom: 10,
         paddingTop: 6,
         ...(Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
+              backdropFilter: 'blur(20px) saturate(175%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(175%)',
             } as any)
           : {}),
       };
@@ -61,7 +64,10 @@ export const OwnerTabs: React.FC = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: isDark ? '#38BDF8' : '#0284C7',
+        sceneStyle: {
+          backgroundColor: Platform.OS === 'web' ? 'transparent' : theme.background,
+        },
+        tabBarActiveTintColor: isDark ? '#22D3EE' : '#0284C7',
         tabBarInactiveTintColor: isDark ? '#64748B' : '#94A3B8',
         tabBarStyle,
         tabBarLabelStyle: {

@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html lang="%LANG_ISO_CODE%">
+<html lang="%LANG_ISO_CODE%" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
     <title>%WEB_TITLE%</title>
 
-    <!-- Google Fonts: Plus Jakarta Sans & Outfit (Boutique Luxury Typography) -->
+    <!-- Google Fonts: Plus Jakarta Sans, Outfit & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- The `react-native-web` recommended style reset + Luxury Coastal Design Engine -->
+    <!-- React Native Web Reset -->
     <style id="expo-reset">
-      /* Root element full-height & smooth rendering */
       html,
       body {
         height: 100%;
         margin: 0;
         padding: 0;
-        background-color: #090C10;
-        color: #F1F5F9;
+        background-color: #030812;
+        color: #F8FAFC;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
@@ -35,11 +34,23 @@
         display: flex;
         height: 100%;
         flex: 1;
+        position: relative;
+        z-index: 1;
       }
     </style>
 
-    <!-- Luxury Coastal Web Styling Engine (Titanium Radical Upgrade) -->
+    <!-- Bioluminescent Tide & Golden Hour Design Engine -->
     <style id="luxury-coastal-css">
+      :root {
+        --sr-abyss-0: #030812;
+        --sr-abyss-1: #061326;
+        --sr-cyan: #22D3EE;
+        --sr-biolum: #00E5FF;
+        --sr-seafoam: #2DD4BF;
+        --sr-gold: #FBBF24;
+        --sr-glass-border: rgba(56, 189, 248, 0.22);
+      }
+
       *, *::before, *::after {
         box-sizing: border-box;
       }
@@ -49,110 +60,550 @@
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
       }
 
-      /* Headings & Brand Elements */
+      /* Headings & Display Typography */
       h1, h2, h3, h4, h5, h6, [data-heading="true"] {
         font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, sans-serif !important;
         letter-spacing: -0.025em;
       }
 
-      /* Atmospheric Maritime Background */
+      /* Animated Deep Ocean Obsidian Canvas + Bioluminescent Mesh */
       body {
-        background-color: #090C10 !important;
-        background-image: 
-          radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 229, 255, 0.09) 0%, transparent 100%),
-          radial-gradient(ellipse 60% 40% at 85% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 100%),
-          radial-gradient(ellipse 50% 30% at 10% 80%, rgba(0, 229, 255, 0.04) 0%, transparent 100%),
-          #090C10 !important;
+        position: relative;
+        background-color: #030812 !important;
+        background-image:
+          radial-gradient(ellipse 85% 55% at 50% -18%, rgba(6, 182, 212, 0.22) 0%, transparent 72%),
+          radial-gradient(ellipse 65% 48% at 92% 16%, rgba(251, 191, 36, 0.11) 0%, transparent 68%),
+          radial-gradient(ellipse 60% 45% at 8% 82%, rgba(45, 212, 191, 0.14) 0%, transparent 70%),
+          linear-gradient(165deg, #030812 0%, #061326 50%, #040B18 100%) !important;
         background-attachment: fixed !important;
       }
 
-      /* Ultra-Luxe Custom Scrollbars (Champagne Gold + Ocean Neon Cyan Hover) */
+      /* Living Caustic Aurora Layers (Pointer-Safe Background Plane) */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: -25% -15%;
+        pointer-events: none;
+        z-index: 0;
+        background:
+          radial-gradient(42% 36% at 24% 26%, rgba(34, 211, 238, 0.17) 0%, transparent 70%),
+          radial-gradient(36% 32% at 78% 68%, rgba(45, 212, 191, 0.13) 0%, transparent 70%),
+          radial-gradient(28% 26% at 72% 18%, rgba(251, 191, 36, 0.08) 0%, transparent 70%);
+        filter: blur(48px);
+        will-change: transform, opacity;
+        animation: auroraDriftA 22s ease-in-out infinite alternate;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.35;
+        background-image:
+          radial-gradient(rgba(103, 232, 249, 0.14) 1px, transparent 1px),
+          radial-gradient(rgba(251, 191, 36, 0.06) 1px, transparent 1px);
+        background-size: 48px 48px, 72px 72px;
+        background-position: 0 0, 24px 24px;
+        mask-image: radial-gradient(ellipse 90% 70% at 50% 25%, #000 10%, transparent 80%);
+        -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 25%, #000 10%, transparent 80%);
+        animation: coastalGridFloat 28s linear infinite;
+      }
+
+      /* Atlantic Daylight Theme Adaptation */
+      html[data-theme="light"] body {
+        background-color: #F2F8FC !important;
+        background-image:
+          radial-gradient(ellipse 85% 55% at 50% -15%, rgba(14, 165, 233, 0.18) 0%, transparent 72%),
+          radial-gradient(ellipse 60% 45% at 88% 18%, rgba(251, 191, 36, 0.14) 0%, transparent 70%),
+          radial-gradient(ellipse 60% 45% at 10% 80%, rgba(20, 184, 166, 0.12) 0%, transparent 70%),
+          linear-gradient(165deg, #F4FAFE 0%, #E7F4FC 52%, #FDF9F0 100%) !important;
+      }
+
+      html[data-theme="light"] body::before {
+        background:
+          radial-gradient(42% 36% at 24% 26%, rgba(14, 165, 233, 0.16) 0%, transparent 70%),
+          radial-gradient(36% 32% at 78% 68%, rgba(20, 184, 166, 0.12) 0%, transparent 70%),
+          radial-gradient(28% 26% at 72% 18%, rgba(245, 158, 11, 0.10) 0%, transparent 70%);
+      }
+
+      html[data-theme="light"] body::after {
+        opacity: 0.22;
+        background-image: radial-gradient(rgba(2, 132, 199, 0.16) 1px, transparent 1px);
+      }
+
+      /* Custom Scrollbars */
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #090C10;
+        background: rgba(3, 8, 18, 0.7);
       }
       ::-webkit-scrollbar-thumb {
-        background: rgba(212, 175, 55, 0.32);
+        background: linear-gradient(180deg, rgba(34, 211, 238, 0.45), rgba(14, 165, 233, 0.40));
         border-radius: 9999px;
-        border: 2px solid #090C10;
-        transition: background 0.25s ease, box-shadow 0.25s ease;
+        border: 2px solid transparent;
+        background-clip: content-box;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #00E5FF;
-        box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+        background: #22D3EE;
+        box-shadow: 0 0 14px rgba(34, 211, 238, 0.7);
       }
       * {
         scrollbar-width: thin;
-        scrollbar-color: rgba(212, 175, 55, 0.32) #090C10;
+        scrollbar-color: rgba(34, 211, 238, 0.40) transparent;
+      }
+      html[data-theme="light"] * {
+        scrollbar-color: rgba(2, 132, 199, 0.35) transparent;
       }
 
-      /* Luxury Text Selection Highlight */
+      /* Selection & Accessible Focus */
       ::selection {
-        background: rgba(0, 229, 255, 0.3) !important;
+        background: rgba(34, 211, 238, 0.32) !important;
         color: #FFFFFF !important;
       }
       ::-moz-selection {
-        background: rgba(0, 229, 255, 0.3) !important;
+        background: rgba(34, 211, 238, 0.32) !important;
         color: #FFFFFF !important;
       }
-
-      /* Accessible Focus Rings */
       *:focus-visible {
-        outline: 2px solid #00E5FF !important;
+        outline: 2px solid #22D3EE !important;
         outline-offset: 2px;
       }
 
-      /* Interactive Micro-Interactions for Web */
-      div[role="button"], button, a {
-        transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), 
-                    box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1), 
-                    filter 0.18s ease, 
-                    border-color 0.18s ease !important;
+      /* Ambient Floating Screen Glow Orbs */
+      [data-ambient-glow="cyan"] {
+        will-change: transform, opacity;
+        animation: orbFloatCyan 16s ease-in-out infinite alternate;
+      }
+      [data-ambient-glow="gold"] {
+        will-change: transform, opacity;
+        animation: orbFloatGold 20s ease-in-out infinite alternate;
       }
 
-      div[role="button"]:hover:not([aria-disabled="true"]), 
-      button:hover:not(:disabled) {
-        transform: translateY(-1.5px);
-        filter: brightness(1.05);
+      /* Brand Header Logo & Live Coastal Dot */
+      [data-brand-logo="true"] {
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease !important;
+        box-shadow: 0 0 18px rgba(34, 211, 238, 0.22);
+      }
+      [data-brand-logo="true"]:hover {
+        transform: rotate(-8deg) scale(1.08);
+        box-shadow: 0 0 26px rgba(34, 211, 238, 0.45);
       }
 
-      div[role="button"]:active:not([aria-disabled="true"]), 
-      button:active:not(:disabled) {
-        transform: scale(0.985);
+      [data-live-dot="true"] {
+        position: relative;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.85);
+        animation: liveBeaconPulse 2.2s ease-in-out infinite;
       }
 
-      /* Input Focus Lighting Effect */
-      input, textarea {
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+      [data-telemetry-pill="true"] {
+        transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+        box-shadow: inset 0 1px 0 rgba(165, 243, 252, 0.14);
       }
-      input:focus, textarea:focus {
-        border-color: #00E5FF !important;
-        box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.18) !important;
-      }
-
-      /* Hardware Accelerated Glassmorphism */
-      .glass-card, [data-glass="true"] {
-        backdrop-filter: blur(20px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      [data-telemetry-pill="true"]:hover {
+        border-color: rgba(34, 211, 238, 0.50) !important;
+        box-shadow: 0 0 24px rgba(34, 211, 238, 0.18), inset 0 1px 0 rgba(165, 243, 252, 0.22);
       }
 
-      /* Elegant Entrance Animation */
+      /* Hero Banner Ken Burns Ocean Breathing & Specular Glow */
+      [data-hero-banner="true"] {
+        box-shadow: 0 22px 54px -14px rgba(0, 0, 0, 0.65),
+                    0 0 36px rgba(6, 182, 212, 0.18),
+                    inset 0 1px 0 rgba(165, 243, 252, 0.20) !important;
+        transition: border-color 0.35s ease, box-shadow 0.35s ease !important;
+      }
+      [data-hero-banner="true"]:hover {
+        border-color: rgba(103, 232, 249, 0.46) !important;
+        box-shadow: 0 26px 60px -12px rgba(0, 0, 0, 0.72),
+                    0 0 46px rgba(34, 211, 238, 0.24),
+                    inset 0 1px 0 rgba(165, 243, 252, 0.28) !important;
+      }
+      [data-hero-banner="true"] img {
+        will-change: transform;
+        animation: heroKenBurns 22s ease-in-out infinite alternate;
+      }
+
+      [data-hero-chip="true"] {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                    border-color 0.25s ease,
+                    box-shadow 0.25s ease !important;
+      }
+      [data-hero-chip="true"]:hover {
+        transform: translateY(-2.5px);
+        border-color: rgba(34, 211, 238, 0.55) !important;
+        box-shadow: 0 8px 20px -6px rgba(34, 211, 238, 0.32);
+      }
+
+      [data-stock-pulse="true"] {
+        animation: subtleBorderPulse 3.2s ease-in-out infinite;
+      }
+
+      /* Live Marine Telemetry Sonar & Instrument Dials */
+      [data-radar-pulse="true"] {
+        position: relative;
+        overflow: visible !important;
+      }
+      [data-radar-pulse="true"]::after {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: 9999px;
+        border: 1.5px solid rgba(16, 185, 129, 0.75);
+        pointer-events: none;
+        animation: sonarRingExpand 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+      }
+
+      [data-telemetry-dial="true"] {
+        transition: transform 0.30s cubic-bezier(0.22, 1, 0.36, 1),
+                    border-color 0.30s ease,
+                    box-shadow 0.30s ease !important;
+        box-shadow: inset 0 1px 0 rgba(165, 243, 252, 0.10);
+      }
+      [data-telemetry-dial="true"]:hover {
+        transform: translateY(-4px);
+        border-color: rgba(34, 211, 238, 0.45) !important;
+        box-shadow: 0 14px 28px -10px rgba(6, 182, 212, 0.28),
+                    inset 0 1px 0 rgba(165, 243, 252, 0.22) !important;
+      }
+
+      /* Form Inputs & Luminous Focus Shell */
+      [data-input-shell] {
+        transition: border-color 0.24s ease, box-shadow 0.24s ease, background-color 0.24s ease !important;
+      }
+      [data-input-shell]:focus-within,
+      [data-input-shell="focused"] {
+        border-color: #22D3EE !important;
+        box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18), 0 0 22px rgba(6, 182, 212, 0.16) !important;
+      }
+      [data-input-shell] input:focus,
+      [data-input-shell] textarea:focus {
+        outline: none !important;
+        box-shadow: none !important;
+      }
+      input:not([data-input-shell] input):focus,
+      textarea:not([data-input-shell] textarea):focus {
+        border-color: #22D3EE !important;
+        box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18) !important;
+      }
+
+      /* Primary & Secondary Liquid Sheen Buttons */
+      [data-luxury-btn="primary"] {
+        position: relative;
+        overflow: hidden !important;
+        transition: box-shadow 0.28s ease, filter 0.28s ease, border-color 0.28s ease !important;
+      }
+      [data-luxury-btn="primary"]::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -130%;
+        width: 70%;
+        height: 100%;
+        background: linear-gradient(
+          105deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.10) 35%,
+          rgba(255, 255, 255, 0.42) 50%,
+          rgba(255, 255, 255, 0.10) 65%,
+          transparent 100%
+        );
+        transform: skewX(-22deg);
+        pointer-events: none;
+        transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      [data-luxury-btn="primary"]:hover::after {
+        left: 160%;
+      }
+      [data-luxury-btn="primary"]:hover {
+        filter: brightness(1.08);
+        box-shadow: 0 12px 30px -4px rgba(14, 165, 233, 0.60),
+                    0 0 24px rgba(34, 211, 238, 0.34),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
+      }
+
+      [data-luxury-btn="secondary"]:hover,
+      [data-luxury-btn="ghost"]:hover {
+        border-color: rgba(34, 211, 238, 0.52) !important;
+        box-shadow: 0 8px 22px -6px rgba(6, 182, 212, 0.24) !important;
+      }
+
+      [data-oauth-btn="true"] {
+        transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 0.24s ease,
+                    filter 0.24s ease !important;
+      }
+      [data-oauth-btn="true"]:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.04);
+        box-shadow: 0 10px 24px -6px rgba(2, 132, 199, 0.30) !important;
+      }
+
+      /* Surfboard Cards: 3D Levitation + Iridescent Cyan Rim + Diagonal Glass Sheen + Image Zoom */
+      [data-surf-card="true"] {
+        position: relative;
+        transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                    border-color 0.35s ease,
+                    box-shadow 0.38s cubic-bezier(0.22, 1, 0.36, 1) !important;
+        box-shadow: 0 14px 36px -12px rgba(0, 0, 0, 0.58),
+                    inset 0 1px 0 rgba(165, 243, 252, 0.14) !important;
+      }
+      [data-surf-card="true"]::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -130%;
+        width: 65%;
+        height: 100%;
+        background: linear-gradient(
+          110deg,
+          transparent 0%,
+          rgba(165, 243, 252, 0.04) 38%,
+          rgba(255, 255, 255, 0.14) 50%,
+          rgba(165, 243, 252, 0.04) 62%,
+          transparent 100%
+        );
+        transform: skewX(-20deg);
+        pointer-events: none;
+        z-index: 6;
+        transition: left 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      [data-surf-card="true"]:hover::after {
+        left: 165%;
+      }
+      [data-surf-card="true"]:hover {
+        transform: translateY(-8px) scale(1.012) !important;
+        border-color: rgba(34, 211, 238, 0.52) !important;
+        box-shadow: 0 24px 52px -12px rgba(2, 132, 199, 0.45),
+                    0 0 32px rgba(34, 211, 238, 0.18),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+      }
+      [data-surf-image-frame="true"] img {
+        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) !important;
+      }
+      [data-surf-card="true"]:hover [data-surf-image-frame="true"] img {
+        transform: scale(1.08);
+      }
+
+      [data-surf-reserve="true"] {
+        transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 0.25s ease !important;
+      }
+      [data-surf-reserve="true"]:hover {
+        transform: translateY(-1.5px) scale(1.03);
+        box-shadow: 0 8px 22px rgba(34, 211, 238, 0.45) !important;
+      }
+
+      /* Catalog Card Entrance Animation (releases transform on finish for hover compatibility) */
+      [data-stagger-card="true"] {
+        animation: cardFloatIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+      }
+
+      /* Filter Pills */
+      [data-filter-pill] {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                    border-color 0.22s ease,
+                    box-shadow 0.22s ease,
+                    background-color 0.22s ease !important;
+      }
+      [data-filter-pill]:hover {
+        transform: translateY(-2.5px);
+        border-color: rgba(34, 211, 238, 0.58) !important;
+        box-shadow: 0 8px 20px -6px rgba(34, 211, 238, 0.35) !important;
+      }
+      [data-filter-pill="active"] {
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+      }
+
+      /* Floating Dock Navigation Tabs */
+      [role="tablist"] {
+        transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+      }
+      [role="tab"] {
+        transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s ease !important;
+      }
+      [role="tab"]:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Scroll-to-Top Ring Button */
+      [data-scroll-top-btn="true"] {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease !important;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 20px rgba(34, 211, 238, 0.20) !important;
+      }
+      [data-scroll-top-btn="true"]:hover {
+        transform: translateY(-3px) scale(1.06);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55), 0 0 28px rgba(34, 211, 238, 0.42) !important;
+      }
+
+      /* Hardware Accelerated Glassmorphism Base */
+      .glass-card, [data-glass] {
+        backdrop-filter: blur(22px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
+      }
+
+      /* Root Entrance Animation */
       #root {
-        animation: luxuryAppFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        animation: luxuryAppFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
+      /* Keyframes */
       @keyframes luxuryAppFadeIn {
         from {
           opacity: 0;
-          transform: translateY(3px);
+          transform: translateY(4px);
         }
         to {
           opacity: 1;
           transform: translateY(0);
+        }
+      }
+
+      @keyframes auroraDriftA {
+        0% {
+          transform: translate3d(-2%, -1%, 0) scale(1);
+          opacity: 0.90;
+        }
+        50% {
+          transform: translate3d(3%, 2%, 0) scale(1.06);
+          opacity: 1;
+        }
+        100% {
+          transform: translate3d(-1%, 3%, 0) scale(1.03);
+          opacity: 0.92;
+        }
+      }
+
+      @keyframes coastalGridFloat {
+        0% {
+          transform: translate3d(0, 0, 0);
+        }
+        50% {
+          transform: translate3d(12px, -10px, 0);
+        }
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      @keyframes orbFloatCyan {
+        0% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        100% {
+          transform: translate3d(42px, 28px, 0) scale(1.12);
+        }
+      }
+
+      @keyframes orbFloatGold {
+        0% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        100% {
+          transform: translate3d(-36px, 24px, 0) scale(1.10);
+        }
+      }
+
+      @keyframes heroKenBurns {
+        0% {
+          transform: scale(1) translate3d(0, 0, 0);
+        }
+        100% {
+          transform: scale(1.07) translate3d(-1%, -1%, 0);
+        }
+      }
+
+      @keyframes sonarRingExpand {
+        0% {
+          transform: scale(0.95);
+          opacity: 0.85;
+        }
+        75% {
+          transform: scale(2.15);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(2.15);
+          opacity: 0;
+        }
+      }
+
+      @keyframes liveBeaconPulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.22);
+          opacity: 0.78;
+        }
+      }
+
+      @keyframes subtleBorderPulse {
+        0%, 100% {
+          box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.25);
+        }
+        50% {
+          box-shadow: 0 0 18px 2px rgba(52, 211, 153, 0.30);
+        }
+      }
+
+      @keyframes cardFloatIn {
+        from {
+          opacity: 0;
+          transform: translateY(16px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes splashLogoFloat {
+        0%, 100% {
+          transform: translateY(0px);
+          box-shadow: 0 18px 44px rgba(0, 0, 0, 0.65), 0 0 36px rgba(34, 211, 238, 0.25);
+        }
+        50% {
+          transform: translateY(-6px);
+          box-shadow: 0 24px 52px rgba(0, 0, 0, 0.70), 0 0 48px rgba(34, 211, 238, 0.42);
+        }
+      }
+
+      @keyframes splashWaveBar {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(220%);
+        }
+      }
+
+      /* Respect User Motion Preferences */
+      @media (prefers-reduced-motion: reduce) {
+        body::before,
+        body::after,
+        [data-ambient-glow],
+        [data-hero-banner="true"] img,
+        [data-radar-pulse="true"]::after,
+        [data-live-dot="true"],
+        [data-stock-pulse="true"],
+        [data-stagger-card="true"] {
+          animation: none !important;
+        }
+        [data-surf-card="true"],
+        [data-luxury-btn],
+        [data-filter-pill],
+        [data-hero-chip] {
+          transition: none !important;
         }
       }
     </style>
@@ -161,27 +612,30 @@
   <body>
     <!-- Fallback for JavaScript-disabled environments -->
     <noscript>
-      <div style="background:#090C10;color:#F1F5F9;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;padding:24px;text-align:center;">
+      <div style="background:#030812;color:#F8FAFC;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;padding:24px;text-align:center;">
         <div>
-          <h2 style="color:#00E5FF;margin-bottom:12px;">JavaScript Requerido</h2>
+          <h2 style="color:#22D3EE;margin-bottom:12px;">JavaScript Requerido</h2>
           <p style="color:#94A3B8;">Por favor activá JavaScript en tu navegador para ingresar a Surf Rental Mar del Plata.</p>
         </div>
       </div>
     </noscript>
 
-    <!-- The root element for React Native Web app -->
+    <!-- The root element for React Native Web app (upgraded animated splash loader) -->
     <div id="root">
-      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%, #0F2035 0%, #090C10 70%);color:#F8FAFC;font-family:'Outfit',sans-serif;text-align:center;padding:24px;">
-        <div style="width:76px;height:76px;border-radius:22px;background:rgba(16,26,42,0.92);border:1.5px solid rgba(0,229,255,0.45);box-shadow:0 16px 40px rgba(0,0,0,0.6),0 0 30px rgba(0,229,255,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-          <svg width="42" height="42" viewBox="0 0 120 120" fill="none">
-            <path d="M60 12C73 34 79 58 75 88C73 100 67 106 60 108C53 106 47 100 45 88C41 58 47 34 60 12Z" fill="rgba(14,165,233,0.28)" stroke="#00E5FF" stroke-width="3.5"/>
-            <line x1="60" y1="16" x2="60" y2="105" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M18 82C32 72 46 72 60 80C74 88 88 88 102 78" stroke="#00E5FF" stroke-width="5" stroke-linecap="round"/>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%, rgba(6, 182, 212, 0.16) 0%, #030812 68%);color:#F8FAFC;font-family:'Outfit',sans-serif;text-align:center;padding:24px;">
+        <div style="width:82px;height:82px;border-radius:24px;background:rgba(8,20,38,0.88);border:1.5px solid rgba(34,211,238,0.50);display:flex;align-items:center;justify-content:center;margin-bottom:22px;animation:splashLogoFloat 3s ease-in-out infinite;">
+          <svg width="44" height="44" viewBox="0 0 120 120" fill="none">
+            <path d="M60 12C73 34 79 58 75 88C73 100 67 106 60 108C53 106 47 100 45 88C41 58 47 34 60 12Z" fill="rgba(34,211,238,0.28)" stroke="#22D3EE" stroke-width="3.5"/>
+            <line x1="60" y1="16" x2="60" y2="105" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M18 82C32 72 46 72 60 80C74 88 88 88 102 78" stroke="#22D3EE" stroke-width="5" stroke-linecap="round"/>
           </svg>
         </div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:3.5px;color:#D4AF37;margin-bottom:6px;">BALNEARIO PLAYA GRANDE</div>
-        <div style="font-size:24px;font-weight:800;letter-spacing:4px;color:#F8FAFC;margin-bottom:8px;">SURF RENTAL</div>
-        <div style="font-size:12px;color:#94A3B8;letter-spacing:1px;">Iniciando plataforma y telemetría costera...</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:3.8px;color:#FBBF24;margin-bottom:6px;">BALNEARIO PLAYA GRANDE</div>
+        <div style="font-size:26px;font-weight:800;letter-spacing:4.5px;background:linear-gradient(90deg,#F8FAFC,#22D3EE,#FCD34D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;">SURF RENTAL</div>
+        <div style="font-size:12px;color:#94A3B8;letter-spacing:1px;margin-bottom:18px;">Iniciando plataforma y telemetría costera...</div>
+        <div style="width:160px;height:3px;border-radius:9999px;background:rgba(56,189,248,0.16);overflow:hidden;position:relative;">
+          <div style="width:55%;height:100%;border-radius:9999px;background:linear-gradient(90deg,transparent,#22D3EE,#FBBF24);animation:splashWaveBar 1.4s ease-in-out infinite;"></div>
+        </div>
       </div>
     </div>
   </body>

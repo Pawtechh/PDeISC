@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, useWindowDimensions, Platform } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as LocalAuthentication from 'expo-local-authentication';
@@ -132,7 +132,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     <Screen scrollable atmosphericGradient={true}>
       <View style={[styles.mainWrapper, isDesktop && styles.mainWrapperDesktop]}>
         {/* Left Column on Desktop / Top Banner on Mobile */}
-        <View style={[styles.heroPanel, isDesktop ? styles.heroPanelDesktop : styles.heroPanelMobile]}>
+        <View
+          {...(Platform.OS === 'web' ? ({ dataSet: { heroBanner: 'true' } } as any) : {})}
+          style={[styles.heroPanel, isDesktop ? styles.heroPanelDesktop : styles.heroPanelMobile]}
+        >
           <Image
             source={{ uri: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1400&q=85' }}
             style={StyleSheet.absoluteFillObject}
@@ -141,11 +144,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           />
           <LinearGradient
             colors={[
-              'rgba(9, 12, 16, 0.45)',
-              'rgba(9, 12, 16, 0.82)',
-              '#0B0F17',
+              'rgba(3, 8, 18, 0.22)',
+              'rgba(5, 16, 34, 0.74)',
+              'rgba(4, 10, 22, 0.96)',
             ]}
-            locations={[0, 0.65, 1]}
+            locations={[0, 0.62, 1]}
             style={StyleSheet.absoluteFillObject}
           />
           <View style={styles.heroOverlayContent}>
@@ -164,13 +167,22 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             </Text>
 
             <View style={styles.telemetryRow}>
-              <View style={styles.telemetryBadge}>
+              <View
+                {...(Platform.OS === 'web' ? ({ dataSet: { heroChip: 'true' } } as any) : {})}
+                style={styles.telemetryBadge}
+              >
                 <Text style={styles.telemetryLabel}>50+ Tablas</Text>
               </View>
-              <View style={styles.telemetryBadge}>
+              <View
+                {...(Platform.OS === 'web' ? ({ dataSet: { heroChip: 'true' } } as any) : {})}
+                style={styles.telemetryBadge}
+              >
                 <Text style={styles.telemetryLabel}>Retiro en 5 min</Text>
               </View>
-              <View style={styles.telemetryBadge}>
+              <View
+                {...(Platform.OS === 'web' ? ({ dataSet: { heroChip: 'true' } } as any) : {})}
+                style={styles.telemetryBadge}
+              >
                 <Text style={styles.telemetryLabel}>Cobertura Total</Text>
               </View>
             </View>
@@ -184,8 +196,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             style={[
               styles.authCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 24, 36, 0.92)' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : '#E2E8F0',
+                backgroundColor: isDark ? 'rgba(8, 19, 36, 0.80)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.26)' : 'rgba(2, 132, 199, 0.18)',
               },
             ]}
           >
@@ -230,7 +242,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation?.navigate?.('ForgotPassword')}>
                   <Text
                     variant="caption"
-                    style={[styles.link, { color: isDark ? '#38BDF8' : colors.ocean[600] }]}
+                    style={[styles.link, { color: isDark ? '#22D3EE' : colors.ocean[600] }]}
                   >
                     ¿Olvidaste tu contraseña?
                   </Text>
@@ -266,7 +278,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation?.navigate?.('Register')}>
                   <Text
                     variant="caption"
-                    style={[styles.link, { color: isDark ? '#F59E0B' : colors.ocean[500] }]}
+                    style={[styles.link, { color: isDark ? '#FBBF24' : colors.ocean[600] }]}
                   >
                     Registrate acá
                   </Text>
@@ -309,7 +321,12 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.25)',
+    borderColor: 'rgba(34, 211, 238, 0.28)',
+    shadowColor: '#06B6D4',
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.28,
+    shadowRadius: 28,
+    elevation: 10,
   },
   heroPanelDesktop: {
     flex: 1.1,
@@ -331,38 +348,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(9, 12, 16, 0.85)',
+    backgroundColor: 'rgba(4, 14, 28, 0.80)',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.4)',
+    borderColor: 'rgba(34, 211, 238, 0.45)',
     marginBottom: spacing.xs,
   },
   brandPillDot: {
-    color: '#38BDF8',
+    color: '#22D3EE',
     fontSize: 8,
   },
   brandPillText: {
-    color: '#38BDF8',
+    color: '#22D3EE',
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
   heroBrandTitle: {
-    color: '#F1F5F9',
+    color: '#F8FAFC',
     fontSize: 32,
     fontWeight: '800',
     lineHeight: 38,
   },
   heroBrandTagline: {
-    color: '#F59E0B',
+    color: '#FCD34D',
     fontSize: 16,
     fontWeight: '600',
     lineHeight: 22,
   },
   heroBrandDesc: {
-    color: '#94A3B8',
+    color: '#CBD5E1',
     fontSize: 13,
     lineHeight: 19,
     maxWidth: 440,
@@ -377,12 +394,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(18, 24, 36, 0.85)',
+    backgroundColor: 'rgba(6, 20, 40, 0.80)',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderColor: 'rgba(56, 189, 248, 0.22)',
   },
   telemetryIcon: {
     fontSize: 13,

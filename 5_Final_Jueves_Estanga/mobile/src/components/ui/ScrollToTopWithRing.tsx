@@ -41,19 +41,20 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
     onPress();
   };
 
-  const primaryColor = isDark ? '#38BDF8' : colors.ocean[600];
-  const trackColor = isDark ? 'rgba(245, 158, 11, 0.25)' : 'rgba(0, 0, 0, 0.08)';
+  const primaryColor = isDark ? '#22D3EE' : colors.ocean[600];
+  const trackColor = isDark ? 'rgba(34, 211, 238, 0.18)' : 'rgba(0, 0, 0, 0.08)';
 
   return (
     <TouchableOpacity
       activeOpacity={0.82}
       onPress={handlePress}
+      {...(Platform.OS === 'web' ? ({ dataSet: { scrollTopBtn: 'true' } } as any) : {})}
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? 'rgba(18, 24, 36, 0.92)' : 'rgba(255, 255, 255, 0.96)',
+          backgroundColor: isDark ? 'rgba(8, 19, 36, 0.88)' : 'rgba(255, 255, 255, 0.96)',
           shadowColor: primaryColor,
-          borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : 'rgba(0, 0, 0, 0.1)',
+          borderColor: isDark ? 'rgba(34, 211, 238, 0.35)' : 'rgba(2, 132, 199, 0.18)',
         },
         style,
       ]}
