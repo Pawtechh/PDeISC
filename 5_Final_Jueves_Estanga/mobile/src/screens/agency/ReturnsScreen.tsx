@@ -198,7 +198,11 @@ export const ReturnsScreen: React.FC = () => {
 
       let msg = `La tabla "${currentRental.board?.titulo || 'de surf'}" fue recibida en sede.`;
       if (!isWashed) {
-        msg += ` MULTA APLICADA: Se debitó $${res.data?.multaLavado?.toLocaleString('es-AR') || '10.000'} ARS por salitre.`;
+        msg += ` MULTA SALITRE: $${res.data?.multaLavado?.toLocaleString('es-AR') || '10.000'} ARS.`;
+      }
+      if ((res.data as any)?.excesoHorario?.isOvertime) {
+        const eh = (res.data as any).excesoHorario;
+        msg += ` EXCESO HORARIO (+${eh.overtimeHoursCharged}h): +$${Number(eh.overtimeChargeArs || 0).toLocaleString('es-AR')} ARS.`;
       }
       if (hasDamage) {
         msg += ` REVISIÓN ACTIVA: Pasa a peritaje de dueño (24h).`;
@@ -335,8 +339,20 @@ export const ReturnsScreen: React.FC = () => {
                   <Stack spacing="sm">
                     <Row justify="space-between" align="center">
                       <Badge
-                        label={rental.estado === 'EN_CURSO' ? 'EN EL AGUA' : 'ACTIVA'}
-                        variant={rental.estado === 'EN_CURSO' ? 'warning' : 'ocean'}
+                        label={
+                          rental.fechaFinEstimada && Date.now() > new Date(rental.fechaFinEstimada).getTime() + 15 * 60000
+                            ? 'FUERA DE HORARIO (+RECARGO)'
+                            : rental.estado === 'EN_CURSO'
+                            ? 'EN EL AGUA'
+                            : 'ACTIVA'
+                        }
+                        variant={
+                          rental.fechaFinEstimada && Date.now() > new Date(rental.fechaFinEstimada).getTime() + 15 * 60000
+                            ? 'danger'
+                            : rental.estado === 'EN_CURSO'
+                            ? 'warning'
+                            : 'ocean'
+                        }
                       />
                       <Text variant="caption" color={theme.subtext}>
                         Pase #{rental.id ? rental.id.slice(0, 8) : '--------'}
@@ -346,7 +362,7 @@ export const ReturnsScreen: React.FC = () => {
                     <Text variant="h2" color={theme.text}>{rental.board?.titulo || 'Tabla de Surf'}</Text>
 
                     <Text variant="body" color={theme.subtext}>
-                      Retiro: {safeFormatTime(rental.fechaInicio)} • Duración: {rental.horas || 1} hs
+                      Inicio: {safeFormatTime(rental.fechaInicio)} • Fin pactado: {safeFormatTime(rental.fechaFinEstimada)} ({rental.horas || 1} hs)
                     </Text>
 
                     {rental.consumer?.nombre && (

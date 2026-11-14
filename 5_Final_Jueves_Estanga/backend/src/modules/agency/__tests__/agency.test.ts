@@ -142,6 +142,73 @@ describe('Agency Module Tests (MP7 Mostrador Sede Central Playa Grande, Check-in
         })
       );
     });
+
+    it('REGLA RETIRO TARDÍO: si retira 4h después, permite check-in sin extender fechaFinEstimada y cobra todas las horas', async () => {
+      const inicioHace4h = new Date(Date.now() - 4 * 3600 * 1000);
+      const finEn4h = new Date(Date.now() + 4 * 3600 * 1000);
+      const lateRental = {
+        ...mockRental,
+        id: 'rental-late-4h',
+        horas: 8,
+        precioTotal: 32000,
+        fechaInicio: inicioHace4h,
+        fechaFinEstimada: finEn4h,
+      };
+      (prisma.rental.findUnique as jest.Mock).mockResolvedValue(lateRental);
+      (prisma.rental.update as jest.Mock).mockResolvedValue({ ...lateRental, estado: 'EN_CURSO' });
+      (prisma.board.update as jest.Mock).mockResolvedValue({ ...mockBoard, estado: 'ALQUILADA' });
+      (prisma.notification.createMany as jest.Mock).mockResolvedValue({ count: 2 });
+
+      const res = await request(app)
+        .post('/api/agency/checkin')
+        .set('Authorization', `Bearer ${agencyToken}`)
+        .send({
+          rentalId: 'rental-late-4h',
+          fotosRetiro: ['https://images.unsplash.com/photo-1.jpg'],
+          firmaRetiroUrl: 'data:image/png;base64,mocksignature',
+          dniVerificado: true,
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.retiroTardio.tardio).toBe(true);
+      expect(res.body.data.retiroTardio.minutosDemora).toBeGreaterThanOrEqual(239);
+      expect(new Date(res.body.data.retiroTardio.fechaFinPactada).toISOString()).toBe(finEn4h.toISOString());
+    });
+
+    it('REGLA NO-SHOW EXPIRADO: si venció la hora de devolución sin retiro, liquida No-Show cobrando el servicio y liberando la tabla', async () => {
+      const expiredRental = {
+        ...mockRental,
+        id: 'rental-expired-noshow',
+        horas: 4,
+        precioTotal: 18000,
+        fechaInicio: new Date(Date.now() - 6 * 3600 * 1000),
+        fechaFinEstimada: new Date(Date.now() - 2 * 3600 * 1000),
+        estado: 'ACTIVA',
+      };
+      (prisma.rental.findUnique as jest.Mock).mockResolvedValue(expiredRental);
+      (prisma.rental.update as jest.Mock).mockResolvedValue({ ...expiredRental, estado: 'DEVUELTA' });
+      (prisma.board.update as jest.Mock).mockResolvedValue({ ...mockBoard, estado: 'DISPONIBLE' });
+      (prisma.notification.createMany as jest.Mock).mockResolvedValue({ count: 2 });
+
+      const res = await request(app)
+        .post('/api/agency/no-show')
+        .set('Authorization', `Bearer ${agencyToken}`)
+        .send({ rentalId: 'rental-expired-noshow' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.esNoShow).toBe(true);
+      expect(res.body.data.servicioCobrado).toBe(18000);
+      expect(prisma.rental.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ estado: 'DEVUELTA' }),
+        })
+      );
+      expect(prisma.board.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: { estado: 'DISPONIBLE' },
+        })
+      );
+    });
   });
 
   describe('POST /api/agency/checkout (Devolución en Sede & Multa Salitre)', () => {

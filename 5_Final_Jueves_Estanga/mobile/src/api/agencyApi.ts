@@ -146,6 +146,12 @@ export const agencyApi = apiSlice.injectEndpoints({
           lavada: boolean;
           tieneDanio: boolean;
           estadoFinal: string;
+          excesoHorario?: {
+            isOvertime: boolean;
+            overtimeMinutes: number;
+            overtimeHoursCharged: number;
+            overtimeChargeArs: number;
+          };
         };
       },
       AgencyCheckOutRequest
@@ -166,6 +172,33 @@ export const agencyApi = apiSlice.injectEndpoints({
         'OwnerRevisions',
       ],
     }),
+
+    markNoShow: builder.mutation<
+      {
+        status: string;
+        data: {
+          rental: Rental;
+          esNoShow: boolean;
+          servicioCobrado: number;
+        };
+      },
+      { rentalId: string }
+    >({
+      query: (body) => ({
+        url: '/agency/no-show',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [
+        'Rental',
+        'Schedule',
+        'AgencyRental',
+        'Board',
+        'OwnerBoards',
+        'Metrics',
+        'AgencyMetrics',
+      ],
+    }),
   }),
 });
 
@@ -178,4 +211,5 @@ export const {
   useResolveVendorRequestMutation,
   useCheckInMutation,
   useCheckOutMutation,
+  useMarkNoShowMutation,
 } = agencyApi;

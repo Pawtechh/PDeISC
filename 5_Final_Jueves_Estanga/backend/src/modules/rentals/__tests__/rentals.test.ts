@@ -356,5 +356,35 @@ describe('Rentals Module Tests (MP5 Cotizaciones, Reservas y Cancelación Escalo
       expect(res.status).toBe(403);
       expect(res.body.code).toBe('FORBIDDEN');
     });
+
+    it('debe rechazar cancelación y cobrar servicio si venció la ventana de retiro antes del horario de devolución', async () => {
+      const mockRentalExpired = {
+        id: 'rental-expired-cancel',
+        consumerId: mockConsumer.id,
+        boardId: mockBoard.id,
+        estado: 'ACTIVA',
+        precioTotal: 16000,
+        fechaInicio: new Date(Date.now() - 5 * 3600 * 1000),
+        fechaFinEstimada: new Date(Date.now() - 1 * 3600 * 1000),
+        board: mockBoard,
+      };
+      (prisma.rental.findUnique as jest.Mock).mockResolvedValue(mockRentalExpired);
+      (prisma.rental.update as jest.Mock).mockResolvedValue({ ...mockRentalExpired, estado: 'DEVUELTA' });
+      (prisma.board.update as jest.Mock).mockResolvedValue({ ...mockBoard, estado: 'DISPONIBLE' });
+      (prisma.notification.createMany as jest.Mock).mockResolvedValue({ count: 2 });
+
+      const res = await request(app)
+        .post('/api/rentals/rental-expired-cancel/cancel')
+        .set('Authorization', `Bearer ${consumerToken}`)
+        .send({ motivo: 'Intento cancelar turno vencido' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.code).toBe('CANNOT_CANCEL');
+      expect(prisma.rental.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ estado: 'DEVUELTA' }),
+        })
+      );
+    });
   });
 });

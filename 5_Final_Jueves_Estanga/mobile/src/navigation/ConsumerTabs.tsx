@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Waves, FileText, Award, User } from 'lucide-react-native';
 import { CatalogScreen } from '../screens/consumer/CatalogScreen';
@@ -19,7 +19,7 @@ export const ConsumerTabs: React.FC = () => {
 
   return (
     <Tab.Navigator
-      detachInactiveScreens={true}
+      detachInactiveScreens
       screenOptions={getTabNavigatorScreenOptions(theme, isDesktop, 520, 11)}
     >
       <Tab.Screen

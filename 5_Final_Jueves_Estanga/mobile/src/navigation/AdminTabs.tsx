@@ -18,7 +18,7 @@ export const AdminTabs: React.FC = () => {
 
   return (
     <Tab.Navigator
-      detachInactiveScreens={true}
+      detachInactiveScreens
       screenOptions={getTabNavigatorScreenOptions(theme, isDesktop, 560, 11)}
     >
       <Tab.Screen

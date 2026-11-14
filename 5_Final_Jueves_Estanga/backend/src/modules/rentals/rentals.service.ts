@@ -9,6 +9,7 @@ import {
   RentalQuoteResult,
   CancellationRefundResult,
 } from './pricing.engine';
+import { settleNoShowRental, sweepExpiredNoShows } from './rentalLifecycle';
 import { QuoteRentalInput, CreateRentalInput, CancelRentalInput } from './rentals.schemas';
 
 export class RentalsService {
@@ -251,6 +252,7 @@ export class RentalsService {
    * Obtiene todos los alquileres del consumidor actual
    */
   async getMyRentals(consumerId: string) {
+    await sweepExpiredNoShows({ consumerId }, new Date());
     const rentals = await prisma.rental.findMany({
       where: { consumerId },
       orderBy: { fechaInicio: 'desc' },
@@ -355,7 +357,17 @@ export class RentalsService {
       throw new AppError('CANNOT_CANCEL', `No se puede cancelar un alquiler en estado ${rental.estado}`, 400);
     }
 
-    const refund = calculateCancellationRefund(Number(rental.precioTotal), rental.fechaInicio);
+    const now = new Date();
+    if (rental.fechaFinEstimada && now.getTime() >= new Date(rental.fechaFinEstimada).getTime()) {
+      await settleNoShowRental(rental, now);
+      throw new AppError(
+        'CANNOT_CANCEL',
+        'El turno ya superó el horario pactado de devolución sin retiro; el servicio quedó cobrado íntegramente.',
+        400
+      );
+    }
+
+    const refund = calculateCancellationRefund(Number(rental.precioTotal), rental.fechaInicio, now);
 
     const updated = await prisma.rental.update({
       where: { id: rentalId },
@@ -373,12 +385,17 @@ export class RentalsService {
       });
     }
 
-    // Liberar pagos y pre-autorizaciones de garantía asociadas
+    // Si hay reembolso (> 0%), reembolsar cobros; si la penalidad es 100% (o turno ya iniciado),
+    // mantener cobrado el servicio ('APROBADO') y liberar únicamente la pre-autorización de garantía.
     if (prisma.payment?.updateMany) {
+      const refundableStates =
+        refund.montoReembolso > 0
+          ? ['APROBADO', 'PRE_AUTORIZADO', 'PENDIENTE']
+          : ['PRE_AUTORIZADO', 'PENDIENTE'];
       await prisma.payment.updateMany({
         where: {
           rentalId,
-          estado: { in: ['APROBADO', 'PRE_AUTORIZADO', 'PENDIENTE'] },
+          estado: { in: refundableStates as any },
         },
         data: {
           estado: 'REEMBOLSADO',

@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, EmptyState, Input } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
-import { useGetScheduleQuery, useCheckInMutation } from '../../api/agencyApi';
+import { useGetScheduleQuery, useCheckInMutation, useMarkNoShowMutation } from '../../api/agencyApi';
 import { Rental } from '../../api/rentalsApi';
 import { Board } from '../../api/boardsApi';
 import { SignaturePad } from '../../components/ui/SignaturePad';
@@ -19,6 +19,7 @@ export const DeliveriesScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
   const { data, isFetching, refetch } = useGetScheduleQuery(undefined, { pollingInterval: 8000 });
   const [checkIn, { isLoading: isCheckingIn }] = useCheckInMutation();
+  const [markNoShow, { isLoading: isMarkingNoShow }] = useMarkNoShowMutation();
   const { signContractWithBiometrics } = useBiometricSignature();
 
   const [selectedRental, setSelectedRental] = useState<Rental | null>(null);
@@ -61,12 +62,20 @@ export const DeliveriesScreen: React.FC = () => {
     });
 
     if (match) {
-      const { isEarly, horaPactada, fechaPactada, tiempoFaltanteStr } = getEarlyStatus(match);
+      const { isEarly, isExpiredNoShow, horaPactada, horaFinPactada, fechaPactada, tiempoFaltanteStr } = getEarlyStatus(match);
       if (isEarly) {
         setSelectedRental(null);
         setFeedbackBanner({
           type: 'error',
           text: `Retiro anticipado bloqueado para QR ${scanned.code} (${match.board?.titulo} • ${match.consumer?.nombre || 'Surfista'}): El turno pactado es el ${fechaPactada} a las ${horaPactada} hs (faltan ${tiempoFaltanteStr}). La entrega en sede solo se habilita 15 minutos antes de la hora pactada.`,
+        });
+        return;
+      }
+      if (isExpiredNoShow) {
+        setSelectedRental(null);
+        setFeedbackBanner({
+          type: 'error',
+          text: `Turno vencido (No-Show) para QR ${scanned.code}: la devolución pactada a las ${horaFinPactada} hs ya pasó sin retiro en sede. Liquidá el No-Show desde la tarjeta para liberar la tabla manteniendo el cobro del servicio.`,
         });
         return;
       }
@@ -118,11 +127,26 @@ export const DeliveriesScreen: React.FC = () => {
   });
 
   const getEarlyStatus = (rental: Rental | null) => {
-    if (!rental?.fechaInicio) return { isEarly: false, horaPactada: '', fechaPactada: '', tiempoFaltanteStr: '' };
+    if (!rental?.fechaInicio) {
+      return {
+        isEarly: false,
+        isLatePickup: false,
+        isExpiredNoShow: false,
+        horaPactada: '',
+        horaFinPactada: '',
+        fechaPactada: '',
+        tiempoFaltanteStr: '',
+        demoraStr: '',
+      };
+    }
     const dInicio = new Date(rental.fechaInicio);
+    const dFin = rental.fechaFinEstimada
+      ? new Date(rental.fechaFinEstimada)
+      : new Date(dInicio.getTime() + Number(rental.horas || 1) * 3600 * 1000);
     const now = new Date();
     const diffMs = dInicio.getTime() - 15 * 60 * 1000 - now.getTime();
     const horaPactada = dInicio.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    const horaFinPactada = dFin.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
     const fechaPactada = dInicio.toLocaleDateString('es-AR');
 
     if (diffMs > 0) {
@@ -131,17 +155,71 @@ export const DeliveriesScreen: React.FC = () => {
       const tiempoFaltanteStr = diffHours > 0 ? `${diffHours}h ${diffMin}m` : `${diffMin} min`;
       return {
         isEarly: true,
+        isLatePickup: false,
+        isExpiredNoShow: false,
         horaPactada,
+        horaFinPactada,
         fechaPactada,
         tiempoFaltanteStr,
+        demoraStr: '',
       };
     }
+
+    if (now.getTime() >= dFin.getTime()) {
+      return {
+        isEarly: false,
+        isLatePickup: false,
+        isExpiredNoShow: true,
+        horaPactada,
+        horaFinPactada,
+        fechaPactada,
+        tiempoFaltanteStr: '',
+        demoraStr: '',
+      };
+    }
+
+    const lateMs = now.getTime() - dInicio.getTime();
+    if (lateMs > 60 * 1000) {
+      const lateHours = Math.floor(lateMs / (1000 * 60 * 60));
+      const lateMin = Math.floor((lateMs % (1000 * 60 * 60)) / (1000 * 60));
+      const demoraStr = lateHours > 0 ? `${lateHours}h ${lateMin}m` : `${lateMin} min`;
+      return {
+        isEarly: false,
+        isLatePickup: true,
+        isExpiredNoShow: false,
+        horaPactada,
+        horaFinPactada,
+        fechaPactada,
+        tiempoFaltanteStr: '',
+        demoraStr,
+      };
+    }
+
     return {
       isEarly: false,
+      isLatePickup: false,
+      isExpiredNoShow: false,
       horaPactada,
+      horaFinPactada,
       fechaPactada,
       tiempoFaltanteStr: '',
+      demoraStr: '',
     };
+  };
+
+  const handleSettleNoShow = async (rental: Rental) => {
+    if (isMarkingNoShow) return;
+    try {
+      await markNoShow({ rentalId: rental.id }).unwrap();
+      setFeedbackBanner({
+        type: 'success',
+        text: `No-Show liquidado para "${rental.board?.titulo}": servicio cobrado íntegramente ($${rental.precioTotal} ARS) y tabla liberada a DISPONIBLE.`,
+      });
+      refetch();
+    } catch (err: any) {
+      const msg = err?.data?.message || err?.message || 'No se pudo liquidar el No-Show.';
+      setFeedbackBanner({ type: 'error', text: msg });
+    }
   };
 
   const handleConfirmCheckIn = async () => {
@@ -262,7 +340,16 @@ export const DeliveriesScreen: React.FC = () => {
         ) : (
           <View style={[styles.gridContainer, numColumns > 1 && styles.gridMultiColumn]}>
             {deliveries.map((rental) => {
-              const { isEarly, horaPactada, fechaPactada, tiempoFaltanteStr } = getEarlyStatus(rental);
+              const {
+                isEarly,
+                isLatePickup,
+                isExpiredNoShow,
+                horaPactada,
+                horaFinPactada,
+                fechaPactada,
+                tiempoFaltanteStr,
+                demoraStr,
+              } = getEarlyStatus(rental);
               return (
                 <View
                   key={rental.id}
@@ -275,8 +362,22 @@ export const DeliveriesScreen: React.FC = () => {
                     <Stack spacing="sm">
                       <Row justify="space-between" align="center">
                         <Badge
-                          label={isEarly ? `PROGRAMADO (${horaPactada} hs)` : 'LISTA PARA RETIRO'}
-                          variant={isEarly ? 'warning' : 'success'}
+                          label={
+                            isExpiredNoShow
+                              ? 'VENCIDO • NO-SHOW'
+                              : isLatePickup
+                              ? `RETIRO TARDÍO (+${demoraStr})`
+                              : isEarly
+                              ? `PROGRAMADO (${horaPactada} hs)`
+                              : 'LISTA PARA RETIRO'
+                          }
+                          variant={
+                            isExpiredNoShow
+                              ? 'danger'
+                              : isLatePickup || isEarly
+                              ? 'warning'
+                              : 'success'
+                          }
                         />
                         <Text variant="caption" color={theme.subtext}>
                           Pase #{rental.id.slice(0, 8)}
@@ -285,7 +386,7 @@ export const DeliveriesScreen: React.FC = () => {
 
                       <Text variant="h2" color={theme.text}>{rental.board?.titulo}</Text>
                       <Text variant="body" color={theme.subtext}>
-                        Duración: {rental.horas} hs • Total pagado: ${rental.precioTotal} ARS
+                        Duración: {rental.horas} hs • Devolución pactada: {horaFinPactada} hs • Total: ${rental.precioTotal} ARS
                       </Text>
 
                       {isEarly && (
@@ -307,6 +408,44 @@ export const DeliveriesScreen: React.FC = () => {
                         </Card>
                       )}
 
+                      {isLatePickup && (
+                        <Card
+                          padding="xs"
+                          style={{
+                            backgroundColor: theme.warningBg,
+                            borderColor: theme.warningBorder,
+                            borderWidth: 1,
+                          }}
+                        >
+                          <Text
+                            variant="caption"
+                            color={theme.warningText}
+                            style={{ fontWeight: '600', fontSize: 11 }}
+                          >
+                            Retiro tardío ({demoraStr} de demora desde las {horaPactada} hs): se cobran igual las {rental.horas} hs reservadas y la devolución sigue pactada a las {horaFinPactada} hs.
+                          </Text>
+                        </Card>
+                      )}
+
+                      {isExpiredNoShow && (
+                        <Card
+                          padding="xs"
+                          style={{
+                            backgroundColor: theme.dangerBg,
+                            borderColor: theme.dangerBorder,
+                            borderWidth: 1,
+                          }}
+                        >
+                          <Text
+                            variant="caption"
+                            color={theme.dangerText}
+                            style={{ fontWeight: '600', fontSize: 11 }}
+                          >
+                            Horario de devolución ({horaFinPactada} hs) vencido sin retiro: corresponde cobrar el servicio íntegramente (No-Show) y liberar la tabla.
+                          </Text>
+                        </Card>
+                      )}
+
                       <Row justify="flex-end" spacing="sm">
                         {rental.board && (
                           <Button
@@ -321,12 +460,22 @@ export const DeliveriesScreen: React.FC = () => {
                             }
                           />
                         )}
-                        <Button
-                          title={isEarly ? `Bloqueado (${horaPactada} hs)` : 'Procesar Entrega'}
-                          size="sm"
-                          variant={isEarly ? 'secondary' : 'primary'}
-                          disabled={isEarly}
-                          testID="btn-procesar-entrega"
+                        {isExpiredNoShow ? (
+                          <Button
+                            title="Cobrar No-Show y Liberar"
+                            size="sm"
+                            variant="primary"
+                            isLoading={isMarkingNoShow}
+                            onPress={() => handleSettleNoShow(rental)}
+                            testID="btn-liquidar-no-show"
+                          />
+                        ) : (
+                          <Button
+                            title={isEarly ? `Bloqueado (${horaPactada} hs)` : 'Procesar Entrega'}
+                            size="sm"
+                            variant={isEarly ? 'secondary' : 'primary'}
+                            disabled={isEarly}
+                            testID="btn-procesar-entrega"
                           onPress={() => {
                             if (isEarly) {
                               setFeedbackBanner({
@@ -345,6 +494,7 @@ export const DeliveriesScreen: React.FC = () => {
                             setModalError(null);
                           }}
                         />
+                        )}
                       </Row>
                     </Stack>
                   </Card>

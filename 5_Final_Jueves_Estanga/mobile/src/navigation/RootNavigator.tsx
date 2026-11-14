@@ -420,8 +420,8 @@ export function RootNavigator() {
     ...baseNavTheme,
     colors: {
       ...baseNavTheme.colors,
-      background: Platform.OS === 'web' ? 'transparent' : theme.background,
-      card: Platform.OS === 'web' ? 'transparent' : theme.surface,
+      background: theme.background,
+      card: theme.surface,
     },
   };
 

@@ -38,6 +38,8 @@ export interface Rental {
   puntosGanados: number;
   puntosUsados: number;
   estado: 'PENDIENTE' | 'ACTIVA' | 'EN_CURSO' | 'PENDIENTE_REVISION' | 'DEVUELTA' | 'RECLAMO' | 'CANCELADA';
+  fotosRetiro?: any;
+  firmaRetiroUrl?: string | null;
   contratoHash?: string;
   versionTerminos?: string;
   board?: {

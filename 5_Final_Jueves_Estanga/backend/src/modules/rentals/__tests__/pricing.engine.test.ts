@@ -2,6 +2,8 @@ import {
   calculateRentalQuote,
   calculateCancellationRefund,
   validateOperatingHours,
+  evaluateCheckInTiming,
+  evaluateOvertimeReturn,
 } from '../pricing.engine';
 
 describe('Pricing Engine Pure Tests (MP5 Reglas de Negocio)', () => {
@@ -179,6 +181,41 @@ describe('Pricing Engine Pure Tests (MP5 Reglas de Negocio)', () => {
       const validation = validateOperatingHours(inicio, fin);
       expect(validation.isValid).toBe(false);
       expect(validation.error).toContain('21:00');
+    });
+  });
+
+  describe('Regla de Puntualidad, Retiro Tardío y No-Show', () => {
+    it('si retira 4 horas tarde antes de la devolución, mantiene el turno original sin extender la hora de fin', () => {
+      const inicio = new Date('2026-11-10T10:00:00Z');
+      const fin = new Date('2026-11-10T18:00:00Z');
+      const retiroTardio = new Date('2026-11-10T14:00:00Z'); // +4 horas tarde
+
+      const timing = evaluateCheckInTiming(inicio, fin, retiroTardio);
+      expect(timing.status).toBe('LATE_PICKUP');
+      expect(timing.latePickupMinutes).toBe(240);
+      expect(timing.remainingMinutes).toBe(240);
+      expect(timing.effectiveFechaInicio.toISOString()).toBe(inicio.toISOString());
+      expect(timing.effectiveFechaFinEstimada.toISOString()).toBe(fin.toISOString());
+    });
+
+    it('si no retira antes del horario de devolución (No-Show), marca EXPIRED_NO_SHOW', () => {
+      const inicio = new Date('2026-11-10T10:00:00Z');
+      const fin = new Date('2026-11-10T14:00:00Z');
+      const vencido = new Date('2026-11-10T14:05:00Z');
+
+      const timing = evaluateCheckInTiming(inicio, fin, vencido);
+      expect(timing.status).toBe('EXPIRED_NO_SHOW');
+      expect(timing.remainingMinutes).toBe(0);
+    });
+
+    it('debe cobrar exceso horario si devuelve más de 15 min después de fechaFinEstimada aunque haya retirado tarde', () => {
+      const fin = new Date('2026-11-10T18:00:00Z');
+      const devolucionTardia = new Date('2026-11-10T19:30:00Z'); // 1h 30m tarde -> cobra 2h extra
+
+      const overtime = evaluateOvertimeReturn(fin, 8, 32000, devolucionTardia);
+      expect(overtime.isOvertime).toBe(true);
+      expect(overtime.overtimeHoursCharged).toBe(2);
+      expect(overtime.overtimeChargeArs).toBe(8000);
     });
   });
 });

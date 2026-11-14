@@ -230,3 +230,119 @@ export function validateOperatingHours(fechaInicio: Date, fechaFin: Date): { isV
 
   return { isValid: true };
 }
+
+export interface CheckInTimingEvaluation {
+  status: 'TOO_EARLY' | 'ON_TIME' | 'LATE_PICKUP' | 'EXPIRED_NO_SHOW';
+  minutesBeforeStart: number;
+  latePickupMinutes: number;
+  remainingMinutes: number;
+  effectiveFechaInicio: Date;
+  effectiveFechaFinEstimada: Date;
+}
+
+/**
+ * Evalúa la puntualidad en el retiro:
+ * - Hasta 15 min antes de `fechaInicio`: permitido.
+ * - Retiro tardío (`ahora > fechaInicio` y `ahora < fechaFinEstimada`): permitido, pero las horas
+ *   contratadas siguen corriendo desde `fechaInicio` hasta `fechaFinEstimada` sin prórroga ni descuentos.
+ * - Ventana expirada (`ahora >= fechaFinEstimada`): No-Show — servicio cobrado íntegro.
+ */
+export function evaluateCheckInTiming(
+  fechaInicio: Date,
+  fechaFinEstimada: Date,
+  ahora: Date = new Date()
+): CheckInTimingEvaluation {
+  const startMs = fechaInicio.getTime();
+  const endMs = fechaFinEstimada.getTime();
+  const nowMs = ahora.getTime();
+  const earlyWindowMs = 15 * 60 * 1000;
+
+  if (nowMs < startMs - earlyWindowMs) {
+    const minutesBeforeStart = Math.max(1, Math.ceil((startMs - earlyWindowMs - nowMs) / 60000));
+    return {
+      status: 'TOO_EARLY',
+      minutesBeforeStart,
+      latePickupMinutes: 0,
+      remainingMinutes: Math.max(0, Math.round((endMs - startMs) / 60000)),
+      effectiveFechaInicio: fechaInicio,
+      effectiveFechaFinEstimada: fechaFinEstimada,
+    };
+  }
+
+  if (nowMs >= endMs) {
+    return {
+      status: 'EXPIRED_NO_SHOW',
+      minutesBeforeStart: 0,
+      latePickupMinutes: Math.max(1, Math.round((nowMs - startMs) / 60000)),
+      remainingMinutes: 0,
+      effectiveFechaInicio: fechaInicio,
+      effectiveFechaFinEstimada: fechaFinEstimada,
+    };
+  }
+
+  const graceLateMs = 60 * 1000;
+  if (nowMs > startMs + graceLateMs) {
+    return {
+      status: 'LATE_PICKUP',
+      minutesBeforeStart: 0,
+      latePickupMinutes: Math.round((nowMs - startMs) / 60000),
+      remainingMinutes: Math.max(0, Math.round((endMs - nowMs) / 60000)),
+      effectiveFechaInicio: fechaInicio,
+      effectiveFechaFinEstimada: fechaFinEstimada,
+    };
+  }
+
+  return {
+    status: 'ON_TIME',
+    minutesBeforeStart: 0,
+    latePickupMinutes: 0,
+    remainingMinutes: Math.max(0, Math.round((endMs - nowMs) / 60000)),
+    effectiveFechaInicio: fechaInicio,
+    effectiveFechaFinEstimada: fechaFinEstimada,
+  };
+}
+
+export interface OvertimeReturnEvaluation {
+  isOvertime: boolean;
+  overtimeMinutes: number;
+  overtimeHoursCharged: number;
+  overtimeChargeArs: number;
+}
+
+/**
+ * Calcula recargo por devolución fuera de término respecto de `fechaFinEstimada`
+ * (sin extender el turno por retiros tardíos; tolerancia operativa de 15 minutos).
+ */
+export function evaluateOvertimeReturn(
+  fechaFinEstimada: Date,
+  horasContratadas: number,
+  precioBase: number,
+  ahora: Date = new Date()
+): OvertimeReturnEvaluation {
+  const endMs = fechaFinEstimada.getTime();
+  const nowMs = ahora.getTime();
+  const graceMs = 15 * 60 * 1000;
+
+  if (nowMs <= endMs + graceMs) {
+    return {
+      isOvertime: false,
+      overtimeMinutes: 0,
+      overtimeHoursCharged: 0,
+      overtimeChargeArs: 0,
+    };
+  }
+
+  const diffMs = nowMs - endMs;
+  const overtimeMinutes = Math.max(16, Math.round(diffMs / 60000));
+  const overtimeHoursCharged = Math.max(1, Math.ceil(diffMs / (60 * 60 * 1000)));
+  const hourlyRate =
+    horasContratadas > 0 ? Math.round(precioBase / horasContratadas) : Math.round(precioBase);
+  const overtimeChargeArs = Math.max(0, hourlyRate * overtimeHoursCharged);
+
+  return {
+    isOvertime: true,
+    overtimeMinutes,
+    overtimeHoursCharged,
+    overtimeChargeArs,
+  };
+}

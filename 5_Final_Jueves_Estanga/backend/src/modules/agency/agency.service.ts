@@ -4,6 +4,14 @@ import { AppError } from '../../middlewares/errorHandler';
 import { BUSINESS } from '../../constants/business';
 import { systemConfig } from '../../config/systemConfig';
 import { vendorRegistry } from '../../config/vendorRegistry';
+import {
+  evaluateCheckInTiming,
+  evaluateOvertimeReturn,
+} from '../rentals/pricing.engine';
+import {
+  settleNoShowRental,
+  sweepExpiredNoShows,
+} from '../rentals/rentalLifecycle';
 import { AgencyCheckInInput, AgencyCheckOutInput, UpdateCommissionInput } from './agency.schemas';
 
 export class AgencyService {
@@ -55,15 +63,18 @@ export class AgencyService {
     }
 
     const now = new Date();
-    const inicioTime = new Date(rental.fechaInicio).getTime();
-    const ventanaAnticipacionMs = 15 * 60 * 1000;
+    const fechaInicio = new Date(rental.fechaInicio);
+    const fechaFinEstimada = rental.fechaFinEstimada
+      ? new Date(rental.fechaFinEstimada)
+      : new Date(fechaInicio.getTime() + Number(rental.horas || 1) * 3600 * 1000);
+    const timing = evaluateCheckInTiming(fechaInicio, fechaFinEstimada, now);
 
-    if (now.getTime() < inicioTime - ventanaAnticipacionMs) {
-      const horaPactada = new Date(rental.fechaInicio).toLocaleTimeString('es-AR', {
+    if (timing.status === 'TOO_EARLY') {
+      const horaPactada = fechaInicio.toLocaleTimeString('es-AR', {
         hour: '2-digit',
         minute: '2-digit',
       });
-      const fechaPactada = new Date(rental.fechaInicio).toLocaleDateString('es-AR');
+      const fechaPactada = fechaInicio.toLocaleDateString('es-AR');
       throw new AppError(
         'EARLY_CHECKIN_NOT_ALLOWED',
         `Retiro anticipado no permitido. El horario pactado de retiro es el ${fechaPactada} a las ${horaPactada} hs. El despacho en mostrador se habilita con un máximo de 15 minutos de anticipación.`,
@@ -71,6 +82,20 @@ export class AgencyService {
       );
     }
 
+    if (timing.status === 'EXPIRED_NO_SHOW') {
+      await settleNoShowRental(rental, now);
+      const horaFin = fechaFinEstimada.toLocaleTimeString('es-AR', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      throw new AppError(
+        'RENTAL_WINDOW_EXPIRED_NO_SHOW',
+        `El turno expiró antes del horario de devolución (${horaFin} hs) sin retiro en sede. Según política vigente, el servicio quedó cobrado íntegramente y la tabla fue liberada.`,
+        400
+      );
+    }
+
+    // Importante: aunque retire 1h, 2h o 4h tarde, NO se desplaza fechaInicio ni fechaFinEstimada.
     const updatedRental = await prisma.rental.update({
       where: { id: rental.id },
       data: {
@@ -91,12 +116,19 @@ export class AgencyService {
       },
     });
 
+    const horaInicioStr = fechaInicio.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    const horaFinStr = fechaFinEstimada.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    const lateNote =
+      timing.status === 'LATE_PICKUP'
+        ? ` Retiro tardío (${timing.latePickupMinutes} min de demora desde las ${horaInicioStr} hs): las ${rental.horas}h contratadas corren igualmente sin prórroga hasta las ${horaFinStr} hs.`
+        : '';
+
     await prisma.notification.createMany({
       data: [
         {
           userId: rental.consumerId,
-          titulo: '¡Tabla Retirada en Sede!',
-          mensaje: `Retiraste ${rental.board.titulo}. Horario de devolución estimada: ${new Date(rental.fechaFinEstimada).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs.`,
+          titulo: timing.status === 'LATE_PICKUP' ? 'Tabla Retirada (Retiro Tardío)' : '¡Tabla Retirada en Sede!',
+          mensaje: `Retiraste ${rental.board.titulo}. Horario de devolución pactado: ${horaFinStr} hs.${lateNote}`,
           tipo: 'ALQUILER',
         },
         {
@@ -108,7 +140,16 @@ export class AgencyService {
       ],
     });
 
-    return updatedRental;
+    return {
+      ...updatedRental,
+      retiroTardio: {
+        tardio: timing.status === 'LATE_PICKUP',
+        minutosDemora: timing.latePickupMinutes,
+        minutosRestantes: timing.remainingMinutes,
+        fechaInicioPactada: fechaInicio,
+        fechaFinPactada: fechaFinEstimada,
+      },
+    };
   }
 
   /**
@@ -165,6 +206,16 @@ export class AgencyService {
     }
 
     const now = new Date();
+    const fechaFinEstimada = rental.fechaFinEstimada
+      ? new Date(rental.fechaFinEstimada)
+      : new Date(new Date(rental.fechaInicio).getTime() + Number(rental.horas || 1) * 3600 * 1000);
+    const overtime = evaluateOvertimeReturn(
+      fechaFinEstimada,
+      Number(rental.horas || 1),
+      Number(rental.precioBase ?? rental.precioTotal ?? 0),
+      now
+    );
+
     const multaLavado = !input.lavada ? BUSINESS.MULTA_NO_LAVAR : 0;
     const nuevoEstadoRental = input.tieneDanio ? 'PENDIENTE_REVISION' : 'DEVUELTA';
     const nuevoEstadoBoard = input.tieneDanio ? 'MANTENIMIENTO' : 'DISPONIBLE';
@@ -189,6 +240,32 @@ export class AgencyService {
           userId: rental.consumerId,
           titulo: '⚠️ Multa por Salitre Aplicada',
           mensaje: `Se debitó una multa de $${multaLavado.toLocaleString('es-AR')} ARS por no enjuagar la tabla antes de la devolución.`,
+          tipo: 'MULTA',
+        },
+      });
+    }
+
+    if (overtime.isOvertime && overtime.overtimeChargeArs > 0) {
+      await prisma.payment.create({
+        data: {
+          rentalId: rental.id,
+          monto: overtime.overtimeChargeArs,
+          tipo: 'MULTA',
+          estado: 'DEBITADO',
+          metadataJson: {
+            motivo: 'EXCESO_HORARIO_DEVOLUCION',
+            minutosTarde: overtime.overtimeMinutes,
+            horasExtraCobradas: overtime.overtimeHoursCharged,
+            aplicadoAt: now.toISOString(),
+          },
+        },
+      });
+
+      await prisma.notification.create({
+        data: {
+          userId: rental.consumerId,
+          titulo: '⏱️ Recargo por Devolución Fuera de Hora',
+          mensaje: `Devolución registrada con ${overtime.overtimeMinutes} min de demora sobre el horario pactado. Se cobró $${overtime.overtimeChargeArs.toLocaleString('es-AR')} ARS (${overtime.overtimeHoursCharged}h adicional/es).`,
           tipo: 'MULTA',
         },
       });
@@ -255,6 +332,78 @@ export class AgencyService {
       lavada: input.lavada,
       tieneDanio: input.tieneDanio,
       estadoFinal: nuevoEstadoRental,
+      excesoHorario: overtime,
+    };
+  }
+
+  /**
+   * Liquida manualmente o vía cierre de turno una reserva vencida sin retiro (No-Show):
+   * mantiene cobrado el 100% del servicio y libera la tabla inmediatamente.
+   */
+  async markNoShow(
+    rentalId: string,
+    _operatorId: string,
+    operatorContext?: { role?: string; agencyId?: string | null }
+  ) {
+    const rental = await prisma.rental.findUnique({
+      where: { id: rentalId },
+      include: {
+        board: true,
+        consumer: true,
+      },
+    });
+
+    if (!rental) {
+      throw new AppError('RENTAL_NOT_FOUND', 'Alquiler no encontrado', 404);
+    }
+
+    if (
+      operatorContext?.role &&
+      operatorContext.role.toUpperCase() !== 'SUPER_ADMIN' &&
+      operatorContext.agencyId
+    ) {
+      const rentalAgencyId = (rental as any).agencyId || (rental as any).board?.agencyId || null;
+      if (rentalAgencyId && rentalAgencyId !== operatorContext.agencyId) {
+        throw new AppError(
+          'FORBIDDEN_AGENCY_SCOPE',
+          'Esta reserva pertenece a otra sede o agencia',
+          403
+        );
+      }
+    }
+
+    if (rental.estado === 'DEVUELTA') {
+      return {
+        rental,
+        esNoShow: !rental.firmaRetiroUrl,
+        servicioCobrado: Number(rental.precioTotal || 0),
+      };
+    }
+
+    if (rental.estado !== 'ACTIVA' && rental.estado !== 'PENDIENTE') {
+      throw new AppError(
+        'INVALID_STATUS',
+        `Solo se puede liquidar No-Show sobre reservas pendientes de retiro (actual: ${rental.estado})`,
+        400
+      );
+    }
+
+    const now = new Date();
+    const fechaFin = rental.fechaFinEstimada ? new Date(rental.fechaFinEstimada) : null;
+    if (fechaFin && now.getTime() < fechaFin.getTime()) {
+      const horaFin = fechaFin.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+      throw new AppError(
+        'RENTAL_WINDOW_NOT_EXPIRED',
+        `El turno sigue vigente hasta el horario de devolución (${horaFin} hs). Si el surfista no retira antes de esa hora se liquida el No-Show manteniendo el cobro del servicio.`,
+        400
+      );
+    }
+
+    const settled = await settleNoShowRental(rental, now);
+    return {
+      rental: settled,
+      esNoShow: true,
+      servicioCobrado: Number(rental.precioTotal || 0),
     };
   }
 
@@ -262,6 +411,11 @@ export class AgencyService {
    * Obtiene la grilla de operaciones del día en Sede Central
    */
   async getDailySchedule(agencyId?: string | null) {
+    const tenantScope = agencyId
+      ? { OR: [{ agencyId }, { board: { agencyId } }] }
+      : {};
+    await sweepExpiredNoShows(tenantScope, new Date());
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
@@ -322,6 +476,7 @@ export class AgencyService {
     const rentalTenantFilter = agencyId
       ? { OR: [{ agencyId }, { board: { agencyId } }] }
       : {};
+    await sweepExpiredNoShows(rentalTenantFilter, new Date());
 
     const enElAguaCount = await prisma.rental.count({
       where: { estado: 'EN_CURSO', ...rentalTenantFilter },

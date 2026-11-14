@@ -35,6 +35,26 @@ export const checkOut = async (req: Request, res: Response, next: NextFunction):
   }
 };
 
+export const markNoShow = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const user = (req as any).user;
+    const result = await agencyService.markNoShow(req.body.rentalId, user.id, {
+      role: user.role,
+      agencyId: user.agencyId ?? null,
+    });
+    res.status(200).json({
+      status: 'success',
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getDailySchedule = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const user = (req as any).user;

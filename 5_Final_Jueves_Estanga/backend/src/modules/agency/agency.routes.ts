@@ -2,10 +2,11 @@ import { Router } from 'express';
 import { requireAuth } from '../../middlewares/requireAuth';
 import { requireRole } from '../../middlewares/requireRole';
 import { validateBody } from '../../middlewares/validateBody';
-import { agencyCheckInSchema, agencyCheckOutSchema, updateCommissionSchema } from './agency.schemas';
+import { agencyCheckInSchema, agencyCheckOutSchema, agencyNoShowSchema, updateCommissionSchema } from './agency.schemas';
 import {
   checkIn,
   checkOut,
+  markNoShow,
   getDailySchedule,
   getAgencyMetrics,
   getCommission,
@@ -28,6 +29,7 @@ router.use(requireRole('AGENCIA', 'SUPER_ADMIN'));
 
 router.post('/checkin', validateBody(agencyCheckInSchema), checkIn);
 router.post('/checkout', validateBody(agencyCheckOutSchema), checkOut);
+router.post('/no-show', validateBody(agencyNoShowSchema), markNoShow);
 router.get('/schedule', getDailySchedule);
 router.get('/metrics', getAgencyMetrics);
 router.get('/vendor-requests', getVendorRequests);

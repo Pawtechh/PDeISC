@@ -17,79 +17,17 @@ import {
   ShieldCheck,
   Sun,
   Moon,
-  FileText,
-  Award,
-  User,
-  Layers,
-  TrendingUp,
-  LayoutDashboard,
-  PackageCheck,
-  RotateCcw,
-  UserCheck,
 } from 'lucide-react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { logout } from '../../store/auth/thunks';
 import { useGetMarineForecastQuery } from '../../api/weatherApi';
-import { navigateSafe } from '../../navigation/navigationRef';
-
-interface DesktopNavItem {
-  route: string;
-  label: string;
-  icon: (color: string, active: boolean) => React.ReactNode;
-}
-
-const getDesktopNavItems = (role: string, isGuest: boolean): DesktopNavItem[] => {
-  if (isGuest) {
-    return [
-      { route: 'Catálogo', label: 'Catálogo', icon: (c, a) => <Waves size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Mis Alquileres', label: 'Alquileres', icon: (c, a) => <FileText size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Puntos', label: 'Puntos', icon: (c, a) => <Award size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Perfil', label: 'Perfil', icon: (c, a) => <User size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-    ];
-  }
-  const normalized = role.toUpperCase();
-  if (normalized === 'SUPER_ADMIN') {
-    return [
-      { route: 'AdminSaaS', label: 'Panel Admin', icon: (c, a) => <ShieldCheck size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Catálogo', label: 'Catálogo', icon: (c, a) => <Waves size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Vendedores', label: 'Solicitudes', icon: (c, a) => <UserCheck size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Perfil', label: 'Perfil', icon: (c, a) => <User size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-    ];
-  }
-  if (normalized === 'AGENCIA') {
-    return [
-      { route: 'Dashboard', label: 'Dashboard', icon: (c, a) => <LayoutDashboard size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Mis Tablas', label: 'Mis Tablas', icon: (c, a) => <Waves size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Entregas', label: 'Entregas', icon: (c, a) => <PackageCheck size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Devoluciones', label: 'Devoluciones', icon: (c, a) => <RotateCcw size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Vendedores', label: 'Vendedores', icon: (c, a) => <UserCheck size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Perfil', label: 'Perfil', icon: (c, a) => <User size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-    ];
-  }
-  if (normalized === 'OWNER') {
-    return [
-      { route: 'Mis Tablas', label: 'Mis Tablas', icon: (c, a) => <Layers size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Revisiones', label: 'Revisiones', icon: (c, a) => <ShieldCheck size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Ganancias', label: 'Ganancias', icon: (c, a) => <TrendingUp size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-      { route: 'Perfil', label: 'Perfil', icon: (c, a) => <User size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-    ];
-  }
-  return [
-    { route: 'Catálogo', label: 'Catálogo', icon: (c, a) => <Waves size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-    { route: 'Mis Alquileres', label: 'Alquileres', icon: (c, a) => <FileText size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-    { route: 'Puntos', label: 'Puntos', icon: (c, a) => <Award size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-    { route: 'Perfil', label: 'Perfil', icon: (c, a) => <User size={14} color={c} strokeWidth={a ? 2.3 : 1.8} /> },
-  ];
-};
 
 export const DesktopHeader: React.FC = () => {
   const { width } = useWindowDimensions();
   const { theme, isDark, toggleTheme } = useTheme();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth?.user);
-  const isGuest = Boolean(useSelector((state: any) => state.auth?.isGuest));
   const activeZone = useSelector((state: any) => state.ui?.activeZone);
-  const activeRouteName = useSelector((state: any) => state.ui?.activeRouteName);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const targetZoneId = activeZone?.id || user?.agency?.zoneId || undefined;
   const { data: marineRes } = useGetMarineForecastQuery(
@@ -122,9 +60,6 @@ export const DesktopHeader: React.FC = () => {
   const telemetryLine = marine
     ? `${spotShortName.toUpperCase()} • ${marine.waveHeightMeters}M • ${marine.windSpeedKmh}KM/H • ${marine.waterTemperatureCelsius}°C`
     : 'COSTA ATLÁNTICA • EN VIVO';
-
-  const navItems = user || isGuest ? getDesktopNavItems(activeUserRole, isGuest && !user) : [];
-  const effectiveActiveRoute = activeRouteName || navItems[0]?.route;
 
   const handleLogout = () => {
     setShowLogoutModal(true);
@@ -346,46 +281,6 @@ export const DesktopHeader: React.FC = () => {
         )}
       </View>
 
-      {/* Row 2: Adaptive Desktop Role Navigation Strip (frees bottom space vs floating dock) */}
-      {navItems.length > 0 && (
-        <View style={[styles.desktopNavWrapper, { borderTopColor: theme.divider }]}>
-          <View style={styles.desktopNavInner}>
-            {navItems.map((item) => {
-              const isActive = effectiveActiveRoute === item.route;
-              const ink = isActive ? (isDark ? theme.primaryHover : theme.primary) : theme.subtext;
-              return (
-                <TouchableOpacity
-                  key={item.route}
-                  activeOpacity={0.78}
-                  onPress={() => navigateSafe(item.route)}
-                  testID={`desktop-nav-${item.route}`}
-                  style={[
-                    styles.desktopNavTab,
-                    {
-                      backgroundColor: isActive ? theme.primarySubtle : 'transparent',
-                      borderColor: isActive ? theme.primaryBorder : 'transparent',
-                    },
-                  ]}
-                >
-                  {item.icon(ink, isActive)}
-                  <Text
-                    style={[
-                      styles.desktopNavLabel,
-                      {
-                        color: ink,
-                        fontWeight: isActive ? '800' : '600',
-                      },
-                    ]}
-                  >
-                    {item.label}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-      )}
-
       {/* Modal de Confirmación de Cierre de Sesión Seguro */}
       <Modal
         visible={showLogoutModal}
@@ -452,11 +347,9 @@ export const DesktopHeader: React.FC = () => {
 const styles = StyleSheet.create({
   headerContainer: {
     width: '100%',
-    minHeight: 60,
+    height: 64,
     borderBottomWidth: 1,
     paddingHorizontal: 28,
-    paddingTop: 10,
-    paddingBottom: 6,
     justifyContent: 'center',
   },
   innerContainer: {
@@ -467,34 +360,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 14,
-  },
-  desktopNavWrapper: {
-    width: '100%',
-    marginTop: 8,
-    paddingTop: 6,
-    borderTopWidth: 1,
-  },
-  desktopNavInner: {
-    maxWidth: 1220,
-    width: '100%',
-    alignSelf: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    flexWrap: 'wrap',
-  },
-  desktopNavTab: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 999,
-    borderWidth: 1,
-  },
-  desktopNavLabel: {
-    fontSize: 12,
-    letterSpacing: 0.2,
   },
   brandRow: {
     flexDirection: 'row',

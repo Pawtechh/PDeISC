@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Modal, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, Modal, TouchableOpacity, useWindowDimensions, Platform } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Star, ShieldCheck, MapPin, Ruler, Droplets, DollarSign, Briefcase, UserCheck } from 'lucide-react-native';
@@ -316,17 +316,19 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({
       <Modal
         visible={showBookingModal}
         animationType="slide"
-        presentationStyle="pageSheet"
+        presentationStyle={Platform.OS === 'ios' ? 'pageSheet' : 'fullScreen'}
         onRequestClose={() => setShowBookingModal(false)}
       >
-        <CheckoutScreen
-          board={board}
-          onClose={() => setShowBookingModal(false)}
-          onSuccess={() => {
-            setShowBookingModal(false);
-            navigation?.navigate?.('Mis Alquileres');
-          }}
-        />
+        <View style={{ flex: 1, backgroundColor: theme.background }}>
+          <CheckoutScreen
+            board={board}
+            onClose={() => setShowBookingModal(false)}
+            onSuccess={() => {
+              setShowBookingModal(false);
+              navigation?.navigate?.('Mis Alquileres');
+            }}
+          />
+        </View>
       </Modal>
 
       <LightboxViewer

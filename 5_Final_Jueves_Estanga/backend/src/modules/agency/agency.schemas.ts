@@ -56,6 +56,12 @@ export const agencyCheckOutSchema = z.object({
 
 export type AgencyCheckOutInput = z.infer<typeof agencyCheckOutSchema>;
 
+export const agencyNoShowSchema = z.object({
+  rentalId: z.string().min(1, 'ID de alquiler inválido'),
+});
+
+export type AgencyNoShowInput = z.infer<typeof agencyNoShowSchema>;
+
 export const updateCommissionSchema = z.object({
   porcentaje: z
     .number({ required_error: 'El porcentaje de comisión es obligatorio' })

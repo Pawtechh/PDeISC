@@ -19,8 +19,8 @@ import { ScrollToTopWithRing } from './ScrollToTopWithRing';
 import { ReadingProgressBar } from './ReadingProgressBar';
 import { DesktopHeader } from './DesktopHeader';
 
-export const LUXURY_COASTAL_GRADIENT = ['#21201E', '#262522', '#21201E'] as const;
-export const LIGHT_COASTAL_GRADIENT = ['#F5F1EA', '#FAF8F4', '#EEE8DF'] as const;
+export const LUXURY_COASTAL_GRADIENT = ['#1A1F22', '#1F262A', '#1A1F22'] as const;
+export const LIGHT_COASTAL_GRADIENT = ['#F4F5F2', '#FAFBF9', '#EAECE7'] as const;
 
 export interface ScreenProps {
   children: React.ReactNode;
@@ -44,6 +44,10 @@ export interface ScreenProps {
    * Custom gradient colors if atmosphericGradient is enabled. Defaults to LUXURY_COASTAL_GRADIENT in dark, LIGHT_COASTAL_GRADIENT in light.
    */
   gradientColors?: readonly [string, string, ...string[]] | string[];
+  /**
+   * Hides DesktopHeader inside standalone modal flows
+   */
+  hideDesktopHeader?: boolean;
 }
 
 export const Screen: React.FC<ScreenProps> = ({
@@ -59,6 +63,7 @@ export const Screen: React.FC<ScreenProps> = ({
   fullWidth = false,
   atmosphericGradient = true,
   gradientColors,
+  hideDesktopHeader = false,
 }) => {
   const { theme, isDark } = useTheme();
   const { width } = useWindowDimensions();
@@ -96,26 +101,10 @@ export const Screen: React.FC<ScreenProps> = ({
   };
 
   const resolvedGradientColors =
-    gradientColors ||
-    (Platform.OS === 'web'
-      ? isDark
-        ? (['rgba(33, 32, 30, 0.25)', 'rgba(38, 37, 34, 0.08)', 'rgba(33, 32, 30, 0.30)'] as const)
-        : (['rgba(245, 241, 234, 0.32)', 'rgba(253, 252, 250, 0.14)', 'rgba(238, 232, 223, 0.34)'] as const)
-      : isDark
-      ? LUXURY_COASTAL_GRADIENT
-      : LIGHT_COASTAL_GRADIENT);
+    gradientColors || (isDark ? LUXURY_COASTAL_GRADIENT : LIGHT_COASTAL_GRADIENT);
 
-  const rootBg =
-    Platform.OS === 'web'
-      ? atmosphericGradient
-        ? 'transparent'
-        : backgroundColor || (isDark ? 'rgba(33, 32, 30, 0.90)' : 'rgba(245, 241, 234, 0.90)')
-      : atmosphericGradient
-      ? isDark
-        ? '#21201E'
-        : '#F5F1EA'
-      : backgroundColor || theme.background;
-  const statusBarBg = isDark ? '#21201E' : '#F5F1EA';
+  const rootBg = backgroundColor || theme.background;
+  const statusBarBg = theme.background;
 
   const dynamicContentContainerStyle = [
     styles.contentContainer,
@@ -133,7 +122,7 @@ export const Screen: React.FC<ScreenProps> = ({
       <ReadingProgressBar progress={scrollProgress} visible={scrollable} />
 
       {/* Flagship Desktop Header (Brand Identity, Telemetry & User Role) */}
-      {isDesktop && <DesktopHeader />}
+      {isDesktop && !hideDesktopHeader && <DesktopHeader />}
 
       {atmosphericGradient && (
         <LinearGradient

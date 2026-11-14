@@ -19,7 +19,10 @@ export function getRentalTimingInfo(rental: Rental) {
   if (!rental?.fechaInicio) {
     return {
       isEarly: false,
+      isLatePickup: false,
+      isNoShow: false,
       horaPactada: '',
+      horaFinPactada: '',
       fechaPactada: '',
       tiempoFaltanteStr: '',
       badgeLabel: rental?.estado || 'PENDIENTE',
@@ -28,9 +31,16 @@ export function getRentalTimingInfo(rental: Rental) {
   }
 
   const dInicio = new Date(rental.fechaInicio);
+  const dFin = rental.fechaFinEstimada
+    ? new Date(rental.fechaFinEstimada)
+    : new Date(dInicio.getTime() + Number(rental.horas || 1) * 3600 * 1000);
   const now = new Date();
   const diffMs = dInicio.getTime() - 15 * 60 * 1000 - now.getTime();
   const horaPactada = dInicio.toLocaleTimeString('es-AR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  const horaFinPactada = dFin.toLocaleTimeString('es-AR', {
     hour: '2-digit',
     minute: '2-digit',
   });
@@ -41,6 +51,18 @@ export function getRentalTimingInfo(rental: Rental) {
 
   let tiempoFaltanteStr = '';
   const isEarly = diffMs > 0;
+  const isLatePickup =
+    (rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE') &&
+    now.getTime() > dInicio.getTime() &&
+    now.getTime() < dFin.getTime();
+  const isExpiredUnpicked =
+    (rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE') &&
+    now.getTime() >= dFin.getTime();
+  const hasRetiroSignature =
+    Boolean(rental.firmaRetiroUrl) ||
+    (Array.isArray(rental.fotosRetiro) && rental.fotosRetiro.length > 0);
+  const isNoShow = rental.estado === 'DEVUELTA' && !hasRetiroSignature;
+
   if (isEarly) {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffMin = Math.max(1, Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60)));
@@ -51,16 +73,48 @@ export function getRentalTimingInfo(rental: Rental) {
     if (isEarly) {
       return {
         isEarly: true,
+        isLatePickup: false,
+        isNoShow: false,
         horaPactada,
+        horaFinPactada,
         fechaPactada,
         tiempoFaltanteStr,
         badgeLabel: 'RESERVA PROGRAMADA (PENDIENTE DE RETIRO)',
         badgeVariant: 'warning' as const,
       };
     }
+    if (isExpiredUnpicked) {
+      return {
+        isEarly: false,
+        isLatePickup: false,
+        isNoShow: true,
+        horaPactada,
+        horaFinPactada,
+        fechaPactada,
+        tiempoFaltanteStr: '',
+        badgeLabel: 'VENCIDO SIN RETIRO (COBRADO)',
+        badgeVariant: 'danger' as const,
+      };
+    }
+    if (isLatePickup) {
+      return {
+        isEarly: false,
+        isLatePickup: true,
+        isNoShow: false,
+        horaPactada,
+        horaFinPactada,
+        fechaPactada,
+        tiempoFaltanteStr: '',
+        badgeLabel: 'TURNO EN CURSO • RETIRO TARDÍO',
+        badgeVariant: 'warning' as const,
+      };
+    }
     return {
       isEarly: false,
+      isLatePickup: false,
+      isNoShow: false,
       horaPactada,
+      horaFinPactada,
       fechaPactada,
       tiempoFaltanteStr: '',
       badgeLabel: 'HABILITADA PARA RETIRAR EN SEDE',
@@ -71,11 +125,28 @@ export function getRentalTimingInfo(rental: Rental) {
   if (rental.estado === 'EN_CURSO') {
     return {
       isEarly: false,
+      isLatePickup: false,
+      isNoShow: false,
       horaPactada,
+      horaFinPactada,
       fechaPactada,
       tiempoFaltanteStr: '',
       badgeLabel: 'RETIRADA EN SEDE • EN EL AGUA',
       badgeVariant: 'success' as const,
+    };
+  }
+
+  if (isNoShow) {
+    return {
+      isEarly: false,
+      isLatePickup: false,
+      isNoShow: true,
+      horaPactada,
+      horaFinPactada,
+      fechaPactada,
+      tiempoFaltanteStr: '',
+      badgeLabel: 'NO-SHOW • SERVICIO COBRADO',
+      badgeVariant: 'danger' as const,
     };
   }
 
@@ -92,7 +163,10 @@ export function getRentalTimingInfo(rental: Rental) {
   const mapped = staticMap[rental.estado] || { label: rental.estado, variant: 'sand' as const };
   return {
     isEarly: false,
+    isLatePickup: false,
+    isNoShow: false,
     horaPactada,
+    horaFinPactada,
     fechaPactada,
     tiempoFaltanteStr: '',
     badgeLabel: mapped.label,
@@ -189,25 +263,62 @@ export const RentalCard: React.FC<RentalCardProps> = ({
             style={[
               styles.windowBanner,
               {
-                backgroundColor: timing.isEarly ? theme.warningBg : theme.successBg,
-                borderColor: timing.isEarly ? theme.warningBorder : theme.successBorder,
+                backgroundColor: timing.isNoShow
+                  ? theme.dangerBg
+                  : timing.isEarly || timing.isLatePickup
+                  ? theme.warningBg
+                  : theme.successBg,
+                borderColor: timing.isNoShow
+                  ? theme.dangerBorder
+                  : timing.isEarly || timing.isLatePickup
+                  ? theme.warningBorder
+                  : theme.successBorder,
               },
             ]}
           >
             <Row spacing="xs" align="center">
-              {timing.isEarly ? (
-                <AlertTriangle size={14} color={theme.warning} />
+              {timing.isEarly || timing.isLatePickup || timing.isNoShow ? (
+                <AlertTriangle size={14} color={timing.isNoShow ? theme.danger : theme.warning} />
               ) : (
                 <CheckCircle2 size={14} color={theme.success} />
               )}
               <Text
                 variant="caption"
-                color={timing.isEarly ? theme.warningText : theme.successText}
+                color={
+                  timing.isNoShow
+                    ? theme.dangerText
+                    : timing.isEarly || timing.isLatePickup
+                    ? theme.warningText
+                    : theme.successText
+                }
                 style={{ flex: 1, fontWeight: '600', fontSize: 11 }}
               >
-                {timing.isEarly
+                {timing.isNoShow
+                  ? `Ventana expirada a las ${timing.horaFinPactada} hs sin retiro en sede. Según política de uso, el servicio quedó cobrado íntegramente.`
+                  : timing.isLatePickup
+                  ? `Turno iniciado a las ${timing.horaPactada} hs (retiro demorado). Las horas corren igualmente y la devolución sigue pactada para las ${timing.horaFinPactada} hs.`
+                  : timing.isEarly
                   ? `Faltan ${timing.tiempoFaltanteStr} para el horario de retiro (${timing.fechaPactada} ${timing.horaPactada} hs). El despacho en sede se habilita 15 min antes.`
                   : 'Horario de retiro habilitado: Ya podés presentar tu código QR en el mostrador de la sede.'}
+              </Text>
+            </Row>
+          </View>
+        )}
+
+        {timing.isNoShow && rental.estado === 'DEVUELTA' && (
+          <View
+            style={[
+              styles.windowBanner,
+              {
+                backgroundColor: theme.dangerBg,
+                borderColor: theme.dangerBorder,
+              },
+            ]}
+          >
+            <Row spacing="xs" align="center">
+              <AlertTriangle size={14} color={theme.danger} />
+              <Text variant="caption" color={theme.dangerText} style={{ flex: 1, fontWeight: '600', fontSize: 11 }}>
+                Inasistencia registrada (No-Show): No se efectuó el retiro antes de las {timing.horaFinPactada} hs. Servicio cobrado sin reembolso.
               </Text>
             </Row>
           </View>
@@ -235,7 +346,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
           </View>
 
           <Row spacing="xs" style={{ flexWrap: 'wrap', gap: 6 }}>
-            {(rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE') && (
+            {(rental.estado === 'ACTIVA' || rental.estado === 'PENDIENTE') && !timing.isNoShow && (
               <>
                 {onPressCancel && (
                   <Button

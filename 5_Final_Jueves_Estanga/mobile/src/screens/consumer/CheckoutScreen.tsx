@@ -66,7 +66,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   onSuccess,
 }) => {
   const { theme, isDark } = useTheme();
-  const labelColor = isDark ? theme.sand : colors.sand[700];
+  const labelColor = isDark ? '#DCE4E2' : '#2C3A40';
   const titleColor = theme.text;
   const subtextColor = theme.subtext;
   const [createRentalApi] = useCreateRentalMutation();
@@ -463,7 +463,12 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   // PANTALLA DE ÉXITO TRAS PAGO SIMULADO
   if (paymentSuccess && receiptData) {
     return (
-      <Screen scrollable>
+      <Screen
+        scrollable
+        hideDesktopHeader
+        atmosphericGradient={false}
+        backgroundColor={theme.background}
+      >
         <Stack spacing="lg" style={styles.container}>
           <Card
             padding="xl"
@@ -541,8 +546,14 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
   // PANTALLA PRINCIPAL DE CHECKOUT
   return (
-    <Screen scrollable>
-      <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
+    <Screen
+      scrollable
+      hideDesktopHeader
+      atmosphericGradient={false}
+      backgroundColor={theme.background}
+      scrollRef={scrollRef}
+    >
+      <Stack spacing="md" style={styles.container}>
         {/* Header */}
         <Row justify="space-between" align="center">
           <View>
@@ -560,7 +571,17 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
         {/* Global Banner Error si intentó confirmar con fallas */}
         {globalBannerError && (
-          <Card padding="sm" style={[styles.globalErrorBanner, { backgroundColor: theme.dangerBg, borderColor: theme.dangerBorder }]} testID="banner-error-checkout">
+          <Card
+            padding="sm"
+            style={[
+              styles.globalErrorBanner,
+              {
+                backgroundColor: isDark ? '#352223' : '#FCECEB',
+                borderColor: theme.dangerBorder,
+              },
+            ]}
+            testID="banner-error-checkout"
+          >
             <Row justify="space-between" align="center">
               <Text variant="caption" color={theme.dangerText} style={styles.bold}>
                 {globalBannerError}
@@ -750,7 +771,17 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 ) : null}
 
                 {availableSlots.every((s) => !s.disponible) ? (
-                  <Card padding="sm" style={[styles.warningCard, { backgroundColor: theme.warningBg, borderColor: theme.warningBorder }]} testID="banner-slots-agotados">
+                  <Card
+                    padding="sm"
+                    style={[
+                      styles.warningCard,
+                      {
+                        backgroundColor: isDark ? '#2B261C' : '#FBF3DF',
+                        borderColor: theme.warningBorder,
+                      },
+                    ]}
+                    testID="banner-slots-agotados"
+                  >
                     <Text variant="caption" color={theme.warningText}>
                       No quedan horarios disponibles para hoy. Elegí otra fecha en el calendario.
                     </Text>
@@ -831,6 +862,22 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     </TouchableOpacity>
                   </Row>
                 )}
+
+                <View
+                  style={[
+                    styles.warningCard,
+                    {
+                      backgroundColor: isDark ? '#2B261C' : '#FBF3DF',
+                      borderColor: theme.warningBorder,
+                      padding: spacing.sm,
+                      marginTop: 4,
+                    },
+                  ]}
+                >
+                  <Text variant="caption" color={theme.warningText} style={{ fontSize: 11, lineHeight: 16 }}>
+                    ⏱️ <Text style={styles.bold}>Puntualidad y No-Show:</Text> Tu turno corre desde la hora reservada (si retirás más tarde se cobra igual hasta la hora de devolución pactada). Si no retirás antes del horario de devolución, el servicio queda cobrado íntegramente sin reembolso.
+                  </Text>
+                </View>
               </Stack>
             </Stack>
           </View>
@@ -1439,10 +1486,17 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         <Card
           padding="md"
           style={[
-            isFormValid ? styles.summaryCardValid : styles.summaryCardInvalid,
+            styles.validationCard,
             {
-              backgroundColor: isFormValid ? theme.successBg : theme.warningBg,
+              backgroundColor: isFormValid
+                ? isDark
+                  ? '#1A2D2A'
+                  : '#EBF7F3'
+                : isDark
+                ? '#2B261C'
+                : '#FBF3DF',
               borderColor: isFormValid ? theme.successBorder : theme.warningBorder,
+              borderWidth: 1,
             },
           ]}
           testID="checkout-validation-panel"
@@ -1461,31 +1515,41 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             {/* Checklist Visual (Bloque 4.1) */}
             <Stack spacing="xs" style={{ marginTop: 4 }}>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{biometricSignature || signatureMode === 'digital' ? '' : ''}</Text>
+                <Text style={{ fontSize: 13, fontWeight: '800', color: biometricSignature || signatureMode === 'digital' ? theme.success : theme.warning }}>
+                  {biometricSignature || signatureMode === 'digital' ? '✓' : '○'}
+                </Text>
                 <Text variant="caption" color={labelColor}>
                   Rúbrica de contrato: {biometricSignature ? 'Huella Digital Validada' : signatureMode === 'digital' ? 'Firma PC Lista' : 'Pendiente escanear huella'}
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{board ? '' : ''}</Text>
+                <Text style={{ fontSize: 13, fontWeight: '800', color: board ? theme.success : theme.warning }}>
+                  {board ? '✓' : '○'}
+                </Text>
                 <Text variant="caption" color={labelColor}>
                   Tabla seleccionada: {board.titulo}
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{fechaRetiro && isSlotValid ? '' : ''}</Text>
+                <Text style={{ fontSize: 13, fontWeight: '800', color: fechaRetiro && isSlotValid ? theme.success : theme.warning }}>
+                  {fechaRetiro && isSlotValid ? '✓' : '○'}
+                </Text>
                 <Text variant="caption" color={labelColor}>
                   Fecha y horario: {fechaRetiro} a las {horaRetiro || '---'} hs
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{isCardNumberValid && isNameValid && isExpValid && isCvvValid && isDniValid ? '' : ''}</Text>
+                <Text style={{ fontSize: 13, fontWeight: '800', color: isCardNumberValid && isNameValid && isExpValid && isCvvValid && isDniValid ? theme.success : theme.warning }}>
+                  {isCardNumberValid && isNameValid && isExpValid && isCvvValid && isDniValid ? '✓' : '○'}
+                </Text>
                 <Text variant="caption" color={labelColor}>
                   Datos de tarjeta: {isCardNumberValid ? `Luhn OK (${marca.toUpperCase()})` : 'Pendiente o erróneo'}
                 </Text>
               </Row>
               <Row spacing="xs" align="center">
-                <Text style={{ fontSize: 13 }}>{aceptaGarantia ? '' : ''}</Text>
+                <Text style={{ fontSize: 13, fontWeight: '800', color: aceptaGarantia ? theme.success : theme.warning }}>
+                  {aceptaGarantia ? '✓' : '○'}
+                </Text>
                 <Text variant="caption" color={labelColor}>
                   Pre-autorización de garantía ($50.000): {aceptaGarantia ? 'Aceptada' : 'Pendiente'}
                 </Text>
@@ -1499,7 +1563,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 style={[
                   styles.errorList,
                   {
-                    backgroundColor: theme.dangerBg,
+                    backgroundColor: isDark ? '#352223' : '#FCECEB',
                     borderColor: theme.dangerBorder,
                     borderWidth: 1,
                   },
@@ -1540,15 +1604,24 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         </TouchableOpacity>
 
         {/* Nota Legal al Pie */}
-        <Card padding="sm" style={styles.legalBox} testID="checkout-legal-notice">
+        <Card
+          padding="sm"
+          style={[
+            styles.legalBox,
+            {
+              backgroundColor: theme.surfaceElevated,
+              borderColor: theme.border,
+              borderWidth: 1,
+            },
+          ]}
+          testID="checkout-legal-notice"
+        >
           <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center', fontSize: 11 }}>
             Transacción procesada bajo protocolo encriptado SSL • Garantía pre-autorizada.{'\n'}
-            Conforme a la Ley 24.240 de Defensa del Consumidor.
+            Las horas corren desde el horario pactado. Si no retirás antes del horario de devolución, el servicio queda cobrado (Ley 24.240).
           </Text>
         </Card>
-
-
-      </ScrollView>
+      </Stack>
     </Screen>
   );
 };
@@ -1586,13 +1659,12 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
   },
   boardCard: {
-    backgroundColor: colors.sand[50],
+    borderWidth: 1,
   },
   boardImage: {
     width: 64,
     height: 64,
     borderRadius: radii.md,
-    backgroundColor: colors.sand[200],
   },
   bold: {
     fontWeight: '700',
@@ -1602,39 +1674,29 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: colors.sand[300],
-    backgroundColor: colors.white,
   },
   hourPillSelected: {
     backgroundColor: colors.teal[600],
     borderColor: colors.teal[700],
   },
   breakdownCard: {
-    backgroundColor: colors.teal.subtle,
     borderWidth: 1,
-    borderColor: colors.teal.border,
   },
   debitBanner: {
-    backgroundColor: colors.teal.subtle,
     borderWidth: 1,
-    borderColor: colors.teal.border,
     borderRadius: radii.md,
   },
   testCardsBox: {
-    backgroundColor: colors.sand[50],
     borderWidth: 1,
-    borderColor: colors.sand[200],
     borderRadius: radii.md,
   },
   accordionHeader: {
     paddingVertical: 2,
   },
   testCardRow: {
-    backgroundColor: colors.white,
     padding: spacing.xs,
     borderRadius: radii.sm,
     borderWidth: 1,
-    borderColor: colors.sand[200],
   },
   useCardButton: {
     backgroundColor: colors.teal[600],
@@ -1656,9 +1718,7 @@ const styles = StyleSheet.create({
   inputBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: colors.sand[300],
     borderRadius: radii.md,
     paddingHorizontal: spacing.sm,
     height: 44,
@@ -1672,7 +1732,6 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     fontSize: 14,
-    color: colors.sand[900],
   },
   checkbox: {
     width: 20,
@@ -1683,36 +1742,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   summaryCardValid: {
-    backgroundColor: 'rgba(36, 115, 96, 0.09)',
     borderWidth: 1,
-    borderColor: 'rgba(36, 115, 96, 0.24)',
     borderRadius: radii.md,
   },
   summaryCardInvalid: {
-    backgroundColor: 'rgba(164, 112, 28, 0.09)',
     borderWidth: 1,
-    borderColor: 'rgba(164, 112, 28, 0.24)',
+    borderRadius: radii.md,
+  },
+  validationCard: {
+    borderWidth: 1,
     borderRadius: radii.md,
   },
   warningCard: {
-    backgroundColor: 'rgba(164, 112, 28, 0.09)',
     borderWidth: 1,
-    borderColor: 'rgba(164, 112, 28, 0.24)',
     borderRadius: radii.sm,
   },
   errorList: {
-    backgroundColor: 'rgba(182, 57, 51, 0.08)',
     padding: spacing.xs,
     borderRadius: radii.sm,
     marginTop: 4,
   },
   legalBox: {
-    backgroundColor: 'transparent',
-    borderWidth: 0,
+    borderRadius: radii.md,
     paddingVertical: spacing.xs,
   },
   successCard: {
-    backgroundColor: colors.white,
     borderRadius: radii.xl,
     marginVertical: spacing.lg,
   },
@@ -1746,8 +1800,6 @@ const styles = StyleSheet.create({
     color: colors.sand[900],
   },
   accessoryItem: {
-    backgroundColor: colors.sand[50],
-    borderColor: colors.sand[200],
     borderWidth: 1,
     borderRadius: radii.sm,
     padding: spacing.sm,
@@ -1761,7 +1813,6 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: colors.sand[200],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1772,7 +1823,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: colors.sand[200],
   },
   tallePillActive: {
     backgroundColor: colors.teal[600],
@@ -1787,9 +1837,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 16,
-    backgroundColor: colors.sand[100],
     borderWidth: 1,
-    borderColor: colors.sand[300],
     marginRight: 4,
   },
   filterPeriodPillActive: {
@@ -1798,7 +1846,6 @@ const styles = StyleSheet.create({
   },
   filterPeriodText: {
     fontSize: 11,
-    color: colors.sand[700],
     fontWeight: '600',
   },
   filterPeriodTextActive: {
@@ -1809,9 +1856,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: radii.sm,
-    backgroundColor: colors.teal.subtle,
     borderWidth: 1,
-    borderColor: colors.teal.border,
   },
   slotsWrapContainer: {
     flexDirection: 'row',

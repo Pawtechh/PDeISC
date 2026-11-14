@@ -3,6 +3,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { enableScreens } from 'react-native-screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+// Mantener enableScreens activo también en Web para que Screen.web.js oculte pestañas inactivas (display: none)
 enableScreens(true);
 WebBrowser.maybeCompleteAuthSession();
 import { Provider } from 'react-redux';
