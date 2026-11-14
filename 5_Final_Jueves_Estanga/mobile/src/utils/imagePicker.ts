@@ -227,7 +227,7 @@ function openWebCameraAsync(quality: number): Promise<string | null> {
         video.style.width = '100%';
         video.style.maxHeight = '360px';
         video.style.borderRadius = '12px';
-        video.style.backgroundColor = '#161513';
+        video.style.backgroundColor = '#1A1F22';
         video.style.objectFit = 'cover';
         card.appendChild(video);
 
@@ -238,8 +238,8 @@ function openWebCameraAsync(quality: number): Promise<string | null> {
 
         const captureBtn = document.createElement('button');
         captureBtn.innerText = '🔘 Capturar Foto';
-        captureBtn.style.backgroundColor = '#E06343';
-        captureBtn.style.color = '#FDFCFA';
+        captureBtn.style.backgroundColor = '#0E6B74';
+        captureBtn.style.color = '#FFFFFF';
         captureBtn.style.border = 'none';
         captureBtn.style.borderRadius = '8px';
         captureBtn.style.padding = '12px 28px';

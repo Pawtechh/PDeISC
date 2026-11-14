@@ -9,17 +9,23 @@ import { JWT_CONFIG } from '../../config/jwt';
 import { vendorRegistry } from '../../config/vendorRegistry';
 import { systemConfig } from '../../config/systemConfig';
 import { AppError } from '../../middlewares/errorHandler';
-import { saveBase64Image } from '../../utils/fileStorage';
+import { saveImageAsset } from '../../utils/fileStorage';
 
 const router = Router();
 
 router.use(requireAuth);
 
-const generateUserTokens = async (user: { id: string; email: string; role: Role }) => {
+const generateUserTokens = async (user: {
+  id: string;
+  email: string;
+  role: Role;
+  agencyId?: string | null;
+}) => {
   const payload = {
     id: user.id,
     email: user.email,
     role: user.role,
+    agencyId: user.agencyId ?? null,
   };
 
   const accessToken = jwt.sign(payload, JWT_CONFIG.accessSecret, {
@@ -63,6 +69,12 @@ router.get('/me', async (req, res, next) => {
         role: true,
         puntos: true,
         puntosSancion: true,
+        agencyId: true,
+        agency: {
+          include: {
+            zone: true,
+          },
+        },
         createdAt: true,
         updatedAt: true,
       },
@@ -75,12 +87,17 @@ router.get('/me', async (req, res, next) => {
 
     let app = vendorRegistry.getByUser(user.id, user.email);
     if (!app && user.role === 'OWNER') {
-      app = vendorRegistry.ensureOwnerApproved(user);
+      app = vendorRegistry.ensureOwnerApproved({
+        ...user,
+        agencyId: user.agencyId ?? null,
+      });
     }
 
     const vendorStatus = app ? app.status : user.role === 'OWNER' ? 'APROBADO' : 'NONE';
     const canSwitchRole =
-      user.role !== 'AGENCIA' && (vendorStatus === 'APROBADO' || user.role === 'OWNER');
+      user.role !== 'AGENCIA' &&
+      user.role !== 'SUPER_ADMIN' &&
+      (vendorStatus === 'APROBADO' || user.role === 'OWNER');
 
     res.status(200).json({
       status: 'success',
@@ -126,14 +143,22 @@ router.patch('/me', async (req, res, next) => {
         return;
       }
     }
+
+    const persistedDni = dniFotoUrl
+      ? (await saveImageAsset(dniFotoUrl, 'dni', req.user!.id)) || dniFotoUrl
+      : undefined;
+    const persistedAvatar = avatarUrl
+      ? (await saveImageAsset(avatarUrl, 'avatar', req.user!.id)) || avatarUrl
+      : undefined;
+
     const updated = await prisma.user.update({
       where: { id: req.user!.id },
       data: {
         nombre: nombre || undefined,
         telefono: telefono || undefined,
         dni: cleanDni || undefined,
-        dniFotoUrl: dniFotoUrl ? (saveBase64Image(dniFotoUrl, 'dni', req.user!.id) || dniFotoUrl) : undefined,
-        avatarUrl: avatarUrl ? (saveBase64Image(avatarUrl, 'avatar', req.user!.id) || avatarUrl) : undefined,
+        dniFotoUrl: persistedDni,
+        avatarUrl: persistedAvatar,
       },
       select: {
         id: true,
@@ -146,6 +171,12 @@ router.patch('/me', async (req, res, next) => {
         role: true,
         puntos: true,
         puntosSancion: true,
+        agencyId: true,
+        agency: {
+          include: {
+            zone: true,
+          },
+        },
         createdAt: true,
         updatedAt: true,
       },
@@ -157,9 +188,6 @@ router.patch('/me', async (req, res, next) => {
   }
 });
 
-/**
- * Obtiene el estado del permiso de publicación (Perfil de Vendedor) del usuario actual
- */
 /**
  * Endpoint estricto de verificación de identidad (DNI + Foto de documento)
  */
@@ -199,11 +227,14 @@ router.post('/verify-identity', async (req, res, next) => {
       return;
     }
 
+    const persistedDni =
+      (await saveImageAsset(dniFotoUrl, 'dni', req.user!.id)) || String(dniFotoUrl).trim();
+
     const updated = await prisma.user.update({
       where: { id: req.user!.id },
       data: {
         dni: cleanDni,
-        dniFotoUrl: saveBase64Image(dniFotoUrl, 'dni', req.user!.id) || String(dniFotoUrl).trim(),
+        dniFotoUrl: persistedDni,
       },
       select: {
         id: true,
@@ -216,6 +247,7 @@ router.post('/verify-identity', async (req, res, next) => {
         role: true,
         puntos: true,
         puntosSancion: true,
+        agencyId: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -231,6 +263,9 @@ router.post('/verify-identity', async (req, res, next) => {
   }
 });
 
+/**
+ * Obtiene el estado del permiso de publicación (Perfil de Vendedor) del usuario actual
+ */
 router.get('/vendor-status', async (req, res, next) => {
   try {
     const user = await prisma.user.findUnique({
@@ -242,6 +277,7 @@ router.get('/vendor-status', async (req, res, next) => {
         telefono: true,
         dni: true,
         role: true,
+        agencyId: true,
       },
     });
 
@@ -256,7 +292,9 @@ router.get('/vendor-status', async (req, res, next) => {
 
     const vendorStatus = app ? app.status : user.role === 'OWNER' ? 'APROBADO' : 'NONE';
     const canSwitchRole =
-      user.role !== 'AGENCIA' && (vendorStatus === 'APROBADO' || user.role === 'OWNER');
+      user.role !== 'AGENCIA' &&
+      user.role !== 'SUPER_ADMIN' &&
+      (vendorStatus === 'APROBADO' || user.role === 'OWNER');
 
     res.status(200).json({
       status: 'success',
@@ -284,7 +322,7 @@ router.post('/vendor-application', async (req, res, next) => {
       throw new AppError('USER_NOT_FOUND', 'Usuario no encontrado', 404);
     }
 
-    if (user.role === 'AGENCIA') {
+    if (user.role === 'AGENCIA' || user.role === 'SUPER_ADMIN') {
       throw new AppError(
         'FORBIDDEN_ROLE',
         'El perfil de Agencia es administrativo y no requiere solicitud de vendedor.',
@@ -292,7 +330,7 @@ router.post('/vendor-application', async (req, res, next) => {
       );
     }
 
-    const { nombreVendedor, descripcion, fotosTablas, experienciaRubro } = req.body;
+    const { nombreVendedor, descripcion, fotosTablas, experienciaRubro, agencyId } = req.body;
 
     if (!nombreVendedor || typeof nombreVendedor !== 'string' || nombreVendedor.trim().length < 2) {
       throw new AppError(
@@ -336,10 +374,15 @@ router.post('/vendor-application', async (req, res, next) => {
       );
     }
 
-    const fotosGuardadas = fotosArray.map((foto, idx) => {
-      const saved = saveBase64Image(foto, 'board', `${user.id}-${idx}`);
-      return saved || foto;
-    });
+    const fotosGuardadas = await Promise.all(
+      fotosArray.map(async (foto, idx) => {
+        const saved = await saveImageAsset(foto, 'board', `${user.id}-${idx}`);
+        return saved || foto;
+      })
+    );
+
+    const targetAgencyId =
+      typeof agencyId === 'string' && agencyId.trim() ? agencyId.trim() : user.agencyId || null;
 
     const application = vendorRegistry.submitApplication({
       userId: user.id,
@@ -351,12 +394,13 @@ router.post('/vendor-application', async (req, res, next) => {
       descripcion,
       fotosTablas: fotosGuardadas,
       experienciaRubro,
+      agencyId: targetAgencyId,
     });
 
-    // Notificar a operadores de agencia
+    // Notificar a operadores de agencia de esa sede (o a todas si aún no eligió sede)
     try {
       const agencies = await prisma.user.findMany({
-        where: { role: 'AGENCIA' },
+        where: targetAgencyId ? { role: 'AGENCIA', agencyId: targetAgencyId } : { role: 'AGENCIA' },
         select: { id: true },
       });
       if (agencies.length > 0) {
@@ -404,8 +448,13 @@ router.post('/switch-role', async (req, res, next) => {
       throw new AppError('USER_NOT_FOUND', 'Usuario no encontrado', 404);
     }
 
-    // Regla estricta: El perfil de Admin (AGENCIA) nunca se puede alternar
-    if (user.role === 'AGENCIA' || targetRole === 'AGENCIA') {
+    // Regla estricta: El perfil de Admin (AGENCIA / SUPER_ADMIN) nunca se puede alternar
+    if (
+      user.role === 'AGENCIA' ||
+      user.role === 'SUPER_ADMIN' ||
+      targetRole === 'AGENCIA' ||
+      targetRole === 'SUPER_ADMIN'
+    ) {
       throw new AppError(
         'ADMIN_SWITCH_FORBIDDEN',
         'El perfil de administración (Agencia) está excluido del cambio de rol.',
@@ -457,7 +506,6 @@ router.post('/switch-role', async (req, res, next) => {
       if (user.passwordHash) {
         hasValidPassword = await bcrypt.compare(password, user.passwordHash);
       }
-      // Permitir también si es cuenta OAuth o demo con clave estándar de usuario
       if (!hasValidPassword && systemConfig.validateSpecialPassword(password)) {
         hasValidPassword = true;
       }
@@ -491,6 +539,12 @@ router.post('/switch-role', async (req, res, next) => {
         dni: true,
         role: true,
         puntos: true,
+        agencyId: true,
+        agency: {
+          include: {
+            zone: true,
+          },
+        },
       },
     });
 

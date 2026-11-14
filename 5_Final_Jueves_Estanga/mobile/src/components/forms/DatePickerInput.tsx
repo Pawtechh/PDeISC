@@ -657,8 +657,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   yearItemSelected: {
-    backgroundColor: colors.coral[600],
-    borderColor: colors.coral[700],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[700],
   },
   calendarBody: {
     marginTop: spacing.xs,
@@ -685,7 +685,7 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   dayCellSelected: {
-    backgroundColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
   },
   dayCellDisabled: {
     opacity: 0.3,

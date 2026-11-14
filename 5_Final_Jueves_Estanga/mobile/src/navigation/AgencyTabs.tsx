@@ -1,11 +1,12 @@
 import React from 'react';
 import { Platform, useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { LayoutDashboard, PackageCheck, RotateCcw, UserCheck, User } from 'lucide-react-native';
+import { LayoutDashboard, Waves, PackageCheck, RotateCcw, UserCheck, User } from 'lucide-react-native';
 import { AgencyDashboardScreen } from '../screens/agency/AgencyDashboardScreen';
 import { DeliveriesScreen } from '../screens/agency/DeliveriesScreen';
 import { ReturnsScreen } from '../screens/agency/ReturnsScreen';
 import { VendorApprovalsScreen } from '../screens/agency/VendorApprovalsScreen';
+import { MyBoardsScreen } from '../screens/owner/MyBoardsScreen';
 import { ProfileScreen } from '../screens/consumer/ProfileScreen';
 import { colors } from '../theme';
 import { useTheme } from '../theme/ThemeContext';
@@ -21,7 +22,7 @@ export const AgencyTabs: React.FC = () => {
   return (
     <Tab.Navigator
       detachInactiveScreens={true}
-      screenOptions={getTabNavigatorScreenOptions(theme, isDesktop, 650, 10.5)}
+      screenOptions={getTabNavigatorScreenOptions(theme, isDesktop, 760, 10.5)}
     >
       <Tab.Screen
         name="Dashboard"
@@ -30,6 +31,16 @@ export const AgencyTabs: React.FC = () => {
           tabBarLabel: 'Dashboard',
           tabBarIcon: ({ color, focused }) => (
             <LayoutDashboard size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Mis Tablas"
+        component={MyBoardsScreen}
+        options={{
+          tabBarLabel: 'Mis Tablas',
+          tabBarIcon: ({ color, focused }) => (
+            <Waves size={20} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />

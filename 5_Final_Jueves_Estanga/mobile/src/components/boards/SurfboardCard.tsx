@@ -11,7 +11,7 @@ import {
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { safeHaptic } from '../../utils/haptics';
-import { Star, Award } from 'lucide-react-native';
+import { Star, Award, Store } from 'lucide-react-native';
 import { Board } from '../../api/boardsApi';
 import { Badge } from '../ui/Badge';
 import { useTheme } from '../../theme/ThemeContext';
@@ -21,6 +21,7 @@ export interface SurfboardCardProps {
   board: Board;
   onPressDetail?: () => void;
   onPressReserve?: () => void;
+  onPressAgency?: (slugOrId: string) => void;
   onPressEdit?: () => void;
   onPressDelete?: () => void;
   isOwnerView?: boolean;
@@ -37,6 +38,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
   board,
   onPressDetail,
   onPressReserve,
+  onPressAgency,
   onPressEdit,
   onPressDelete,
   isOwnerView = false,
@@ -108,7 +110,10 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
           {...(Platform.OS === 'web' ? ({ dataSet: { surfImageFrame: 'true' } } as any) : {})}
           style={[
             styles.imageInner,
-            { borderColor: theme.border },
+            {
+              backgroundColor: isDark ? '#20262A' : '#EAECE8',
+              borderColor: isDark ? 'rgba(242, 245, 244, 0.08)' : theme.border,
+            },
           ]}
         >
           <Image
@@ -119,10 +124,14 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
             style={styles.heroImage}
           />
 
-          {/* Subtle bottom feather only */}
+          {/* Matte dark-mode edge softening + bottom feather so bright studio shots blend cleanly */}
           <LinearGradient
-            colors={['transparent', isDark ? 'rgba(33, 32, 30, 0.26)' : 'rgba(253, 252, 250, 0.14)']}
-            locations={[0.72, 1.0]}
+            colors={
+              isDark
+                ? ['rgba(26, 31, 34, 0.22)', 'transparent', 'rgba(26, 31, 34, 0.34)']
+                : ['rgba(19, 26, 29, 0.06)', 'transparent', 'rgba(252, 252, 250, 0.14)']
+            }
+            locations={[0, 0.45, 1.0]}
             style={StyleSheet.absoluteFillObject}
             pointerEvents="none"
           />
@@ -184,6 +193,48 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
         >
           {board.titulo}
         </Text>
+
+        {/* Agency & Coastal Zone Pill */}
+        {(board.agency || board.zone) && (
+          <TouchableOpacity
+            activeOpacity={onPressAgency && board.agency ? 0.75 : 1}
+            disabled={!onPressAgency || !board.agency}
+            onPress={(e) => {
+              e?.stopPropagation?.();
+              if (board.agency && onPressAgency) {
+                onPressAgency(board.agency.slug || board.agency.id);
+              }
+            }}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 5,
+              marginBottom: 8,
+            }}
+          >
+            <View
+              style={{
+                width: 7,
+                height: 7,
+                borderRadius: 4,
+                backgroundColor: board.agency?.accentColor || (isDark ? theme.primaryHover : theme.primary),
+              }}
+            />
+            <Store size={11} color={theme.subtext} />
+            <Text
+              style={{
+                fontSize: 11,
+                fontWeight: '600',
+                color: onPressAgency && board.agency ? (isDark ? theme.primaryHover : theme.primary) : theme.subtext,
+                flexShrink: 1,
+              }}
+              numberOfLines={1}
+            >
+              {board.agency?.nombre || 'Sede Oficial'}
+              {board.zone ? ` • ${board.zone.ciudad}` : ''}
+            </Text>
+          </TouchableOpacity>
+        )}
 
         {/* Specs Pill Line */}
         <View style={styles.specsRow}>
@@ -287,12 +338,12 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
               testID={`board-3d-reserve-${board.id}`}
             >
               <LinearGradient
-                colors={isDark ? ['#E57355', '#E06343', '#C94A29'] : ['#D95A38', '#C94A29', '#B23E20']}
+                colors={isDark ? ['#51CCD5', '#38BDC7', '#2499A3'] : ['#13828C', '#0E6B74', '#08444A']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.reserveBtnGradient}
               >
-                <Text style={styles.reserveBtnText}>Reservar</Text>
+                <Text style={[styles.reserveBtnText, { color: theme.primaryText }]}>Reservar</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -453,9 +504,9 @@ const styles = StyleSheet.create({
   reserveBtnWrapper: {
     borderRadius: 10,
     overflow: 'hidden',
-    shadowColor: '#E06343',
+    shadowColor: '#38BDC7',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.30,
+    shadowOpacity: 0.26,
     shadowRadius: 10,
     elevation: 4,
   },
@@ -466,7 +517,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   reserveBtnText: {
-    color: '#FDFCFA',
+    color: '#0C1719',
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0.8,
@@ -477,7 +528,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(245, 242, 236, 0.08)',
+    borderTopColor: 'rgba(242, 245, 244, 0.08)',
   },
   ownerButtons: {
     flexDirection: 'row',
@@ -487,12 +538,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: 'rgba(208, 85, 78, 0.14)',
+    backgroundColor: 'rgba(185, 64, 58, 0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(208, 85, 78, 0.32)',
+    borderColor: 'rgba(236, 122, 115, 0.32)',
   },
   ownerGhostBtnText: {
-    color: '#D0554E',
+    color: '#EC7A73',
     fontSize: 11,
     fontWeight: '700',
   },
@@ -500,12 +551,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: 'rgba(224, 99, 67, 0.14)',
+    backgroundColor: 'rgba(56, 189, 199, 0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(224, 99, 67, 0.32)',
+    borderColor: 'rgba(56, 189, 199, 0.32)',
   },
   ownerEditBtnText: {
-    color: '#E06343',
+    color: '#38BDC7',
     fontSize: 11,
     fontWeight: '700',
   },

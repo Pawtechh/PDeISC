@@ -153,6 +153,7 @@ export class RentalsService {
       data: {
         consumerId,
         boardId: board.id,
+        ...((board as any).agencyId ? { agencyId: (board as any).agencyId } : {}),
         fechaInicio,
         fechaFinEstimada: fechaFin,
         horas: input.horas,
@@ -179,6 +180,17 @@ export class RentalsService {
             tipoTabla: true,
             fotos: true,
             ownerId: true,
+            agencyId: true,
+            agency: {
+              select: {
+                id: true,
+                slug: true,
+                nombre: true,
+                direccion: true,
+                whatsapp: true,
+                accentColor: true,
+              },
+            },
           },
         },
       },
@@ -198,13 +210,13 @@ export class RentalsService {
         {
           userId: consumerId,
           titulo: '¡Reserva Confirmada!',
-          mensaje: `Tu reserva de ${board.titulo} está confirmada. Presentá tu código en Sede Central Playa Grande.`,
+          mensaje: `Tu reserva de ${board.titulo} está confirmada. Presentá tu código en ${(rental as any)?.board?.agency?.nombre || 'la sede asignada'}.`,
           tipo: 'ALQUILER',
         },
         {
           userId: board.ownerId,
           titulo: 'Nuevo Alquiler Registrado',
-          mensaje: `Tu tabla ${board.titulo} fue reservada por ${input.horas} hs. Ganancia estimada: $${quote.gananciaOwner} ARS (95%).`,
+          mensaje: `Tu tabla ${board.titulo} fue reservada por ${input.horas} hs. Ganancia estimada: $${quote.gananciaOwner} ARS.`,
           tipo: 'ALQUILER',
         },
       ],
@@ -251,6 +263,23 @@ export class RentalsService {
             medidas: true,
             tipoTabla: true,
             fotos: true,
+            agencyId: true,
+            agency: {
+              select: {
+                id: true,
+                slug: true,
+                nombre: true,
+                direccion: true,
+                whatsapp: true,
+              },
+            },
+            zone: {
+              select: {
+                id: true,
+                ciudad: true,
+                nombre: true,
+              },
+            },
           },
         },
         review: true,

@@ -342,7 +342,9 @@ export function RootNavigator() {
     if (isGuest) return <ConsumerTabs key="guest-tabs" />;
     if (!isAuthenticated) return <AuthNavigator key="auth-nav" />;
     const normalizedRole = (rol || '').toUpperCase();
-    if (normalizedRole === 'AGENCIA') return <AgencyTabs key="agency-tabs" />;
+    if (normalizedRole === 'AGENCIA' || normalizedRole === 'SUPER_ADMIN') {
+      return <AgencyTabs key="agency-tabs" />;
+    }
     if (normalizedRole === 'OWNER') return <OwnerTabs key="owner-tabs" />;
     return <ConsumerTabs key="consumer-tabs" />;
   };
@@ -384,7 +386,7 @@ export function RootNavigator() {
             SURF RENTAL
           </Text>
           <Text style={[styles.brandSubtitle, { color: isDark ? theme.primaryHover : theme.primary }]}>
-            SEDE PLAYA GRANDE • MAR DEL PLATA
+            RED MULTI-ZONA • AGENCIAS Y TABLAS
           </Text>
           <ActivityIndicator
             size="small"

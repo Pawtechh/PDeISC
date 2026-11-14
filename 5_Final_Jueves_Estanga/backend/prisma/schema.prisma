@@ -11,6 +11,7 @@ enum Role {
   CONSUMER
   OWNER
   AGENCIA
+  SUPER_ADMIN
 }
 
 enum AuthProvider {
@@ -76,6 +77,8 @@ model User {
   puntos          Int            @default(0)
   puntosSancion   Int            @default(0)
   activo          Boolean        @default(true)
+  agencyId        String?
+  agency          Agency?        @relation(fields: [agencyId], references: [id], onDelete: SetNull)
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
@@ -91,6 +94,60 @@ model User {
   @@index([email])
   @@index([dni])
   @@index([role])
+  @@index([agencyId])
+}
+
+model Zone {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  pais      String   @default("Argentina")
+  ciudad    String
+  nombre    String
+  latitud   Float
+  longitud  Float
+  timezone  String   @default("America/Argentina/Buenos_Aires")
+  activa    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  agencies  Agency[]
+  boards    Board[]
+
+  @@index([ciudad])
+  @@index([activa])
+}
+
+model Agency {
+  id                 String   @id @default(uuid())
+  slug               String   @unique
+  nombre             String
+  descripcion        String   @db.Text
+  logoUrl            String?  @db.MediumText
+  portadaUrl         String?  @db.MediumText
+  accentColor        String?  @default("#0E6B74")
+  direccion          String
+  whatsapp           String?
+  emailContacto      String?
+  horario            String   @default("06:00 a 21:00 hs")
+  latitud            Float?
+  longitud           Float?
+  zoneId             String
+  zone               Zone     @relation(fields: [zoneId], references: [id], onDelete: Restrict)
+  comisionPorcentaje Decimal  @default(5.00) @db.Decimal(5, 2)
+  multaSalitreArs    Decimal  @default(10000.00) @db.Decimal(10, 2)
+  mpCollectorId      String?
+  planEstado         String   @default("ACTIVA")
+  verificada         Boolean  @default(true)
+  activa             Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  users              User[]
+  boards             Board[]
+  rentals            Rental[]
+
+  @@index([zoneId])
+  @@index([activa])
 }
 
 model RefreshToken {
@@ -109,6 +166,10 @@ model Board {
   id                    String      @id @default(uuid())
   ownerId               String
   owner                 User        @relation("OwnerBoards", fields: [ownerId], references: [id], onDelete: Cascade)
+  agencyId              String?
+  agency                Agency?     @relation(fields: [agencyId], references: [id], onDelete: SetNull)
+  zoneId                String?
+  zone                  Zone?       @relation(fields: [zoneId], references: [id], onDelete: SetNull)
   titulo                String
   marca                 String
   modelo                String
@@ -130,6 +191,8 @@ model Board {
   reviews               Review[]
 
   @@index([ownerId])
+  @@index([agencyId])
+  @@index([zoneId])
   @@index([estado])
   @@index([marca, modelo])
 }
@@ -140,6 +203,8 @@ model Rental {
   consumer            User          @relation("ConsumerRentals", fields: [consumerId], references: [id], onDelete: Restrict)
   boardId             String
   board               Board         @relation(fields: [boardId], references: [id], onDelete: Restrict)
+  agencyId            String?
+  agency              Agency?       @relation(fields: [agencyId], references: [id], onDelete: SetNull)
   fechaInicio         DateTime
   fechaFinEstimada    DateTime
   fechaDevolucionReal DateTime?
@@ -176,6 +241,7 @@ model Rental {
 
   @@index([consumerId])
   @@index([boardId])
+  @@index([agencyId])
   @@index([estado])
   @@index([fechaInicio])
 }
@@ -280,4 +346,37 @@ model Payout {
   updatedAt  DateTime @updatedAt
 
   @@index([ownerId])
+}
+
+model SystemSetting {
+  key       String   @id
+  value     Json
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+}
+
+model VendorApplicationRecord {
+  id               String    @id
+  userId           String
+  userEmail        String
+  userNombre       String
+  userDni          String?
+  userTelefono     String?
+  agencyId         String?
+  nombreVendedor   String
+  descripcion      String    @db.Text
+  fotosTablas      Json
+  experienciaRubro String    @db.Text
+  status           String    @default("PENDIENTE")
+  reviewedAt       DateTime?
+  reviewedBy       String?
+  biometricHash    String?
+  motivoResolucion String?   @db.Text
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([userEmail])
+  @@index([agencyId])
+  @@index([status])
 }

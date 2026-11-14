@@ -24,24 +24,26 @@ export const OAUTH_CONFIG = {
     scope: ['public_profile'],
   },
   apple: {
-    clientId: process.env.APPLE_CLIENT_ID || 'com.surfrental.mdp.web',
-    teamId: process.env.APPLE_TEAM_ID || 'mock-apple-team-id',
-    keyId: process.env.APPLE_KEY_ID || 'mock-apple-key-id',
-    privateKey: process.env.APPLE_PRIVATE_KEY || 'mock-apple-private-key',
+    clientId: process.env.APPLE_CLIENT_ID || '',
+    teamId: process.env.APPLE_TEAM_ID || '',
+    keyId: process.env.APPLE_KEY_ID || '',
+    privateKey: process.env.APPLE_PRIVATE_KEY || '',
     authUrl: 'https://appleid.apple.com/auth/authorize',
     tokenUrl: 'https://appleid.apple.com/auth/token',
     scope: ['name', 'email'],
   },
   instagram: {
-    clientId: process.env.INSTAGRAM_CLIENT_ID || 'mock-instagram-client-id',
-    clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || 'mock-instagram-client-secret',
+    clientId: process.env.INSTAGRAM_CLIENT_ID || '',
+    clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || '',
     authUrl: 'https://api.instagram.com/oauth/authorize',
     tokenUrl: 'https://api.instagram.com/oauth/access_token',
     userInfoUrl: 'https://graph.instagram.com/me?fields=id,username',
     scope: ['user_profile', 'user_media'],
   },
-  callbackBaseUrl: process.env.API_BASE_URL || 'http://localhost:3000/api',
-  mobileDeepLinkScheme: 'surfrental://auth/callback',
+  callbackBaseUrl:
+    process.env.API_BASE_URL ||
+    (process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL.replace(/\/$/, '')}/api` : 'http://localhost:3000/api'),
+  mobileDeepLinkScheme: process.env.MOBILE_DEEP_LINK_SCHEME || 'surfrental://auth/callback',
 } as const;
 
 export type SupportedOAuthProvider = 'google' | 'github' | 'facebook' | 'apple' | 'instagram';

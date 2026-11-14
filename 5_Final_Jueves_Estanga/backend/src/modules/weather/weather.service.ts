@@ -1,5 +1,9 @@
+import { prisma } from '../../config/prisma';
+
 export interface MarineCondition {
+  zoneId?: string;
   spotName: string;
+  ciudad?: string;
   latitude: number;
   longitude: number;
   timestamp: string;
@@ -15,18 +19,45 @@ export interface MarineCondition {
 }
 
 export class WeatherService {
-  private static cachedData: { timestamp: number; data: MarineCondition } | null = null;
+  private static cacheByKey = new Map<string, { timestamp: number; data: MarineCondition }>();
   private static CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutos
 
-  public async getMarineForecast(): Promise<MarineCondition> {
+  public async getMarineForecast(params?: {
+    zoneId?: string;
+    lat?: number;
+    lon?: number;
+  }): Promise<MarineCondition> {
+    let latitude = params?.lat ?? -38.0305;
+    let longitude = params?.lon ?? -57.531;
+    let spotName = 'Playa Grande - Sede Central MDP';
+    let ciudad = 'Mar del Plata';
+    let zoneId = params?.zoneId;
+
+    if (zoneId && (prisma as any)?.zone?.findUnique) {
+      try {
+        const zone = await prisma.zone.findUnique({ where: { id: zoneId } });
+        if (zone) {
+          latitude = zone.latitud;
+          longitude = zone.longitud;
+          spotName = zone.nombre;
+          ciudad = zone.ciudad;
+          zoneId = zone.id;
+        }
+      } catch {
+        // fallback a coordenadas provistas o Playa Grande
+      }
+    }
+
+    const cacheKey = zoneId || `${latitude.toFixed(2)},${longitude.toFixed(2)}`;
     const now = Date.now();
-    if (WeatherService.cachedData && now - WeatherService.cachedData.timestamp < WeatherService.CACHE_TTL_MS) {
-      return WeatherService.cachedData.data;
+    const cached = WeatherService.cacheByKey.get(cacheKey);
+    if (cached && now - cached.timestamp < WeatherService.CACHE_TTL_MS) {
+      return cached.data;
     }
 
     try {
       const response = await fetch(
-        'https://marine-api.open-meteo.com/v1/marine?latitude=-38.03&longitude=-57.53&current=wave_height,wave_direction,wave_period&hourly=wave_height&timezone=America%2FArgentina%2FBuenos_Aires',
+        `https://marine-api.open-meteo.com/v1/marine?latitude=${latitude}&longitude=${longitude}&current=wave_height,wave_direction,wave_period&hourly=wave_height&timezone=America%2FArgentina%2FBuenos_Aires`,
         { signal: AbortSignal.timeout(3500) }
       );
 
@@ -36,29 +67,56 @@ export class WeatherService {
         const wavePeriod = Number(json.current?.wave_period ?? 9.5);
         const waveDirection = Number(json.current?.wave_direction ?? 160);
 
-        const condition = this.calculateCondition(waveHeight, wavePeriod, waveDirection);
-        WeatherService.cachedData = { timestamp: now, data: condition };
+        const condition = this.calculateCondition({
+          zoneId,
+          spotName,
+          ciudad,
+          latitude,
+          longitude,
+          waveHeight,
+          wavePeriod,
+          waveDir: waveDirection,
+        });
+        WeatherService.cacheByKey.set(cacheKey, { timestamp: now, data: condition });
         return condition;
       }
     } catch {
-      // Fallback a condiciones estacionales típicas y realistas de Playa Grande
+      // Fallback a condiciones estacionales realistas de la costa atlántica
     }
 
-    const fallbackCondition = this.calculateCondition(1.3, 10.2, 155);
-    WeatherService.cachedData = { timestamp: now, data: fallbackCondition };
+    const fallbackCondition = this.calculateCondition({
+      zoneId,
+      spotName,
+      ciudad,
+      latitude,
+      longitude,
+      waveHeight: 1.3,
+      wavePeriod: 10.2,
+      waveDir: 155,
+    });
+    WeatherService.cacheByKey.set(cacheKey, { timestamp: now, data: fallbackCondition });
     return fallbackCondition;
   }
 
-  private calculateCondition(waveHeight: number, wavePeriod: number, waveDir: number): MarineCondition {
+  private calculateCondition(input: {
+    zoneId?: string;
+    spotName: string;
+    ciudad: string;
+    latitude: number;
+    longitude: number;
+    waveHeight: number;
+    wavePeriod: number;
+    waveDir: number;
+  }): MarineCondition {
     let flag: 'VERDE' | 'AMARILLA' | 'ROJA' = 'VERDE';
     let conditionText = 'Olas óptimas para surf';
     const recommended: string[] = [];
 
-    if (waveHeight > 2.2) {
+    if (input.waveHeight > 2.2) {
       flag = 'ROJA';
       conditionText = 'Mar peligroso / Swell fuerte. Solo expertos.';
       recommended.push('Shortboard');
-    } else if (waveHeight >= 1.2) {
+    } else if (input.waveHeight >= 1.2) {
       flag = 'AMARILLA';
       conditionText = 'Condiciones medianas a buenas. Olas consistentes.';
       recommended.push('Fish', 'Shortboard', 'Funboard');
@@ -69,13 +127,15 @@ export class WeatherService {
     }
 
     return {
-      spotName: 'Playa Grande - Sede Central MDP',
-      latitude: -38.0305,
-      longitude: -57.531,
+      zoneId: input.zoneId,
+      spotName: input.spotName,
+      ciudad: input.ciudad,
+      latitude: input.latitude,
+      longitude: input.longitude,
       timestamp: new Date().toISOString(),
-      waveHeightMeters: Number(waveHeight.toFixed(1)),
-      wavePeriodSeconds: Number(wavePeriod.toFixed(1)),
-      waveDirectionDegrees: Math.round(waveDir),
+      waveHeightMeters: Number(input.waveHeight.toFixed(1)),
+      wavePeriodSeconds: Number(input.wavePeriod.toFixed(1)),
+      waveDirectionDegrees: Math.round(input.waveDir),
       windSpeedKmh: 14,
       windDirectionText: 'Sudoeste (Offshore)',
       waterTemperatureCelsius: 16.5,

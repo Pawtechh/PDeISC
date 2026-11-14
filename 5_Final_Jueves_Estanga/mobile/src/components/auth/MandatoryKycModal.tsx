@@ -276,11 +276,11 @@ export const MandatoryKycModal: React.FC = () => {
                 ]}
               >
                 {isLoading ? (
-                  <ActivityIndicator size="small" color={isDark ? '#161513' : '#FDFCFA'} />
+                  <ActivityIndicator size="small" color={theme.primaryText} />
                 ) : (
                   <Row spacing="sm" align="center" justify="center">
-                    <CheckCircle2 size={18} color={canSubmit ? (isDark ? '#161513' : '#FDFCFA') : theme.subtext} />
-                    <Text style={[styles.submitButtonText, { color: canSubmit ? (isDark ? '#161513' : '#FDFCFA') : theme.subtext }]}>Verificar y Activar Cuenta</Text>
+                    <CheckCircle2 size={18} color={canSubmit ? theme.primaryText : theme.subtext} />
+                    <Text style={[styles.submitButtonText, { color: canSubmit ? theme.primaryText : theme.subtext }]}>Verificar y Activar Cuenta</Text>
                   </Row>
                 )}
               </TouchableOpacity>

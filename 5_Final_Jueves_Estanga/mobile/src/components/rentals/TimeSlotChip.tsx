@@ -52,7 +52,7 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
           variant="caption"
           color={
             selected
-              ? '#FDFCFA'
+              ? theme.primaryText
               : !disponible
               ? theme.muted
               : theme.text
@@ -107,8 +107,8 @@ const styles = StyleSheet.create({
     }),
   },
   chipSelected: {
-    backgroundColor: colors.coral[500],
-    borderColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[700],
   },
   chipDisabled: {
     opacity: 0.45,

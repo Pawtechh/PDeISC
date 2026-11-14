@@ -22,9 +22,9 @@ router.get('/commission', getCommission);
 router.put('/commission', validateBody(updateCommissionSchema), updateCommission);
 router.post('/commission', validateBody(updateCommissionSchema), updateCommission);
 
-// Todas las rutas operativas de mostrador requieren sesión activa con rol AGENCIA
+// Todas las rutas operativas de mostrador requieren sesión activa con rol AGENCIA o SUPER_ADMIN
 router.use(requireAuth);
-router.use(requireRole('AGENCIA'));
+router.use(requireRole('AGENCIA', 'SUPER_ADMIN'));
 
 router.post('/checkin', validateBody(agencyCheckInSchema), checkIn);
 router.post('/checkout', validateBody(agencyCheckOutSchema), checkOut);

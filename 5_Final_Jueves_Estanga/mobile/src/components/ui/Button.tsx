@@ -22,7 +22,7 @@ import { useTheme } from '../../theme/ThemeContext';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps {
@@ -86,27 +86,27 @@ export const Button: React.FC<ButtonProps> = ({
         return {
           backgroundColor: theme.primary,
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(234, 125, 96, 0.40)' : theme.primaryDeep,
+          borderColor: isDark ? 'rgba(81, 204, 213, 0.42)' : theme.primaryDeep,
           shadowColor: theme.primary,
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: isDark ? 0.22 : 0.15,
+          shadowOpacity: isDark ? 0.22 : 0.16,
           shadowRadius: 14,
           elevation: 5,
           ...(Platform.OS === 'web'
             ? ({
                 backgroundImage: isDark
-                  ? 'linear-gradient(135deg, #E57355 0%, #E06343 55%, #C94A29 100%)'
-                  : 'linear-gradient(135deg, #D95A38 0%, #C94A29 55%, #B23E20 100%)',
+                  ? 'linear-gradient(135deg, #51CCD5 0%, #38BDC7 55%, #2499A3 100%)'
+                  : 'linear-gradient(135deg, #13828C 0%, #0E6B74 55%, #08444A 100%)',
                 boxShadow: isDark
-                  ? '0 8px 20px -6px rgba(224, 99, 67, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22)'
-                  : '0 8px 18px -6px rgba(201, 74, 41, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.28)',
+                  ? '0 8px 20px -6px rgba(56, 189, 199, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.25)'
+                  : '0 8px 18px -6px rgba(14, 107, 116, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.24)',
                 overflow: 'hidden',
               } as any)
             : {}),
         };
       case 'secondary':
         return {
-          backgroundColor: isDark ? 'rgba(245, 242, 236, 0.06)' : theme.cardHighlight,
+          backgroundColor: isDark ? 'rgba(242, 245, 244, 0.06)' : theme.cardHighlight,
           borderWidth: 1,
           borderColor: theme.border,
           ...(Platform.OS === 'web'
@@ -119,9 +119,16 @@ export const Button: React.FC<ButtonProps> = ({
         };
       case 'danger':
         return {
-          backgroundColor: isDark ? '#D0554E' : theme.danger,
+          backgroundColor: isDark ? '#B9403A' : '#B63933',
           borderWidth: 1,
-          borderColor: theme.dangerBorder,
+          borderColor: isDark ? 'rgba(236, 122, 115, 0.38)' : '#8B2621',
+          ...(Platform.OS === 'web' ? ({ overflow: 'hidden' } as any) : {}),
+        };
+      case 'success':
+        return {
+          backgroundColor: '#1D6F5A',
+          borderWidth: 1,
+          borderColor: isDark ? 'rgba(79, 195, 161, 0.42)' : '#155444',
           ...(Platform.OS === 'web' ? ({ overflow: 'hidden' } as any) : {}),
         };
       case 'ghost':
@@ -137,8 +144,10 @@ export const Button: React.FC<ButtonProps> = ({
   const getTextColor = (): string => {
     switch (variant) {
       case 'primary':
-        return '#FFFFFF';
+        return theme.primaryText;
       case 'danger':
+        return '#FFFFFF';
+      case 'success':
         return '#FFFFFF';
       case 'secondary':
         return theme.text;

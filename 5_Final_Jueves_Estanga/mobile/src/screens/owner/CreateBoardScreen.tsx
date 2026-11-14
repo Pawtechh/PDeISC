@@ -219,10 +219,10 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                 ¡Tabla Publicada con Éxito!
               </Text>
               <Text variant="body" color={theme.subtext} style={{ textAlign: 'center' }}>
-                Tu tabla <Text style={{ fontWeight: '700' }}>"{titulo}"</Text> ya está disponible en el catálogo oficial de la Sede Central Mar del Plata.
+                Tu tabla <Text style={{ fontWeight: '700' }}>"{titulo}"</Text> ya está disponible en el catálogo oficial de la red costera.
               </Text>
               <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center' }}>
-                Comisión transparente de sede central. Ciclo de mantenimiento preventivo inicializado (45 días).
+                Vinculada a tu agencia/sede asignada. Ciclo de mantenimiento preventivo inicializado (45 días).
               </Text>
               <Row spacing="md" style={{ width: '100%', marginTop: spacing.md }}>
                 <Button
@@ -443,7 +443,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                     title="📷 Tomar Foto (Cámara)"
                     variant="primary"
                     size="sm"
-                    iconLeft={<Camera size={14} color="#FFFFFF" />}
+                    iconLeft={<Camera size={14} color={theme.primaryText} />}
                     onPress={handleTakePhoto}
                   />
                   <Button

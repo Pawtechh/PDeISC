@@ -11,7 +11,11 @@ export class AgencyService {
    * Procesa la entrega física de la tabla en mostrador de la Sede Central:
    * Inspección fotográfica de retiro, validación de DNI (+18) y firma digital.
    */
-  async checkIn(input: AgencyCheckInInput, _operatorId: string) {
+  async checkIn(
+    input: AgencyCheckInInput,
+    _operatorId: string,
+    operatorContext?: { role?: string; agencyId?: string | null }
+  ) {
     const rental = await prisma.rental.findUnique({
       where: { id: input.rentalId },
       include: {
@@ -22,6 +26,20 @@ export class AgencyService {
 
     if (!rental) {
       throw new AppError('RENTAL_NOT_FOUND', 'Alquiler no encontrado', 404);
+    }
+
+    const rentalAgencyId = (rental as any).agencyId || (rental as any).board?.agencyId || null;
+    if (
+      operatorContext?.agencyId &&
+      operatorContext.role !== 'SUPER_ADMIN' &&
+      rentalAgencyId &&
+      rentalAgencyId !== operatorContext.agencyId
+    ) {
+      throw new AppError(
+        'FORBIDDEN_AGENCY',
+        'Este alquiler corresponde a otra agencia o sede.',
+        403
+      );
     }
 
     if (rental.estado === 'EN_CURSO') {
@@ -97,7 +115,11 @@ export class AgencyService {
    * Procesa la devolución de la tabla en mostrador de la Sede Central:
    * Control de enjuague de salitre (multa automática $10.000 ARS) y revisión de daños.
    */
-  async checkOut(input: AgencyCheckOutInput, _operatorId: string) {
+  async checkOut(
+    input: AgencyCheckOutInput,
+    _operatorId: string,
+    operatorContext?: { role?: string; agencyId?: string | null }
+  ) {
     const rental = await prisma.rental.findUnique({
       where: { id: input.rentalId },
       include: {
@@ -108,6 +130,20 @@ export class AgencyService {
 
     if (!rental) {
       throw new AppError('RENTAL_NOT_FOUND', 'Alquiler no encontrado', 404);
+    }
+
+    const rentalAgencyId = (rental as any).agencyId || (rental as any).board?.agencyId || null;
+    if (
+      operatorContext?.agencyId &&
+      operatorContext.role !== 'SUPER_ADMIN' &&
+      rentalAgencyId &&
+      rentalAgencyId !== operatorContext.agencyId
+    ) {
+      throw new AppError(
+        'FORBIDDEN_AGENCY',
+        'Esta devolución corresponde a otra agencia o sede.',
+        403
+      );
     }
 
     if (rental.estado === 'DEVUELTA' || rental.estado === 'PENDIENTE_REVISION') {
@@ -225,23 +261,34 @@ export class AgencyService {
   /**
    * Obtiene la grilla de operaciones del día en Sede Central
    */
-  async getDailySchedule() {
+  async getDailySchedule(agencyId?: string | null) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    const scheduleCondition = {
+      OR: [
+        {
+          estado: { in: ['ACTIVA', 'PENDIENTE', 'EN_CURSO'] as any },
+        },
+        {
+          fechaInicio: { gte: today, lt: tomorrow },
+        },
+      ],
+    };
+
+    const whereClause: any = agencyId
+      ? {
+          AND: [
+            { OR: [{ agencyId }, { board: { agencyId } }] },
+            scheduleCondition,
+          ],
+        }
+      : scheduleCondition;
+
     const rentals = await prisma.rental.findMany({
-      where: {
-        OR: [
-          {
-            estado: { in: ['ACTIVA', 'PENDIENTE', 'EN_CURSO'] },
-          },
-          {
-            fechaInicio: { gte: today, lt: tomorrow },
-          },
-        ],
-      },
+      where: whereClause,
       orderBy: { fechaInicio: 'asc' },
       include: {
         board: {
@@ -251,6 +298,7 @@ export class AgencyService {
             marca: true,
             tipoTabla: true,
             fotos: true,
+            agencyId: true,
           },
         },
         consumer: {
@@ -270,22 +318,42 @@ export class AgencyService {
   /**
    * Métricas y resumen operativo del mostrador de la agencia
    */
-  async getAgencyMetrics() {
+  async getAgencyMetrics(agencyId?: string | null) {
+    const rentalTenantFilter = agencyId
+      ? { OR: [{ agencyId }, { board: { agencyId } }] }
+      : {};
+
     const enElAguaCount = await prisma.rental.count({
-      where: { estado: 'EN_CURSO' },
+      where: { estado: 'EN_CURSO', ...rentalTenantFilter },
     });
 
     const reservasHoyCount = await prisma.rental.count({
-      where: { estado: 'ACTIVA' },
+      where: { estado: 'ACTIVA', ...rentalTenantFilter },
     });
 
-    const tablasEnCustodia = await prisma.board.count();
+    const tablasEnCustodia = await prisma.board.count(
+      agencyId ? { where: { agencyId } } : undefined
+    );
 
     const multasEmitidas = await prisma.payment.aggregate({
-      where: { tipo: 'MULTA', estado: 'DEBITADO' },
+      where: agencyId
+        ? { tipo: 'MULTA', estado: 'DEBITADO', rental: rentalTenantFilter }
+        : { tipo: 'MULTA', estado: 'DEBITADO' },
       _sum: { monto: true },
       _count: { id: true },
     });
+
+    let agencyRow: { comisionPorcentaje?: any; multaSalitreArs?: any; nombre?: string; slug?: string } | null = null;
+    if (agencyId && (prisma as any)?.agency?.findUnique) {
+      try {
+        agencyRow = await (prisma as any).agency.findUnique({
+          where: { id: agencyId },
+          select: { comisionPorcentaje: true, multaSalitreArs: true, nombre: true, slug: true },
+        });
+      } catch {
+        agencyRow = null;
+      }
+    }
 
     return {
       enElAguaCount,
@@ -293,8 +361,16 @@ export class AgencyService {
       tablasEnCustodia,
       totalMultasRecaudadas: Number(multasEmitidas?._sum?.monto || 0),
       cantidadMultas: multasEmitidas?._count?.id || 0,
-      comisionAgenciaPorcentaje: systemConfig.getAgencyCommissionPercentage(),
-      multaLavadoEstándar: BUSINESS.MULTA_NO_LAVAR,
+      comisionAgenciaPorcentaje:
+        agencyRow?.comisionPorcentaje != null
+          ? Number(agencyRow.comisionPorcentaje)
+          : systemConfig.getAgencyCommissionPercentage(),
+      multaLavadoEstándar:
+        agencyRow?.multaSalitreArs != null
+          ? Number(agencyRow.multaSalitreArs)
+          : BUSINESS.MULTA_NO_LAVAR,
+      agencyName: agencyRow?.nombre,
+      agencySlug: agencyRow?.slug,
     };
   }
 
@@ -313,7 +389,11 @@ export class AgencyService {
   /**
    * Actualiza el % que cobra la agencia desde la web con confirmación de contraseña especial
    */
-  async updateAgencyCommission(input: UpdateCommissionInput, operatorIdentifier?: string) {
+  async updateAgencyCommission(
+    input: UpdateCommissionInput,
+    operatorIdentifier?: string,
+    agencyId?: string | null
+  ) {
     if (!systemConfig.validateSpecialPassword(input.specialPassword)) {
       throw new AppError(
         'INVALID_SPECIAL_PASSWORD',
@@ -333,10 +413,23 @@ export class AgencyService {
 
     systemConfig.setAgencyCommissionPercent(nuevoPorcentaje, operatorIdentifier);
 
+    if (agencyId && (prisma as any)?.agency?.update) {
+      try {
+        await (prisma as any).agency.update({
+          where: { id: agencyId },
+          data: { comisionPorcentaje: nuevoPorcentaje },
+        });
+      } catch {
+        // Ignorar si mock
+      }
+    }
+
     let rentalsUpdatedCount = 0;
     try {
       if (prisma && prisma.rental && typeof prisma.rental.findMany === 'function') {
-        const rentals = await prisma.rental.findMany();
+        const rentals = await prisma.rental.findMany(
+          agencyId ? { where: { OR: [{ agencyId }, { board: { agencyId } }] } } : undefined
+        );
         if (Array.isArray(rentals)) {
           for (const r of rentals) {
             const precioBase = Number(r.precioBase || 0);
@@ -375,11 +468,13 @@ export class AgencyService {
   /**
    * Obtiene todas las solicitudes y vendedores activos (sincronizando owners en DB)
    */
-  async getVendorRequests() {
+  async getVendorRequests(agencyId?: string | null) {
     try {
       if (prisma?.user?.findMany) {
         const activeOwners = await prisma.user.findMany({
-          where: { role: 'OWNER', activo: true },
+          where: agencyId
+            ? { role: 'OWNER', activo: true, OR: [{ agencyId }, { agencyId: null }] }
+            : { role: 'OWNER', activo: true },
           include: {
             boards: {
               select: { fotos: true },
@@ -404,6 +499,7 @@ export class AgencyService {
             dni: owner.dni,
             telefono: owner.telefono,
             fotos: boardPhotos.slice(0, 4),
+            agencyId: (owner as any).agencyId ?? null,
           });
         }
       }
@@ -411,10 +507,11 @@ export class AgencyService {
       // Continuar de forma segura si prisma está mockeado en unit tests
     }
 
-    const all = vendorRegistry.getAll();
+    const all = vendorRegistry.getAll(agencyId);
     try {
       if (prisma?.board?.findMany) {
         const allBoards = await prisma.board.findMany({
+          where: agencyId ? { OR: [{ agencyId }, { agencyId: null }] } : undefined,
           select: {
             id: true,
             ownerId: true,
@@ -450,7 +547,8 @@ export class AgencyService {
       motivoResolucion?: string;
     },
     operatorId: string,
-    operatorEmail: string
+    operatorEmail: string,
+    operatorAgencyId?: string | null
   ) {
     if (
       input.decision !== 'APROBADO' &&
@@ -515,6 +613,14 @@ export class AgencyService {
         'VENDOR_REQUEST_NOT_FOUND',
         'Solicitud o perfil de vendedor no encontrado.',
         404
+      );
+    }
+
+    if (operatorAgencyId && existing.agencyId && existing.agencyId !== operatorAgencyId) {
+      throw new AppError(
+        'FORBIDDEN_AGENCY',
+        'Esta solicitud de vendedor está dirigida a otra agencia.',
+        403
       );
     }
 
@@ -590,8 +696,26 @@ export class AgencyService {
       );
     }
 
-    // Si se rechaza y el usuario estaba en rol OWNER, degradarlo a CONSUMER
+    // Si se aprueba y la agencia operadora o solicitud tiene agencyId, vincular al vendedor con esa agencia/zona
     try {
+      const targetAgencyId = updated.agencyId || operatorAgencyId || null;
+      if (input.decision === 'APROBADO' && targetAgencyId && prisma?.user?.updateMany) {
+        let targetZoneId: string | undefined;
+        if ((prisma as any)?.agency?.findUnique) {
+          const ag = await (prisma as any).agency.findUnique({
+            where: { id: targetAgencyId },
+            select: { zoneId: true },
+          });
+          if (ag?.zoneId) targetZoneId = ag.zoneId;
+        }
+        await prisma.user.updateMany({
+          where: { OR: [{ id: updated.userId }, { email: updated.userEmail }] },
+          data: {
+            agencyId: targetAgencyId,
+          },
+        });
+      }
+
       if (input.decision === 'RECHAZADO' && prisma?.user?.updateMany) {
         await prisma.user.updateMany({
           where: {

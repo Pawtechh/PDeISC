@@ -1,13 +1,18 @@
 import { BoardStatus, Prisma } from '@prisma/client';
 import { prisma } from '../../config/prisma';
 import { BUSINESS } from '../../constants/business';
+import { saveImageAsset } from '../../utils/fileStorage';
 import { CreateBoardInput, UpdateBoardInput, BoardFiltersInput } from './boards.schemas';
 
 export class BoardsService {
   /**
-   * Crea una nueva tabla verificando regla de duplicados, estado de suscripción y mantenimiento
+   * Crea una nueva tabla verificando regla de duplicados, estado de suscripción, zona/agencia y mantenimiento
    */
-  async create(ownerId: string, data: CreateBoardInput) {
+  async create(
+    ownerId: string,
+    data: CreateBoardInput,
+    context?: { role?: string; agencyId?: string | null }
+  ) {
     // 1. Regla de duplicados: mismo owner + marca + modelo + medidas
     const existingDuplicate = await prisma.board.findFirst({
       where: {
@@ -31,7 +36,7 @@ export class BoardsService {
     // Gratis los primeros 3 meses; luego requiere estar al día, si no pasa a PRIVADA
     const owner = await prisma.user.findUnique({
       where: { id: ownerId },
-      select: { createdAt: true },
+      select: { createdAt: true, agencyId: true, agency: { select: { zoneId: true } } },
     });
 
     let estadoInicial: BoardStatus = BoardStatus.DISPONIBLE;
@@ -47,6 +52,29 @@ export class BoardsService {
       }
     }
 
+    // Subir fotos base64 a Cloudinary (producción) o disco local persistente
+    const persistedFotos = await Promise.all(
+      data.fotos.map(async (foto, idx) => {
+        if (foto.startsWith('data:image/')) {
+          return (await saveImageAsset(foto, 'board', `${ownerId}-${idx}`)) || foto;
+        }
+        return foto;
+      })
+    );
+
+    // Resolver agencia y zona de publicación
+    const resolvedAgencyId = data.agencyId || context?.agencyId || owner?.agencyId || null;
+    let resolvedZoneId = data.zoneId || owner?.agency?.zoneId || null;
+    if (resolvedAgencyId && !resolvedZoneId && (prisma as any)?.agency?.findUnique) {
+      const targetAgency = await (prisma as any).agency.findUnique({
+        where: { id: resolvedAgencyId },
+        select: { zoneId: true },
+      });
+      if (targetAgency?.zoneId) {
+        resolvedZoneId = targetAgency.zoneId;
+      }
+    }
+
     // 3. Programar próximo mantenimiento obligatorio en 45 días
     const proximoMantenimiento = new Date();
     proximoMantenimiento.setDate(proximoMantenimiento.getDate() + BUSINESS.MANTENIMIENTO_DIAS);
@@ -54,6 +82,8 @@ export class BoardsService {
     const board = await prisma.board.create({
       data: {
         ownerId,
+        ...(resolvedAgencyId ? { agencyId: resolvedAgencyId } : {}),
+        ...(resolvedZoneId ? { zoneId: resolvedZoneId } : {}),
         titulo: data.titulo,
         marca: data.marca,
         modelo: data.modelo,
@@ -63,7 +93,7 @@ export class BoardsService {
         precioHora: new Prisma.Decimal(data.precioHora),
         valorTasadoUsd: new Prisma.Decimal(data.valorTasadoUsd),
         estado: estadoInicial,
-        fotos: data.fotos,
+        fotos: persistedFotos,
         polizaSeguroNumero: data.polizaSeguroNumero,
         polizaAseguradora: data.polizaAseguradora,
         proximoMantenimiento,
@@ -71,6 +101,29 @@ export class BoardsService {
       include: {
         owner: {
           select: { id: true, nombre: true, email: true },
+        },
+        agency: {
+          select: {
+            id: true,
+            slug: true,
+            nombre: true,
+            accentColor: true,
+            logoUrl: true,
+            direccion: true,
+            whatsapp: true,
+            verificada: true,
+            zoneId: true,
+          },
+        },
+        zone: {
+          select: {
+            id: true,
+            slug: true,
+            ciudad: true,
+            nombre: true,
+            latitud: true,
+            longitud: true,
+          },
         },
       },
     });
@@ -97,6 +150,22 @@ export class BoardsService {
 
     if (filters.marca) {
       where.marca = { contains: filters.marca };
+    }
+
+    if (filters.zoneId) {
+      where.zoneId = filters.zoneId;
+    }
+
+    if (filters.agencyId) {
+      where.agencyId = filters.agencyId;
+    }
+
+    if (filters.ciudad) {
+      where.zone = {
+        is: {
+          ciudad: { contains: filters.ciudad },
+        },
+      };
     }
 
     if (filters.precioMin !== undefined || filters.precioMax !== undefined) {
@@ -128,6 +197,29 @@ export class BoardsService {
           },
           owner: {
             select: { id: true, nombre: true, email: true, createdAt: true, dniFotoUrl: true },
+          },
+          agency: {
+            select: {
+              id: true,
+              slug: true,
+              nombre: true,
+              accentColor: true,
+              logoUrl: true,
+              direccion: true,
+              whatsapp: true,
+              verificada: true,
+              zoneId: true,
+            },
+          },
+          zone: {
+            select: {
+              id: true,
+              slug: true,
+              ciudad: true,
+              nombre: true,
+              latitud: true,
+              longitud: true,
+            },
           },
         },
       }),
@@ -181,6 +273,12 @@ export class BoardsService {
         owner: {
           select: { id: true, nombre: true },
         },
+        agency: {
+          include: {
+            zone: true,
+          },
+        },
+        zone: true,
         rentals: {
           where: { estado: { in: ['ACTIVA', 'EN_CURSO', 'PENDIENTE'] } },
           select: {
@@ -303,7 +401,13 @@ export class BoardsService {
   /**
    * Actualización de tabla (solo por su owner o agencia)
    */
-  async update(userId: string, userRole: string, id: string, data: UpdateBoardInput) {
+  async update(
+    userId: string,
+    userRole: string,
+    id: string,
+    data: UpdateBoardInput,
+    userAgencyId?: string | null
+  ) {
     const board = await prisma.board.findUnique({ where: { id } });
     if (!board) {
       const error: any = new Error('La tabla no existe');
@@ -312,17 +416,34 @@ export class BoardsService {
       throw error;
     }
 
-    if (userRole !== 'AGENCIA' && board.ownerId !== userId) {
+    const canEdit =
+      userRole === 'SUPER_ADMIN' ||
+      board.ownerId === userId ||
+      (userRole === 'AGENCIA' && (!board.agencyId || !userAgencyId || board.agencyId === userAgencyId));
+
+    if (!canEdit) {
       const error: any = new Error('No tenés permisos para modificar esta tabla');
       error.statusCode = 403;
       error.code = 'FORBIDDEN';
       throw error;
     }
 
+    const persistedFotos = data.fotos
+      ? await Promise.all(
+          data.fotos.map(async (foto, idx) => {
+            if (foto.startsWith('data:image/')) {
+              return (await saveImageAsset(foto, 'board', `${userId}-upd-${idx}`)) || foto;
+            }
+            return foto;
+          })
+        )
+      : undefined;
+
     return await prisma.board.update({
       where: { id },
       data: {
         ...data,
+        fotos: persistedFotos ?? data.fotos,
         volumenLitros: data.volumenLitros ? new Prisma.Decimal(data.volumenLitros) : undefined,
         precioHora: data.precioHora ? new Prisma.Decimal(data.precioHora) : undefined,
         valorTasadoUsd: data.valorTasadoUsd ? new Prisma.Decimal(data.valorTasadoUsd) : undefined,
@@ -333,7 +454,7 @@ export class BoardsService {
   /**
    * Eliminación de tabla
    */
-  async delete(userId: string, userRole: string, id: string) {
+  async delete(userId: string, userRole: string, id: string, userAgencyId?: string | null) {
     const board = await prisma.board.findUnique({ where: { id } });
     if (!board) {
       const error: any = new Error('La tabla no existe');
@@ -342,7 +463,12 @@ export class BoardsService {
       throw error;
     }
 
-    if (userRole !== 'AGENCIA' && board.ownerId !== userId) {
+    const canDelete =
+      userRole === 'SUPER_ADMIN' ||
+      board.ownerId === userId ||
+      (userRole === 'AGENCIA' && (!board.agencyId || !userAgencyId || board.agencyId === userAgencyId));
+
+    if (!canDelete) {
       const error: any = new Error('No tenés permisos para eliminar esta tabla');
       error.statusCode = 403;
       error.code = 'FORBIDDEN';
@@ -380,14 +506,36 @@ export class BoardsService {
   }
 
   /**
-   * Obtiene las tablas del owner autenticado
+   * Obtiene las tablas del owner o de la agencia autenticada
    */
-  async getMyBoards(ownerId: string) {
+  async getMyBoards(ownerId: string, userRole?: string, agencyId?: string | null) {
+    const where: Prisma.BoardWhereInput =
+      userRole === 'AGENCIA' && agencyId
+        ? { OR: [{ agencyId }, { ownerId }] }
+        : { ownerId };
+
     const boards = await prisma.board.findMany({
-      where: { ownerId },
+      where,
       include: {
         reviews: {
           select: { calificacion: true },
+        },
+        agency: {
+          select: {
+            id: true,
+            slug: true,
+            nombre: true,
+            accentColor: true,
+            direccion: true,
+          },
+        },
+        zone: {
+          select: {
+            id: true,
+            slug: true,
+            ciudad: true,
+            nombre: true,
+          },
         },
       },
       orderBy: { createdAt: 'desc' },

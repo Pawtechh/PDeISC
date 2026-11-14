@@ -604,8 +604,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   optionRowSelected: {
-    borderColor: colors.coral[600],
-    backgroundColor: colors.coral.subtle,
+    borderColor: colors.teal[600],
+    backgroundColor: colors.teal.subtle,
   },
   pill: {
     paddingVertical: spacing.sm,
@@ -617,8 +617,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pillSelected: {
-    backgroundColor: colors.coral[600],
-    borderColor: colors.coral[700],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[700],
   },
   pointPill: {
     paddingVertical: spacing.xs,
@@ -633,9 +633,9 @@ const styles = StyleSheet.create({
     borderColor: colors.sunset[600],
   },
   quoteCard: {
-    backgroundColor: colors.coral.subtle,
+    backgroundColor: colors.teal.subtle,
     borderWidth: 1,
-    borderColor: colors.coral.border,
+    borderColor: colors.teal.border,
   },
   termsCard: {
     backgroundColor: colors.sand[50],
@@ -657,8 +657,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkboxActive: {
-    backgroundColor: colors.coral[600],
-    borderColor: colors.coral[700],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[700],
   },
   bold: {
     fontWeight: '700',
@@ -670,6 +670,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   methodPillActive: {
-    backgroundColor: colors.coral.subtle,
+    backgroundColor: colors.teal.subtle,
   },
 });

@@ -259,7 +259,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
               style={styles.quickSignBtn}
               testID={`${testID}-btn-quick`}
             >
-              <Text variant="caption" color={colors.coral[600]} style={{ fontWeight: '600', fontSize: 12 }}>
+              <Text variant="caption" color={colors.teal[600]} style={{ fontWeight: '600', fontSize: 12 }}>
                 Firma Rápida
               </Text>
             </TouchableOpacity>
@@ -324,21 +324,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   lawPill: {
-    backgroundColor: 'rgba(201, 74, 41, 0.08)',
+    backgroundColor: 'rgba(14, 107, 116, 0.08)',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(201, 74, 41, 0.24)',
+    borderColor: 'rgba(14, 107, 116, 0.24)',
   },
   lawText: {
-    color: colors.coral[600],
+    color: colors.teal[600],
     fontWeight: '600',
     fontSize: 10,
   },
   padContainer: {
     backgroundColor: '#FFFFFF',
-    borderColor: 'rgba(201, 74, 41, 0.42)',
+    borderColor: 'rgba(14, 107, 116, 0.42)',
     borderWidth: 2,
     borderStyle: 'solid',
     borderRadius: radii.md,
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
       : {}),
   },
   padContainerDrawing: {
-    borderColor: colors.coral[600],
+    borderColor: colors.teal[600],
     borderWidth: 2,
     backgroundColor: '#FFFFFF',
   },

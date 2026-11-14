@@ -19,10 +19,13 @@ import {
   Edit3,
   Clock,
   QrCode,
+  Store,
 } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button } from '../../components/ui';
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
+import { useAppSelector } from '../../store';
+import { AgencySettingsModal } from '../../components/agencies/AgencySettingsModal';
 import {
   useGetMetricsQuery,
   useGetScheduleQuery,
@@ -36,6 +39,8 @@ import { getRentalTimingInfo } from '../../components/rentals/RentalCard';
 export const AgencyDashboardScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
   const navigation = useNavigation<any>();
+  const currentUser = useAppSelector((s) => s.auth.user);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const {
     data: metricsData,
     isFetching: fetchingMetrics,
@@ -197,17 +202,37 @@ export const AgencyDashboardScreen: React.FC = () => {
           <Row justify="space-between" align="flex-start" style={{ flexWrap: 'wrap', gap: 6 }}>
             <View style={{ flex: 1, paddingRight: spacing.xs }}>
               <Text variant="caption" style={[styles.eyebrowText, { color: theme.champagne }]}>
-                CENTRO DE CONTROL OPERATIVO • MAR DEL PLATA
+                {currentUser?.agency?.zone
+                  ? `${currentUser.agency.zone.ciudad.toUpperCase()} • ${currentUser.agency.zone.nombre.toUpperCase()}`
+                  : 'CENTRO DE CONTROL OPERATIVO'}
               </Text>
               <Text variant="h1" color={theme.text}>
-                Mostrador Playa Grande
+                {currentUser?.agency?.nombre || (metrics as any).agencyName || 'Mostrador Operativo'}
               </Text>
             </View>
             <Badge label="ABIERTO (6-21 HS)" variant="success" />
           </Row>
           <Text variant="body" color={theme.subtext}>
-            Sede Central Mar del Plata • Operación de entrega, peritaje y custodia
+            {currentUser?.agency?.direccion || 'Operación de entrega, peritaje y custodia en sede'}
           </Text>
+          <Row spacing="sm" style={{ flexWrap: 'wrap', marginTop: 4 }}>
+            <Button
+              title="Editar Perfil de Tienda"
+              variant="secondary"
+              size="sm"
+              onPress={() => setShowSettingsModal(true)}
+              iconLeft={<Store size={14} color={theme.text} />}
+              testID="btn-agency-edit-profile"
+            />
+            <Button
+              title="Mis Tablas & Publicar"
+              variant="primary"
+              size="sm"
+              onPress={() => navigation.navigate('Mis Tablas')}
+              iconLeft={<Waves size={14} color={theme.primaryText} />}
+              testID="btn-agency-go-boards"
+            />
+          </Row>
         </Stack>
 
         {/* Métricas Principales */}
@@ -331,7 +356,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                   color={theme.dangerText}
                   style={{ flex: 1 }}
                 >
-                  Protocolo de Salitre ($10.000 ARS)
+                  Protocolo de Salitre (${Number(metrics.multaLavadoEstándar || 10000).toLocaleString('es-AR')} ARS)
                 </Text>
               </Row>
               <Badge label={`${metrics.cantidadMultas} multas cobradas`} variant="danger" />
@@ -604,6 +629,14 @@ export const AgencyDashboardScreen: React.FC = () => {
           </Card>
         </View>
       </Modal>
+
+      <AgencySettingsModal
+        visible={showSettingsModal}
+        onClose={() => {
+          setShowSettingsModal(false);
+          refetchMetrics();
+        }}
+      />
     </Screen>
   );
 };

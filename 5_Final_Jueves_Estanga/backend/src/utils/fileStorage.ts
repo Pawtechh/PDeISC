@@ -1,8 +1,89 @@
 import fs from 'fs';
 import path from 'path';
+import { v2 as cloudinary } from 'cloudinary';
+
+function isCloudinaryConfigured(): boolean {
+  const cloud = process.env.CLOUDINARY_CLOUD_NAME?.trim();
+  const key = process.env.CLOUDINARY_API_KEY?.trim();
+  const secret = process.env.CLOUDINARY_API_SECRET?.trim();
+  return Boolean(
+    cloud &&
+      key &&
+      secret &&
+      !cloud.startsWith('your-') &&
+      !key.startsWith('your-') &&
+      !secret.startsWith('your-')
+  );
+}
+
+let cloudinaryConfigured = false;
+function ensureCloudinaryInit() {
+  if (!cloudinaryConfigured && isCloudinaryConfigured()) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+    cloudinaryConfigured = true;
+  }
+}
 
 /**
- * Guarda una imagen en formato Base64 (Data URI o raw) en el directorio public/uploads/dni/
+ * Persiste imágenes en Cloudinary cuando está configurado en variables de entorno
+ * (ideal para hosting stateless económico como Render / Railway / Koyeb),
+ * o en almacenamiento local `/uploads/...` como fallback automático en desarrollo.
+ */
+export async function saveImageAsset(
+  dataUriOrUrl: string | undefined | null,
+  prefix = 'dni',
+  identifier = 'user'
+): Promise<string | undefined> {
+  if (!dataUriOrUrl || typeof dataUriOrUrl !== 'string') {
+    return undefined;
+  }
+  const trimmed = dataUriOrUrl.trim();
+  if (
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('/uploads/') ||
+    trimmed.startsWith('/images/')
+  ) {
+    return trimmed;
+  }
+
+  if (isCloudinaryConfigured()) {
+    try {
+      ensureCloudinaryInit();
+      const subfolder =
+        prefix === 'avatar'
+          ? 'avatars'
+          : prefix === 'board' || prefix === 'boards'
+          ? 'boards'
+          : prefix === 'agency' || prefix === 'agencies'
+          ? 'agencies'
+          : 'dni';
+      const uploadPayload = trimmed.startsWith('data:')
+        ? trimmed
+        : `data:image/jpeg;base64,${trimmed}`;
+      const cleanId = String(identifier).replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 32);
+      const res = await cloudinary.uploader.upload(uploadPayload, {
+        folder: `surf-rental/${subfolder}`,
+        public_id: `${prefix}-${cleanId}-${Date.now()}`,
+        resource_type: 'image',
+      });
+      if (res?.secure_url) {
+        return res.secure_url;
+      }
+    } catch (err) {
+      console.warn('[fileStorage] Cloudinary upload falló, usando fallback local:', err);
+    }
+  }
+
+  return saveBase64Image(trimmed, prefix, identifier);
+}
+
+/**
+ * Guarda una imagen en formato Base64 (Data URI o raw) en el directorio public/uploads/
  * y retorna la URL pública relativa (ej. /uploads/dni/dni-12345.jpg).
  * Si ya es una URL HTTP o relativa existente, la retorna tal cual.
  */
@@ -46,7 +127,13 @@ export function saveBase64Image(
 
   try {
     const subfolder =
-      prefix === 'avatar' ? 'avatars' : prefix === 'board' || prefix === 'boards' ? 'boards' : 'dni';
+      prefix === 'avatar'
+        ? 'avatars'
+        : prefix === 'board' || prefix === 'boards'
+        ? 'boards'
+        : prefix === 'agency' || prefix === 'agencies'
+        ? 'agencies'
+        : 'dni';
     const uploadDir = path.resolve(__dirname, `../../public/uploads/${subfolder}`);
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });

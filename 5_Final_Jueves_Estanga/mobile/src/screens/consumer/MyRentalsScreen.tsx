@@ -482,12 +482,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   tabPillSelected: {
-    backgroundColor: colors.coral[600],
-    borderColor: colors.coral[700],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[700],
   },
   tabPillSelectedDark: {
-    backgroundColor: colors.coral.subtle,
-    borderColor: colors.coral[500],
+    backgroundColor: colors.teal.subtle,
+    borderColor: colors.teal[500],
   },
   bold: {
     fontWeight: '700',

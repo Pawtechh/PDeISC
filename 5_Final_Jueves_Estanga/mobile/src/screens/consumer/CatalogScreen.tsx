@@ -16,6 +16,11 @@ import { BoardDetailScreen } from './BoardDetailScreen';
 import { useResponsive } from '../../hooks/useResponsive';
 import { MarineForecastCard } from '../../components/marine/MarineForecastCard';
 import { GoogleMapSedeCard } from '../../components/sensors';
+import { Pressable as RNPressable, ScrollView as RNScrollView } from 'react-native';
+import { MapPin as ZonePinIcon, Store as AgencyStoreIcon, ShieldCheck as AgencyCheckIcon } from 'lucide-react-native';
+import { useGetZonesQuery, useGetAgenciesQuery } from '../../api/agenciesApi';
+import { AgencyProfileScreen } from './AgencyProfileScreen';
+import { getContrastInk } from '../../theme/ThemeContext';
 import { useAppSelector, useAppDispatch } from '../../store';
 import { setGuestMode } from '../../store/slices/authSlice';
 
@@ -28,6 +33,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('Todos');
+  const [selectedZoneId, setSelectedZoneId] = useState<string>('');
+  const [selectedAgencySlug, setSelectedAgencySlug] = useState<string | null>(null);
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const { numColumns } = useResponsive();
 
@@ -35,8 +42,26 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
     safeHaptic.impact();
   }, []);
 
+  const { data: zonesData } = useGetZonesQuery();
+  const { data: agenciesData } = useGetAgenciesQuery(
+    selectedZoneId ? { zoneId: selectedZoneId } : undefined
+  );
+  const zones = zonesData?.data ?? [];
+  const agencies = agenciesData?.data ?? [];
+  const selectedZone = useMemo(
+    () => zones.find((z) => z.id === selectedZoneId) ?? null,
+    [zones, selectedZoneId]
+  );
+
+  const boardsQueryArgs = useMemo(() => {
+    const params: { tipo?: string; zoneId?: string } = {};
+    if (selectedType !== 'Todos') params.tipo = selectedType;
+    if (selectedZoneId) params.zoneId = selectedZoneId;
+    return Object.keys(params).length > 0 ? params : undefined;
+  }, [selectedType, selectedZoneId]);
+
   const { data, isLoading, isFetching, isError, refetch } = useGetBoardsQuery(
-    selectedType !== 'Todos' ? { tipo: selectedType } : undefined,
+    boardsQueryArgs,
     { pollingInterval: 6000, refetchOnMountOrArgChange: true }
   );
 
@@ -118,7 +143,11 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           <View style={styles.heroBannerContent}>
             <Row justify="space-between" align="center" style={styles.heroHeaderRow}>
               <View style={styles.brandLocationPill}>
-                <Text style={styles.brandLocationText}>COLECCIÓN EXCLUSIVA • PLAYA GRANDE, MAR DEL PLATA</Text>
+                <Text style={styles.brandLocationText}>
+                  {selectedZone
+                    ? `COLECCIÓN EXCLUSIVA • ${selectedZone.nombre.toUpperCase()}, ${selectedZone.ciudad.toUpperCase()}`
+                    : 'RED COSTERA MULTI-ZONA • ARGENTINA'}
+                </Text>
               </View>
               <View
                 {...(Platform.OS === 'web' ? ({ dataSet: { stockPulse: 'true' } } as any) : {})}
@@ -132,7 +161,9 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
               FLOTA DE AUTOR & ALTO RENDIMIENTO
             </Text>
             <Text style={styles.catalogHeroSubtitle}>
-              Tablas curadas por shapers marplatenses. Reserva instantánea, equipamiento encerado y entrega express en la orilla de Playa Grande.
+              {selectedZone
+                ? `Tablas curadas en ${selectedZone.ciudad}. Reserva instantánea, encerado y entrega en ${selectedZone.nombre}.`
+                : 'Explora tablas en múltiples ciudades costeras. Reserva instantánea con agencias verificadas.'}
             </Text>
 
             <View style={styles.kpiRow}>
@@ -141,13 +172,15 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                 style={styles.kpiChip}
               >
                 <Award size={13} color={theme.champagne} />
-                <Text style={styles.kpiChipText}>Shapers Marplatenses</Text>
+                <Text style={styles.kpiChipText}>
+                  {selectedZone ? selectedZone.ciudad : `${zones.length || 5} Zonas Costeras`}
+                </Text>
               </View>
               <View
                 {...(Platform.OS === 'web' ? ({ dataSet: { heroChip: 'true' } } as any) : {})}
                 style={styles.kpiChip}
               >
-                <Clock size={13} color={colors.coral[400]} />
+                <Clock size={13} color={colors.teal[400]} />
                 <Text style={styles.kpiChipText}>Retiro Express 5 min</Text>
               </View>
               <View
@@ -168,8 +201,188 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Live Marine Weather Report (Playa Grande) */}
-        <MarineForecastCard />
+        {/* Live Marine Weather Report (Dinámico por Zona / Spot) */}
+        <MarineForecastCard
+          zoneId={selectedZoneId || undefined}
+          zoneLabel={selectedZone ? `${selectedZone.ciudad} • ${selectedZone.nombre}` : 'Playa Grande • Costa Atlántica'}
+        />
+
+        {/* Zone / City Switcher */}
+        {zones.length > 0 && (
+          <Stack spacing="xs" style={styles.zoneSection}>
+            <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
+              <Row spacing="xs" align="center">
+                <ZonePinIcon size={15} color={theme.primary} />
+                <Text variant="label" color={theme.primary} style={styles.sectionTitle}>
+                  EXPLORAR POR ZONA / CIUDAD
+                </Text>
+              </Row>
+              <Text variant="caption" color={theme.subtext}>
+                {selectedZone ? `${selectedZone.ciudad} (${selectedZone.boardCount} tablas)` : `${zones.length} zonas activas`}
+              </Text>
+            </Row>
+            {numColumns >= 2 ? (
+              <View style={[styles.zoneScrollContent, styles.filterRow]}>
+                <RNPressable
+                  onPress={() => setSelectedZoneId('')}
+                  style={[
+                    styles.zonePill,
+                    {
+                      backgroundColor: selectedZoneId === '' ? theme.primary : theme.surfaceElevated,
+                      borderColor: selectedZoneId === '' ? theme.primary : theme.border,
+                    },
+                  ]}
+                >
+                  <Text
+                    variant="caption"
+                    color={selectedZoneId === '' ? getContrastInk(theme.primary) : theme.text}
+                    style={{ fontWeight: selectedZoneId === '' ? '800' : '600' }}
+                  >
+                    Todas las zonas
+                  </Text>
+                </RNPressable>
+                {zones.map((z) => {
+                  const active = selectedZoneId === z.id;
+                  return (
+                    <RNPressable
+                      key={z.id}
+                      onPress={() => setSelectedZoneId(active ? '' : z.id)}
+                      style={[
+                        styles.zonePill,
+                        {
+                          backgroundColor: active ? theme.primary : theme.surfaceElevated,
+                          borderColor: active ? theme.primary : theme.border,
+                        },
+                      ]}
+                    >
+                      <Text
+                        variant="caption"
+                        color={active ? getContrastInk(theme.primary) : theme.text}
+                        style={{ fontWeight: active ? '800' : '600' }}
+                      >
+                        {z.ciudad} · {z.nombre} ({z.boardCount})
+                      </Text>
+                    </RNPressable>
+                  );
+                })}
+              </View>
+            ) : (
+              <RNScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.zoneScrollContent}
+              >
+                <RNPressable
+                  onPress={() => setSelectedZoneId('')}
+                  style={[
+                    styles.zonePill,
+                    {
+                      backgroundColor: selectedZoneId === '' ? theme.primary : theme.surfaceElevated,
+                      borderColor: selectedZoneId === '' ? theme.primary : theme.border,
+                    },
+                  ]}
+                >
+                  <Text
+                    variant="caption"
+                    color={selectedZoneId === '' ? getContrastInk(theme.primary) : theme.text}
+                    style={{ fontWeight: selectedZoneId === '' ? '800' : '600' }}
+                  >
+                    Todas las zonas
+                  </Text>
+                </RNPressable>
+                {zones.map((z) => {
+                  const active = selectedZoneId === z.id;
+                  return (
+                    <RNPressable
+                      key={z.id}
+                      onPress={() => setSelectedZoneId(active ? '' : z.id)}
+                      style={[
+                        styles.zonePill,
+                        {
+                          backgroundColor: active ? theme.primary : theme.surfaceElevated,
+                          borderColor: active ? theme.primary : theme.border,
+                        },
+                      ]}
+                    >
+                      <Text
+                        variant="caption"
+                        color={active ? getContrastInk(theme.primary) : theme.text}
+                        style={{ fontWeight: active ? '800' : '600' }}
+                      >
+                        {z.ciudad} · {z.nombre} ({z.boardCount})
+                      </Text>
+                    </RNPressable>
+                  );
+                })}
+              </RNScrollView>
+            )}
+          </Stack>
+        )}
+
+        {/* Agencies Directory in Selected Zone */}
+        {agencies.length > 0 && (
+          <Stack spacing="xs" style={styles.zoneSection}>
+            <Row justify="space-between" align="center" style={styles.sectionHeaderRow}>
+              <Row spacing="xs" align="center">
+                <AgencyStoreIcon size={15} color={theme.primary} />
+                <Text variant="label" color={theme.primary} style={styles.sectionTitle}>
+                  AGENCIAS EN {selectedZone ? selectedZone.ciudad.toUpperCase() : 'LA COSTA'}
+                </Text>
+              </Row>
+              <Text variant="caption" color={theme.subtext}>
+                {agencies.length} {agencies.length === 1 ? 'tienda' : 'tiendas'}
+              </Text>
+            </Row>
+            <RNScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.agenciesScrollContent}
+            >
+              {agencies.map((ag) => {
+                const accent = ag.accentColor || theme.primary;
+                const ink = getContrastInk(accent);
+                return (
+                  <RNPressable
+                    key={ag.id}
+                    onPress={() => setSelectedAgencySlug(ag.slug || ag.id)}
+                    style={[
+                      styles.agencyCard,
+                      {
+                        backgroundColor: theme.surfaceElevated,
+                        borderColor: theme.border,
+                      },
+                    ]}
+                  >
+                    <View style={[styles.agencyAccentStripe, { backgroundColor: accent }]} />
+                    <Stack spacing="xs" style={{ padding: spacing.sm + 2 }}>
+                      <Row justify="space-between" align="center" spacing="xs">
+                        <Text variant="label" color={theme.text} numberOfLines={1} style={{ flex: 1, fontWeight: '800' }}>
+                          {ag.nombre}
+                        </Text>
+                        {ag.verificada && (
+                          <View style={[styles.agencyVerifiedDot, { backgroundColor: accent }]}>
+                            <AgencyCheckIcon size={11} color={ink} />
+                          </View>
+                        )}
+                      </Row>
+                      <Text variant="caption" color={theme.subtext} numberOfLines={1}>
+                        {ag.zone ? `${ag.zone.ciudad} · ${ag.zone.nombre}` : ag.direccion}
+                      </Text>
+                      <Row justify="space-between" align="center" style={{ marginTop: 2 }}>
+                        <Text variant="caption" color={theme.primary} style={{ fontWeight: '700' }}>
+                          {ag.boardCount ?? 0} {(ag.boardCount ?? 0) === 1 ? 'tabla' : 'tablas'}
+                        </Text>
+                        <Text variant="caption" color={theme.primary} style={{ fontWeight: '700' }}>
+                          Ver tienda →
+                        </Text>
+                      </Row>
+                    </Stack>
+                  </RNPressable>
+                );
+              })}
+            </RNScrollView>
+          </Stack>
+        )}
 
         {/* Banner de Modo Invitado */}
         {(!isAuthenticated || isGuest) && (
@@ -218,7 +431,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                   variant="caption"
                   style={[styles.sectionTitle, { color: theme.text }]}
                 >
-                  TABLAS DESTACADAS • SELECCIÓN PLAYA GRANDE
+                  {selectedZone ? `TABLAS DESTACADAS • ${selectedZone.nombre.toUpperCase()}` : 'TABLAS DESTACADAS • RED COSTERA'}
                 </Text>
               </Row>
               <Badge label="TOP RATED" variant={isDark ? 'sand' : 'sand'} />
@@ -235,6 +448,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
               boards={featuredBoards}
               onPressDetail={(board) => setSelectedBoard(board)}
               onPressReserve={(board) => setSelectedBoard(board)}
+              onPressAgency={(slugOrId) => setSelectedAgencySlug(slugOrId)}
             />
           </View>
         )}
@@ -351,11 +565,12 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
           ) : boardsList.length === 0 ? (
             <EmptyState
               title="No se encontraron tablas"
-              description="Probá seleccionando otra categoría o cambiando el término de búsqueda."
+              description="Probá seleccionando otra zona, categoría o cambiando el término de búsqueda."
               actionTitle="Ver todas"
               onAction={() => {
                 triggerHaptic();
                 setSelectedType('Todos');
+                setSelectedZoneId('');
                 setSearch('');
               }}
             />
@@ -374,6 +589,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                     board={board}
                     onPressDetail={() => setSelectedBoard(board)}
                     onPressReserve={() => setSelectedBoard(board)}
+                    onPressAgency={(slugOrId) => setSelectedAgencySlug(slugOrId)}
                   />
                 </View>
               ))}
@@ -382,7 +598,22 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         </View>
 
         {/* Ubicación de la Sede & Cómo Llegar con Google Maps (y Sensor GPS en Móvil) */}
-        <GoogleMapSedeCard />
+          <GoogleMapSedeCard
+            spotName={
+              selectedZone
+                ? `${selectedZone.nombre} — ${selectedZone.ciudad}`
+                : agencies[0]?.nombre
+                  ? `${agencies[0].nombre} (${agencies[0].zone?.ciudad || 'Costa Atlántica'})`
+                  : undefined
+            }
+            address={
+              agencies[0]?.direccion ||
+              (selectedZone ? `${selectedZone.nombre}, ${selectedZone.ciudad}, Argentina` : undefined)
+            }
+            latitude={selectedZone?.latitud ?? agencies[0]?.zone?.latitud}
+            longitude={selectedZone?.longitud ?? agencies[0]?.zone?.longitud}
+            badgeLabel={selectedZone ? `SPOT • ${selectedZone.ciudad.toUpperCase()}` : undefined}
+          />
       </Stack>
 
       {/* Modal with Full Surfboard Detail */}
@@ -414,6 +645,31 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                   navigation?.navigate?.(screen);
                 },
               }}
+              onOpenAgency={(slugOrId) => {
+                setSelectedBoard(null);
+                setSelectedAgencySlug(slugOrId);
+              }}
+            />
+          </View>
+        )}
+      </Modal>
+
+      {/* Modal with Public Agency Storefront */}
+      <Modal
+        visible={Boolean(selectedAgencySlug)}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setSelectedAgencySlug(null)}
+      >
+        {selectedAgencySlug && (
+          <View style={[styles.modalRoot, { backgroundColor: theme.background }]}>
+            <AgencyProfileScreen
+              agencyIdOrSlug={selectedAgencySlug}
+              onClose={() => setSelectedAgencySlug(null)}
+              onSelectBoard={(b) => {
+                setSelectedAgencySlug(null);
+                setSelectedBoard(b);
+              }}
             />
           </View>
         )}
@@ -436,9 +692,9 @@ const styles = StyleSheet.create({
     minHeight: 240,
     justifyContent: 'flex-end',
     padding: spacing.lg,
-    shadowColor: '#E06343',
+    shadowColor: '#38BDC7',
     shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.24,
+    shadowOpacity: 0.20,
     shadowRadius: 28,
     elevation: 10,
   },
@@ -455,19 +711,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(28, 26, 24, 0.82)',
+    backgroundColor: 'rgba(20, 26, 29, 0.84)',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(245, 242, 236, 0.16)',
+    borderColor: 'rgba(242, 245, 244, 0.16)',
   },
   brandLocationDot: {
-    color: colors.coral[400],
+    color: colors.teal[400],
     fontSize: 8,
   },
   brandLocationText: {
-    color: '#F5F2EC',
+    color: '#F2F5F4',
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 0.5,
@@ -577,12 +833,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: 'rgba(245, 242, 236, 0.05)',
+    backgroundColor: 'rgba(242, 245, 244, 0.05)',
     borderWidth: 1,
-    borderColor: 'rgba(245, 242, 236, 0.10)',
+    borderColor: 'rgba(242, 245, 244, 0.10)',
   },
   gridBadgeText: {
-    color: colors.coral[400],
+    color: colors.teal[400],
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 1,
@@ -594,9 +850,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   searchInput: {
-    backgroundColor: '#35332F',
-    borderColor: 'rgba(245, 242, 236, 0.12)',
-    color: '#F5F2EC',
+    backgroundColor: '#2D363B',
+    borderColor: 'rgba(242, 245, 244, 0.12)',
+    color: '#F2F5F4',
   },
   searchIcon: {
     fontSize: 14,
@@ -611,23 +867,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs + 2,
     borderRadius: radii.full,
-    backgroundColor: 'rgba(42, 41, 38, 0.90)',
+    backgroundColor: 'rgba(35, 42, 46, 0.90)',
     borderWidth: 1,
-    borderColor: 'rgba(245, 242, 236, 0.12)',
+    borderColor: 'rgba(242, 245, 244, 0.12)',
   },
   filterPillSelectedDark: {
-    backgroundColor: '#E06343',
-    borderColor: '#E06343',
-    shadowColor: '#E06343',
+    backgroundColor: '#38BDC7',
+    borderColor: '#38BDC7',
+    shadowColor: '#38BDC7',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 4,
   },
   filterPillSelectedLight: {
-    backgroundColor: '#C94A29',
-    borderColor: '#C94A29',
-    shadowColor: '#C94A29',
+    backgroundColor: '#0E6B74',
+    borderColor: '#0E6B74',
+    shadowColor: '#0E6B74',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.22,
     shadowRadius: 8,
@@ -638,7 +894,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   filterPillTextSelectedDark: {
-    color: '#FFFFFF',
+    color: '#0C1719',
     fontWeight: '800',
   },
   filterPillTextSelectedLight: {
@@ -682,5 +938,39 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(245, 242, 236, 0.10)',
+  },
+  zoneSection: {
+    marginTop: 2,
+  },
+  zoneScrollContent: {
+    gap: spacing.xs,
+    paddingVertical: 2,
+  },
+  zonePill: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: 8,
+    borderRadius: radii.full,
+    borderWidth: 1,
+  },
+  agenciesScrollContent: {
+    gap: spacing.sm,
+    paddingVertical: 2,
+  },
+  agencyCard: {
+    width: 245,
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  agencyAccentStripe: {
+    height: 4,
+    width: '100%',
+  },
+  agencyVerifiedDot: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

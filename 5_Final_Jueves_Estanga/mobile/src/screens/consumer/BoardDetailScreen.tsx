@@ -16,9 +16,14 @@ import { setGuestMode } from '../../store/slices/authSlice';
 export interface BoardDetailScreenProps {
   route?: { params?: { board?: Board; boardId?: string } };
   navigation?: any;
+  onOpenAgency?: (slugOrId: string) => void;
 }
 
-export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, navigation }) => {
+export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({
+  route,
+  navigation,
+  onOpenAgency,
+}) => {
   const { theme, isDark } = useTheme();
   const { width } = useWindowDimensions();
   const [showBookingModal, setShowBookingModal] = useState(false);
@@ -94,7 +99,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
           <Row justify="space-between" align="center">
             <View style={{ flex: 1, paddingRight: spacing.md }}>
               <Text variant="caption" style={{ color: isDark ? theme.primaryHover : theme.primary, fontWeight: '800', letterSpacing: 1.5 }}>
-                {board.marca.toUpperCase()} • SHAPER OFICIAL MAR DEL PLATA
+                {board.marca.toUpperCase()} • {board.zone ? `${board.zone.ciudad.toUpperCase()} — ${board.zone.nombre.toUpperCase()}` : 'COSTA ATLÁNTICA'}
               </Text>
               <Text variant="h1" color={theme.text}>
                 {board.titulo}
@@ -131,18 +136,28 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '800', letterSpacing: 1 }}>
-                    COMERCIANTE HABILITADO
+                    AGENCIA Y COMERCIANTE HABILITADO
                   </Text>
                   <Text variant="h3" color={theme.text}>
-                    {board.owner?.nombre || `${board.marca} Shaper Oficial`}
+                    {board.agency?.nombre || board.owner?.nombre || `${board.marca} Surf Shop`}
                   </Text>
                   <Text variant="caption" color={theme.subtext}>
-                    Shaper MDP • Custodia oficial en Mostrador Playa Grande
+                    {board.owner?.nombre ? `Shaper / Owner: ${board.owner.nombre} • ` : ''}
+                    {board.agency?.direccion || (board.zone ? `${board.zone.ciudad} — ${board.zone.nombre}` : 'Custodia oficial verificada')}
                   </Text>
                 </View>
               </Row>
               <Badge label="VERIFICADO" variant="success" />
             </Row>
+
+            {board.agency && onOpenAgency && (
+              <Button
+                title="Visitar perfil público y más tablas de esta agencia"
+                variant="secondary"
+                size="sm"
+                onPress={() => onOpenAgency(board.agency!.slug || board.agency!.id)}
+              />
+            )}
 
             <Divider />
 
@@ -199,7 +214,10 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                 <MapPin size={14} color={theme.champagne} />
                 <Text variant="body" color={theme.subtext}>Sede de retiro:</Text>
               </Row>
-              <Text variant="body" color={theme.text} style={styles.bold}>Playa Grande (Sede Central)</Text>
+              <Text variant="body" color={theme.text} style={[styles.bold, { flex: 1, textAlign: 'right' }]} numberOfLines={2}>
+                {board.agency?.nombre || 'Sede Costera Oficial'}
+                {board.zone ? ` (${board.zone.ciudad})` : ''}
+              </Text>
             </Row>
           </Stack>
         </Card>
@@ -212,7 +230,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
               <Badge label={board.estado === 'DISPONIBLE' ? 'DISPONIBLE HOY' : board.estado} variant="success" />
             </Row>
             <Text variant="caption" color={theme.subtext}>
-              Horario de atención: 6:00 AM a 21:00 PM. Retiro y devolución presencial en Playa Grande.
+              Horario de atención: {board.agency?.horario || '06:00 a 21:00 hs'}. Retiro y devolución presencial en {board.agency?.direccion || 'la sede asignada'}.
             </Text>
             <Row spacing="xs" justify="space-between" style={{ marginTop: spacing.xs }}>
               {['Hoy', 'Mañ', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((dia, idx) => (

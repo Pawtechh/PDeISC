@@ -18,6 +18,36 @@ export interface Board {
   proximoMantenimiento?: string | null;
   calificacionPromedio?: number;
   totalReviews?: number;
+  agencyId?: string | null;
+  zoneId?: string | null;
+  agency?: {
+    id: string;
+    slug: string;
+    nombre: string;
+    accentColor?: string | null;
+    logoUrl?: string | null;
+    direccion?: string | null;
+    whatsapp?: string | null;
+    horario?: string | null;
+    verificada?: boolean;
+    zoneId?: string;
+    zone?: {
+      id: string;
+      slug: string;
+      ciudad: string;
+      nombre: string;
+      latitud: number;
+      longitud: number;
+    };
+  } | null;
+  zone?: {
+    id: string;
+    slug: string;
+    ciudad: string;
+    nombre: string;
+    latitud: number;
+    longitud: number;
+  } | null;
   owner?: {
     id: string;
     nombre: string;
@@ -41,6 +71,9 @@ export interface BoardFilters {
   orden?: string;
   page?: number;
   limit?: number;
+  zoneId?: string;
+  ciudad?: string;
+  agencyId?: string;
 }
 
 export interface AvailabilityDay {

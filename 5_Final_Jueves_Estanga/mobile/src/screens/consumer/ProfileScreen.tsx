@@ -32,10 +32,12 @@ import {
   AlertCircle,
   Sparkles,
   Upload,
+  Store,
 } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Avatar, Button, Badge, Input } from '../../components/ui';
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
+import { RegisterAgencyModal } from '../../components/agencies/RegisterAgencyModal';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { setCredentials, setRole, setGuestMode, updateUser, UserRole } from '../../store/slices/authSlice';
 import { logout, resetAllApis } from '../../store/auth/thunks';
@@ -121,7 +123,7 @@ export const ProfileScreen: React.FC = () => {
                   variant={!isDark ? 'primary' : 'secondary'}
                   size="sm"
                   style={{ flex: 1 }}
-                  iconLeft={<Sun size={16} color={!isDark ? '#FFFFFF' : theme.text} />}
+                  iconLeft={<Sun size={16} color={!isDark ? theme.primaryText : theme.text} />}
                   onPress={() => setMode('light')}
                 />
                 <Button
@@ -129,7 +131,7 @@ export const ProfileScreen: React.FC = () => {
                   variant={isDark ? 'primary' : 'secondary'}
                   size="sm"
                   style={{ flex: 1 }}
-                  iconLeft={<Moon size={16} color={isDark ? '#FFFFFF' : theme.text} />}
+                  iconLeft={<Moon size={16} color={isDark ? theme.primaryText : theme.text} />}
                   onPress={() => setMode('dark')}
                 />
               </Row>
@@ -149,6 +151,7 @@ export const ProfileScreen: React.FC = () => {
     useBiometricSignature();
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showRegisterAgencyModal, setShowRegisterAgencyModal] = useState(false);
 
   // Estado del formulario de Solicitud de Permiso de Publicación (Perfil de Vendedor)
   const [showVendorFormModal, setShowVendorFormModal] = useState(false);
@@ -668,7 +671,7 @@ export const ProfileScreen: React.FC = () => {
                       title="Solicitar Permiso de Publicación"
                       variant="primary"
                       size="md"
-                      iconLeft={<Briefcase size={16} color="#FFFFFF" />}
+                      iconLeft={<Briefcase size={16} color={theme.primaryText} />}
                       onPress={openVendorApplicationForm}
                     />
                   </Stack>
@@ -822,6 +825,39 @@ export const ProfileScreen: React.FC = () => {
                 )}
               </Stack>
             </Card>
+
+            {/* SaaS Multi-Agencia: Registrar Mi Surf Shop / Guardería */}
+            {!user?.agencyId && (
+              <Card
+                padding="lg"
+                style={{
+                  borderColor: theme.primaryBorder,
+                  borderWidth: 1,
+                }}
+              >
+                <Stack spacing="sm">
+                  <Row justify="space-between" align="center">
+                    <Row spacing="xs" align="center" style={{ flex: 1 }}>
+                      <Store size={16} color={isDark ? theme.primaryHover : theme.primary} />
+                      <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
+                        ¿Tenés una Agencia o Guardería?
+                      </Text>
+                    </Row>
+                    <Badge label="MULTI-ZONA" variant="ocean" />
+                  </Row>
+                  <Text variant="caption" color={theme.subtext}>
+                    Creá tu perfil de tienda en tu ciudad o playa, personalizá tus colores y publicá tus tablas con QR de entrega.
+                  </Text>
+                  <Button
+                    title="Abrir Mi Agencia / Surf Shop"
+                    variant="secondary"
+                    size="sm"
+                    onPress={() => setShowRegisterAgencyModal(true)}
+                    testID="btn-profile-open-agency"
+                  />
+                </Stack>
+              </Card>
+            )}
 
             {/* APARTADO 2: Cambio de Perfil (Usuario <-> Vendedor, SIN Admin) con Huella o Contraseña */}
             <Card padding="lg">
@@ -1064,7 +1100,7 @@ export const ProfileScreen: React.FC = () => {
                         variant="primary"
                         size="sm"
                         iconLeft={
-                          <Camera size={14} color="#FFFFFF" />
+                          <Camera size={14} color={theme.primaryText} />
                         }
                         onPress={handleTakePhotoOfBoard}
                       />
@@ -1180,6 +1216,12 @@ export const ProfileScreen: React.FC = () => {
           </Card>
         </View>
       </Modal>
+
+      <RegisterAgencyModal
+        visible={showRegisterAgencyModal}
+        onClose={() => setShowRegisterAgencyModal(false)}
+        onSuccess={() => refetch()}
+      />
 
       {/* MODAL 2: Verificación Biométrica (Huella) O Contraseña para Cambiar entre Usuario y Vendedor */}
       <Modal
@@ -1643,7 +1685,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -2,
     right: -2,
-    backgroundColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
     width: 28,
     height: 28,
     borderRadius: 14,

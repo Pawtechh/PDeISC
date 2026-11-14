@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     height: '100%',
-    shadowColor: '#E06343',
+    shadowColor: '#38BDC7',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.45,
     shadowRadius: 3,

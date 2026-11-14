@@ -542,7 +542,7 @@ export const VendorApprovalsSection: React.FC = () => {
                       title="Eliminar Vendedor y Degradar a Usuario"
                       size="sm"
                       variant="danger"
-                      iconLeft={<UserMinus size={15} color={theme.primaryText} />}
+                      iconLeft={<UserMinus size={15} color="#FFFFFF" />}
                       onPress={() => openDecisionModal(app, 'DEGRADADO')}
                     />
                   </View>
@@ -551,8 +551,8 @@ export const VendorApprovalsSection: React.FC = () => {
                     <Button
                       title="Aceptar y Habilitar"
                       size="sm"
-                      variant="primary"
-                      iconLeft={<CheckCircle2 size={15} color={theme.primaryText} />}
+                      variant="success"
+                      iconLeft={<CheckCircle2 size={15} color="#FFFFFF" />}
                       style={{ flex: 1 }}
                       onPress={() => openDecisionModal(app, 'APROBADO')}
                     />
@@ -561,7 +561,7 @@ export const VendorApprovalsSection: React.FC = () => {
                         title="Rechazar Solicitud"
                         size="sm"
                         variant="danger"
-                        iconLeft={<XCircle size={15} color={theme.primaryText} />}
+                        iconLeft={<XCircle size={15} color="#FFFFFF" />}
                         style={{ flex: 1 }}
                         onPress={() => openDecisionModal(app, 'RECHAZADO')}
                       />

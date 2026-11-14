@@ -27,7 +27,7 @@ export const getBaseUrl = () => {
     return process.env.EXPO_PUBLIC_API_URL;
   }
   if (Platform.OS === 'android' || Platform.OS === 'ios') {
-    return 'https://pdeisc-1.onrender.com/api';
+    return __DEV__ ? 'http://localhost:3000/api' : 'https://app.example.com/api';
   }
   return 'http://localhost:3000/api';
 };
@@ -59,6 +59,11 @@ const rawBaseQuery = fetchBaseQuery({
     return headers;
   },
 });
+
+const ALLOW_DEMO_AUTO_LOGIN =
+  typeof __DEV__ !== 'undefined' && __DEV__
+    ? true
+    : process.env.EXPO_PUBLIC_ENABLE_DEMO_MODE === 'true';
 
 const DEMO_ACCOUNTS = new Set([
   'consumer@surf.com',
@@ -211,8 +216,8 @@ export const tryRefreshAccessToken = async (params: {
           }
         }
 
-        // 2. Si no hay refresh token real o falló, verificar si es cuenta demo o dev
-        if (currentUser?.email && DEMO_ACCOUNTS.has(currentUser.email)) {
+        // 2. Si no hay refresh token real o falló, verificar si es cuenta demo habilitada explícitamente en dev/demo
+        if (ALLOW_DEMO_AUTO_LOGIN && currentUser?.email && DEMO_ACCOUNTS.has(currentUser.email)) {
           const loginResult = await rawBaseQuery(
             {
               url: '/auth/login',

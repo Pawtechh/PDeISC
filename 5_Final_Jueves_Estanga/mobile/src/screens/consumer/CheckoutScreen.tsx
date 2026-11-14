@@ -1575,9 +1575,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     borderRadius: radii.full,
-    backgroundColor: colors.coral.subtle,
+    backgroundColor: colors.teal.subtle,
     borderWidth: 1,
-    borderColor: colors.coral.border,
+    borderColor: colors.teal.border,
   },
   globalErrorBanner: {
     backgroundColor: 'rgba(182, 57, 51, 0.10)',
@@ -1606,18 +1606,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   hourPillSelected: {
-    backgroundColor: colors.coral[600],
-    borderColor: colors.coral[700],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[700],
   },
   breakdownCard: {
-    backgroundColor: colors.coral.subtle,
+    backgroundColor: colors.teal.subtle,
     borderWidth: 1,
-    borderColor: colors.coral.border,
+    borderColor: colors.teal.border,
   },
   debitBanner: {
-    backgroundColor: colors.coral.subtle,
+    backgroundColor: colors.teal.subtle,
     borderWidth: 1,
-    borderColor: colors.coral.border,
+    borderColor: colors.teal.border,
     borderRadius: radii.md,
   },
   testCardsBox: {
@@ -1637,7 +1637,7 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   useCardButton: {
-    backgroundColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     borderRadius: radii.sm,
@@ -1754,8 +1754,8 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   accessoryItemActive: {
-    backgroundColor: colors.coral.subtle,
-    borderColor: colors.coral.border,
+    backgroundColor: colors.teal.subtle,
+    borderColor: colors.teal.border,
   },
   accessoryCheck: {
     width: 28,
@@ -1766,7 +1766,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   accessoryCheckActive: {
-    backgroundColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
   },
   tallePill: {
     paddingHorizontal: 10,
@@ -1775,7 +1775,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.sand[200],
   },
   tallePillActive: {
-    backgroundColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
   },
   viewModeToggle: {
     paddingHorizontal: 8,
@@ -1793,8 +1793,8 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   filterPeriodPillActive: {
-    backgroundColor: colors.coral[600],
-    borderColor: colors.coral[700],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[700],
   },
   filterPeriodText: {
     fontSize: 11,
@@ -1809,9 +1809,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: radii.sm,
-    backgroundColor: colors.coral.subtle,
+    backgroundColor: colors.teal.subtle,
     borderWidth: 1,
-    borderColor: colors.coral.border,
+    borderColor: colors.teal.border,
   },
   slotsWrapContainer: {
     flexDirection: 'row',
@@ -1842,6 +1842,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   sigMethodPillActive: {
-    backgroundColor: colors.coral.subtle,
+    backgroundColor: colors.teal.subtle,
   },
 });

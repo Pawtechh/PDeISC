@@ -5,6 +5,7 @@ import { CheckSquare, Square, ShieldCheck, Info } from 'lucide-react-native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, EmptyState, Input } from '../../components/ui';
 import { colors, spacing, radii } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
+import { useAppSelector } from '../../store';
 import { useDeleteBoardMutation, Board } from '../../api/boardsApi';
 import {
   useGetOwnerBoardsQuery,
@@ -16,6 +17,8 @@ import { useResponsive } from '../../hooks/useResponsive';
 
 export const MyBoardsScreen: React.FC = () => {
   const { theme, isDark } = useTheme();
+  const currentUser = useAppSelector((s) => s.auth.user);
+  const isAgencyUser = currentUser?.role === 'AGENCIA' || currentUser?.role === 'SUPER_ADMIN';
   const [showCreateModal, setShowCreateModal] = useState(false);
   const { data, isLoading, isFetching, refetch } = useGetOwnerBoardsQuery();
   const [deleteBoard] = useDeleteBoardMutation();
@@ -136,10 +139,12 @@ export const MyBoardsScreen: React.FC = () => {
         <Row justify="space-between" align="center" spacing="sm">
           <View style={{ flex: 1, flexShrink: 1, paddingRight: spacing.xs }}>
             <Text variant="h1" color={theme.text}>
-              Mis Tablas
+              {isAgencyUser ? 'Tablas de la Agencia' : 'Mis Tablas'}
             </Text>
             <Text variant="body" color={theme.subtext}>
-              Administrá tus tablas y su ciclo de mantenimiento
+              {isAgencyUser
+                ? 'Administrá el catálogo y ciclo preventivo de tu sede'
+                : 'Administrá tus tablas y su ciclo de mantenimiento'}
             </Text>
           </View>
           <Button
@@ -194,15 +199,22 @@ export const MyBoardsScreen: React.FC = () => {
                 color={isDark ? theme.primaryHover : theme.primary}
                 style={{ fontWeight: '700' }}
               >
-                SUSCRIPCIÓN OWNER
+                {isAgencyUser ? 'INVENTARIO DE SEDE' : 'SUSCRIPCIÓN OWNER'}
               </Text>
-              <Badge label="GRATIS (Mes 1/3)" variant="success" />
+              <Badge
+                label={isAgencyUser ? 'PUBLICACIÓN DIRECTA • 0% FEE' : 'GRATIS (Mes 1/3)'}
+                variant="success"
+              />
             </Row>
             <Text variant="h3" color={theme.text}>
-              Liquidación directa de rentas • $0/mes
+              {isAgencyUser
+                ? `${currentUser?.agency?.nombre || 'Sede Costera'} • Catálogo oficial`
+                : 'Liquidación directa de rentas • $0/mes'}
             </Text>
             <Text variant="caption" color={theme.subtext}>
-              Primeros 3 meses 100% bonificados. Luego $1.000 ARS/mes por custodia y mantenimiento en sede.
+              {isAgencyUser
+                ? 'Las tablas que publicás aparecen instantáneamente en tu tienda pública y en el catálogo por zona.'
+                : 'Primeros 3 meses 100% bonificados. Luego $1.000 ARS/mes por custodia y mantenimiento en sede.'}
             </Text>
           </Stack>
         </Card>

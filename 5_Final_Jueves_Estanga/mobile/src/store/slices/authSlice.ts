@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export type UserRole = 'CONSUMER' | 'OWNER' | 'AGENCIA';
+export type UserRole = 'CONSUMER' | 'OWNER' | 'AGENCIA' | 'SUPER_ADMIN';
 export type VendorStatus = 'NONE' | 'PENDIENTE' | 'APROBADO' | 'RECHAZADO';
 
 export interface VendorApplicationData {
@@ -34,6 +34,31 @@ export interface User {
   dniFotoUrl?: string;
   avatarUrl?: string;
   telefono?: string;
+  agencyId?: string | null;
+  agency?: {
+    id: string;
+    slug: string;
+    nombre: string;
+    descripcion?: string;
+    logoUrl?: string | null;
+    portadaUrl?: string | null;
+    accentColor?: string | null;
+    direccion?: string;
+    whatsapp?: string | null;
+    horario?: string | null;
+    comisionPorcentaje?: number;
+    multaSalitreArs?: number;
+    verificada?: boolean;
+    zoneId?: string;
+    zone?: {
+      id: string;
+      slug: string;
+      ciudad: string;
+      nombre: string;
+      latitud: number;
+      longitud: number;
+    };
+  } | null;
   vendorStatus?: VendorStatus;
   canSwitchRole?: boolean;
   vendorApplication?: VendorApplicationData | null;

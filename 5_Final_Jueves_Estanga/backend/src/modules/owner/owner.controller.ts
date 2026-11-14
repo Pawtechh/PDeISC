@@ -7,8 +7,12 @@ export const getMyBoards = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const ownerId = (req as any).user.id;
-    const boards = await ownerService.getMyBoards(ownerId);
+    const user = (req as any).user;
+    const ownerId = user.id;
+    const boards = await ownerService.getMyBoards(ownerId, {
+      role: user?.role,
+      agencyId: user?.agencyId ?? null,
+    });
     res.status(200).json({
       status: 'success',
       data: boards,
@@ -92,11 +96,16 @@ export const completeMaintenance = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const ownerId = (req as any).user.id;
+    const user = (req as any).user;
+    const ownerId = user.id;
     const result = await ownerService.completeMaintenance(
       ownerId,
       req.params.boardId as string,
-      req.body
+      req.body,
+      {
+        role: user?.role,
+        agencyId: user?.agencyId ?? null,
+      }
     );
     res.status(200).json({
       status: 'success',

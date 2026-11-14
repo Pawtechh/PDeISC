@@ -405,8 +405,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   docPillSelected: {
-    backgroundColor: colors.coral[600],
-    borderColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[600],
   },
   docPillText: {
     color: colors.sand[700],
@@ -423,11 +423,11 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   sealBox: {
-    backgroundColor: 'rgba(201, 74, 41, 0.07)',
+    backgroundColor: 'rgba(14, 107, 116, 0.08)',
     padding: 10,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(201, 74, 41, 0.22)',
+    borderColor: 'rgba(14, 107, 116, 0.24)',
   },
   hashText: {
     fontFamily: 'monospace',
@@ -482,8 +482,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   checkboxActive: {
-    backgroundColor: colors.coral[600],
-    borderColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[600],
   },
   checkmark: {
     color: colors.white,
@@ -525,8 +525,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   methodTabActive: {
-    borderColor: colors.coral[600],
-    backgroundColor: 'rgba(201, 74, 41, 0.08)',
+    borderColor: colors.teal[600],
+    backgroundColor: 'rgba(14, 107, 116, 0.08)',
   },
   methodTabText: {
     fontWeight: '600',
@@ -534,7 +534,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   methodTabTextActive: {
-    color: colors.coral[600],
+    color: colors.teal[600],
     fontWeight: '700',
   },
 });

@@ -19,23 +19,23 @@ export const Badge: React.FC<BadgeProps> = ({
   style,
   icon,
 }) => {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
 
   const getBadgeColors = (): { bg: string; border: string; text: string } => {
     switch (variant) {
       case 'success':
-        return { bg: theme.successBg, border: theme.successBorder, text: theme.success };
+        return { bg: theme.successBg, border: theme.successBorder, text: theme.successText };
       case 'warning':
-        return { bg: theme.warningBg, border: theme.warningBorder, text: theme.warning };
+        return { bg: theme.warningBg, border: theme.warningBorder, text: theme.warningText };
       case 'danger':
-        return { bg: theme.dangerBg, border: theme.dangerBorder, text: theme.danger };
+        return { bg: theme.dangerBg, border: theme.dangerBorder, text: theme.dangerText };
       case 'info':
-        return { bg: theme.infoBg, border: theme.infoBorder, text: theme.info };
+        return { bg: theme.infoBg, border: theme.infoBorder, text: theme.infoText };
       case 'ocean':
-        return { bg: theme.primarySubtle, border: theme.primaryBorder, text: theme.primary };
+        return { bg: theme.primarySubtle, border: theme.primaryBorder, text: isDark ? theme.primaryHover : theme.primary };
       case 'sand':
         return {
-          bg: theme.isDark ? 'rgba(245, 242, 236, 0.07)' : theme.cardHighlight,
+          bg: theme.isDark ? 'rgba(242, 245, 244, 0.08)' : theme.cardHighlight,
           border: theme.border,
           text: theme.subtext,
         };

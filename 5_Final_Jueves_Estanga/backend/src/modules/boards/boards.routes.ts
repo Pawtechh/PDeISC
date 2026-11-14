@@ -9,7 +9,7 @@ const router = Router();
 
 // Endpoints públicos
 router.get('/', boardsController.listBoards);
-router.get('/mine', requireAuth, requireRole('OWNER', 'AGENCIA'), boardsController.getMyBoards);
+router.get('/mine', requireAuth, requireRole('OWNER', 'AGENCIA', 'SUPER_ADMIN'), boardsController.getMyBoards);
 router.get('/:id', boardsController.getBoard);
 router.get('/:id/availability', boardsController.getAvailability);
 router.get('/:id/reviews', async (req, res, next) => {
@@ -26,7 +26,7 @@ router.get('/:id/reviews', async (req, res, next) => {
 router.post(
   '/',
   requireAuth,
-  requireRole('OWNER', 'AGENCIA'),
+  requireRole('OWNER', 'AGENCIA', 'SUPER_ADMIN'),
   validateBody(createBoardSchema),
   boardsController.createBoard
 );
@@ -34,7 +34,7 @@ router.post(
 router.patch(
   '/:id',
   requireAuth,
-  requireRole('OWNER', 'AGENCIA'),
+  requireRole('OWNER', 'AGENCIA', 'SUPER_ADMIN'),
   validateBody(updateBoardSchema),
   boardsController.updateBoard
 );
@@ -42,7 +42,7 @@ router.patch(
 router.delete(
   '/:id',
   requireAuth,
-  requireRole('OWNER', 'AGENCIA'),
+  requireRole('OWNER', 'AGENCIA', 'SUPER_ADMIN'),
   boardsController.deleteBoard
 );
 

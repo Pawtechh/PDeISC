@@ -48,11 +48,14 @@ export const validateUploadedFiles = (req: Request, res: Response, next: NextFun
     'fotosDano',
     'fotoDanio',
     'dniFotoUrl',
+    'avatarUrl',
+    'logoUrl',
+    'portadaUrl',
   ];
 
   for (const field of checkFields) {
     const val = req.body?.[field];
-    if (typeof val === 'string') {
+    if (typeof val === 'string' && val.trim().length > 0) {
       const check = validateImagePayload(val);
       if (!check.valid) {
         res.status(400).json({
@@ -65,7 +68,7 @@ export const validateUploadedFiles = (req: Request, res: Response, next: NextFun
       }
     } else if (Array.isArray(val)) {
       for (const item of val) {
-        if (typeof item === 'string') {
+        if (typeof item === 'string' && item.trim().length > 0) {
           const check = validateImagePayload(item);
           if (!check.valid) {
             res.status(400).json({

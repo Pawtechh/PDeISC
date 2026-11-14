@@ -23,6 +23,8 @@ import legalRoutes from './modules/legal/legal.routes';
 import usersRoutes from './modules/users/users.routes';
 import reviewsRoutes from './modules/reviews/reviews.routes';
 import weatherRoutes from './modules/weather/weather.routes';
+import agenciesRoutes from './modules/agencies/agencies.routes';
+import { prisma } from './config/prisma';
 
 export const createApp = (): Application => {
   const app = express();
@@ -119,12 +121,12 @@ export const createApp = (): Application => {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Completando autenticación — Surf Rental MDP</title>
+  <title>Completando autenticación — Surf Rental</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #090C10;
-      color: #F1F5F9;
+      background: #1A1F22;
+      color: #F2F5F4;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       display: flex;
       align-items: center;
@@ -135,25 +137,25 @@ export const createApp = (): Application => {
     .box {
       text-align: center;
       padding: 32px 28px;
-      background: #121824;
-      border: 1px solid rgba(212, 175, 55, 0.25);
+      background: #232A2E;
+      border: 1px solid rgba(56, 189, 199, 0.26);
       border-radius: 16px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
       max-width: 400px;
       width: 100%;
     }
     .spinner {
       width: 36px;
       height: 36px;
-      border: 3px solid rgba(212, 175, 55, 0.2);
-      border-top-color: #00E5FF;
+      border: 3px solid rgba(56, 189, 199, 0.22);
+      border-top-color: #38BDC7;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-    p { font-size: 13px; color: #94A3B8; }
+    p { font-size: 13px; color: #B1BDC2; }
   </style>
 </head>
 <body>
@@ -197,10 +199,18 @@ export const createApp = (): Application => {
 </html>`);
   });
 
-  // Health check endpoint
-  app.get('/api/health', (_req: Request, res: Response) => {
-    res.status(200).json({
-      status: 'ok',
+  // Health check endpoint (with optional DB ping for cloud readiness probes)
+  app.get('/api/health', async (_req: Request, res: Response) => {
+    let database = 'ok';
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+    } catch {
+      database = 'error';
+    }
+    const statusCode = database === 'ok' ? 200 : 503;
+    res.status(statusCode).json({
+      status: database === 'ok' ? 'ok' : 'degraded',
+      database,
       timestamp: new Date().toISOString(),
       service: 'surf-rental-backend',
     });
@@ -212,6 +222,7 @@ export const createApp = (): Application => {
   app.use('/api/rentals', rentalsRoutes);
   app.use('/api/payments', paymentsRoutes);
   app.use('/api/agency', agencyRoutes);
+  app.use('/api', agenciesRoutes);
   app.use('/api/owner', ownerRoutes);
   app.use('/api/claims', claimsRoutes);
   app.use('/api/loyalty', loyaltyRoutes);

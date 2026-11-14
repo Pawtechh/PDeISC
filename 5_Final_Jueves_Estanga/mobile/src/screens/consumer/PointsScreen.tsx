@@ -280,8 +280,8 @@ export const PointsScreen: React.FC = () => {
               <LinearGradient
                 colors={
                   isDark
-                    ? ['rgba(45, 43, 40, 0.96)', 'rgba(54, 44, 38, 0.96)', 'rgba(42, 41, 38, 0.94)']
-                    : ['#FDFCFA', '#FAF3EE', '#EFEAE1']
+                    ? ['rgba(35, 42, 46, 0.96)', 'rgba(30, 44, 48, 0.96)', 'rgba(26, 31, 34, 0.94)']
+                    : ['#FCFCFA', '#F2F7F7', '#EAECE8']
                 }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -435,7 +435,7 @@ export const PointsScreen: React.FC = () => {
                       >
                         <Text
                           variant="caption"
-                          color={isSelected ? '#FDFCFA' : theme.text}
+                          color={isSelected ? (isDark ? theme.primaryHover : theme.primaryText) : theme.text}
                           style={{ fontWeight: isSelected ? '700' : '500' }}
                         >
                           {preset} pts (${(parseInt(preset, 10) * 10).toLocaleString('es-AR')})

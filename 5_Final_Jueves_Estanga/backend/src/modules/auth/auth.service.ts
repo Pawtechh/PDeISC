@@ -20,11 +20,12 @@ export class AuthService {
   /**
    * Genera par de tokens JWT (Access 15m + Refresh 7d) y persiste el refresh en DB
    */
-  private async generateTokens(user: { id: string; email: string; role: Role }) {
+  private async generateTokens(user: { id: string; email: string; role: Role; agencyId?: string | null }) {
     const payload: JwtPayload = {
       id: user.id,
       email: user.email,
       role: user.role,
+      agencyId: user.agencyId ?? null,
     };
 
     const accessToken = jwt.sign(payload, JWT_CONFIG.accessSecret, {
@@ -120,6 +121,11 @@ export class AuthService {
   async login(data: LoginInput) {
     const user = await prisma.user.findUnique({
       where: { email: data.email.toLowerCase() },
+      include: {
+        agency: {
+          include: { zone: true },
+        },
+      },
     });
 
     if (!user || !user.passwordHash) {
@@ -144,7 +150,9 @@ export class AuthService {
     }
     const vendorStatus = app ? app.status : user.role === Role.OWNER ? 'APROBADO' : 'NONE';
     const canSwitchRole =
-      user.role !== Role.AGENCIA && (vendorStatus === 'APROBADO' || user.role === Role.OWNER);
+      user.role !== Role.AGENCIA &&
+      user.role !== Role.SUPER_ADMIN &&
+      (vendorStatus === 'APROBADO' || user.role === Role.OWNER);
 
     return {
       user: {
@@ -157,6 +165,8 @@ export class AuthService {
         dniFotoUrl: user.dniFotoUrl,
         avatarUrl: user.avatarUrl,
         puntos: user.puntos,
+        agencyId: user.agencyId ?? null,
+        agency: user.agency || null,
         vendorStatus,
         canSwitchRole,
         vendorApplication: app || null,
@@ -243,6 +253,10 @@ export class AuthService {
         puntos: true,
         puntosSancion: true,
         authProvider: true,
+        agencyId: true,
+        agency: {
+          include: { zone: true },
+        },
         createdAt: true,
       },
     });
@@ -260,10 +274,13 @@ export class AuthService {
     }
     const vendorStatus = app ? app.status : user.role === Role.OWNER ? 'APROBADO' : 'NONE';
     const canSwitchRole =
-      user.role !== Role.AGENCIA && (vendorStatus === 'APROBADO' || user.role === Role.OWNER);
+      user.role !== Role.AGENCIA &&
+      user.role !== Role.SUPER_ADMIN &&
+      (vendorStatus === 'APROBADO' || user.role === Role.OWNER);
 
     return {
       ...user,
+      agencyId: user.agencyId ?? null,
       vendorStatus,
       canSwitchRole,
       vendorApplication: app || null,

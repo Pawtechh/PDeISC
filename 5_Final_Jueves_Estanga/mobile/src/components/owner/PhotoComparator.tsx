@@ -109,7 +109,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
               >
                 <Text
                   variant="caption"
-                  color={isSelected ? colors.white : theme.text}
+                  color={isSelected ? theme.primaryText : theme.text}
                   style={{ fontWeight: isSelected ? '700' : '500' }}
                 >
                   {zone.label}
@@ -142,7 +142,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
               color={
                 viewMode === 'split'
                   ? isDark
-                    ? '#FDFCFA'
+                    ? theme.primaryText
                     : theme.primary
                   : theme.subtext
               }
@@ -166,7 +166,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
               color={
                 viewMode === 'retiro'
                   ? isDark
-                    ? '#FDFCFA'
+                    ? theme.primaryText
                     : theme.primary
                   : theme.subtext
               }
@@ -190,7 +190,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
               color={
                 viewMode === 'devolucion'
                   ? isDark
-                    ? '#FDFCFA'
+                    ? theme.primaryText
                     : theme.primary
                   : theme.subtext
               }
@@ -321,8 +321,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   zonePillActive: {
-    backgroundColor: colors.coral[500],
-    borderColor: colors.coral[600],
+    backgroundColor: colors.teal[600],
+    borderColor: colors.teal[700],
   },
   modeTabs: {
     borderRadius: radii.sm,

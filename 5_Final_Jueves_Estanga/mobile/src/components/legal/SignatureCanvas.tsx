@@ -265,7 +265,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
                 style={styles.quickSignBtn}
                 testID="legal-signature-btn-quick"
               >
-                <Text variant="caption" style={{ color: colors.coral[600], fontWeight: '600', fontSize: 12 }}>
+                <Text variant="caption" style={{ color: colors.teal[600], fontWeight: '600', fontSize: 12 }}>
                   Firma Rápida
                 </Text>
               </TouchableOpacity>
@@ -322,7 +322,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 const styles = StyleSheet.create({
   cardContainer: {
     borderWidth: 1,
-    borderColor: 'rgba(201, 74, 41, 0.24)',
+    borderColor: 'rgba(14, 107, 116, 0.24)',
     backgroundColor: colors.white,
     padding: spacing.md,
     borderRadius: radii.lg,
@@ -330,15 +330,15 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   lawPill: {
-    backgroundColor: 'rgba(201, 74, 41, 0.08)',
+    backgroundColor: 'rgba(14, 107, 116, 0.08)',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(201, 74, 41, 0.24)',
+    borderColor: 'rgba(14, 107, 116, 0.24)',
   },
   lawText: {
-    color: colors.coral[600],
+    color: colors.teal[600],
     fontWeight: '600',
     fontSize: 10,
   },
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 2,
     borderStyle: 'solid',
-    borderColor: 'rgba(201, 74, 41, 0.42)',
+    borderColor: 'rgba(14, 107, 116, 0.42)',
     position: 'relative',
     overflow: 'hidden',
     marginTop: spacing.xs,
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
       : {}),
   },
   canvasWrapperDrawing: {
-    borderColor: colors.coral[600],
+    borderColor: colors.teal[600],
     borderWidth: 2,
     backgroundColor: '#FFFFFF',
   },

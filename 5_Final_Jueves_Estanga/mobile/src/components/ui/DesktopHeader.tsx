@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Waves, LogOut, Compass, Shield, ShieldCheck, Sun, Moon } from 'lucide-react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { logout } from '../../store/auth/thunks';
+import { useGetMarineForecastQuery } from '../../api/weatherApi';
 
 export const DesktopHeader: React.FC = () => {
   const { width } = useWindowDimensions();
@@ -19,6 +20,11 @@ export const DesktopHeader: React.FC = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth?.user);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { data: marineRes } = useGetMarineForecastQuery(
+    user?.agency?.zoneId ? { zoneId: user.agency.zoneId } : undefined,
+    { pollingInterval: 120000 }
+  );
+  const marine = marineRes?.data;
 
   if (width < 768) {
     return null;
@@ -26,11 +32,23 @@ export const DesktopHeader: React.FC = () => {
 
   const activeUserRole = user?.role || user?.rol || 'CONSUMER';
   const roleBadgeLabel =
-    activeUserRole === 'AGENCIA'
-      ? 'SEDE AGENCIA (ADMIN)'
+    activeUserRole === 'SUPER_ADMIN'
+      ? 'SUPER ADMIN SAAS'
+      : activeUserRole === 'AGENCIA'
+      ? user?.agency?.nombre
+        ? `AGENCIA • ${user.agency.nombre.slice(0, 18).toUpperCase()}`
+        : 'SEDE AGENCIA (ADMIN)'
       : activeUserRole === 'OWNER'
       ? 'PERFIL VENDEDOR'
       : 'PERFIL USUARIO';
+
+  const brandSubtitleText = user?.agency?.zone
+    ? `${user.agency.zone.ciudad.toUpperCase()} • ${user.agency.zone.nombre.toUpperCase()}`
+    : 'RED COSTERA MULTI-ZONA • EST. 2026';
+
+  const telemetryLine = marine
+    ? `${(marine.spotName || 'COSTA ATLÁNTICA').toUpperCase()} • OLA ${marine.waveHeightMeters}M • ${marine.windSpeedKmh}KM/H ${marine.windDirectionText.toUpperCase()} • AGUA ${marine.waterTemperatureCelsius}°C`
+    : 'MAR DEL PLATA & COSTA • EN VIVO';
 
   const handleLogout = () => {
     setShowLogoutModal(true);
@@ -84,7 +102,7 @@ export const DesktopHeader: React.FC = () => {
                 { color: theme.muted },
               ]}
             >
-              MAR DEL PLATA • EST. 2026
+              {brandSubtitleText}
             </Text>
           </View>
         </View>
@@ -112,7 +130,7 @@ export const DesktopHeader: React.FC = () => {
                 { color: theme.subtext },
               ]}
             >
-              PLAYA GRANDE • OLA 1.3M • 14KT OFFSHORE • AGUA 16.5°C
+              {telemetryLine}
             </Text>
           </View>
         )}

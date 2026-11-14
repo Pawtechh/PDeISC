@@ -15,6 +15,7 @@ import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { tokenStorage } from '../../utils/storage';
 import { loginSchema, LoginFormData } from '../../schemas/auth.schema';
 import { OAuthButtons } from '../../components/auth/OAuthButtons';
+import { RegisterAgencyModal } from '../../components/agencies/RegisterAgencyModal';
 
 export interface LoginScreenProps {
   navigation?: any;
@@ -30,6 +31,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hasBiometrics, setHasBiometrics] = useState(false);
   const [biometricType, setBiometricType] = useState<string>('Biometría');
+  const [showRegisterAgencyModal, setShowRegisterAgencyModal] = useState(false);
 
   useEffect(() => {
     const checkBiometrics = async () => {
@@ -289,16 +291,29 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               <Divider />
 
               <Button
-                title="🏄‍♂️ Ver Tablas y Shapers como Invitado"
+                title="Ver Tablas y Agencias como Invitado"
                 variant="secondary"
                 size="md"
                 onPress={() => dispatch(setGuestMode(true))}
                 testID="btn-explore-as-guest"
               />
+
+              <Button
+                title="Sumar Mi Surf Shop / Agencia por Zona"
+                variant="secondary"
+                size="md"
+                onPress={() => setShowRegisterAgencyModal(true)}
+                testID="btn-open-register-agency"
+              />
             </Stack>
           </Card>
         </View>
       </View>
+
+      <RegisterAgencyModal
+        visible={showRegisterAgencyModal}
+        onClose={() => setShowRegisterAgencyModal(false)}
+      />
     </Screen>
   );
 };
@@ -349,32 +364,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(28, 26, 24, 0.84)',
+    backgroundColor: 'rgba(20, 26, 29, 0.86)',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(224, 99, 67, 0.44)',
+    borderColor: 'rgba(56, 189, 199, 0.44)',
     marginBottom: spacing.xs,
   },
   brandPillDot: {
-    color: colors.coral[400],
+    color: colors.teal[400],
     fontSize: 8,
   },
   brandPillText: {
-    color: colors.coral[300],
+    color: colors.teal[300],
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
   heroBrandTitle: {
-    color: '#F5F2EC',
+    color: '#F2F5F4',
     fontSize: 32,
     fontWeight: '800',
     lineHeight: 38,
   },
   heroBrandTagline: {
-    color: colors.coral[300],
+    color: colors.teal[300],
     fontSize: 16,
     fontWeight: '600',
     lineHeight: 22,

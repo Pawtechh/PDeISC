@@ -3,8 +3,12 @@ import { agencyService } from './agency.service';
 
 export const checkIn = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const operatorId = (req as any).user.id;
-    const result = await agencyService.checkIn(req.body, operatorId);
+    const user = (req as any).user;
+    const operatorId = user.id;
+    const result = await agencyService.checkIn(req.body, operatorId, {
+      role: user?.role,
+      agencyId: user?.agencyId ?? null,
+    });
     res.status(200).json({
       status: 'success',
       data: result,
@@ -16,8 +20,12 @@ export const checkIn = async (req: Request, res: Response, next: NextFunction): 
 
 export const checkOut = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const operatorId = (req as any).user.id;
-    const result = await agencyService.checkOut(req.body, operatorId);
+    const user = (req as any).user;
+    const operatorId = user.id;
+    const result = await agencyService.checkOut(req.body, operatorId, {
+      role: user?.role,
+      agencyId: user?.agencyId ?? null,
+    });
     res.status(200).json({
       status: 'success',
       data: result,
@@ -27,9 +35,11 @@ export const checkOut = async (req: Request, res: Response, next: NextFunction):
   }
 };
 
-export const getDailySchedule = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getDailySchedule = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const schedule = await agencyService.getDailySchedule();
+    const user = (req as any).user;
+    const agencyId = user?.role === 'SUPER_ADMIN' ? null : (user?.agencyId ?? null);
+    const schedule = await agencyService.getDailySchedule(agencyId);
     res.status(200).json({
       status: 'success',
       data: schedule,
@@ -39,9 +49,11 @@ export const getDailySchedule = async (_req: Request, res: Response, next: NextF
   }
 };
 
-export const getAgencyMetrics = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getAgencyMetrics = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const metrics = await agencyService.getAgencyMetrics();
+    const user = (req as any).user;
+    const agencyId = user?.role === 'SUPER_ADMIN' ? null : (user?.agencyId ?? null);
+    const metrics = await agencyService.getAgencyMetrics(agencyId);
     res.status(200).json({
       status: 'success',
       data: metrics,
@@ -65,8 +77,10 @@ export const getCommission = async (_req: Request, res: Response, next: NextFunc
 
 export const updateCommission = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const operator = (req as any).user?.email || 'operador_web';
-    const result = await agencyService.updateAgencyCommission(req.body, operator);
+    const user = (req as any).user;
+    const operator = user?.email || 'operador_web';
+    const agencyId = user?.role === 'SUPER_ADMIN' ? null : (user?.agencyId ?? null);
+    const result = await agencyService.updateAgencyCommission(req.body, operator, agencyId);
     res.status(200).json({
       status: 'success',
       data: result,
@@ -76,9 +90,11 @@ export const updateCommission = async (req: Request, res: Response, next: NextFu
   }
 };
 
-export const getVendorRequests = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getVendorRequests = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const requests = await agencyService.getVendorRequests();
+    const user = (req as any).user;
+    const agencyId = user?.role === 'SUPER_ADMIN' ? null : (user?.agencyId ?? null);
+    const requests = await agencyService.getVendorRequests(agencyId);
     res.status(200).json({
       status: 'success',
       data: requests,
@@ -90,14 +106,17 @@ export const getVendorRequests = async (_req: Request, res: Response, next: Next
 
 export const resolveVendorRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const operatorId = (req as any).user?.id || 'operator-agency';
-    const operatorEmail = (req as any).user?.email || 'mostrador@surf.com';
+    const user = (req as any).user;
+    const operatorId = user?.id || 'operator-agency';
+    const operatorEmail = user?.email || 'mostrador@surf.com';
+    const operatorAgencyId = user?.role === 'SUPER_ADMIN' ? null : (user?.agencyId ?? null);
     const requestId = String(req.params.id || '');
     const result = await agencyService.resolveVendorRequest(
       requestId,
       req.body,
       operatorId,
-      operatorEmail
+      operatorEmail,
+      operatorAgencyId
     );
     res.status(200).json({
       status: 'success',

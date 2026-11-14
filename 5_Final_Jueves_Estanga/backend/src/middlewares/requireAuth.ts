@@ -56,7 +56,7 @@ export const requireAuth = async (
   try {
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
-      select: { id: true, email: true, role: true, nombre: true, activo: true },
+      select: { id: true, email: true, role: true, nombre: true, activo: true, agencyId: true },
     });
 
     if (!user || !user.activo) {
@@ -73,6 +73,7 @@ export const requireAuth = async (
       email: user.email,
       role: user.role,
       nombre: user.nombre,
+      agencyId: user.agencyId ?? null,
     };
 
     next();

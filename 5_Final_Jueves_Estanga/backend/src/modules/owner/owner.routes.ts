@@ -21,9 +21,9 @@ import {
 
 const router = Router();
 
-// Todas las rutas requieren autenticación y rol OWNER
+// Todas las rutas requieren autenticación y rol OWNER, AGENCIA o SUPER_ADMIN
 router.use(requireAuth);
-router.use(requireRole('OWNER'));
+router.use(requireRole('OWNER', 'AGENCIA', 'SUPER_ADMIN'));
 
 router.get('/boards', getMyBoards);
 router.get('/earnings', getEarnings);

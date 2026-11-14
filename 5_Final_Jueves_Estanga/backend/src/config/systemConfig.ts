@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { prisma } from './prisma';
 import { logger } from '../utils/logger';
 
 export interface SystemConfigData {
@@ -8,6 +9,7 @@ export interface SystemConfigData {
   updatedBy?: string;
 }
 
+const SETTING_KEY = 'agency_commission';
 const CONFIG_FILE_PATH = path.resolve(__dirname, '../../data/system_config.json');
 
 const DEFAULT_CONFIG: SystemConfigData = {
@@ -21,6 +23,64 @@ class SystemConfigManager {
 
   constructor() {
     this.config = this.loadConfig();
+    if (process.env.NODE_ENV !== 'test') {
+      void this.hydrateFromDatabase();
+    }
+  }
+
+  private async hydrateFromDatabase(): Promise<void> {
+    try {
+      const delegate = (prisma as any)?.systemSetting;
+      if (!delegate?.findUnique) return;
+      const row = await delegate.findUnique({ where: { key: SETTING_KEY } });
+      if (row?.value && typeof row.value === 'object') {
+        const val = row.value as Partial<SystemConfigData>;
+        if (typeof val.agencyCommissionPercent === 'number' && !isNaN(val.agencyCommissionPercent)) {
+          this.config = {
+            agencyCommissionPercent: val.agencyCommissionPercent,
+            updatedAt: row.updatedAt ? new Date(row.updatedAt).toISOString() : new Date().toISOString(),
+            updatedBy: row.updatedBy || val.updatedBy || 'db_persisted',
+          };
+          return;
+        }
+      }
+      // Si aún no existía en DB, sembrar el valor actual en SystemSetting
+      await delegate.upsert?.({
+        where: { key: SETTING_KEY },
+        update: {},
+        create: {
+          key: SETTING_KEY,
+          value: this.config,
+          updatedBy: this.config.updatedBy || 'system_seed',
+        },
+      });
+    } catch (err) {
+      logger.warn('No se pudo hidratar SystemSetting desde DB, operando con fallback', {
+        error: String(err),
+      });
+    }
+  }
+
+  private async persistToDatabase(): Promise<void> {
+    if (process.env.NODE_ENV === 'test') return;
+    try {
+      const delegate = (prisma as any)?.systemSetting;
+      if (!delegate?.upsert) return;
+      await delegate.upsert({
+        where: { key: SETTING_KEY },
+        update: {
+          value: this.config,
+          updatedBy: this.config.updatedBy || 'web_operator',
+        },
+        create: {
+          key: SETTING_KEY,
+          value: this.config,
+          updatedBy: this.config.updatedBy || 'web_operator',
+        },
+      });
+    } catch (err) {
+      logger.warn('Error al persistir SystemSetting en DB', { error: String(err) });
+    }
   }
 
   private loadConfig(): SystemConfigData {
@@ -45,6 +105,7 @@ class SystemConfigManager {
   }
 
   private saveConfig(): void {
+    void this.persistToDatabase();
     try {
       const dir = path.dirname(CONFIG_FILE_PATH);
       if (!fs.existsSync(dir)) {
@@ -52,7 +113,7 @@ class SystemConfigManager {
       }
       fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(this.config, null, 2), 'utf-8');
     } catch (err) {
-      logger.error('Error al persistir system_config.json', { error: String(err) });
+      logger.warn('Error al persistir system_config.json en disco', { error: String(err) });
     }
   }
 
@@ -85,7 +146,7 @@ class SystemConfigManager {
   }
 
   /**
-   * Actualiza el porcentaje de comisión y lo persiste en disco
+   * Actualiza el porcentaje de comisión y lo persiste en PostgreSQL/MySQL + respaldo local
    */
   public setAgencyCommissionPercent(percent: number, updatedBy?: string): void {
     this.config = {
@@ -97,23 +158,30 @@ class SystemConfigManager {
   }
 
   /**
-   * Valida la contraseña especial de seguridad requerida para modificar la comisión
+   * Valida la contraseña especial de seguridad requerida para modificar la comisión.
+   * En producción exige AGENCY_COMMISSION_PASSWORD configurada en entorno (sin claves demo).
    */
   public validateSpecialPassword(password: string): boolean {
     if (!password || typeof password !== 'string') return false;
     const trimmed = password.trim();
 
-    // Contraseña configurada en .env o claves maestras autorizadas de la sede
-    const envPassword = process.env.AGENCY_COMMISSION_PASSWORD;
-    const authorizedPasswords = [
-      envPassword,
-      'surf2026',
-      'SURF2026',
-      'admin1234',
-      'Password123!',
-      'mdp2026',
-    ].filter(Boolean) as string[];
+    const envPassword = process.env.AGENCY_COMMISSION_PASSWORD?.trim();
+    const isProduction = process.env.NODE_ENV === 'production';
 
+    if (isProduction) {
+      if (!envPassword) {
+        logger.error('AGENCY_COMMISSION_PASSWORD no configurada en producción; acción denegada.');
+        return false;
+      }
+      return trimmed === envPassword;
+    }
+
+    const devFallbacks =
+      process.env.ALLOW_DEMO_ADMIN_PASSWORDS === 'false'
+        ? []
+        : ['surf2026', 'SURF2026', 'admin1234', 'Password123!', 'mdp2026'];
+
+    const authorizedPasswords = [envPassword, ...devFallbacks].filter(Boolean) as string[];
     return authorizedPasswords.includes(trimmed);
   }
 }

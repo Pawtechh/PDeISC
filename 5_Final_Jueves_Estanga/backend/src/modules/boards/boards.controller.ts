@@ -32,7 +32,10 @@ export const getAvailability: RequestHandler = async (req, res, next) => {
 
 export const createBoard: RequestHandler = async (req, res, next) => {
   try {
-    const board = await boardsService.create(req.user!.id, req.body);
+    const board = await boardsService.create(req.user!.id, req.body, {
+      role: req.user!.role,
+      agencyId: req.user!.agencyId ?? null,
+    });
     res.status(201).json({ data: board });
   } catch (error) {
     next(error);
@@ -45,7 +48,8 @@ export const updateBoard: RequestHandler = async (req, res, next) => {
       req.user!.id,
       req.user!.role,
       req.params.id!,
-      req.body
+      req.body,
+      req.user!.agencyId ?? null
     );
     res.status(200).json({ data: board });
   } catch (error) {
@@ -55,7 +59,12 @@ export const updateBoard: RequestHandler = async (req, res, next) => {
 
 export const deleteBoard: RequestHandler = async (req, res, next) => {
   try {
-    const result = await boardsService.delete(req.user!.id, req.user!.role, req.params.id!);
+    const result = await boardsService.delete(
+      req.user!.id,
+      req.user!.role,
+      req.params.id!,
+      req.user!.agencyId ?? null
+    );
     res.status(200).json({ data: result });
   } catch (error) {
     next(error);
@@ -64,7 +73,11 @@ export const deleteBoard: RequestHandler = async (req, res, next) => {
 
 export const getMyBoards: RequestHandler = async (req, res, next) => {
   try {
-    const boards = await boardsService.getMyBoards(req.user!.id);
+    const boards = await boardsService.getMyBoards(
+      req.user!.id,
+      req.user!.role,
+      req.user!.agencyId ?? null
+    );
     res.status(200).json({ status: 'success', data: boards });
   } catch (error) {
     next(error);

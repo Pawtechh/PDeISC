@@ -200,10 +200,15 @@ export const sensorService = {
   },
 
   /**
-   * 4. Abrir indicaciones de cómo llegar a la Sede Playa Grande en Google Maps
+   * 4. Abrir indicaciones de cómo llegar a la sede / zona seleccionada en Google Maps
    */
-  openGoogleMapsDirections(userLat?: number, userLon?: number) {
-    const dest = `${PLAYA_GRANDE_COORDS.latitude},${PLAYA_GRANDE_COORDS.longitude}`;
+  openGoogleMapsDirections(
+    userLat?: number,
+    userLon?: number,
+    targetLat: number = PLAYA_GRANDE_COORDS.latitude,
+    targetLon: number = PLAYA_GRANDE_COORDS.longitude
+  ) {
+    const dest = `${targetLat},${targetLon}`;
     let url = `https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=driving`;
     if (typeof userLat === 'number' && typeof userLon === 'number') {
       url += `&origin=${userLat},${userLon}`;

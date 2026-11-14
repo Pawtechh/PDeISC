@@ -8,6 +8,7 @@ const photoUriSchema = z
       val.startsWith('http://') ||
       val.startsWith('https://') ||
       val.startsWith('/images/') ||
+      val.startsWith('/uploads/') ||
       val.startsWith('data:image/'),
     { message: 'Formato o URL de foto inválida' }
   );
@@ -26,6 +27,8 @@ export const createBoardSchema = z.object({
   fotos: z.array(photoUriSchema).min(1, 'Se requiere al menos 1 fotografía'),
   polizaSeguroNumero: z.string().optional(),
   polizaAseguradora: z.string().optional(),
+  agencyId: z.string().optional(),
+  zoneId: z.string().optional(),
 });
 
 export type CreateBoardInput = z.infer<typeof createBoardSchema>;
@@ -42,6 +45,9 @@ export const boardFiltersSchema = z.object({
   orden: z.enum(['precio_asc', 'precio_desc', 'recientes']).optional(),
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(50).default(20),
+  zoneId: z.string().optional(),
+  ciudad: z.string().optional(),
+  agencyId: z.string().optional(),
 });
 
 export type BoardFiltersInput = z.infer<typeof boardFiltersSchema>;

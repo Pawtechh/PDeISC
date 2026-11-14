@@ -13,9 +13,19 @@ export class OwnerService {
    * Obtiene todas las tablas del Owner con cálculo en tiempo real
    * del ciclo de mantenimiento preventivo de 45 días y estadísticas de uso.
    */
-  async getMyBoards(ownerId: string) {
+  async getMyBoards(
+    ownerId: string,
+    context?: { role?: string; agencyId?: string | null }
+  ) {
+    const whereClause =
+      context?.role === 'SUPER_ADMIN'
+        ? undefined
+        : context?.role === 'AGENCIA' && context?.agencyId
+        ? { OR: [{ agencyId: context.agencyId }, { ownerId }] }
+        : { ownerId };
+
     const boards = await prisma.board.findMany({
-      where: { ownerId },
+      where: whereClause,
       include: {
         rentals: {
           select: {
@@ -23,6 +33,21 @@ export class OwnerService {
             estado: true,
             gananciaOwner: true,
             horas: true,
+          },
+        },
+        agency: {
+          select: {
+            id: true,
+            slug: true,
+            nombre: true,
+            accentColor: true,
+          },
+        },
+        zone: {
+          select: {
+            id: true,
+            ciudad: true,
+            nombre: true,
           },
         },
       },
@@ -421,7 +446,8 @@ export class OwnerService {
   async completeMaintenance(
     ownerId: string,
     boardId: string,
-    input?: CompleteMaintenanceInput
+    input?: CompleteMaintenanceInput,
+    context?: { role?: string; agencyId?: string | null }
   ) {
     const board = await prisma.board.findUnique({
       where: { id: boardId },
@@ -431,7 +457,13 @@ export class OwnerService {
       throw new AppError('BOARD_NOT_FOUND', 'Tabla no encontrada', 404);
     }
 
-    if (board.ownerId !== ownerId) {
+    const canMaintain =
+      context?.role === 'SUPER_ADMIN' ||
+      board.ownerId === ownerId ||
+      (context?.role === 'AGENCIA' &&
+        (!board.agencyId || !context?.agencyId || board.agencyId === context.agencyId));
+
+    if (!canMaintain) {
       throw new AppError('FORBIDDEN', 'No tenés permisos para gestionar esta tabla', 403);
     }
 

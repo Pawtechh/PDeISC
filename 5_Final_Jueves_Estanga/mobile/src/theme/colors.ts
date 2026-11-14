@@ -1,90 +1,84 @@
 export const colors = {
-  coral: {
-    300: '#F1A691',
-    400: '#EA7D60',
-    500: '#E06343', // Signature Sunlit Terracotta (Dark focal)
-    600: '#C94A29', // Signature Fired Clay (Light focal — 4.92:1 contrast w/ white)
-    700: '#A83A1E',
-    border: 'rgba(224, 99, 67, 0.28)',
-    glow: 'rgba(224, 99, 67, 0.18)',
-    subtle: 'rgba(224, 99, 67, 0.11)',
+  teal: {
+    300: '#6BD4DC',
+    400: '#51CCD5',
+    500: '#38BDC7', // Signature Sea-Glass Teal (Dark focal — 6.43:1 on #232A2E, 8.05:1 w/ #0C1719 ink)
+    600: '#0E6B74', // Signature Deep Atlantic Teal (Light focal — 6.22:1 contrast w/ #FFFFFF)
+    700: '#08444A',
+    border: 'rgba(14, 107, 116, 0.28)',
+    glow: 'rgba(56, 189, 199, 0.20)',
+    subtle: 'rgba(56, 189, 199, 0.12)',
   },
   ocean: {
-    50: '#FAF8F4',
-    100: '#F5F1EA', // Sunlit Coastal Travertine
-    200: '#E8E2D7',
-    300: '#CFC8BC',
-    400: '#9E988D', // Weathered Limestone Chrome
-    500: '#6F6A61',
-    600: '#4E4A43', // Coastal Mineral Graphite
-    700: '#35332F',
-    800: '#2A2926',
-    900: '#21201E',
+    50: '#FCFCFA',
+    100: '#F4F5F2', // Sunlit Salt-Chalk Limestone
+    200: '#EAECE8', // Soft Fog Sand
+    300: '#CBD2D4',
+    400: '#9CAAB0', // Calm Coastal Sea-Slate Chrome
+    500: '#5A676D',
+    600: '#4A575D', // Mineral Slate Graphite
+    700: '#2D363B',
+    800: '#232A2E',
+    900: '#1A1F22',
   },
   seafoam: {
-    300: '#84CBB8',
-    400: '#52B097', // Coastal Sea-Kelp (Split-complement vs Terracotta)
-    500: '#247360', // Deep Atlantic Kelp (5.4:1 contrast on light)
-    600: '#1A5648',
+    300: '#84DCC1',
+    400: '#4FC3A1', // Coastal Sea-Kelp Mint
+    500: '#1D6F5A', // Deep Atlantic Kelp (AA on light)
+    600: '#155444',
   },
   sunset: {
-    400: '#DBA84C', // Brushed Sun-Wax Brass (Dark)
-    500: '#C68B2C',
-    600: '#A4701C', // Deep Ochre Gold (4.6:1 contrast on light)
+    400: '#D9AE57', // Brushed Wax Brass (Dark)
+    500: '#B8832A',
+    600: '#9A6312', // Aged Ochre Brass (AA on light)
   },
   sand: {
-    50: '#FAF8F4',
-    100: '#F5F1EA',
-    200: '#E8E2D7',
-    300: '#D6CFC3',
-    500: '#7A7368',
-    700: '#4A463F',
-    900: '#1C1B18',
+    50: '#FCFCFA',
+    100: '#F4F5F2',
+    200: '#EAECE8',
+    300: '#D4DBD8',
+    500: '#5A676D',
+    700: '#4A575D',
+    900: '#131A1D',
   },
   champagne: {
     100: '#FAF0DA',
     200: '#F3DFB4',
     300: '#EAD094',
-    400: '#DBA84C',
-    500: '#C68B2C', // Warm brushed brass
-    600: '#A4701C',
-    border: 'rgba(219, 168, 76, 0.26)',
-    glow: 'rgba(219, 168, 76, 0.15)',
-    subtle: 'rgba(219, 168, 76, 0.10)',
-  },
-  neon: {
-    cyan: '#9E988D',
-    bioluminescent: '#B6B0A5',
-    cyanGlow: 'rgba(158, 152, 141, 0.14)',
-    cyanHighlight: 'rgba(158, 152, 141, 0.08)',
+    400: '#D9AE57',
+    500: '#B8832A', // Warm brushed wax brass
+    600: '#9A6312',
+    border: 'rgba(217, 174, 87, 0.28)',
+    glow: 'rgba(217, 174, 87, 0.16)',
+    subtle: 'rgba(217, 174, 87, 0.11)',
   },
   semantic: {
-    success: '#247360',
-    warning: '#A4701C',
+    success: '#1D6F5A',
+    warning: '#9A6312',
     danger: '#B63933',
-    info: '#3B657E',
+    info: '#2B5B78',
   },
   dark: {
-    background: '#21201E', // Warm Coastal Basalt Graphite (Lifted, never black)
-    surface: '#2A2926',    // Elevated Mineral Stone
-    card: '#2D2B28',
-    champagne: '#DBA84C',
-    primary: '#E06343',    // Sunlit Terracotta
-    primaryText: '#FFFFFF',
-    text: '#F5F2EC',       // Warm Chalk White (13.1:1 on card)
-    subtext: '#B6B0A5',    // Driftwood Stone (6.7:1 on card)
-    sand: '#D6CFC3',
-    border: 'rgba(245, 242, 236, 0.09)',
-    accent: '#9E988D',     // Weathered Mineral Chrome
-    accentLight: 'rgba(158, 152, 141, 0.12)',
-    cardHighlight: 'rgba(245, 242, 236, 0.05)',
-    inputBg: '#35332F',
-    inputBorder: 'rgba(245, 242, 236, 0.13)',
-    glowChampagne: 'rgba(219, 168, 76, 0.14)',
-    glowCyan: 'rgba(224, 99, 67, 0.18)',
+    background: '#1A1F22', // Coastal Atlantic Slate (Lifted, calm, zero pitch black)
+    surface: '#232A2E',    // Elevated Mineral Charcoal
+    card: '#232A2E',
+    champagne: '#D9AE57',
+    primary: '#38BDC7',    // Sea-Glass Teal (6.43:1 on #232A2E)
+    primaryText: '#0C1719', // Deep Abyssal Ink (8.05:1 contrast on #38BDC7)
+    text: '#F2F5F4',       // Salt-Chalk White (15.16:1 on bg)
+    subtext: '#B1BDC2',    // Mist Driftwood (7.9:1 on card)
+    sand: '#D4DBD8',
+    border: 'rgba(242, 245, 244, 0.09)',
+    accent: '#9CAAB0',     // Calm Mineral Sea-Chrome
+    accentLight: 'rgba(156, 170, 176, 0.13)',
+    cardHighlight: 'rgba(242, 245, 244, 0.05)',
+    inputBg: '#2D363B',
+    inputBorder: 'rgba(242, 245, 244, 0.14)',
+    glowChampagne: 'rgba(217, 174, 87, 0.15)',
+    glowTeal: 'rgba(56, 189, 199, 0.20)',
   },
-  white: '#FDFCFA',
-  black: '#1C1B18',
+  white: '#FCFCFA',
+  black: '#131A1D',
   transparent: 'transparent',
 } as const;
 

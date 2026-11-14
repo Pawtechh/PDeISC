@@ -7,11 +7,17 @@ import { spacing } from '../../theme/spacing';
 import { useTheme } from '../../theme/ThemeContext';
 import { useGetMarineForecastQuery } from '../../api/weatherApi';
 
-export const MarineForecastCard: React.FC = () => {
+export interface MarineForecastCardProps {
+  zoneId?: string;
+  zoneLabel?: string;
+}
+
+export const MarineForecastCard: React.FC<MarineForecastCardProps> = ({ zoneId, zoneLabel }) => {
   const { theme, isDark } = useTheme();
-  const { data, isLoading } = useGetMarineForecastQuery(undefined, {
-    pollingInterval: 60000,
-  });
+  const { data, isLoading } = useGetMarineForecastQuery(
+    zoneId ? { zoneId } : undefined,
+    { pollingInterval: 60000 }
+  );
 
   const forecast = data?.data;
 
@@ -29,7 +35,7 @@ export const MarineForecastCard: React.FC = () => {
         <Row align="center" justify="center" spacing="sm">
           <ActivityIndicator size="small" color={isDark ? theme.primaryHover : theme.primary} />
           <Text variant="caption" color={theme.subtext}>
-            Sincronizando boya oceanográfica de Playa Grande...
+            Sincronizando boya oceanográfica {zoneLabel ? `de ${zoneLabel}` : 'costera'}...
           </Text>
         </Row>
       </View>
@@ -84,7 +90,7 @@ export const MarineForecastCard: React.FC = () => {
                 style={[styles.spotTitle, { color: theme.text }]}
                 numberOfLines={2}
               >
-                {forecast.spotName} • Mar del Plata
+                {forecast.spotName || zoneLabel || 'Spot Costero en Vivo'}
               </Text>
             </View>
           </Row>
@@ -343,14 +349,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: 'rgba(224, 99, 67, 0.14)',
+    backgroundColor: 'rgba(56, 189, 199, 0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(224, 99, 67, 0.30)',
+    borderColor: 'rgba(56, 189, 199, 0.30)',
   },
   recomPillText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#EA7D60',
+    color: '#51CCD5',
     letterSpacing: 0.5,
   },
 });

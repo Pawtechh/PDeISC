@@ -27,6 +27,7 @@ export interface Board3DCarouselProps {
   boards: Board[];
   onPressDetail: (board: Board) => void;
   onPressReserve: (board: Board) => void;
+  onPressAgency?: (slugOrId: string) => void;
 }
 
 const triggerHaptic = () => {
@@ -41,6 +42,7 @@ interface CarouselCardItemProps {
   isDesktop: boolean;
   onPressDetail: (board: Board) => void;
   onPressReserve: (board: Board) => void;
+  onPressAgency?: (slugOrId: string) => void;
 }
 
 const CarouselCardItem: React.FC<CarouselCardItemProps> = ({
@@ -51,6 +53,7 @@ const CarouselCardItem: React.FC<CarouselCardItemProps> = ({
   isDesktop,
   onPressDetail,
   onPressReserve,
+  onPressAgency,
 }) => {
   const animatedStyle = useAnimatedStyle(() => {
     if (isDesktop) {
@@ -101,6 +104,7 @@ const CarouselCardItem: React.FC<CarouselCardItemProps> = ({
         isFeatured={true}
         onPressDetail={() => onPressDetail(board)}
         onPressReserve={() => onPressReserve(board)}
+        onPressAgency={onPressAgency}
         testID={`board-3d-detail-${board.id}`}
       />
     </Animated.View>
@@ -139,7 +143,7 @@ const PaginationDot: React.FC<PaginationDotProps> = ({ index, scrollX, cardWidth
     return {
       width,
       opacity,
-      backgroundColor: opacity > 0.65 ? '#E06343' : '#9E988D',
+      backgroundColor: opacity > 0.65 ? '#38BDC7' : '#9CAAB0',
     };
   });
 
@@ -158,6 +162,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
   boards,
   onPressDetail,
   onPressReserve,
+  onPressAgency,
 }) => {
   const { isDark } = useTheme();
   const { width } = useWindowDimensions();
@@ -307,6 +312,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               isDesktop={isDesktop}
               onPressDetail={onPressDetail}
               onPressReserve={onPressReserve}
+              onPressAgency={onPressAgency}
             />
           )}
           getItemLayout={(_, index) => ({
@@ -368,7 +374,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <ChevronLeft size={15} color={isFirst ? '#7A7368' : (isDark ? '#EA7D60' : '#C94A29')} />
+          <ChevronLeft size={15} color={isFirst ? '#5A676D' : (isDark ? '#51CCD5' : '#0E6B74')} />
         </TouchableOpacity>
 
         {boards.length <= 10 ? (
@@ -393,9 +399,9 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               },
             ]}
           >
-            <Text style={[styles.counterHighlight, { color: isDark ? '#EA7D60' : '#C94A29' }]}>{currentIndex + 1}</Text>
+            <Text style={[styles.counterHighlight, { color: isDark ? '#51CCD5' : '#0E6B74' }]}>{currentIndex + 1}</Text>
             <Text style={styles.counterDivider}> / </Text>
-            <Text style={[styles.counterTotal, { color: isDark ? '#B6B0A5' : '#666056' }]}>
+            <Text style={[styles.counterTotal, { color: isDark ? '#B1BDC2' : '#4A575D' }]}>
               {boards.length}
             </Text>
           </View>
@@ -405,8 +411,8 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           style={[
             styles.navArrowBtn,
             {
-              backgroundColor: isDark ? 'rgba(245, 242, 236, 0.06)' : '#FDFCFA',
-              borderColor: isDark ? 'rgba(245, 242, 236, 0.10)' : 'rgba(28, 27, 24, 0.09)',
+              backgroundColor: isDark ? 'rgba(242, 245, 244, 0.06)' : '#FCFCFA',
+              borderColor: isDark ? 'rgba(242, 245, 244, 0.10)' : 'rgba(19, 26, 29, 0.10)',
             },
             isLast && styles.navArrowBtnDisabled,
           ]}
@@ -415,7 +421,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <ChevronRight size={15} color={isLast ? '#7A7368' : (isDark ? '#EA7D60' : '#C94A29')} />
+          <ChevronRight size={15} color={isLast ? '#5A676D' : (isDark ? '#51CCD5' : '#0E6B74')} />
         </TouchableOpacity>
       </View>
     </View>
@@ -500,16 +506,16 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   counterHighlight: {
-    color: '#E06343',
+    color: '#38BDC7',
     fontSize: 13,
     fontWeight: '800',
   },
   counterDivider: {
-    color: '#9E988D',
+    color: '#9CAAB0',
     fontSize: 12,
   },
   counterTotal: {
-    color: '#B6B0A5',
+    color: '#B1BDC2',
     fontSize: 13,
     fontWeight: '600',
   },

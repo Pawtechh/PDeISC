@@ -9,10 +9,170 @@ async function main() {
   const defaultPassword = 'Password123!';
   const passwordHash = await bcrypt.hash(defaultPassword, 12);
 
-  // 1. USUARIOS: 1 AGENCIA, 3 OWNERS, 5 CONSUMERS
+  // 0. ZONAS COSTERAS / CIUDADES DE SURF
+  const zonesSeed = [
+    {
+      id: 'zone-mdp-playa-grande',
+      slug: 'mar-del-plata-playa-grande',
+      ciudad: 'Mar del Plata',
+      nombre: 'Playa Grande',
+      pais: 'Argentina',
+      latitud: -38.0278,
+      longitud: -57.5306,
+      activa: true,
+    },
+    {
+      id: 'zone-mdp-varese',
+      slug: 'mar-del-plata-varese',
+      ciudad: 'Mar del Plata',
+      nombre: 'Varese & Cabo Corrientes',
+      pais: 'Argentina',
+      latitud: -38.0156,
+      longitud: -57.5269,
+      activa: true,
+    },
+    {
+      id: 'zone-chapadmalal',
+      slug: 'chapadmalal-luna-roja',
+      ciudad: 'Chapadmalal',
+      nombre: 'Luna Roja & Los Lobos',
+      pais: 'Argentina',
+      latitud: -38.2044,
+      longitud: -57.6847,
+      activa: true,
+    },
+    {
+      id: 'zone-pinamar',
+      slug: 'pinamar-muelle',
+      ciudad: 'Pinamar',
+      nombre: 'Muelle & Playa Norte',
+      pais: 'Argentina',
+      latitud: -37.1079,
+      longitud: -56.8548,
+      activa: true,
+    },
+    {
+      id: 'zone-miramar',
+      slug: 'miramar-el-muelle',
+      ciudad: 'Miramar',
+      nombre: 'El Muelle & Pomponius',
+      pais: 'Argentina',
+      latitud: -38.2736,
+      longitud: -57.8351,
+      activa: true,
+    },
+  ];
+
+  for (const z of zonesSeed) {
+    await prisma.zone.upsert({
+      where: { slug: z.slug },
+      update: z,
+      create: z,
+    });
+  }
+
+  // 0B. AGENCIAS / SURF SHOPS POR ZONA
+  const agenciesSeed = [
+    {
+      id: 'agency-playa-grande',
+      slug: 'playa-grande-central',
+      nombre: 'Playa Grande Central — Guardería & Quiver',
+      descripcion:
+        'Sede emblemática frente al Yacht Club y Escollera Sur. Quiver pro de shortboards, fishes y alquiler rápido con retiro QR en bajada principal.',
+      accentColor: '#0E6B74',
+      direccion: 'Escollera Norte, Bajada 3, Playa Grande, Mar del Plata',
+      whatsapp: '+54 9 223 555-0303',
+      horario: 'Todos los días 07:00 a 20:30',
+      comisionPorcentaje: 5.0,
+      multaSalitreArs: 10000.0,
+      verificada: true,
+      activa: true,
+      zoneId: 'zone-mdp-playa-grande',
+    },
+    {
+      id: 'agency-varese-longboard',
+      slug: 'varese-longboard-co',
+      nombre: 'Varese Longboard Co.',
+      descripcion:
+        'Especialistas en longboard clásico, mid-length y clases iniciales en aguas calmas de Bahía Varese y Torreón.',
+      accentColor: '#9A6312',
+      direccion: 'Paseo Jesús de Galíndez 110, Bahía Varese, Mar del Plata',
+      whatsapp: '+54 9 223 555-0412',
+      horario: 'Lun a Dom 08:00 a 20:00',
+      comisionPorcentaje: 5.0,
+      multaSalitreArs: 10000.0,
+      verificada: true,
+      activa: true,
+      zoneId: 'zone-mdp-varese',
+    },
+    {
+      id: 'agency-chapadmalal-cliff',
+      slug: 'chapadmalal-cliff-club',
+      nombre: 'Chapadmalal Cliff Club',
+      descripcion:
+        'Base de surf junto a los acantilados de Ruta 11 Km 539. Twin fins, mid-lengths y tablas resistentes para reef break y swells del sur.',
+      accentColor: '#1D6F5A',
+      direccion: 'Ruta 11 Km 539, Bajada Luna Roja, Chapadmalal',
+      whatsapp: '+54 9 223 555-0518',
+      horario: 'Mar a Dom 07:30 a 19:30',
+      comisionPorcentaje: 6.0,
+      multaSalitreArs: 12000.0,
+      verificada: true,
+      activa: true,
+      zoneId: 'zone-chapadmalal',
+    },
+    {
+      id: 'agency-pinamar-swell',
+      slug: 'pinamar-north-swell',
+      nombre: 'Pinamar North Swell Shop',
+      descripcion:
+        'Guardería y rental frente al muelle histórico de Pinamar. Tablas de viaje, softboards familiares y shortboards para picos rápidos.',
+      accentColor: '#2B5B78',
+      direccion: 'Av. del Mar 420 y Constitución, Pinamar',
+      whatsapp: '+54 9 2254 555-0620',
+      horario: 'Todos los días 08:30 a 20:00',
+      comisionPorcentaje: 5.0,
+      multaSalitreArs: 10000.0,
+      verificada: true,
+      activa: true,
+      zoneId: 'zone-pinamar',
+    },
+    {
+      id: 'agency-miramar-muelle',
+      slug: 'miramar-muelle-surf',
+      nombre: 'Miramar Muelle Surf Garage',
+      descripcion:
+        'Alquiler directo frente a los bancos de arena de Miramar. Bodyboards de competición, SUPs de travesía y tablas all-around.',
+      accentColor: '#3C5F4B',
+      direccion: 'Costanera y Calle 21, Sector Muelle, Miramar',
+      whatsapp: '+54 9 2291 555-0730',
+      horario: 'Todos los días 08:00 a 19:30',
+      comisionPorcentaje: 5.0,
+      multaSalitreArs: 9500.0,
+      verificada: true,
+      activa: true,
+      zoneId: 'zone-miramar',
+    },
+  ];
+
+  for (const ag of agenciesSeed) {
+    await prisma.agency.upsert({
+      where: { id: ag.id },
+      update: ag,
+      create: ag,
+    });
+  }
+  console.log(`✅ ${zonesSeed.length} Zonas y ${agenciesSeed.length} Agencias multi-ciudad creadas.`);
+
+  // 1. USUARIOS: AGENCIAS POR ZONA, 3 OWNERS, 5 CONSUMERS, 1 SUPER_ADMIN
   const agencia = await prisma.user.upsert({
     where: { email: 'mostrador@surf.com' },
-    update: { passwordHash, activo: true, role: Role.AGENCIA },
+    update: {
+      passwordHash,
+      activo: true,
+      role: Role.AGENCIA,
+      agencyId: 'agency-playa-grande',
+    },
     create: {
       email: 'mostrador@surf.com',
       passwordHash,
@@ -20,13 +180,73 @@ async function main() {
       telefono: '+54 223 555-0303',
       dni: '30444555',
       role: Role.AGENCIA,
+      agencyId: 'agency-playa-grande',
+      activo: true,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: 'agency.varese@surf.com' },
+    update: {
+      passwordHash,
+      activo: true,
+      role: Role.AGENCIA,
+      agencyId: 'agency-varese-longboard',
+    },
+    create: {
+      email: 'agency.varese@surf.com',
+      passwordHash,
+      nombre: 'Operador Varese Longboard Co.',
+      telefono: '+54 223 555-0412',
+      dni: '30444556',
+      role: Role.AGENCIA,
+      agencyId: 'agency-varese-longboard',
+      activo: true,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: 'agency.chapa@surf.com' },
+    update: {
+      passwordHash,
+      activo: true,
+      role: Role.AGENCIA,
+      agencyId: 'agency-chapadmalal-cliff',
+    },
+    create: {
+      email: 'agency.chapa@surf.com',
+      passwordHash,
+      nombre: 'Operador Chapadmalal Cliff Club',
+      telefono: '+54 223 555-0518',
+      dni: '30444557',
+      role: Role.AGENCIA,
+      agencyId: 'agency-chapadmalal-cliff',
+      activo: true,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: 'superadmin@surf.com' },
+    update: { passwordHash, activo: true, role: Role.SUPER_ADMIN },
+    create: {
+      email: 'superadmin@surf.com',
+      passwordHash,
+      nombre: 'Administrador Red Costera SaaS',
+      telefono: '+54 223 555-0999',
+      dni: '29999000',
+      role: Role.SUPER_ADMIN,
       activo: true,
     },
   });
 
   const owner1 = await prisma.user.upsert({
     where: { email: 'owner@surf.com' },
-    update: { passwordHash, activo: true, role: Role.OWNER },
+    update: {
+      passwordHash,
+      activo: true,
+      role: Role.OWNER,
+      agencyId: 'agency-playa-grande',
+    },
     create: {
       email: 'owner@surf.com',
       passwordHash,
@@ -34,13 +254,19 @@ async function main() {
       telefono: '+54 223 555-0201',
       dni: '28987654',
       role: Role.OWNER,
+      agencyId: 'agency-playa-grande',
       activo: true,
     },
   });
 
   const owner2 = await prisma.user.upsert({
     where: { email: 'owner2@surf.com' },
-    update: { passwordHash, activo: true, role: Role.OWNER },
+    update: {
+      passwordHash,
+      activo: true,
+      role: Role.OWNER,
+      agencyId: 'agency-varese-longboard',
+    },
     create: {
       email: 'owner2@surf.com',
       passwordHash,
@@ -48,13 +274,19 @@ async function main() {
       telefono: '+54 223 555-0202',
       dni: '31234567',
       role: Role.OWNER,
+      agencyId: 'agency-varese-longboard',
       activo: true,
     },
   });
 
   const owner3 = await prisma.user.upsert({
     where: { email: 'owner3@surf.com' },
-    update: { passwordHash, activo: true, role: Role.OWNER },
+    update: {
+      passwordHash,
+      activo: true,
+      role: Role.OWNER,
+      agencyId: 'agency-chapadmalal-cliff',
+    },
     create: {
       email: 'owner3@surf.com',
       passwordHash,
@@ -62,6 +294,7 @@ async function main() {
       telefono: '+54 223 555-0203',
       dni: '33456789',
       role: Role.OWNER,
+      agencyId: 'agency-chapadmalal-cliff',
       activo: true,
     },
   });
@@ -481,14 +714,40 @@ async function main() {
     },
   ];
 
+  const boardLocationMap: Record<string, { agencyId: string; zoneId: string }> = {
+    'board-seed-1': { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' },
+    'board-seed-2': { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' },
+    'board-seed-3': { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' },
+    'board-seed-4': { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' },
+    'board-seed-5': { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' },
+    'board-seed-6': { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' },
+    'board-seed-7': { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' },
+    'board-seed-8': { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' },
+    'board-seed-9': { agencyId: 'agency-varese-longboard', zoneId: 'zone-mdp-varese' },
+    'board-seed-10': { agencyId: 'agency-varese-longboard', zoneId: 'zone-mdp-varese' },
+    'board-seed-11': { agencyId: 'agency-varese-longboard', zoneId: 'zone-mdp-varese' },
+    'board-seed-12': { agencyId: 'agency-chapadmalal-cliff', zoneId: 'zone-chapadmalal' },
+    'board-seed-13': { agencyId: 'agency-chapadmalal-cliff', zoneId: 'zone-chapadmalal' },
+    'board-seed-14': { agencyId: 'agency-chapadmalal-cliff', zoneId: 'zone-chapadmalal' },
+    'board-seed-15': { agencyId: 'agency-pinamar-swell', zoneId: 'zone-pinamar' },
+    'board-seed-16': { agencyId: 'agency-pinamar-swell', zoneId: 'zone-pinamar' },
+    'board-seed-17': { agencyId: 'agency-miramar-muelle', zoneId: 'zone-miramar' },
+    'board-seed-18': { agencyId: 'agency-miramar-muelle', zoneId: 'zone-miramar' },
+  };
+
   for (const b of boardsData) {
+    const loc = boardLocationMap[b.id] || {
+      agencyId: 'agency-playa-grande',
+      zoneId: 'zone-mdp-playa-grande',
+    };
+    const boardPayload = { ...b, agencyId: loc.agencyId, zoneId: loc.zoneId };
     await prisma.board.upsert({
       where: { id: b.id },
-      update: b,
-      create: b,
+      update: boardPayload,
+      create: boardPayload,
     });
   }
-  console.log(`✅ ${boardsData.length} Tablas de surf insertadas en catálogo (6 por cada Owner).`);
+  console.log(`✅ ${boardsData.length} Tablas de surf distribuidas por Zonas y Agencias.`);
 
   // 3. RENTALS: 14 Alquileres en diversos estados
   const now = new Date();
@@ -772,10 +1031,12 @@ async function main() {
   ];
 
   for (const r of rentalsData) {
+    const loc = boardLocationMap[r.boardId] || { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' };
+    const rentalPayload = { ...r, agencyId: loc.agencyId };
     await prisma.rental.upsert({
       where: { id: r.id },
-      update: r,
-      create: r,
+      update: rentalPayload,
+      create: rentalPayload,
     });
   }
   console.log(`✅ ${rentalsData.length} Alquileres creados con estados variados.`);
@@ -879,13 +1140,15 @@ async function main() {
   for (let i = 0; i < extraReviews.length; i++) {
     const rev = extraReviews[i];
     const rentalDummyId = `rental-rev-dummy-${i + 1}`;
+    const loc = boardLocationMap[rev.boardId] || { agencyId: 'agency-playa-grande', zoneId: 'zone-mdp-playa-grande' };
     await prisma.rental.upsert({
       where: { id: rentalDummyId },
-      update: {},
+      update: { agencyId: loc.agencyId },
       create: {
         id: rentalDummyId,
         consumerId: rev.userId,
         boardId: rev.boardId,
+        agencyId: loc.agencyId,
         fechaInicio: new Date(now.getTime() - (5 + i) * 24 * 60 * 60 * 1000),
         fechaFinEstimada: new Date(now.getTime() - (5 + i) * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000),
         fechaDevolucionReal: new Date(now.getTime() - (5 + i) * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000),

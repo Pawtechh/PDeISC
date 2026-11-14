@@ -10,9 +10,28 @@ import {
   RealGpsReading,
 } from '../../services/sensorService';
 
-export const GoogleMapSedeCard: React.FC = () => {
+export interface GoogleMapSedeCardProps {
+  spotName?: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  badgeLabel?: string;
+}
+
+export const GoogleMapSedeCard: React.FC<GoogleMapSedeCardProps> = ({
+  spotName,
+  address,
+  latitude,
+  longitude,
+  badgeLabel,
+}) => {
   const { theme, isDark } = useTheme();
   const isPcWeb = Platform.OS === 'web';
+  const activeLat = typeof latitude === 'number' ? latitude : PLAYA_GRANDE_COORDS.latitude;
+  const activeLon = typeof longitude === 'number' ? longitude : PLAYA_GRANDE_COORDS.longitude;
+  const activeName = spotName || PLAYA_GRANDE_COORDS.name;
+  const activeAddress = address || PLAYA_GRANDE_COORDS.address;
+  const activeBadge = badgeLabel || 'COSTA ATLÁNTICA';
 
   const [gpsData, setGpsData] = useState<RealGpsReading | null>(null);
   const [gpsError, setGpsError] = useState<string | null>(null);
@@ -77,11 +96,17 @@ export const GoogleMapSedeCard: React.FC = () => {
   };
 
   const handleOpenDirections = () => {
-    sensorService.openGoogleMapsDirections(gpsData?.latitude, gpsData?.longitude);
+    sensorService.openGoogleMapsDirections(
+      gpsData?.latitude,
+      gpsData?.longitude,
+      activeLat,
+      activeLon
+    );
   };
 
   // OpenStreetMap embed evita peticiones de telemetría de Google Maps (gen_204) bloqueadas por AdBlock/uBlock
-  const mapEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=-57.542,-38.037,-57.520,-38.024&layer=mapnik&marker=${PLAYA_GRANDE_COORDS.latitude},${PLAYA_GRANDE_COORDS.longitude}`;
+  const bbox = `${(activeLon - 0.011).toFixed(4)},${(activeLat - 0.007).toFixed(4)},${(activeLon + 0.011).toFixed(4)},${(activeLat + 0.007).toFixed(4)}`;
+  const mapEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${activeLat},${activeLon}`;
 
   return (
     <Card
@@ -104,17 +129,17 @@ export const GoogleMapSedeCard: React.FC = () => {
             <View>
               <Text variant="h3" color={theme.text}>
                 {isPcWeb
-                  ? 'Ubicación de la Sede & Cómo Llegar'
-                  : 'Mapa Google & Sensor GPS en Vivo'}
+                  ? `Ubicación: ${activeName}`
+                  : 'Mapa & Sensor GPS en Vivo'}
               </Text>
               <Text variant="caption" color={theme.subtext}>
-                {PLAYA_GRANDE_COORDS.address}
+                {activeAddress}
               </Text>
             </View>
           </Row>
 
           {isPcWeb ? (
-            <Badge label="PLAYA GRANDE • MDP" variant="ocean" />
+            <Badge label={activeBadge.toUpperCase()} variant="ocean" />
           ) : gpsData ? (
             <Badge
               label={
@@ -187,13 +212,13 @@ export const GoogleMapSedeCard: React.FC = () => {
                 ]}
               >
                 {isLocating ? (
-                  <ActivityIndicator size="small" color="#FDFCFA" />
+                  <ActivityIndicator size="small" color={theme.primaryText} />
                 ) : (
                   <Row spacing="xs" align="center">
-                    <Radio size={13} color="#FDFCFA" />
+                    <Radio size={13} color={theme.primaryText} />
                     <Text
                       variant="caption"
-                      color="#FDFCFA"
+                      color={theme.primaryText}
                       style={{ fontWeight: '700' }}
                     >
                       Actualizar GPS
@@ -225,10 +250,10 @@ export const GoogleMapSedeCard: React.FC = () => {
             <View style={[styles.nativeMapPlaceholder, { backgroundColor: theme.surfaceElevated }]}>
               <MapPin size={28} color={theme.primary} />
               <Text variant="body" color={theme.text} style={{ fontWeight: '700', marginTop: 4 }}>
-                {PLAYA_GRANDE_COORDS.name}
+                {activeName}
               </Text>
               <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center' }}>
-                {PLAYA_GRANDE_COORDS.address}
+                {activeAddress}
               </Text>
               {gpsData && (
                 <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ marginTop: 6, fontWeight: '700' }}>
@@ -245,7 +270,7 @@ export const GoogleMapSedeCard: React.FC = () => {
             <MapPin size={13} color={theme.subtext} />
             <Text variant="caption" color={theme.subtext} style={styles.coordText}>
               {isPcWeb
-                ? `Sede Central: ${PLAYA_GRANDE_COORDS.latitude}, ${PLAYA_GRANDE_COORDS.longitude}`
+                ? `Ubicación: ${activeLat.toFixed(4)}, ${activeLon.toFixed(4)}`
                 : gpsData
                 ? `Tu GPS: ${gpsData.latitude.toFixed(4)}, ${gpsData.longitude.toFixed(4)}`
                 : 'GPS del teléfono listo para ruta'}
@@ -264,10 +289,10 @@ export const GoogleMapSedeCard: React.FC = () => {
             testID="btn-google-maps-directions"
           >
             <Row spacing="xs" align="center">
-              <Navigation size={14} color={isDark ? theme.primaryHover : '#FDFCFA'} />
+              <Navigation size={14} color={isDark ? theme.primaryHover : theme.primaryText} />
               <Text
                 variant="caption"
-                color={isDark ? theme.primaryHover : '#FDFCFA'}
+                color={isDark ? theme.primaryHover : theme.primaryText}
                 style={{ fontWeight: '700' }}
               >
                 Cómo Llegar con Google Maps
