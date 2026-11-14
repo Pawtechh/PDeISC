@@ -550,7 +550,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                   style={[
                     styles.input,
                     {
-                      backgroundColor: isDark ? '#141418' : '#F4F4F5',
+                      backgroundColor: isDark ? '#242834' : '#F4F4F5',
                       color: theme.text,
                       borderColor: theme.border,
                     },
@@ -583,7 +583,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                   style={[
                     styles.input,
                     {
-                      backgroundColor: isDark ? '#141418' : '#F4F4F5',
+                      backgroundColor: isDark ? '#242834' : '#F4F4F5',
                       color: theme.text,
                       borderColor: theme.border,
                     },

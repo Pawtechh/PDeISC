@@ -165,7 +165,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/fish-1.jpg',
-        '/images/boards/fish-2.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-001',
       polizaAseguradora: 'La Segunda Seguros',
@@ -184,7 +183,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/shortboard-1.jpg',
-        '/images/boards/shortboard-2.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-002',
       polizaAseguradora: 'Sancor Seguros',
@@ -203,7 +201,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/longboard-1.jpg',
-        '/images/boards/longboard-2.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-003',
       polizaAseguradora: 'Rivadavia Seguros',
@@ -222,7 +219,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/funboard-1.jpg',
-        '/images/boards/funboard-2.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-004',
       polizaAseguradora: 'La Segunda Seguros',
@@ -241,7 +237,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/funboard-2.jpg',
-        '/images/boards/funboard-1.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-005',
       polizaAseguradora: 'Sancor Seguros',
@@ -260,7 +255,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/sup-1.jpg',
-        '/images/boards/sup-2.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-006',
       polizaAseguradora: 'Rivadavia Seguros',
@@ -281,7 +275,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/shortboard-2.jpg',
-        '/images/boards/shortboard-3.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-007',
       polizaAseguradora: 'La Segunda Seguros',
@@ -299,8 +292,7 @@ async function main() {
       valorTasadoUsd: 950.0,
       estado: BoardStatus.DISPONIBLE,
       fotos: [
-        '/images/boards/funboard-1.jpg',
-        '/images/boards/funboard-3.jpg',
+        '/images/boards/funboard-4.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-008',
       polizaAseguradora: 'Sancor Seguros',
@@ -319,7 +311,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/longboard-2.jpg',
-        '/images/boards/longboard-1.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-009',
       polizaAseguradora: 'Rivadavia Seguros',
@@ -338,7 +329,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/shortboard-3.jpg',
-        '/images/boards/shortboard-1.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-010',
       polizaAseguradora: 'La Segunda Seguros',
@@ -357,7 +347,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/bodyboard-1.jpg',
-        '/images/boards/bodyboard-2.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-011',
       polizaAseguradora: 'Sancor Seguros',
@@ -376,7 +365,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/sup-2.jpg',
-        '/images/boards/sup-3.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-012',
       polizaAseguradora: 'Rivadavia Seguros',
@@ -397,7 +385,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/fish-2.jpg',
-        '/images/boards/fish-1.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-013',
       polizaAseguradora: 'La Segunda Seguros',
@@ -416,7 +403,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/shortboard-4.jpg',
-        '/images/boards/shortboard-2.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-014',
       polizaAseguradora: 'Sancor Seguros',
@@ -435,7 +421,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/longboard-3.jpg',
-        '/images/boards/longboard-1.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-015',
       polizaAseguradora: 'Rivadavia Seguros',
@@ -454,7 +439,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/funboard-3.jpg',
-        '/images/boards/funboard-1.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-016',
       polizaAseguradora: 'La Segunda Seguros',
@@ -473,7 +457,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/bodyboard-2.jpg',
-        '/images/boards/bodyboard-1.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-017',
       polizaAseguradora: 'Sancor Seguros',
@@ -492,7 +475,6 @@ async function main() {
       estado: BoardStatus.DISPONIBLE,
       fotos: [
         '/images/boards/sup-3.jpg',
-        '/images/boards/sup-1.jpg',
       ],
       polizaSeguroNumero: 'POL-SURF-MDP-018',
       polizaAseguradora: 'Rivadavia Seguros',

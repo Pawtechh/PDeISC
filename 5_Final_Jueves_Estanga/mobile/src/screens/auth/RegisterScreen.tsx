@@ -13,6 +13,7 @@ import { setCredentials } from '../../store/slices/authSlice';
 import { tokenStorage } from '../../utils/storage';
 import { FormDatePickerInput } from '../../components/forms';
 import { registerSchema, RegisterFormData } from '../../schemas/auth.schema';
+import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 
 export interface RegisterScreenProps {
   navigation?: any;
@@ -70,7 +71,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
       };
       input.click();
     } else {
-      setValue('dniFotoUrl', 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80', { shouldValidate: true });
+      setValue('dniFotoUrl', '/images/boards/shortboard-1.jpg', { shouldValidate: true });
     }
   };
 
@@ -195,7 +196,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
 
               {dniFotoUrl ? (
                 <View style={styles.dniPreviewContainer}>
-                  <Image source={{ uri: dniFotoUrl }} style={styles.dniPreviewImg} />
+                  <Image source={{ uri: dniFotoUrl.startsWith('/') ? resolveAssetUrl(dniFotoUrl) : dniFotoUrl }} style={styles.dniPreviewImg} />
                   <Row spacing="sm" align="center" style={{ marginTop: 8 }}>
                     <CheckCircle2 size={16} color={colors.semantic.success} />
                     <Text variant="caption" color={colors.semantic.success} style={{ fontWeight: '600', flex: 1 }}>
@@ -222,7 +223,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
                     title="Usar DNI Demo"
                     size="sm"
                     variant="secondary"
-                    onPress={() => setValue('dniFotoUrl', 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80', { shouldValidate: true })}
+                    onPress={() => setValue('dniFotoUrl', '/images/boards/shortboard-1.jpg', { shouldValidate: true })}
                     testID="btn-demo-dni-foto"
                   />
                 </Row>

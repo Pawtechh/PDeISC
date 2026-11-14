@@ -46,7 +46,7 @@ import {
   useSwitchUserRoleMutation,
   useUpdateProfileMutation,
 } from '../../api/authApi';
-import { getServerOrigin } from '../../api/baseQueryWithAuth';
+import { getServerOrigin, resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { tokenStorage } from '../../utils/storage';
 import { pickImagesFromDevice, takePhotoWithCamera, pickSingleImage } from '../../utils/imagePicker';
 import {
@@ -262,8 +262,8 @@ export const ProfileScreen: React.FC = () => {
   const handleLoadDemoPhotos = () => {
     setVendorFormError(null);
     const demoPhotos = [
-      'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80',
+      '/images/boards/shortboard-1.jpg',
+      '/images/boards/fish-2.jpg',
     ];
     setFotosTablas((prev) => {
       const next = [...prev];
@@ -813,7 +813,7 @@ export const ProfileScreen: React.FC = () => {
                               {vendorApp.fotosTablas.map((url, idx) => (
                                 <Image
                                   key={`my-approved-photo-${idx}`}
-                                  source={{ uri: url }}
+                                  source={{ uri: url.startsWith('/') ? resolveAssetUrl(url) : url }}
                                   style={styles.miniThumb}
                                 />
                               ))}
@@ -986,7 +986,7 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.vendorModalCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
               },
             ]}
@@ -1041,7 +1041,7 @@ export const ProfileScreen: React.FC = () => {
                           : isDark
                           ? 'rgba(255, 255, 255, 0.12)'
                           : 'rgba(0, 0, 0, 0.10)',
-                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
                     },
                   ]}
                 >
@@ -1130,7 +1130,7 @@ export const ProfileScreen: React.FC = () => {
                         <Row spacing="sm">
                           {fotosTablas.map((foto, index) => (
                             <View key={`form-photo-${index}`} style={styles.photoPreviewWrap}>
-                              <Image source={{ uri: foto }} style={styles.photoPreviewImg} />
+                              <Image source={{ uri: foto.startsWith('/') ? resolveAssetUrl(foto) : foto }} style={styles.photoPreviewImg} />
                               <TouchableOpacity
                                 style={styles.removePhotoBtn}
                                 onPress={() =>
@@ -1285,7 +1285,7 @@ export const ProfileScreen: React.FC = () => {
                       borderColor: switchBiometricProof
                         ? colors.semantic.success
                         : theme.border,
-                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
                     },
                   ]}
                 >
@@ -1443,7 +1443,7 @@ export const ProfileScreen: React.FC = () => {
             style={[
               styles.vendorModalCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
               },
             ]}
@@ -1601,7 +1601,7 @@ const styles = StyleSheet.create({
     width: 86,
     height: 62,
     borderRadius: radii.sm,
-    backgroundColor: '#141418',
+    backgroundColor: '#242834',
   },
   uploadSectionBox: {
     padding: spacing.md,

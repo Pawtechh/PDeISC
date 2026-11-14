@@ -14,15 +14,15 @@ export interface PhotoComparatorProps {
 }
 
 const DEFAULT_RETIRO = [
-  'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80',
-  'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=800&q=80',
-  'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=800&q=80',
+  resolveAssetUrl('/images/boards/shortboard-1.jpg'),
+  resolveAssetUrl('/images/boards/fish-2.jpg'),
+  resolveAssetUrl('/images/boards/longboard-1.jpg'),
 ];
 
 const DEFAULT_DEVOLUCION = [
-  'https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800&q=80',
-  'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=800&q=80',
-  'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=800&q=80',
+  resolveAssetUrl('/images/boards/shortboard-2.jpg'),
+  resolveAssetUrl('/images/boards/fish-2.jpg'),
+  resolveAssetUrl('/images/boards/longboard-1.jpg'),
 ];
 
 const ZONES = [
@@ -66,7 +66,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#141418' : colors.white,
+          backgroundColor: isDark ? '#242834' : colors.white,
           borderColor: theme.border,
         },
       ]}
@@ -97,7 +97,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
                 style={[
                   styles.zonePill,
                   {
-                    backgroundColor: isDark ? '#141418' : '#F4F4F5',
+                    backgroundColor: isDark ? '#242834' : '#F4F4F5',
                     borderColor: theme.border,
                   },
                   isSelected && styles.zonePillActive,
@@ -287,7 +287,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
           style={[
             styles.tipBox,
             {
-              backgroundColor: isDark ? '#141418' : '#F5F5F7',
+              backgroundColor: isDark ? '#242834' : '#F5F5F7',
               borderColor: theme.border,
             },
           ]}

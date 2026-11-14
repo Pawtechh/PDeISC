@@ -26,7 +26,7 @@ export const createOwnerClaimSchema = z.object({
   fotosDano: z
     .array(z.string().min(1, 'URL de foto inválida'))
     .optional()
-    .default(['https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800']),
+    .default(['/images/boards/shortboard-1.jpg']),
   montoReclamado: z.number().positive('El monto reclamado debe ser mayor a 0'),
   presupuestoReparacionUrl: z.string().optional(),
 });

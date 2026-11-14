@@ -504,7 +504,7 @@ export class OwnerService {
       if (Array.isArray(rental.fotosDevolucion) && (rental.fotosDevolucion as any[]).length > 0) {
         safeFotosDano = (rental.fotosDevolucion as any[]).map(f => typeof f === 'string' ? f : String(f?.url || f));
       } else {
-        safeFotosDano = ['https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800'];
+        safeFotosDano = ['/images/boards/shortboard-1.jpg'];
       }
     }
 

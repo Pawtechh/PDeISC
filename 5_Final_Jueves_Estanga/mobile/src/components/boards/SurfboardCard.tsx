@@ -87,26 +87,29 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
       style={[
         styles.cardContainer,
         {
-          backgroundColor: isDark ? 'rgba(18, 18, 22, 0.78)' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
+          backgroundColor: isDark ? 'rgba(45, 50, 64, 0.96)' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(15, 23, 42, 0.08)',
           shadowColor: '#000000',
-          shadowOpacity: isDark ? 0.35 : 0.07,
+          shadowOpacity: isDark ? 0.24 : 0.07,
         },
         Platform.OS === 'web'
           ? ({
               cursor: 'pointer',
-              backdropFilter: 'blur(18px) saturate(165%)',
-              WebkitBackdropFilter: 'blur(18px) saturate(165%)',
+              backdropFilter: 'blur(18px) saturate(140%)',
+              WebkitBackdropFilter: 'blur(18px) saturate(140%)',
             } as any)
           : undefined,
         style,
       ]}
     >
       {/* 1. Curated Gallery Image Showcase Frame */}
-      <View style={[styles.imageFrame, { backgroundColor: isDark ? 'transparent' : '#F4F9FD' }]}>
+      <View style={[styles.imageFrame, { backgroundColor: isDark ? 'transparent' : '#FFFFFF' }]}>
         <View
           {...(Platform.OS === 'web' ? ({ dataSet: { surfImageFrame: 'true' } } as any) : {})}
-          style={styles.imageInner}
+          style={[
+            styles.imageInner,
+            { borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 23, 42, 0.07)' },
+          ]}
         >
           <Image
             source={{ uri: photoUrl }}
@@ -116,10 +119,10 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
             style={styles.heroImage}
           />
 
-          {/* Subtle bottom fade to blend smoothly into card body */}
+          {/* Subtle bottom feather only */}
           <LinearGradient
-            colors={['transparent', isDark ? 'rgba(7, 17, 33, 0.82)' : 'rgba(255, 255, 255, 0.45)']}
-            locations={[0.62, 1.0]}
+            colors={['transparent', isDark ? 'rgba(34, 38, 48, 0.28)' : 'rgba(255, 255, 255, 0.16)']}
+            locations={[0.72, 1.0]}
             style={StyleSheet.absoluteFillObject}
             pointerEvents="none"
           />
@@ -137,7 +140,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
           {isFeatured && (
             <View style={styles.floatingBadgeCenter}>
               <View style={styles.featuredBlurPill}>
-                <Award size={10} color="#F59E0B" strokeWidth={2.2} />
+                <Award size={10} color="#E5B869" strokeWidth={2.2} />
                 <Text style={styles.featuredBadgeText}>DESTACADA</Text>
               </View>
             </View>
@@ -146,7 +149,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
           {/* Floating Rating Badge with Lucide Star Icon */}
           <View style={styles.floatingBadgeRight}>
             <View style={styles.blurPill}>
-              <Star size={11} color="#F59E0B" fill="#F59E0B" />
+              <Star size={11} color="#E5B869" fill="#E5B869" />
               <Text style={styles.ratingText}>
                 {board.calificacionPromedio ? board.calificacionPromedio.toFixed(1) : '5.0'}
               </Text>
@@ -162,7 +165,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
           <Text
             style={[
               styles.brandSubtitle,
-              { color: isDark ? '#FF7A59' : '#E04320' },
+              { color: isDark ? '#EA7357' : '#CC482A' },
             ]}
             numberOfLines={1}
           >
@@ -175,7 +178,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
         <Text
           style={[
             styles.boardTitle,
-            { color: isDark ? '#F5F5F7' : '#111115' },
+            { color: isDark ? '#F3F4F6' : '#16181E' },
           ]}
           numberOfLines={1}
         >
@@ -184,19 +187,43 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
 
         {/* Specs Pill Line */}
         <View style={styles.specsRow}>
-          <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F1F5F9' }]}>
+          <View
+            style={[
+              styles.specChip,
+              {
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F3F4F6',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)',
+              },
+            ]}
+          >
             <Text style={[styles.specChipText, { color: isDark ? '#CBD5E1' : '#475569' }]}>
               {board.medidas || "6'0\" × 19\""}
             </Text>
           </View>
           {Boolean(board.volumenLitros) && (
-            <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F5' }]}>
-              <Text style={[styles.specChipText, { color: isDark ? '#FF7A59' : '#E04320' }]}>
+            <View
+              style={[
+                styles.specChip,
+                {
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F3F4F6',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)',
+                },
+              ]}
+            >
+              <Text style={[styles.specChipText, { color: isDark ? '#CBD5E1' : '#475569' }]}>
                 {board.volumenLitros} L
               </Text>
             </View>
           )}
-          <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9' }]}>
+          <View
+            style={[
+              styles.specChip,
+              {
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F3F4F6',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)',
+              },
+            ]}
+          >
             <Text style={[styles.specChipText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
               {board.tipoTabla.toUpperCase()}
             </Text>
@@ -260,7 +287,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
               testID={`board-3d-reserve-${board.id}`}
             >
               <LinearGradient
-                colors={['#FF6F4D', '#FF5A36', '#E04320']}
+                colors={['#EA6A4C', '#E25B3C', '#CC482A']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.reserveBtnGradient}
@@ -328,7 +355,7 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: 'rgba(12, 12, 16, 0.82)',
+    backgroundColor: 'rgba(26, 29, 37, 0.82)',
     borderWidth: 1,
     borderColor: 'rgba(245, 158, 11, 0.42)',
     borderRadius: 6,
@@ -344,7 +371,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: 'rgba(12, 12, 16, 0.78)',
+    backgroundColor: 'rgba(26, 29, 37, 0.78)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.14)',
     borderRadius: 6,

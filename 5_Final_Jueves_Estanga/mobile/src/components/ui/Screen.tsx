@@ -19,8 +19,8 @@ import { ScrollToTopWithRing } from './ScrollToTopWithRing';
 import { ReadingProgressBar } from './ReadingProgressBar';
 import { DesktopHeader } from './DesktopHeader';
 
-export const LUXURY_COASTAL_GRADIENT = ['#050507', '#0A0A0E', '#050507'] as const;
-export const LIGHT_COASTAL_GRADIENT = ['#F5F5F7', '#FAFAFC', '#F2F2F5'] as const;
+export const LUXURY_COASTAL_GRADIENT = ['#222630', '#282C37', '#222630'] as const;
+export const LIGHT_COASTAL_GRADIENT = ['#F5F6F8', '#FAFAFB', '#F2F4F7'] as const;
 
 export interface ScreenProps {
   children: React.ReactNode;
@@ -99,8 +99,8 @@ export const Screen: React.FC<ScreenProps> = ({
     gradientColors ||
     (Platform.OS === 'web'
       ? isDark
-        ? (['rgba(5, 5, 7, 0.22)', 'rgba(10, 10, 14, 0.08)', 'rgba(5, 5, 7, 0.32)'] as const)
-        : (['rgba(245, 245, 247, 0.30)', 'rgba(255, 255, 255, 0.10)', 'rgba(245, 245, 247, 0.34)'] as const)
+        ? (['rgba(34, 38, 48, 0.25)', 'rgba(40, 44, 55, 0.08)', 'rgba(34, 38, 48, 0.30)'] as const)
+        : (['rgba(245, 246, 248, 0.32)', 'rgba(255, 255, 255, 0.12)', 'rgba(242, 244, 247, 0.34)'] as const)
       : isDark
       ? LUXURY_COASTAL_GRADIENT
       : LIGHT_COASTAL_GRADIENT);
@@ -109,13 +109,13 @@ export const Screen: React.FC<ScreenProps> = ({
     Platform.OS === 'web'
       ? atmosphericGradient
         ? 'transparent'
-        : backgroundColor || (isDark ? 'rgba(5, 5, 7, 0.72)' : 'rgba(245, 245, 247, 0.78)')
+        : backgroundColor || (isDark ? 'rgba(34, 38, 48, 0.88)' : 'rgba(245, 246, 248, 0.88)')
       : atmosphericGradient
       ? isDark
-        ? '#050507'
-        : '#F5F5F7'
+        ? '#222630'
+        : '#F5F6F8'
       : backgroundColor || theme.background;
-  const statusBarBg = isDark ? '#050507' : '#F5F5F7';
+  const statusBarBg = isDark ? '#222630' : '#F5F6F8';
 
   const dynamicContentContainerStyle = [
     styles.contentContainer,
@@ -245,10 +245,10 @@ const styles = StyleSheet.create({
     width: 620,
     height: 420,
     borderRadius: 310,
-    backgroundColor: 'rgba(255, 90, 54, 0.08)',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
   },
   ambientCyanGlowLight: {
-    backgroundColor: 'rgba(255, 90, 54, 0.055)',
+    backgroundColor: 'rgba(255, 255, 255, 0.35)',
   },
   ambientGoldGlow: {
     position: 'absolute',
@@ -257,9 +257,9 @@ const styles = StyleSheet.create({
     width: 520,
     height: 380,
     borderRadius: 260,
-    backgroundColor: 'rgba(0, 210, 211, 0.055)',
+    backgroundColor: 'rgba(226, 91, 60, 0.025)',
   },
   ambientGoldGlowLight: {
-    backgroundColor: 'rgba(8, 145, 178, 0.045)',
+    backgroundColor: 'rgba(226, 91, 60, 0.02)',
   },
 });

@@ -25,42 +25,42 @@ export interface ThemeColors {
 }
 
 export const lightTheme: ThemeColors = {
-  background: '#F5F5F7', // Apple Pearl Alabaster
+  background: '#F5F6F8', // Warm Architectural Stone White
   surface: '#FFFFFF',
-  card: 'rgba(255, 255, 255, 0.86)',
-  champagne: '#D97706', // Warm amber gold
-  primary: '#FF5A36', // Coral Sunset
+  card: '#FFFFFF',
+  champagne: '#C48422', // Warm brushed sandstone
+  primary: '#E25B3C',   // Signature Warm Terracotta
   primaryText: '#FFFFFF',
-  text: '#111115', // Crisp Charcoal Obsidian Ink
-  subtext: '#52525B', // Clean neutral zinc
-  sand: '#E4E4E7',
-  border: 'rgba(0, 0, 0, 0.07)', // Subtle Apple hairline
-  accent: '#0891B2', // Lagoon Aqua
-  accentLight: 'rgba(8, 145, 178, 0.08)',
-  divider: 'rgba(0, 0, 0, 0.06)',
-  cardHighlight: '#FAFAFC',
+  text: '#16181E',      // Softened Charcoal Ink
+  subtext: '#5B6270',   // Balanced Slate Secondary
+  sand: '#E5E7EB',
+  border: 'rgba(15, 23, 42, 0.08)',
+  accent: '#64748B',    // Neutral Slate Chrome
+  accentLight: 'rgba(100, 116, 139, 0.09)',
+  divider: 'rgba(15, 23, 42, 0.06)',
+  cardHighlight: '#F8FAFC',
   inputBg: '#FFFFFF',
-  inputBorder: 'rgba(0, 0, 0, 0.10)',
+  inputBorder: 'rgba(15, 23, 42, 0.12)',
   isDark: false,
 };
 
 export const darkTheme: ThemeColors = {
-  background: '#050507', // Pure Obsidian
-  surface: '#111115',    // Smoked Neutral Glass
-  card: 'rgba(18, 18, 22, 0.76)',
-  champagne: '#FBBF24',  // Warm Golden Hour amber
-  primary: '#FF5A36',    // Coral Sunset
+  background: '#222630', // Lifted Charcoal Slate (Not harsh black)
+  surface: '#2B303C',    // Elevated Graphite Surface
+  card: 'rgba(45, 50, 64, 0.94)',
+  champagne: '#E5B869',  // Muted Warm Sandstone
+  primary: '#E25B3C',    // Signature Warm Terracotta
   primaryText: '#FFFFFF',
-  text: '#F5F5F7',       // Titanium White
-  subtext: '#A1A1AA',    // Neutral Zinc Secondary
-  sand: '#D4D4D8',
-  border: 'rgba(255, 255, 255, 0.08)', // Crisp neutral glass border
-  accent: '#00D2D3',     // Aqua Telemetry Secondary
-  accentLight: 'rgba(0, 210, 211, 0.12)',
-  divider: 'rgba(255, 255, 255, 0.07)',
-  cardHighlight: 'rgba(255, 255, 255, 0.04)',
-  inputBg: 'rgba(255, 255, 255, 0.04)',
-  inputBorder: 'rgba(255, 255, 255, 0.10)',
+  text: '#F3F4F6',       // Crisp Soft White
+  subtext: '#B4BAC6',    // Mineral Slate Secondary
+  sand: '#D1D5DB',
+  border: 'rgba(255, 255, 255, 0.10)',
+  accent: '#94A3B8',     // Calm Slate Telemetry
+  accentLight: 'rgba(148, 163, 184, 0.12)',
+  divider: 'rgba(255, 255, 255, 0.08)',
+  cardHighlight: 'rgba(255, 255, 255, 0.05)',
+  inputBg: '#343A48',
+  inputBorder: 'rgba(255, 255, 255, 0.12)',
   isDark: true,
 };
 

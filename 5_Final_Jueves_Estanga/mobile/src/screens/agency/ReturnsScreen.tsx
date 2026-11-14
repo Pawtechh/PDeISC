@@ -20,22 +20,23 @@ import { BoardQrModal } from '../../components/boards/BoardQrModal';
 import { QrInspectionModal, ScannedBoardData } from '../../components/sensors/QrInspectionModal';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useTheme } from '../../theme/ThemeContext';
+import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 
 const PRESET_DAMAGE_PHOTOS = [
   {
     id: 'deck',
     label: 'Golpe en Deck / Proa',
-    url: 'https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800&q=80',
+    url: '/images/boards/shortboard-1.jpg',
   },
   {
     id: 'fin',
     label: 'Fisura en Quilla / Tail',
-    url: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=800&q=80',
+    url: '/images/boards/fish-2.jpg',
   },
   {
     id: 'rail',
     label: 'Rotura en Canto / Riel',
-    url: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=800&q=80',
+    url: '/images/boards/longboard-1.jpg',
   },
 ];
 
@@ -176,7 +177,7 @@ export const ReturnsScreen: React.FC = () => {
 
     const baseFotos = Array.isArray(currentRental.board?.fotos) && currentRental.board.fotos.length > 0
       ? currentRental.board.fotos.map((f: any) => String(typeof f === 'string' ? f : f?.url || f).replace(/^https?:\/\/localhost:3000/i, ''))
-      : ['https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600'];
+      : [resolveAssetUrl('/images/boards/longboard-1.jpg')];
 
     const fotosList = effectiveDamagePhoto
       ? [effectiveDamagePhoto, ...baseFotos]
@@ -413,7 +414,7 @@ export const ReturnsScreen: React.FC = () => {
             padding="lg"
             style={[
               styles.modalCard,
-              isDark && { backgroundColor: 'rgba(18, 18, 22, 0.96)', borderColor: 'rgba(255, 255, 255, 0.10)', borderWidth: 1 },
+              isDark && { backgroundColor: 'rgba(34, 38, 48, 0.96)', borderColor: 'rgba(255, 255, 255, 0.10)', borderWidth: 1 },
             ]}
           >
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -451,7 +452,7 @@ export const ReturnsScreen: React.FC = () => {
                 <TouchableOpacity
                   style={[
                     styles.checkItem,
-                    isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.10)' },
+                    isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.10)' },
                   ]}
                   onPress={() => setIsWashed(!isWashed)}
                 >
@@ -470,7 +471,7 @@ export const ReturnsScreen: React.FC = () => {
                 <TouchableOpacity
                   style={[
                     styles.checkItem,
-                    isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.10)' },
+                    isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.10)' },
                   ]}
                   onPress={() => {
                     setHasDamage(!hasDamage);
@@ -512,7 +513,7 @@ export const ReturnsScreen: React.FC = () => {
                       <TextInput
                         style={[
                           styles.input,
-                          isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.12)', color: '#F5F5F7' },
+                          isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.12)', color: '#F5F5F7' },
                         ]}
                         value={damageDescription}
                         onChangeText={(val) => {
@@ -547,7 +548,7 @@ export const ReturnsScreen: React.FC = () => {
                               style={[
                                 styles.presetPill,
                                 isSelected && styles.presetPillActive,
-                                isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.10)' },
+                                isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.10)' },
                                 isSelected && isDark && { backgroundColor: '#FF5A36', borderColor: '#FF7A59' },
                               ]}
                               onPress={() => {
@@ -573,7 +574,7 @@ export const ReturnsScreen: React.FC = () => {
                         style={[
                           styles.input,
                           { marginTop: spacing.xs },
-                          isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.12)', color: '#F5F5F7' },
+                          isDark && { backgroundColor: '#242834', borderColor: 'rgba(255, 255, 255, 0.12)', color: '#F5F5F7' },
                         ]}
                         value={customPhotoInput}
                         onChangeText={(val) => {
@@ -587,7 +588,7 @@ export const ReturnsScreen: React.FC = () => {
                       {/* Preview de la foto de daño seleccionada */}
                       <View style={styles.photoPreviewWrapper}>
                         <Image
-                          source={{ uri: customPhotoInput.trim() || damagePhotoUrl }}
+                          source={{ uri: (customPhotoInput.trim() || damagePhotoUrl).startsWith('/') ? resolveAssetUrl(customPhotoInput.trim() || damagePhotoUrl) : (customPhotoInput.trim() || damagePhotoUrl) }}
                           style={styles.photoPreviewImage}
                           contentFit="cover"
                         />

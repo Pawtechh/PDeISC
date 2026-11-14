@@ -89,7 +89,7 @@ export const GoogleMapSedeCard: React.FC = () => {
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#121216' : '#FFFFFF',
+          backgroundColor: isDark ? '#222630' : '#FFFFFF',
           borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
         },
       ]}
@@ -222,7 +222,7 @@ export const GoogleMapSedeCard: React.FC = () => {
               loading="lazy"
             />
           ) : (
-            <View style={[styles.nativeMapPlaceholder, { backgroundColor: isDark ? '#141418' : '#F5F5F7' }]}>
+            <View style={[styles.nativeMapPlaceholder, { backgroundColor: isDark ? '#242834' : '#F5F5F7' }]}>
               <MapPin size={28} color="#FF5A36" />
               <Text variant="body" color={theme.text} style={{ fontWeight: '700', marginTop: 4 }}>
                 {PLAYA_GRANDE_COORDS.name}

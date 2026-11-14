@@ -38,7 +38,7 @@ export const BoardQrModal: React.FC<BoardQrModalProps> = ({ board, visible, onCl
           style={[
             styles.modalCard,
             {
-              backgroundColor: isDark ? '#111115' : '#FFFFFF',
+              backgroundColor: isDark ? '#222630' : '#FFFFFF',
               borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
             },
           ]}

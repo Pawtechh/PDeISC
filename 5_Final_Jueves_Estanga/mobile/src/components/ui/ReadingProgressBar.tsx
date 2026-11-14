@@ -20,8 +20,8 @@ export const ReadingProgressBar: React.FC<ReadingProgressBarProps> = ({
   const widthPercent = `${(clampedProgress * 100).toFixed(1)}%`;
 
   const gradientColors = isDark
-    ? (['#FF5A36', '#FF8F6B', '#00D2D3'] as const)
-    : (['#E04320', '#FF5A36', '#0891B2'] as const);
+    ? (['#FF5A36', '#FF8F6B', '#FBBF24'] as const)
+    : (['#E04320', '#FF5A36', '#3E8E87'] as const);
 
   return (
     <View style={styles.container} pointerEvents="none">

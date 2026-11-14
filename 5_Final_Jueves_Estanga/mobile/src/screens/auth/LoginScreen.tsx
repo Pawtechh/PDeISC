@@ -11,6 +11,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { useAppDispatch } from '../../store';
 import { setCredentials, setGuestMode } from '../../store/slices/authSlice';
 import { useLoginMutation } from '../../api/authApi';
+import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { tokenStorage } from '../../utils/storage';
 import { loginSchema, LoginFormData } from '../../schemas/auth.schema';
 import { OAuthButtons } from '../../components/auth/OAuthButtons';
@@ -137,16 +138,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           style={[styles.heroPanel, isDesktop ? styles.heroPanelDesktop : styles.heroPanelMobile]}
         >
           <Image
-            source={{ uri: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1400&q=85' }}
+            source={{ uri: resolveAssetUrl('/images/hero-quiver.jpg') }}
             style={StyleSheet.absoluteFillObject}
             contentFit="cover"
             transition={300}
           />
           <LinearGradient
             colors={[
-              'rgba(5, 5, 7, 0.24)',
-              'rgba(12, 12, 16, 0.72)',
-              'rgba(5, 5, 7, 0.94)',
+              'rgba(34, 38, 48, 0.22)',
+              'rgba(34, 38, 48, 0.65)',
+              'rgba(34, 38, 48, 0.88)',
             ]}
             locations={[0, 0.62, 1]}
             style={StyleSheet.absoluteFillObject}
@@ -196,7 +197,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             style={[
               styles.authCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.76)' : 'rgba(255, 255, 255, 0.92)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.80)' : 'rgba(255, 255, 255, 0.92)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
               },
             ]}
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(12, 12, 16, 0.78)',
+    backgroundColor: 'rgba(28, 31, 40, 0.82)',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: radii.full,
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(18, 18, 22, 0.78)',
+    backgroundColor: 'rgba(34, 38, 48, 0.82)',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: radii.md,

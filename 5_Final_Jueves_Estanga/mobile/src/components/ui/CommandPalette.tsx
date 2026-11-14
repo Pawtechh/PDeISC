@@ -148,7 +148,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           style={[
             styles.palette,
             {
-              backgroundColor: isDark ? '#16161A' : '#FFFFFF',
+              backgroundColor: isDark ? '#222630' : '#FFFFFF',
               borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.09)',
             },
           ]}

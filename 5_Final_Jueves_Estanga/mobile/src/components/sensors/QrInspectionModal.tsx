@@ -324,7 +324,7 @@ export const QrInspectionModal: React.FC<QrInspectionModalProps> = ({
                       style={[
                         styles.manualInputWrap,
                         {
-                          backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                          backgroundColor: isDark ? '#242834' : '#F5F5F7',
                           borderColor: theme.border,
                         },
                       ]}
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
     height: 210,
     borderRadius: radii.lg,
     overflow: 'hidden',
-    backgroundColor: '#050507',
+    backgroundColor: '#222630',
     position: 'relative',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.14)',

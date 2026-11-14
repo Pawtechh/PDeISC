@@ -39,16 +39,16 @@
       }
     </style>
 
-    <!-- Bioluminescent Tide & Golden Hour Design Engine -->
+    <!-- Smoked Graphite & Coral Design Engine -->
     <style id="luxury-coastal-css">
       :root {
-        --sr-abyss-0: #030812;
-        --sr-abyss-1: #061326;
-        --sr-cyan: #22D3EE;
-        --sr-biolum: #00E5FF;
-        --sr-seafoam: #2DD4BF;
-        --sr-gold: #FBBF24;
-        --sr-glass-border: rgba(56, 189, 248, 0.22);
+        --sr-abyss-0: #222630;
+        --sr-abyss-1: #2B303C;
+        --sr-cyan: #94A3B8;
+        --sr-biolum: #E25B3C;
+        --sr-seafoam: #64748B;
+        --sr-gold: #E5B869;
+        --sr-glass-border: rgba(255, 255, 255, 0.10);
       }
 
       *, *::before, *::after {
@@ -66,19 +66,17 @@
         letter-spacing: -0.025em;
       }
 
-      /* Obsidian Luxe & Coral Atmospheric Canvas */
+      /* Lifted Charcoal Slate Atmospheric Canvas (Clean, Even, Zero Muddy Blobs) */
       body {
         position: relative;
-        background-color: #050507 !important;
+        background-color: #222630 !important;
         background-image:
-          radial-gradient(ellipse 80% 55% at 18% -12%, rgba(255, 90, 54, 0.11) 0%, transparent 68%),
-          radial-gradient(ellipse 70% 50% at 86% 18%, rgba(0, 210, 211, 0.06) 0%, transparent 66%),
-          radial-gradient(ellipse 65% 45% at 50% 96%, rgba(255, 90, 54, 0.05) 0%, transparent 72%),
-          linear-gradient(180deg, #050507 0%, #09090D 52%, #050507 100%) !important;
+          radial-gradient(ellipse 90% 45% at 50% -10%, rgba(255, 255, 255, 0.035) 0%, transparent 72%),
+          linear-gradient(180deg, #21252F 0%, #272B36 52%, #222630 100%) !important;
         background-attachment: fixed !important;
       }
 
-      /* Living Obsidian Silk Aurora (Subtle, Elegant, Pointer-Safe) */
+      /* Subtle Architectural Top Light Veil (Neutral, zero green/orange fog) */
       body::before {
         content: "";
         position: fixed;
@@ -86,9 +84,8 @@
         pointer-events: none;
         z-index: 0;
         background:
-          radial-gradient(40% 34% at 22% 24%, rgba(255, 90, 54, 0.10) 0%, transparent 70%),
-          radial-gradient(36% 32% at 78% 70%, rgba(0, 210, 211, 0.065) 0%, transparent 70%),
-          radial-gradient(28% 26% at 68% 18%, rgba(255, 160, 122, 0.05) 0%, transparent 72%);
+          radial-gradient(46% 36% at 50% 10%, rgba(255, 255, 255, 0.032) 0%, transparent 72%),
+          radial-gradient(36% 28% at 50% 85%, rgba(226, 91, 60, 0.025) 0%, transparent 74%);
         filter: blur(56px);
         will-change: transform, opacity;
         animation: auroraDriftA 26s ease-in-out infinite alternate;
@@ -101,28 +98,26 @@
         inset: 0;
         pointer-events: none;
         z-index: 0;
-        opacity: 0.28;
-        background: linear-gradient(125deg, rgba(255, 255, 255, 0.025) 0%, transparent 38%, rgba(255, 90, 54, 0.02) 72%, transparent 100%);
+        opacity: 0.22;
+        background: linear-gradient(125deg, rgba(255, 255, 255, 0.022) 0%, transparent 42%, rgba(255, 255, 255, 0.012) 100%);
       }
 
-      /* Apple Pearl Light-Mode Adaptation */
+      /* Warm Architectural Stone Light-Mode Adaptation */
       html[data-theme="light"] body {
-        background-color: #F5F5F7 !important;
+        background-color: #F5F6F8 !important;
         background-image:
-          radial-gradient(ellipse 80% 55% at 18% -12%, rgba(255, 90, 54, 0.075) 0%, transparent 70%),
-          radial-gradient(ellipse 65% 48% at 88% 18%, rgba(8, 145, 178, 0.055) 0%, transparent 68%),
-          linear-gradient(180deg, #FBFBFD 0%, #F5F5F7 55%, #F2F2F5 100%) !important;
+          radial-gradient(ellipse 85% 45% at 50% -10%, rgba(255, 255, 255, 0.7) 0%, transparent 70%),
+          linear-gradient(180deg, #F9FAFB 0%, #F5F6F8 55%, #F0F2F5 100%) !important;
       }
 
       html[data-theme="light"] body::before {
         background:
-          radial-gradient(40% 34% at 22% 24%, rgba(255, 90, 54, 0.065) 0%, transparent 70%),
-          radial-gradient(36% 32% at 78% 70%, rgba(8, 145, 178, 0.045) 0%, transparent 70%);
+          radial-gradient(45% 34% at 50% 14%, rgba(255, 255, 255, 0.55) 0%, transparent 72%);
       }
 
       html[data-theme="light"] body::after {
-        opacity: 0.35;
-        background: linear-gradient(125deg, rgba(255, 255, 255, 0.5) 0%, transparent 45%, rgba(255, 90, 54, 0.025) 100%);
+        opacity: 0.28;
+        background: linear-gradient(125deg, rgba(255, 255, 255, 0.5) 0%, transparent 50%, rgba(15, 23, 42, 0.015) 100%);
       }
 
       /* Custom Scrollbars */
@@ -140,13 +135,13 @@
         background-clip: content-box;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 90, 54, 0.58);
+        background: rgba(226, 91, 60, 0.58);
       }
       html[data-theme="light"] ::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.16);
       }
       html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 90, 54, 0.55);
+        background: rgba(226, 91, 60, 0.55);
       }
       * {
         scrollbar-width: thin;
@@ -158,15 +153,15 @@
 
       /* Selection & Accessible Focus */
       ::selection {
-        background: rgba(255, 90, 54, 0.28) !important;
+        background: rgba(226, 91, 60, 0.28) !important;
         color: #FFFFFF !important;
       }
       ::-moz-selection {
-        background: rgba(255, 90, 54, 0.28) !important;
+        background: rgba(226, 91, 60, 0.28) !important;
         color: #FFFFFF !important;
       }
       *:focus-visible {
-        outline: 2px solid #FF5A36 !important;
+        outline: 2px solid #E25B3C !important;
         outline-offset: 2px;
       }
 
@@ -191,7 +186,7 @@
       }
       [data-brand-logo="true"]:hover {
         transform: scale(1.06);
-        box-shadow: 0 6px 18px rgba(255, 90, 54, 0.22);
+        box-shadow: 0 6px 18px rgba(226, 91, 60, 0.22);
       }
 
       [data-live-dot="true"] {
@@ -268,8 +263,8 @@
       }
       [data-input-shell]:focus-within,
       [data-input-shell="focused"] {
-        border-color: #FF5A36 !important;
-        box-shadow: 0 0 0 3px rgba(255, 90, 54, 0.14) !important;
+        border-color: #E25B3C !important;
+        box-shadow: 0 0 0 3px rgba(226, 91, 60, 0.14) !important;
       }
       [data-input-shell] input:focus,
       [data-input-shell] textarea:focus {
@@ -278,8 +273,8 @@
       }
       input:not([data-input-shell] input):focus,
       textarea:not([data-input-shell] textarea):focus {
-        border-color: #FF5A36 !important;
-        box-shadow: 0 0 0 3px rgba(255, 90, 54, 0.14) !important;
+        border-color: #E25B3C !important;
+        box-shadow: 0 0 0 3px rgba(226, 91, 60, 0.14) !important;
       }
 
       /* Primary & Secondary Silk Sheen Buttons */
@@ -314,7 +309,7 @@
       }
       [data-luxury-btn="primary"]:hover {
         filter: brightness(1.05);
-        box-shadow: 0 10px 26px -6px rgba(255, 90, 54, 0.48),
+        box-shadow: 0 10px 26px -6px rgba(226, 91, 60, 0.42),
                     inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
       }
 
@@ -392,7 +387,7 @@
       [data-surf-reserve="true"]:hover {
         transform: translateY(-1px);
         filter: brightness(1.06);
-        box-shadow: 0 8px 20px -4px rgba(255, 90, 54, 0.42) !important;
+        box-shadow: 0 8px 20px -4px rgba(226, 91, 60, 0.38) !important;
       }
 
       /* Smooth Card Entrance Animation */
@@ -411,10 +406,10 @@
       }
       [data-filter-pill]:hover {
         transform: translateY(-1.5px);
-        border-color: rgba(255, 90, 54, 0.45) !important;
+        border-color: rgba(226, 91, 60, 0.45) !important;
       }
       [data-filter-pill="active"] {
-        box-shadow: 0 6px 18px -6px rgba(255, 90, 54, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+        box-shadow: 0 6px 18px -6px rgba(226, 91, 60, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
       }
 
       /* Floating Dock Navigation Tabs */
@@ -437,7 +432,7 @@
       }
       [data-scroll-top-btn="true"]:hover {
         transform: translateY(-2.5px) scale(1.04);
-        border-color: rgba(255, 90, 54, 0.45) !important;
+        border-color: rgba(226, 91, 60, 0.45) !important;
         box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55) !important;
       }
 
@@ -460,7 +455,7 @@
       }
       [data-theme-toggle="true"]:hover {
         transform: scale(1.07);
-        border-color: rgba(255, 90, 54, 0.42) !important;
+        border-color: rgba(226, 91, 60, 0.42) !important;
       }
 
       /* Pearl Alabaster Light-Mode Surface Polish */
@@ -639,32 +634,32 @@
   <body>
     <!-- Fallback for JavaScript-disabled environments -->
     <noscript>
-      <div style="background:#050507;color:#F5F5F7;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;padding:24px;text-align:center;">
+      <div style="background:#222630;color:#F5F5F7;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;padding:24px;text-align:center;">
         <div>
-          <h2 style="color:#FF5A36;margin-bottom:12px;">JavaScript Requerido</h2>
-          <p style="color:#A1A1AA;">Por favor activá JavaScript en tu navegador para ingresar a Surf Rental Mar del Plata.</p>
+          <h2 style="color:#E25B3C;margin-bottom:12px;">JavaScript Requerido</h2>
+          <p style="color:#B4B8C4;">Por favor activá JavaScript en tu navegador para ingresar a Surf Rental Mar del Plata.</p>
         </div>
       </div>
     </noscript>
 
-    <!-- The root element for React Native Web app (Obsidian Luxe & Coral Splash Loader) -->
+    <!-- The root element for React Native Web app (Balanced Slate & Terracotta Splash Loader) -->
     <div id="root">
-      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%, rgba(255, 90, 54, 0.14) 0%, #050507 65%);color:#F5F5F7;font-family:'Outfit',sans-serif;text-align:center;padding:24px;">
-        <div style="width:82px;height:82px;border-radius:24px;background:rgba(18,18,22,0.88);border:1.5px solid rgba(255,90,54,0.42);display:flex;align-items:center;justify-content:center;margin-bottom:22px;animation:splashLogoFloat 3s ease-in-out infinite;">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#222630;color:#F5F5F7;font-family:'Outfit',sans-serif;text-align:center;padding:24px;">
+        <div style="width:82px;height:82px;border-radius:24px;background:rgba(45,50,64,0.92);border:1.5px solid rgba(226,91,60,0.40);display:flex;align-items:center;justify-content:center;margin-bottom:22px;animation:splashLogoFloat 3s ease-in-out infinite;">
           <svg width="44" height="44" viewBox="0 0 120 120" fill="none">
-            <path d="M60 12C73 34 79 58 75 88C73 100 67 106 60 108C53 106 47 100 45 88C41 58 47 34 60 12Z" fill="rgba(255,90,54,0.22)" stroke="#FF5A36" stroke-width="3.5"/>
-            <line x1="60" y1="16" x2="60" y2="105" stroke="#00D2D3" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M18 82C32 72 46 72 60 80C74 88 88 88 102 78" stroke="#FF5A36" stroke-width="5" stroke-linecap="round"/>
+            <path d="M60 12C73 34 79 58 75 88C73 100 67 106 60 108C53 106 47 100 45 88C41 58 47 34 60 12Z" fill="rgba(226,91,60,0.20)" stroke="#E25B3C" stroke-width="3.5"/>
+            <line x1="60" y1="16" x2="60" y2="105" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M18 82C32 72 46 72 60 80C74 88 88 88 102 78" stroke="#E25B3C" stroke-width="5" stroke-linecap="round"/>
           </svg>
         </div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:3.8px;color:#A1A1AA;margin-bottom:6px;">BALNEARIO PLAYA GRANDE</div>
-        <div style="font-size:26px;font-weight:800;letter-spacing:4.5px;background:linear-gradient(90deg,#F5F5F7,#FF7A59,#00D2D3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;">SURF RENTAL</div>
-        <div style="font-size:12px;color:#71717A;letter-spacing:1px;margin-bottom:18px;">Iniciando plataforma y telemetría costera...</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:3.8px;color:#B4B8C4;margin-bottom:6px;">BALNEARIO PLAYA GRANDE</div>
+        <div style="font-size:26px;font-weight:800;letter-spacing:4.5px;background:linear-gradient(90deg,#F5F5F7,#EA7357);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;">SURF RENTAL</div>
+        <div style="font-size:12px;color:#9CA3AF;letter-spacing:1px;margin-bottom:18px;">Iniciando plataforma y telemetría costera...</div>
         <div style="width:160px;height:3px;border-radius:9999px;background:rgba(255,255,255,0.10);overflow:hidden;position:relative;">
-          <div style="width:55%;height:100%;border-radius:9999px;background:linear-gradient(90deg,transparent,#FF5A36,#00D2D3);animation:splashWaveBar 1.4s ease-in-out infinite;"></div>
+          <div style="width:55%;height:100%;border-radius:9999px;background:linear-gradient(90deg,transparent,#E25B3C,#EA7357);animation:splashWaveBar 1.4s ease-in-out infinite;"></div>
         </div>
       </div>
     </div>
-  <script src="/_expo/static/js/web/index-a930842245f01fff4d30d1c2703fcbd5.js" defer></script>
+  <script src="/_expo/static/js/web/index-2bbfc1b236f7485ef36382ccaa3164ce.js" defer></script>
 </body>
 </html>

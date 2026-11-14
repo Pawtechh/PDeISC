@@ -39,8 +39,8 @@ const INITIAL_SEED_APPLICATIONS: VendorApplication[] = [
     descripcion:
       'Quiver seleccionado de shortboards de alto rendimiento y twin fins laminados en resina epoxi para las rompientes de Playa Grande y El Yacht. Todas las tablas incluyen quillas FCS II y leash profesional.',
     fotosTablas: [
-      'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80',
+      '/images/boards/shortboard-1.jpg',
+      '/images/boards/fish-2.jpg',
     ],
     experienciaRubro:
       '8 años como shaper y reparador de tablas en Mar del Plata (Taller Puerto Cardiel) y ex instructor nivel 2 de la Asociación de Surf Argentina.',
@@ -144,7 +144,7 @@ class VendorRegistryManager {
         user.fotos && user.fotos.length > 0
           ? user.fotos
           : [
-              'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80',
+              '/images/boards/shortboard-1.jpg',
             ],
       experienciaRubro:
         'Shaper y propietario registrado con historial activo de alquileres e inspecciones técnicas aprobadas en Mar del Plata.',

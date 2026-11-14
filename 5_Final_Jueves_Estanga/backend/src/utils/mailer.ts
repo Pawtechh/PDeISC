@@ -42,9 +42,9 @@ export async function sendPasswordResetEmail(options: SendPasswordResetOptions):
       to,
       subject: `Código de recuperación: ${recoveryCode} — Surf Rental Mar del Plata`,
       html: `
-        <div style="font-family: Arial, sans-serif; background-color: #0B0F17; color: #F1F5F9; padding: 32px; border-radius: 12px; max-width: 520px; margin: 0 auto; border: 1px solid rgba(56, 189, 248, 0.25);">
+        <div style="font-family: Arial, sans-serif; background-color: #191B22; color: #F5F5F7; padding: 32px; border-radius: 12px; max-width: 520px; margin: 0 auto; border: 1px solid rgba(255, 90, 54, 0.25);">
           <div style="text-align: center; margin-bottom: 24px;">
-            <h1 style="color: #38BDF8; margin: 0; font-size: 24px;">Surf Rental MDP 🏄‍♂️</h1>
+            <h1 style="color: #FF5A36; margin: 0; font-size: 24px;">Surf Rental MDP</h1>
             <p style="color: #94A3B8; font-size: 13px; margin-top: 4px;">Sede Central Playa Grande, Mar del Plata</p>
           </div>
           

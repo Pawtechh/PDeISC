@@ -157,14 +157,14 @@ export class OAuthService {
           id: `oauth-${provider}-${Buffer.from(data.email).toString('hex').slice(0, 12)}`,
           email: String(data.email).toLowerCase(),
           name: data.name || `Surfista ${provider.toUpperCase()}`,
-          avatarUrl: `https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=150`,
+          avatarUrl: `/images/boards/fish-2.jpg`,
         };
       } catch {
         return {
           id: `oauth-${provider}-${Date.now()}`,
           email: `surfista.${provider}@surfrental.mdp`,
           name: `Surfista ${provider.toUpperCase()}`,
-          avatarUrl: `https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=150`,
+          avatarUrl: `/images/boards/fish-2.jpg`,
         };
       }
     }
@@ -175,7 +175,7 @@ export class OAuthService {
         id: `oauth-${provider}-123456`,
         email: `surfista.${provider}@surfrental.mdp`,
         name: `Surfista ${provider.toUpperCase()}`,
-        avatarUrl: `https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=150`,
+        avatarUrl: `/images/boards/fish-2.jpg`,
       };
     }
 

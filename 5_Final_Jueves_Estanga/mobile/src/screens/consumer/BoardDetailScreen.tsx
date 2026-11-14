@@ -57,7 +57,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
   const fotos = (
     board.fotos && board.fotos.length > 0
       ? board.fotos
-      : ['https://images.unsplash.com/photo-1531722569936-825d3dd91b15?w=1000&q=85']
+      : ['/images/boards/longboard-1.jpg']
   ).map((f) => resolveCuratedBoardPhoto(String(f), board.tipoTabla));
 
   const heroHeight = width >= 768 ? 360 : 260;
@@ -66,7 +66,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
     <Screen scrollable safeBottom={false}>
       <Stack spacing="lg" style={styles.container}>
         {/* Galería Hero de Alta Resolución */}
-        <View style={[styles.galleryContainer, { height: heroHeight, backgroundColor: isDark ? '#0B101B' : colors.sand[100] }]}>
+        <View style={[styles.galleryContainer, { height: heroHeight, backgroundColor: isDark ? '#2B303C' : '#F3F4F6' }]}>
           <TouchableOpacity
             activeOpacity={0.92}
             onPress={() => setSelectedLightboxPhoto(fotos[0])}
@@ -79,8 +79,8 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
               contentFit="cover"
             />
             <LinearGradient
-              colors={['transparent', 'rgba(9, 12, 16, 0.75)']}
-              locations={[0.55, 1]}
+              colors={['transparent', 'rgba(34, 38, 48, 0.48)']}
+              locations={[0.62, 1]}
               style={StyleSheet.absoluteFillObject}
             />
           </TouchableOpacity>
@@ -93,7 +93,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         <Stack spacing="xs">
           <Row justify="space-between" align="center">
             <View style={{ flex: 1, paddingRight: spacing.md }}>
-              <Text variant="caption" style={{ color: '#F59E0B', fontWeight: '800', letterSpacing: 1.5 }}>
+              <Text variant="caption" style={{ color: isDark ? '#EA7357' : '#CC482A', fontWeight: '800', letterSpacing: 1.5 }}>
                 {board.marca.toUpperCase()} • SHAPER OFICIAL MAR DEL PLATA
               </Text>
               <Text variant="h1" color={theme.text}>
@@ -175,14 +175,14 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
             </Text>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Ruler size={14} color="#00D2D3" />
+                <Ruler size={14} color={isDark ? '#94A3B8' : '#64748B'} />
                 <Text variant="body" color={theme.subtext}>Medidas:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>{board.medidas}</Text>
             </Row>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Droplets size={14} color="#00D2D3" />
+                <Droplets size={14} color={isDark ? '#94A3B8' : '#64748B'} />
                 <Text variant="body" color={theme.subtext}>Volumen:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>{board.volumenLitros || '-'} Litros</Text>
@@ -221,7 +221,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                   style={[
                     styles.dayBox,
                     {
-                      backgroundColor: isDark ? '#0B101B' : colors.sand[50],
+                      backgroundColor: isDark ? '#343A48' : '#F1F5F9',
                       borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : theme.border,
                     },
                   ]}

@@ -15,6 +15,7 @@ import { Screen, Stack, Row, Text, Card, Badge, Button, Divider } from '../../co
 import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { Board, useGetBoardQuery } from '../../api/boardsApi';
+import { resolveCuratedBoardPhoto } from '../../utils/curatedBoardImages';
 import { Rental, useCreateRentalMutation } from '../../api/rentalsApi';
 import { DatePickerInput } from '../../components/forms/DatePickerInput';
 import { TimeSlotChip } from '../../components/rentals/TimeSlotChip';
@@ -53,7 +54,7 @@ const DEFAULT_BOARD: Board = {
   precioHora: 4500,
   valorTasadoUsd: 450,
   estado: 'DISPONIBLE',
-  fotos: ['https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=800&auto=format&fit=crop&q=80'],
+  fotos: ['/images/boards/longboard-1.jpg'],
   calificacionPromedio: 4.9,
   totalReviews: 14,
 };
@@ -585,9 +586,10 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           <Row spacing="md" align="center">
             <Image
               source={{
-                uri:
-                  board.fotos?.[0] ||
-                  'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600',
+                uri: resolveCuratedBoardPhoto(
+                  board.fotos?.[0] || '/images/boards/longboard-1.jpg',
+                  board.tipoTabla
+                ),
               }}
               style={styles.boardImage}
             />

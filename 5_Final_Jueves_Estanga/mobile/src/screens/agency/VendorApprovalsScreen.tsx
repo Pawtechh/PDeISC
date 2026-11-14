@@ -32,13 +32,14 @@ import {
   useResolveVendorRequestMutation,
 } from '../../api/agencyApi';
 import { VendorApplicationData } from '../../store/slices/authSlice';
+import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import {
   useBiometricSignature,
   BiometricSignaturePayload,
 } from '../../hooks/useBiometricSignature';
 
 const FALLBACK_BOARD_PHOTO =
-  'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80';
+  '/images/boards/longboard-1.jpg';
 
 export const VendorApprovalsSection: React.FC = () => {
   const { theme, isDark } = useTheme();
@@ -232,7 +233,7 @@ export const VendorApprovalsSection: React.FC = () => {
                           ? 'rgba(255, 90, 54, 0.18)'
                           : '#FF5A36'
                         : isDark
-                        ? 'rgba(18, 18, 22, 0.78)'
+                        ? 'rgba(34, 38, 48, 0.80)'
                         : '#FFFFFF',
                       borderColor: active
                         ? isDark
@@ -378,7 +379,7 @@ export const VendorApprovalsSection: React.FC = () => {
                   style={[
                     styles.infoBox,
                     {
-                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
                       borderColor: theme.border,
                     },
                   ]}
@@ -399,7 +400,7 @@ export const VendorApprovalsSection: React.FC = () => {
                   style={[
                     styles.infoBox,
                     {
-                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
                       borderColor: theme.border,
                     },
                   ]}
@@ -435,7 +436,7 @@ export const VendorApprovalsSection: React.FC = () => {
                           onPress={() => setPreviewPhoto(fotoUri)}
                         >
                           <Image
-                            source={{ uri: fotoUri || FALLBACK_BOARD_PHOTO }}
+                            source={{ uri: (fotoUri || FALLBACK_BOARD_PHOTO).startsWith('/') ? resolveAssetUrl(fotoUri || FALLBACK_BOARD_PHOTO) : (fotoUri || FALLBACK_BOARD_PHOTO) }}
                             style={styles.boardThumbnail}
                             resizeMode="cover"
                           />
@@ -604,7 +605,7 @@ export const VendorApprovalsSection: React.FC = () => {
             style={[
               styles.modalCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor:
                   decisionType === 'APROBADO'
                     ? colors.semantic.success
@@ -643,7 +644,7 @@ export const VendorApprovalsSection: React.FC = () => {
                     style={[
                       styles.infoBox,
                       {
-                        backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                        backgroundColor: isDark ? '#242834' : '#F5F5F7',
                         borderColor: theme.border,
                       },
                     ]}
@@ -680,7 +681,7 @@ export const VendorApprovalsSection: React.FC = () => {
                           ? 'rgba(16, 185, 129, 0.1)'
                           : '#ECFDF5'
                         : isDark
-                        ? '#141418'
+                        ? '#242834'
                         : '#F5F5F7',
                     },
                   ]}
@@ -756,7 +757,7 @@ export const VendorApprovalsSection: React.FC = () => {
                         agencyPassword.trim().length >= 4
                           ? colors.semantic.success
                           : theme.border,
-                      backgroundColor: isDark ? '#141418' : '#F4F4F5',
+                      backgroundColor: isDark ? '#242834' : '#F4F4F5',
                     },
                   ]}
                 >
@@ -850,7 +851,7 @@ export const VendorApprovalsSection: React.FC = () => {
         >
           {previewPhoto && (
             <Image
-              source={{ uri: previewPhoto }}
+              source={{ uri: previewPhoto.startsWith('/') ? resolveAssetUrl(previewPhoto) : previewPhoto }}
               style={styles.fullPhoto}
               resizeMode="contain"
             />
@@ -913,7 +914,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 85,
     borderRadius: radii.md,
-    backgroundColor: '#141418',
+    backgroundColor: '#242834',
   },
   auditBox: {
     padding: spacing.sm,

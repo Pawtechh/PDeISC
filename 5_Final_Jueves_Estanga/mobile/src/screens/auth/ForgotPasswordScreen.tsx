@@ -137,7 +137,7 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navi
                   style={[
                     styles.codeBox,
                     {
-                      backgroundColor: isDark ? '#141418' : '#FFF7ED',
+                      backgroundColor: isDark ? '#242834' : '#FFF7ED',
                       borderColor: isDark ? 'rgba(255, 90, 54, 0.42)' : '#FF5A36',
                     },
                   ]}

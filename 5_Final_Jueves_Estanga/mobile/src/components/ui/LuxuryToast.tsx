@@ -93,7 +93,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               style={[
                 styles.toastCard,
                 {
-                  backgroundColor: isDark ? 'rgba(18, 18, 22, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+                  backgroundColor: isDark ? 'rgba(34, 38, 48, 0.94)' : 'rgba(255, 255, 255, 0.96)',
                   borderColor,
                   shadowColor: borderColor,
                 },

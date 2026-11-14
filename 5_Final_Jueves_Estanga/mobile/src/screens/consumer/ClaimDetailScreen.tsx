@@ -288,7 +288,7 @@ export const ClaimDetailScreen: React.FC = () => {
         onRequestClose={() => setShowDisputeModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <Card padding="lg" style={[styles.disputeCard, isDark && { backgroundColor: 'rgba(18, 18, 22, 0.96)', borderColor: 'rgba(255, 255, 255, 0.12)' }]}>
+          <Card padding="lg" style={[styles.disputeCard, isDark && { backgroundColor: 'rgba(34, 38, 48, 0.96)', borderColor: 'rgba(255, 255, 255, 0.12)' }]}>
             <Stack spacing="md">
               <Text variant="h2" color={theme.text}>
                 Presentar Descargo

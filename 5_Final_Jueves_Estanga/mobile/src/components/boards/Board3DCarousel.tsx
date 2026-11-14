@@ -322,7 +322,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               styles.floatingArrow,
               styles.floatingArrowLeft,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.88)' : 'rgba(255, 255, 255, 0.92)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.08)',
               },
             ]}
@@ -340,7 +340,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               styles.floatingArrow,
               styles.floatingArrowRight,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.88)' : 'rgba(255, 255, 255, 0.92)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.08)',
               },
             ]}

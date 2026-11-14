@@ -84,21 +84,21 @@ export const Button: React.FC<ButtonProps> = ({
     switch (variant) {
       case 'primary':
         return {
-          backgroundColor: isDark ? '#FF5A36' : '#FF5A36',
+          backgroundColor: '#E25B3C',
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(255, 148, 122, 0.42)' : '#E04320',
-          shadowColor: '#FF5A36',
+          borderColor: isDark ? 'rgba(234, 115, 87, 0.40)' : '#CC482A',
+          shadowColor: '#E25B3C',
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: isDark ? 0.28 : 0.18,
+          shadowOpacity: isDark ? 0.24 : 0.16,
           shadowRadius: 14,
           elevation: 5,
           ...(Platform.OS === 'web'
             ? ({
                 backgroundImage:
-                  'linear-gradient(135deg, #FF6F4D 0%, #FF5A36 55%, #E04320 100%)',
+                  'linear-gradient(135deg, #EA6A4C 0%, #E25B3C 55%, #CC482A 100%)',
                 boxShadow: isDark
-                  ? '0 8px 22px -6px rgba(255, 90, 54, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.26)'
-                  : '0 8px 20px -6px rgba(224, 67, 32, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.30)',
+                  ? '0 8px 20px -6px rgba(226, 91, 60, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.22)'
+                  : '0 8px 18px -6px rgba(204, 72, 42, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.28)',
                 overflow: 'hidden',
               } as any)
             : {}),

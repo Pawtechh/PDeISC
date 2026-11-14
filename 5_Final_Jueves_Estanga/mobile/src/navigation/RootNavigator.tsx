@@ -357,8 +357,8 @@ export function RootNavigator() {
               Platform.OS === 'web'
                 ? 'transparent'
                 : isDark
-                ? '#050507'
-                : '#F5F5F7',
+                ? '#222630'
+                : '#F5F6F8',
           },
         ]}
       >
@@ -366,7 +366,7 @@ export function RootNavigator() {
           style={[
             styles.splashCard,
             {
-              backgroundColor: isDark ? 'rgba(18, 18, 22, 0.85)' : '#FFFFFF',
+              backgroundColor: isDark ? 'rgba(34, 38, 48, 0.86)' : '#FFFFFF',
               borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
             },
           ]}
@@ -406,8 +406,8 @@ export function RootNavigator() {
     ...baseNavTheme,
     colors: {
       ...baseNavTheme.colors,
-      background: Platform.OS === 'web' ? 'transparent' : isDark ? '#050507' : '#F5F5F7',
-      card: Platform.OS === 'web' ? 'transparent' : isDark ? '#111115' : '#FFFFFF',
+      background: Platform.OS === 'web' ? 'transparent' : isDark ? '#222630' : '#F5F6F8',
+      card: Platform.OS === 'web' ? 'transparent' : isDark ? '#222630' : '#FFFFFF',
     },
   };
 

@@ -187,7 +187,7 @@ export const MyRentalsScreen: React.FC = () => {
                 style={[
                   styles.tabPill,
                   {
-                    backgroundColor: isDark ? 'rgba(18, 18, 22, 0.72)' : '#FFFFFF',
+                    backgroundColor: isDark ? 'rgba(34, 38, 48, 0.78)' : '#FFFFFF',
                     borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
                   },
                   isSelected && (isDark ? styles.tabPillSelectedDark : styles.tabPillSelected),
@@ -254,7 +254,7 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.qrModalCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 borderWidth: 1,
               },
@@ -390,7 +390,7 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.qrModalCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 borderWidth: 1,
               },
@@ -436,7 +436,7 @@ export const MyRentalsScreen: React.FC = () => {
               <Card
                 padding="md"
                 style={{
-                  backgroundColor: isDark ? '#141418' : colors.sand[50],
+                  backgroundColor: isDark ? '#242834' : colors.sand[50],
                   borderColor: theme.border,
                   borderWidth: 1,
                 }}

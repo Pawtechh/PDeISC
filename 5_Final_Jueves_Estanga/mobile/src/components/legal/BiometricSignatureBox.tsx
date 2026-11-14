@@ -55,7 +55,7 @@ export const BiometricSignatureBox: React.FC<BiometricSignatureBoxProps> = ({
             : isDark
             ? 'rgba(255, 255, 255, 0.12)'
             : 'rgba(0, 0, 0, 0.08)',
-          backgroundColor: isDark ? '#141418' : '#FFFFFF',
+          backgroundColor: isDark ? '#242834' : '#FFFFFF',
         },
       ]}
     >

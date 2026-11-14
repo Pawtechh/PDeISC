@@ -66,29 +66,29 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     switch (glow) {
       case 'champagne':
         return {
-          borderColor: isDark ? 'rgba(251, 191, 36, 0.22)' : 'rgba(217, 119, 6, 0.18)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(15, 23, 42, 0.09)',
           shadowColor: '#000000',
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: isDark ? 0.35 : 0.08,
+          shadowOpacity: isDark ? 0.24 : 0.07,
           shadowRadius: 16,
           elevation: 4,
         };
       case 'cyan':
         return {
-          borderColor: isDark ? 'rgba(255, 90, 54, 0.24)' : 'rgba(255, 90, 54, 0.20)',
+          borderColor: isDark ? 'rgba(226, 91, 60, 0.22)' : 'rgba(226, 91, 60, 0.18)',
           shadowColor: '#000000',
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: isDark ? 0.35 : 0.08,
+          shadowOpacity: isDark ? 0.24 : 0.07,
           shadowRadius: 16,
           elevation: 4,
         };
       case 'none':
       default:
         return {
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 23, 42, 0.07)',
           shadowColor: '#000000',
           shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: isDark ? 0.28 : 0.06,
+          shadowOpacity: isDark ? 0.20 : 0.06,
           shadowRadius: 12,
           elevation: 2,
         };
@@ -100,17 +100,17 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     switch (glow) {
       case 'cyan':
         return isDark
-          ? ['rgba(255, 90, 54, 0.07)', 'rgba(18, 18, 22, 0.28)', 'rgba(0, 210, 211, 0.04)']
-          : ['rgba(255, 90, 54, 0.04)', 'rgba(255, 255, 255, 0.22)', 'rgba(8, 145, 178, 0.03)'];
+          ? ['rgba(255, 255, 255, 0.04)', 'rgba(45, 50, 64, 0.18)', 'rgba(226, 91, 60, 0.03)']
+          : ['rgba(255, 255, 255, 0.45)', 'rgba(255, 255, 255, 0.18)', 'rgba(15, 23, 42, 0.01)'];
       case 'none':
         return isDark
-          ? ['rgba(255, 255, 255, 0.03)', 'rgba(18, 18, 22, 0.22)', 'rgba(0, 0, 0, 0.08)']
+          ? ['rgba(255, 255, 255, 0.03)', 'rgba(45, 50, 64, 0.18)', 'rgba(0, 0, 0, 0.04)']
           : ['rgba(255, 255, 255, 0.35)', 'rgba(255, 255, 255, 0.15)', 'rgba(0, 0, 0, 0.01)'];
       case 'champagne':
       default:
         return isDark
-          ? ['rgba(251, 191, 36, 0.06)', 'rgba(18, 18, 22, 0.26)', 'rgba(255, 90, 54, 0.03)']
-          : ['rgba(245, 158, 11, 0.04)', 'rgba(255, 255, 255, 0.22)', 'rgba(255, 90, 54, 0.02)'];
+          ? ['rgba(255, 255, 255, 0.035)', 'rgba(45, 50, 64, 0.20)', 'rgba(229, 184, 105, 0.025)']
+          : ['rgba(255, 255, 255, 0.45)', 'rgba(255, 255, 255, 0.18)', 'rgba(217, 155, 56, 0.02)'];
     }
   };
 
@@ -118,8 +118,8 @@ export const GlassCard: React.FC<GlassCardProps> = ({
   const webBackdropStyle: ViewStyle | undefined =
     Platform.OS === 'web'
       ? ({
-          backdropFilter: `blur(${Math.max(16, intensity / 2)}px) saturate(160%)`,
-          WebkitBackdropFilter: `blur(${Math.max(16, intensity / 2)}px) saturate(160%)`,
+          backdropFilter: `blur(${Math.max(16, intensity / 2)}px) saturate(140%)`,
+          WebkitBackdropFilter: `blur(${Math.max(16, intensity / 2)}px) saturate(140%)`,
         } as any)
       : undefined;
 
@@ -139,7 +139,7 @@ export const GlassCard: React.FC<GlassCardProps> = ({
         style={[
           StyleSheet.absoluteFillObject,
           {
-            backgroundColor: isDark ? 'rgba(18, 18, 22, 0.72)' : 'rgba(255, 255, 255, 0.84)',
+            backgroundColor: isDark ? 'rgba(45, 50, 64, 0.94)' : 'rgba(255, 255, 255, 0.92)',
             borderRadius,
           },
           webBackdropStyle,

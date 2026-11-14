@@ -182,7 +182,7 @@ function openWebCameraAsync(quality: number): Promise<string | null> {
         overlay.style.fontFamily = 'system-ui, -apple-system, sans-serif';
 
         const card = document.createElement('div');
-        card.style.backgroundColor = '#111115';
+        card.style.backgroundColor = '#222630';
         card.style.borderRadius = '16px';
         card.style.border = '1px solid rgba(255, 255, 255, 0.12)';
         card.style.boxShadow = '0 25px 60px rgba(0,0,0,0.75)';

@@ -48,7 +48,7 @@ export const CopyButtonWithConfetti: React.FC<CopyButtonWithConfettiProps> = ({
           particleCount: 45,
           spread: 60,
           origin: { y: 0.8 },
-          colors: ['#FF5A36', '#00D2D3', '#10B981', '#FFFFFF'],
+          colors: ['#E25B3C', '#E5B869', '#CBD5E1', '#F5F6F8'],
           ticks: 120,
           scalar: 0.85,
         });

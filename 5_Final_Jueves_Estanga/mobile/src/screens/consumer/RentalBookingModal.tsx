@@ -235,7 +235,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                   {
                     backgroundColor: isSelected
                       ? (theme.isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.08)')
-                      : (theme.isDark ? 'rgba(18, 18, 22, 0.72)' : colors.white),
+                      : (theme.isDark ? 'rgba(34, 38, 48, 0.78)' : colors.white),
                     borderColor: isSelected
                       ? '#FF5A36'
                       : (theme.isDark ? 'rgba(255, 255, 255, 0.09)' : colors.sand[200]),
@@ -360,7 +360,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                   {
                     backgroundColor: isSelected
                       ? '#FF5A36'
-                      : (theme.isDark ? 'rgba(18, 18, 22, 0.72)' : '#FFFFFF'),
+                      : (theme.isDark ? 'rgba(34, 38, 48, 0.78)' : '#FFFFFF'),
                     borderColor: isSelected
                       ? '#FF5A36'
                       : (theme.isDark ? 'rgba(255, 255, 255, 0.09)' : colors.sand[200]),

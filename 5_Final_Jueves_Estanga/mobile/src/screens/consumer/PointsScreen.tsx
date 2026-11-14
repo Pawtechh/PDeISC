@@ -280,7 +280,7 @@ export const PointsScreen: React.FC = () => {
               <LinearGradient
                 colors={
                   isDark
-                    ? ['rgba(18, 18, 22, 0.94)', 'rgba(28, 22, 22, 0.94)', 'rgba(18, 18, 22, 0.92)']
+                    ? ['rgba(34, 38, 48, 0.94)', 'rgba(42, 34, 38, 0.94)', 'rgba(32, 36, 46, 0.92)']
                     : ['#FFFFFF', '#FFF8F6', '#F5F5F7']
                 }
                 start={{ x: 0, y: 0 }}
@@ -429,7 +429,7 @@ export const PointsScreen: React.FC = () => {
                           backgroundColor: isSelected
                             ? (isDark ? 'rgba(255, 90, 54, 0.22)' : '#FF5A36')
                             : isDark
-                            ? 'rgba(18, 18, 22, 0.72)'
+                            ? 'rgba(34, 38, 48, 0.78)'
                             : '#FFFFFF',
                           borderWidth: 1,
                           borderColor: isSelected

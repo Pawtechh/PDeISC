@@ -14,6 +14,7 @@ import { ShieldAlert, CheckCircle2, Upload, FileText, LogOut } from 'lucide-reac
 import { Stack, Row, Text, Button, Badge } from '../ui';
 import { useTheme } from '../../theme/ThemeContext';
 import { colors, radii, spacing } from '../../theme';
+import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { useAppSelector, useAppDispatch } from '../../store';
 import { setCredentials, logout } from '../../store/slices/authSlice';
 import { tokenStorage } from '../../utils/storage';
@@ -60,7 +61,7 @@ export const MandatoryKycModal: React.FC = () => {
 
   const handleUseDemoPhoto = () => {
     setErrorMessage(null);
-    setDniFotoUrl('https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80');
+    setDniFotoUrl('/images/boards/shortboard-1.jpg');
     if (!dni) {
       // Generar DNI aleatorio de 8 dígitos único para testing y evitar colisiones 409
       const randomDni = String(Math.floor(41000000 + Math.random() * 8900000));
@@ -215,7 +216,7 @@ export const MandatoryKycModal: React.FC = () => {
                         Foto de DNI cargada correctamente
                       </Text>
                     </Row>
-                    <Image source={{ uri: dniFotoUrl }} style={styles.previewImage} resizeMode="cover" />
+                    <Image source={{ uri: dniFotoUrl.startsWith('/') ? resolveAssetUrl(dniFotoUrl) : dniFotoUrl }} style={styles.previewImage} resizeMode="cover" />
                     <Row spacing="sm" style={{ marginTop: spacing.xs }}>
                       <Button title="Cambiar Foto" size="sm" variant="secondary" onPress={handlePickPhoto} />
                     </Row>

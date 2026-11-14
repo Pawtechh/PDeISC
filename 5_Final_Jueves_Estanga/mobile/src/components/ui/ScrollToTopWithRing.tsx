@@ -52,7 +52,7 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? 'rgba(18, 18, 22, 0.86)' : 'rgba(255, 255, 255, 0.94)',
+          backgroundColor: isDark ? 'rgba(34, 38, 48, 0.88)' : 'rgba(255, 255, 255, 0.94)',
           shadowColor: '#000000',
           borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
         },

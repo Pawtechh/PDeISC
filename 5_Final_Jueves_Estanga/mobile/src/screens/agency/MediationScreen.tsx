@@ -174,7 +174,7 @@ export const MediationScreen: React.FC = () => {
                   </Row>
 
                   {/* Argumentos de Ambas Partes */}
-                  <Card padding="sm" style={isDark ? { backgroundColor: 'rgba(18, 18, 22, 0.78)' } : { backgroundColor: '#F5F5F7' }}>
+                  <Card padding="sm" style={isDark ? { backgroundColor: 'rgba(34, 38, 48, 0.80)' } : { backgroundColor: '#F5F5F7' }}>
                     <Stack spacing="xs">
                       <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700' }}>
                         REPORTE DEL DUEÑO:

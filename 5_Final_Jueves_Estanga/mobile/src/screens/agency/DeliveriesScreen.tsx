@@ -172,7 +172,7 @@ export const DeliveriesScreen: React.FC = () => {
     try {
       const fotosList = Array.isArray(currentRental.board?.fotos) && currentRental.board.fotos.length > 0
         ? currentRental.board.fotos.map((f: any) => String(typeof f === 'string' ? f : f?.url || f).replace(/^https?:\/\/localhost:3000/i, ''))
-        : ['https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600'];
+        : ['/images/boards/longboard-1.jpg'];
 
       await checkIn({
         rentalId: currentRental.id,
@@ -386,7 +386,7 @@ export const DeliveriesScreen: React.FC = () => {
             style={[
               styles.modalCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
                 borderWidth: 1,
               },
@@ -431,7 +431,7 @@ export const DeliveriesScreen: React.FC = () => {
                   style={[
                     styles.prereqPill,
                     {
-                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
                       borderColor: theme.border,
                     },
                     dniChecked && styles.prereqPillActive,
@@ -455,7 +455,7 @@ export const DeliveriesScreen: React.FC = () => {
                   style={[
                     styles.prereqPill,
                     {
-                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                      backgroundColor: isDark ? '#242834' : '#F5F5F7',
                       borderColor: theme.border,
                     },
                     hasPhotos && styles.prereqPillActive,
@@ -503,7 +503,7 @@ export const DeliveriesScreen: React.FC = () => {
                       styles.methodTab,
                       {
                         borderColor: signMethod === 'biometric' ? '#FF5A36' : theme.border,
-                        backgroundColor: signMethod === 'biometric' ? (isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? '#141418' : '#F4F4F5'),
+                        backgroundColor: signMethod === 'biometric' ? (isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? '#242834' : '#F4F4F5'),
                       },
                     ]}
                     testID="tab-sign-biometric"
@@ -523,7 +523,7 @@ export const DeliveriesScreen: React.FC = () => {
                       styles.methodTab,
                       {
                         borderColor: signMethod === 'pad' ? '#FF5A36' : theme.border,
-                        backgroundColor: signMethod === 'pad' ? (isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? '#141418' : '#F4F4F5'),
+                        backgroundColor: signMethod === 'pad' ? (isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? '#242834' : '#F4F4F5'),
                       },
                     ]}
                     testID="tab-sign-pad"

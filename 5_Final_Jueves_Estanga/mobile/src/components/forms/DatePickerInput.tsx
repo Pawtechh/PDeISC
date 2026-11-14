@@ -371,7 +371,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
 
               {/* Selector desplegable de año si está activado */}
               {showYearPicker ? (
-                <View style={[styles.yearPickerBox, { backgroundColor: theme.isDark ? '#141418' : colors.sand[50] }]}>
+                <View style={[styles.yearPickerBox, { backgroundColor: theme.isDark ? '#242834' : colors.sand[50] }]}>
                   <Text variant="caption" color={theme.subtext} style={{ marginBottom: 4 }}>
                     {isBirthDate ? 'Seleccioná tu año de nacimiento:' : 'Seleccioná el año:'}
                   </Text>
@@ -480,7 +480,7 @@ export const DatePickerInputView: React.FC<DatePickerInputProps> = ({
               )}
 
               {/* Resumen de selección actual y edad */}
-              <Card padding="sm" style={[styles.summaryBox, { backgroundColor: theme.isDark ? '#141418' : colors.sand[50], borderColor: theme.border, borderWidth: 1 }]}>
+              <Card padding="sm" style={[styles.summaryBox, { backgroundColor: theme.isDark ? '#242834' : colors.sand[50], borderColor: theme.border, borderWidth: 1 }]}>
                 <Row justify="space-between" align="center">
                   <Text variant="caption" color={theme.subtext}>
                     Seleccionado:

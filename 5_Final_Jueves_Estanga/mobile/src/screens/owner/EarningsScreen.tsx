@@ -477,7 +477,7 @@ export const EarningsScreen: React.FC = () => {
               style={[
                 styles.balanceInfoCard,
                 {
-                  backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                  backgroundColor: isDark ? '#242834' : '#F5F5F7',
                   borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
@@ -498,7 +498,7 @@ export const EarningsScreen: React.FC = () => {
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDark ? '#141418' : colors.sand[50],
+                    backgroundColor: isDark ? '#242834' : colors.sand[50],
                     borderColor: theme.border,
                     color: theme.text,
                   },
@@ -522,7 +522,7 @@ export const EarningsScreen: React.FC = () => {
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDark ? '#141418' : colors.sand[50],
+                    backgroundColor: isDark ? '#242834' : colors.sand[50],
                     borderColor: theme.border,
                     color: theme.text,
                   },

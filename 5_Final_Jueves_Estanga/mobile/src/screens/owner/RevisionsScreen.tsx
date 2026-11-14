@@ -82,7 +82,7 @@ export const RevisionsScreen: React.FC = () => {
     const photos =
       Array.isArray(rev.fotosDevolucion) && rev.fotosDevolucion.length > 0
         ? rev.fotosDevolucion.map((f: any) => (typeof f === 'string' ? f : String(f?.url || f)))
-        : ['https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800'];
+        : [resolveAssetUrl('/images/boards/shortboard-1.jpg')];
 
     setDamagePhotos(photos);
     setSelectedPhotoIndex(0);
@@ -132,7 +132,7 @@ export const RevisionsScreen: React.FC = () => {
     const safeFotos =
       damagePhotos.length > 0
         ? damagePhotos
-        : ['https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800'];
+        : [resolveAssetUrl('/images/boards/shortboard-1.jpg')];
 
     try {
       await reportDamageClaim({
@@ -505,7 +505,7 @@ export const RevisionsScreen: React.FC = () => {
               style={[
                 styles.protocolCard,
                 {
-                  backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                  backgroundColor: isDark ? '#242834' : '#F5F5F7',
                   borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
@@ -528,7 +528,7 @@ export const RevisionsScreen: React.FC = () => {
                   style={[
                     styles.flowDiagram,
                     {
-                      backgroundColor: isDark ? 'rgba(18, 18, 22, 0.78)' : 'rgba(255, 255, 255, 0.88)',
+                      backgroundColor: isDark ? 'rgba(34, 38, 48, 0.80)' : 'rgba(255, 255, 255, 0.88)',
                       borderWidth: 1,
                       borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
                     },
@@ -593,7 +593,7 @@ export const RevisionsScreen: React.FC = () => {
                     style={[
                       styles.revisionCard,
                       {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
               },
                     ]}
@@ -642,7 +642,7 @@ export const RevisionsScreen: React.FC = () => {
                         style={[
                           styles.claimDescBox,
                           {
-                            backgroundColor: isDark ? '#141418' : colors.sand[50],
+                            backgroundColor: isDark ? '#242834' : colors.sand[50],
                             borderColor: theme.border,
                           },
                         ]}
@@ -680,7 +680,7 @@ export const RevisionsScreen: React.FC = () => {
                                   resolved.startsWith('data:'));
                               const safeUri = isValidUri
                                 ? resolved
-                                : 'https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800&q=80';
+                                : resolveAssetUrl('/images/boards/shortboard-1.jpg');
                               return (
                                 <View
                                   key={idx}
@@ -688,7 +688,7 @@ export const RevisionsScreen: React.FC = () => {
                                 >
                                   <Image
                                     source={{ uri: safeUri }}
-                                    placeholder="https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800&q=80"
+                                    placeholder={resolveAssetUrl('/images/boards/shortboard-1.jpg')}
                                     style={styles.thumbnailImage}
                                     contentFit="cover"
                                   />
@@ -898,7 +898,7 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.confirmCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
               },
             ]}
@@ -957,7 +957,7 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.claimModalCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
               },
             ]}
@@ -1055,7 +1055,7 @@ export const RevisionsScreen: React.FC = () => {
                     style={[
                       styles.input,
                       {
-                        backgroundColor: isDark ? '#141418' : colors.sand[50],
+                        backgroundColor: isDark ? '#242834' : colors.sand[50],
                         color: theme.text,
                         borderColor: theme.border,
                       },
@@ -1084,7 +1084,7 @@ export const RevisionsScreen: React.FC = () => {
                           style={[
                             styles.presetAmountPill,
                             {
-                              backgroundColor: isDark ? 'rgba(18, 18, 22, 0.72)' : '#FFFFFF',
+                              backgroundColor: isDark ? 'rgba(34, 38, 48, 0.78)' : '#FFFFFF',
                               borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
                             },
                             isSelected && styles.presetAmountPillActive,
@@ -1121,7 +1121,7 @@ export const RevisionsScreen: React.FC = () => {
                         uri:
                           damagePhotos[selectedPhotoIndex] ||
                           damagePhotos[0] ||
-                          'https://images.unsplash.com/photo-1508873696983-2df5293cb395?w=800',
+                          resolveAssetUrl('/images/boards/shortboard-1.jpg'),
                       }}
                       style={styles.modalPhotoImage}
                       contentFit="cover"
@@ -1142,7 +1142,7 @@ export const RevisionsScreen: React.FC = () => {
                       styles.input,
                       styles.textArea,
                       {
-                        backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                        backgroundColor: isDark ? '#242834' : '#F5F5F7',
                         color: theme.text,
                         borderColor: theme.border,
                       },

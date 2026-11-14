@@ -6,6 +6,7 @@ import { colors, radii, spacing } from '../../theme';
 import { useTheme } from '../../theme/ThemeContext';
 import { useCreateBoardMutation } from '../../api/boardsApi';
 import { useGetVendorStatusQuery } from '../../api/authApi';
+import { resolveAssetUrl } from '../../api/baseQueryWithAuth';
 import { pickImagesFromDevice, takePhotoWithCamera } from '../../utils/imagePicker';
 
 export interface CreateBoardScreenProps {
@@ -96,8 +97,8 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
   const handleLoadDemoPhotos = () => {
     setErrorMsg('');
     const demoPhotos = [
-      'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?auto=format&fit=crop&w=900&q=80',
+      '/images/boards/shortboard-1.jpg',
+      '/images/boards/fish-2.jpg',
     ];
     setFotosSeleccionadas((prev) => {
       const next = [...prev];
@@ -429,7 +430,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                       : isDark
                       ? 'rgba(255, 255, 255, 0.14)'
                       : 'rgba(255, 90, 54, 0.45)',
-                  backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                  backgroundColor: isDark ? '#242834' : '#F5F5F7',
                 },
               ]}
             >
@@ -533,7 +534,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                       <Row spacing="sm">
                         {fotosSeleccionadas.map((uri, idx) => (
                           <View key={`selected-board-photo-${idx}`} style={styles.selectedWrap}>
-                            <Image source={{ uri }} style={styles.vendorPhotoImg} />
+                            <Image source={{ uri: uri.startsWith('/') ? resolveAssetUrl(uri) : uri }} style={styles.vendorPhotoImg} />
                             <TouchableOpacity
                               style={styles.removeBtn}
                               onPress={() =>

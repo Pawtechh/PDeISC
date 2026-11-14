@@ -42,16 +42,16 @@ export const DesktopHeader: React.FC = () => {
       style={[
         styles.headerContainer,
         {
-          backgroundColor: isDark ? 'rgba(9, 9, 12, 0.76)' : 'rgba(255, 255, 255, 0.82)',
-          borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
+          backgroundColor: isDark ? 'rgba(35, 39, 49, 0.92)' : 'rgba(255, 255, 255, 0.90)',
+          borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 23, 42, 0.07)',
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(24px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+              backdropFilter: 'blur(24px) saturate(150%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(150%)',
               boxShadow: isDark
-                ? '0 8px 28px rgba(0, 0, 0, 0.45)'
-                : '0 4px 20px rgba(0, 0, 0, 0.05)',
+                ? '0 8px 24px rgba(0, 0, 0, 0.28)'
+                : '0 4px 18px rgba(15, 23, 42, 0.05)',
               position: 'sticky',
               top: 0,
               zIndex: 1000,
@@ -67,21 +67,21 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.10)',
-                borderColor: isDark ? 'rgba(255, 90, 54, 0.34)' : 'rgba(255, 90, 54, 0.28)',
+                backgroundColor: isDark ? 'rgba(226, 91, 60, 0.14)' : 'rgba(226, 91, 60, 0.10)',
+                borderColor: isDark ? 'rgba(226, 91, 60, 0.30)' : 'rgba(226, 91, 60, 0.26)',
               },
             ]}
           >
-            <Waves size={18} color={isDark ? '#FF6B4A' : '#E04320'} strokeWidth={2.2} />
+            <Waves size={18} color={isDark ? '#EA7357' : '#CC482A'} strokeWidth={2.2} />
           </View>
           <View style={styles.brandTexts}>
-            <Text style={[styles.brandTitle, { color: isDark ? '#F5F5F7' : '#111115' }]}>
+            <Text style={[styles.brandTitle, { color: isDark ? '#F3F4F6' : '#16181E' }]}>
               SURF RENTAL
             </Text>
             <Text
               style={[
                 styles.brandSubtitle,
-                { color: isDark ? '#A1A1AA' : '#71717A' },
+                { color: isDark ? '#9CA3AF' : '#64748B' },
               ]}
             >
               MAR DEL PLATA • EST. 2026
@@ -96,8 +96,8 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.telemetryPill,
               {
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.07)',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F8FAFC',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 23, 42, 0.08)',
               },
             ]}
           >
@@ -105,11 +105,11 @@ export const DesktopHeader: React.FC = () => {
               {...(Platform.OS === 'web' ? ({ dataSet: { liveDot: 'true' } } as any) : {})}
               style={styles.livePulseDot}
             />
-            <Compass size={13} color={isDark ? '#00D2D3' : '#0891B2'} />
+            <Compass size={13} color={isDark ? '#94A3B8' : '#64748B'} />
             <Text
               style={[
                 styles.telemetryText,
-                { color: isDark ? '#D4D4D8' : '#27272A' },
+                { color: isDark ? '#D1D5DB' : '#334155' },
               ]}
             >
               PLAYA GRANDE • OLA 1.3M • 14KT OFFSHORE • AGUA 16.5°C
@@ -124,16 +124,16 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.roleBadgeGroup,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 90, 54, 0.12)' : 'rgba(255, 90, 54, 0.09)',
-                  borderColor: isDark ? 'rgba(255, 90, 54, 0.28)' : 'rgba(255, 90, 54, 0.24)',
+                  backgroundColor: isDark ? 'rgba(226, 91, 60, 0.12)' : 'rgba(226, 91, 60, 0.08)',
+                  borderColor: isDark ? 'rgba(226, 91, 60, 0.26)' : 'rgba(226, 91, 60, 0.22)',
                 },
               ]}
             >
-              <ShieldCheck size={13} color={isDark ? '#FF7A59' : '#D93D1B'} />
+              <ShieldCheck size={13} color={isDark ? '#EA7357' : '#CC482A'} />
               <Text
                 style={[
                   styles.roleBadgeText,
-                  { color: isDark ? '#FF7A59' : '#D93D1B' },
+                  { color: isDark ? '#EA7357' : '#CC482A' },
                 ]}
               >
                 {roleBadgeLabel}
@@ -261,7 +261,7 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.logoutModalCard,
               {
-                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+                backgroundColor: isDark ? 'rgba(34, 38, 48, 0.94)' : 'rgba(255, 255, 255, 0.96)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.09)',
               },
               Platform.OS === 'web'
