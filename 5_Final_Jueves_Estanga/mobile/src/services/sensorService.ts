@@ -1,6 +1,5 @@
 import { Platform, Linking } from 'react-native';
 import * as Location from 'expo-location';
-import { Camera } from 'expo-camera';
 import * as LocalAuthentication from 'expo-local-authentication';
 
 // Coordenadas reales de la Sede Central Playa Grande (Mar del Plata)
@@ -146,6 +145,8 @@ export const sensorService = {
     }
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { Camera } = require('expo-camera');
       const { status } = await Camera.requestCameraPermissionsAsync();
       return status === 'granted';
     } catch {

@@ -166,47 +166,47 @@ export class AuthService {
    * Rotación de refresh token
    */
   async refresh(refreshToken: string) {
+    let decoded: JwtPayload;
     try {
-      const decoded = jwt.verify(refreshToken, JWT_CONFIG.refreshSecret) as JwtPayload;
-
-      // Buscar el token en DB
-      const storedToken = await prisma.refreshToken.findUnique({
-        where: { token: refreshToken },
-      });
-
-      if (!storedToken || storedToken.revoked || storedToken.expiresAt < new Date()) {
-        const error: any = new Error('El token de refresco es inválido o ha sido revocado');
-        error.statusCode = 401;
-        error.code = 'INVALID_REFRESH_TOKEN';
-        throw error;
-      }
-
-      // Invalidar el token anterior (rotación estricta)
-      await prisma.refreshToken.update({
-        where: { id: storedToken.id },
-        data: { revoked: true },
-      });
-
-      const user = await prisma.user.findUnique({
-        where: { id: decoded.id },
-      });
-
-      if (!user || !user.activo) {
-        const error: any = new Error('Usuario no válido');
-        error.statusCode = 401;
-        error.code = 'UNAUTHORIZED';
-        throw error;
-      }
-
-      // Generar nuevo par de tokens
-      return await this.generateTokens(user);
-    } catch (err: any) {
-      if (err.statusCode) throw err;
+      decoded = jwt.verify(refreshToken, JWT_CONFIG.refreshSecret) as JwtPayload;
+    } catch {
       const error: any = new Error('Token de refresco inválido');
       error.statusCode = 401;
       error.code = 'INVALID_REFRESH_TOKEN';
       throw error;
     }
+
+    // Buscar el token en DB
+    const storedToken = await prisma.refreshToken.findUnique({
+      where: { token: refreshToken },
+    });
+
+    if (!storedToken || storedToken.revoked || storedToken.expiresAt < new Date()) {
+      const error: any = new Error('El token de refresco es inválido o ha sido revocado');
+      error.statusCode = 401;
+      error.code = 'INVALID_REFRESH_TOKEN';
+      throw error;
+    }
+
+    // Invalidar el token anterior (rotación estricta)
+    await prisma.refreshToken.update({
+      where: { id: storedToken.id },
+      data: { revoked: true },
+    });
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+    });
+
+    if (!user || !user.activo) {
+      const error: any = new Error('Usuario no válido');
+      error.statusCode = 401;
+      error.code = 'UNAUTHORIZED';
+      throw error;
+    }
+
+    // Generar nuevo par de tokens
+    return await this.generateTokens(user);
   }
 
   /**

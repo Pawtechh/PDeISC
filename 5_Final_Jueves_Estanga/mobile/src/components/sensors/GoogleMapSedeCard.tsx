@@ -80,7 +80,8 @@ export const GoogleMapSedeCard: React.FC = () => {
     sensorService.openGoogleMapsDirections(gpsData?.latitude, gpsData?.longitude);
   };
 
-  const mapEmbedUrl = `https://maps.google.com/maps?q=${PLAYA_GRANDE_COORDS.latitude},${PLAYA_GRANDE_COORDS.longitude}&hl=es&z=16&output=embed`;
+  // OpenStreetMap embed evita peticiones de telemetría de Google Maps (gen_204) bloqueadas por AdBlock/uBlock
+  const mapEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=-57.542,-38.037,-57.520,-38.024&layer=mapnik&marker=${PLAYA_GRANDE_COORDS.latitude},${PLAYA_GRANDE_COORDS.longitude}`;
 
   return (
     <Card

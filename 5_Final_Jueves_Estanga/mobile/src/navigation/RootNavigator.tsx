@@ -3,11 +3,16 @@ import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
 import * as Linking from 'expo-linking';
 import { NavigationContainer } from '@react-navigation/native';
 import { Waves } from 'lucide-react-native';
-import { useAppSelector, useAppDispatch } from '../store';
+import { store, useAppSelector, useAppDispatch } from '../store';
 import { setCredentials, updateUser, setRole } from '../store/slices/authSlice';
 import { resetAllApis } from '../store/auth/thunks';
 import { tokenStorage } from '../utils/storage';
-import { getBaseUrl } from '../api/baseQueryWithAuth';
+import {
+  getBaseUrl,
+  isValidJwtFormat,
+  isJwtExpired,
+  tryRefreshAccessToken,
+} from '../api/baseQueryWithAuth';
 import { AuthNavigator } from './AuthNavigator';
 import { ConsumerTabs } from './ConsumerTabs';
 import { OwnerTabs } from './OwnerTabs';
@@ -15,9 +20,23 @@ import { AgencyTabs } from './AgencyTabs';
 import { useTheme } from '../theme/ThemeContext';
 import { MandatoryKycModal } from '../components/auth/MandatoryKycModal';
 
-const isValidJwt = (token: string | null | undefined) => {
-  if (!token || typeof token !== 'string' || token.startsWith('dev-')) return false;
-  return token.split('.').length === 3;
+const isValidJwt = isValidJwtFormat;
+const DEMO_EMAILS = new Set(['consumer@surf.com', 'owner@surf.com', 'mostrador@surf.com']);
+
+const syncUserFromMeResponse = async (
+  meRes: Response,
+  fallbackUser: any,
+  dispatch: any,
+  isMounted: () => boolean
+) => {
+  const meJson = await meRes.json();
+  const freshUser = meJson?.data?.user;
+  if (freshUser && isMounted()) {
+    const freshRole = (freshUser.role || freshUser.rol || 'CONSUMER').toUpperCase() as any;
+    dispatch(updateUser({ ...freshUser, role: freshRole, rol: freshRole }));
+    dispatch(setRole(freshRole));
+    await tokenStorage.saveUser({ ...fallbackUser, ...freshUser, role: freshRole, rol: freshRole });
+  }
 };
 
 export function RootNavigator() {
@@ -45,34 +64,83 @@ export function RootNavigator() {
 
         if (isMounted && user) {
           if (isValidJwt(tokens.access)) {
-            dispatch(
-              setCredentials({
-                user,
-                accessToken: tokens.access!,
-                refreshToken: isValidJwt(tokens.refresh) ? tokens.refresh! : '',
-              })
-            );
+            let activeAccess = tokens.access!;
+            let activeRefresh = isValidJwt(tokens.refresh) ? tokens.refresh! : '';
+
+            // Evitar enviar un /auth/me condenado a 401 si el JWT local ya expiró
+            if (isJwtExpired(activeAccess, 30)) {
+              const refreshRes = await tryRefreshAccessToken({
+                dispatch,
+                getState: store.getState,
+                refreshTokenOverride: activeRefresh,
+                userOverride: user,
+              });
+
+              if (!refreshRes.refreshed) {
+                if (refreshRes.transientFailure && isMounted) {
+                  dispatch(
+                    setCredentials({
+                      user,
+                      accessToken: activeAccess,
+                      refreshToken: activeRefresh,
+                    })
+                  );
+                } else {
+                  await tokenStorage.clear();
+                }
+                return;
+              }
+
+              activeAccess = refreshRes.accessToken || activeAccess;
+              activeRefresh = refreshRes.refreshToken || activeRefresh;
+            }
+
+            if (isMounted) {
+              dispatch(
+                setCredentials({
+                  user,
+                  accessToken: activeAccess,
+                  refreshToken: activeRefresh,
+                })
+              );
+            }
 
             // Sincronizar inmediatamente desde base de datos TiDB por si el rol cambió en Prisma Studio
             try {
-              const meRes = await fetch(`${getBaseUrl()}/auth/me`, {
-                headers: { Authorization: `Bearer ${tokens.access}` },
+              let meRes = await fetch(`${getBaseUrl()}/auth/me`, {
+                headers: { Authorization: `Bearer ${activeAccess}` },
               });
-              if (meRes.ok) {
-                const meJson = await meRes.json();
-                const freshUser = meJson?.data?.user;
-                if (freshUser && isMounted) {
-                  const freshRole = (freshUser.role || freshUser.rol || 'CONSUMER').toUpperCase() as any;
-                  dispatch(updateUser({ ...freshUser, role: freshRole, rol: freshRole }));
-                  dispatch(setRole(freshRole));
-                  await tokenStorage.saveUser({ ...user, ...freshUser, role: freshRole, rol: freshRole });
+
+              if ((meRes.status === 502 || meRes.status === 503 || meRes.status === 504) && isMounted) {
+                await new Promise((r) => setTimeout(r, 1500));
+                meRes = await fetch(`${getBaseUrl()}/auth/me`, {
+                  headers: { Authorization: `Bearer ${activeAccess}` },
+                });
+              }
+
+              if (meRes.status === 401) {
+                const recovered = await tryRefreshAccessToken({
+                  dispatch,
+                  getState: store.getState,
+                  refreshTokenOverride: activeRefresh,
+                  userOverride: user,
+                });
+                if (recovered.refreshed && recovered.accessToken) {
+                  const retryMe = await fetch(`${getBaseUrl()}/auth/me`, {
+                    headers: { Authorization: `Bearer ${recovered.accessToken}` },
+                  });
+                  if (retryMe.ok) {
+                    await syncUserFromMeResponse(retryMe, user, dispatch, () => isMounted);
+                  }
                 }
+              } else if (meRes.ok) {
+                await syncUserFromMeResponse(meRes, user, dispatch, () => isMounted);
               }
             } catch (err) {
               console.warn('Error al sincronizar sesión inicial:', err);
             }
-          } else {
-            // Si había un token 'dev-' viejo en caché, obtener un JWT real silenciosamente antes de montar las pantallas
+          } else if (tokens.access?.startsWith('dev-') || DEMO_EMAILS.has(user.email)) {
+            // Si había un token 'dev-' viejo en caché para cuenta demo, obtener un JWT real silenciosamente
             const roleKey = user.role || user.rol || 'CONSUMER';
             const fallbackEmail =
               user.email ||
@@ -115,6 +183,8 @@ export function RootNavigator() {
             } catch {
               await tokenStorage.clear();
             }
+          } else {
+            await tokenStorage.clear();
           }
         }
       } catch (e) {
@@ -187,10 +257,35 @@ export function RootNavigator() {
     let isSubscribed = true;
 
     const syncLiveRoleFromDatabase = async () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+        return;
+      }
+
       try {
+        let tokenToUse = currentToken;
+        if (isJwtExpired(tokenToUse, 15)) {
+          const refreshed = await tryRefreshAccessToken({
+            dispatch,
+            getState: store.getState,
+          });
+          if (!refreshed.refreshed || !refreshed.accessToken) {
+            return;
+          }
+          tokenToUse = refreshed.accessToken;
+        }
+
         const res = await fetch(`${getBaseUrl()}/auth/me`, {
-          headers: { Authorization: `Bearer ${currentToken}` },
+          headers: { Authorization: `Bearer ${tokenToUse}` },
         });
+
+        if (res.status === 401) {
+          await tryRefreshAccessToken({
+            dispatch,
+            getState: store.getState,
+          });
+          return;
+        }
+
         if (res.ok && isSubscribed) {
           const json = await res.json();
           const serverUser = json?.data?.user;

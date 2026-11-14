@@ -34,7 +34,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
     safeHaptic.impact();
   }, []);
 
-  const { data, isLoading, isFetching, refetch } = useGetBoardsQuery(
+  const { data, isLoading, isFetching, isError, refetch } = useGetBoardsQuery(
     selectedType !== 'Todos' ? { tipo: selectedType } : undefined,
     { pollingInterval: 6000, refetchOnMountOrArgChange: true }
   );
@@ -316,6 +316,16 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                 Cargando tablas desde la sede central...
               </Text>
             </View>
+          ) : isError && boardsList.length === 0 ? (
+            <EmptyState
+              title="Conectando con la sede central..."
+              description="El servidor o la base de datos está iniciando en este momento. Tocá Reintentar en unos segundos."
+              actionTitle="Reintentar ahora"
+              onAction={() => {
+                triggerHaptic();
+                refetch();
+              }}
+            />
           ) : boardsList.length === 0 ? (
             <EmptyState
               title="No se encontraron tablas"

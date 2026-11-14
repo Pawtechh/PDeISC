@@ -59,10 +59,19 @@ export const boardsApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getBoards: builder.query<{ data: Board[]; meta: { total: number; page: number } }, BoardFilters | void>({
-      query: (filters) => ({
-        url: '/boards',
-        params: (filters || {}) as Record<string, any>,
-      }),
+      query: (filters) => {
+        const cleanParams: Record<string, any> = {};
+        if (filters) {
+          for (const [key, value] of Object.entries(filters)) {
+            if (value !== undefined && value !== null && value !== '') {
+              cleanParams[key] = value;
+            }
+          }
+        }
+        return Object.keys(cleanParams).length > 0
+          ? { url: '/boards', params: cleanParams }
+          : '/boards';
+      },
       providesTags: (result) =>
         result
           ? [

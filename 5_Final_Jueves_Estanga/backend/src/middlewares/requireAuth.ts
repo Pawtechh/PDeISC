@@ -32,9 +32,28 @@ export const requireAuth = async (
     return;
   }
 
+  let decoded: JwtPayload;
   try {
-    const decoded = jwt.verify(token, JWT_CONFIG.accessSecret) as JwtPayload;
+    decoded = jwt.verify(token, JWT_CONFIG.accessSecret) as JwtPayload;
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(401).json({
+        code: 'TOKEN_EXPIRED',
+        message: 'El token de acceso ha expirado',
+        timestamp,
+      });
+      return;
+    }
 
+    res.status(401).json({
+      code: 'UNAUTHORIZED',
+      message: 'Token de acceso inválido',
+      timestamp,
+    });
+    return;
+  }
+
+  try {
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
       select: { id: true, email: true, role: true, nombre: true, activo: true },
@@ -57,20 +76,7 @@ export const requireAuth = async (
     };
 
     next();
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      res.status(401).json({
-        code: 'TOKEN_EXPIRED',
-        message: 'El token de acceso ha expirado',
-        timestamp,
-      });
-      return;
-    }
-
-    res.status(401).json({
-      code: 'UNAUTHORIZED',
-      message: 'Token de acceso inválido',
-      timestamp,
-    });
+  } catch (dbError) {
+    next(dbError);
   }
 };
