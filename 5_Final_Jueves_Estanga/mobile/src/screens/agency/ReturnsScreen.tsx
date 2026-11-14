@@ -413,7 +413,7 @@ export const ReturnsScreen: React.FC = () => {
             padding="lg"
             style={[
               styles.modalCard,
-              isDark && { backgroundColor: 'rgba(6, 16, 32, 0.96)', borderColor: 'rgba(34, 211, 238, 0.32)', borderWidth: 1 },
+              isDark && { backgroundColor: 'rgba(18, 18, 22, 0.96)', borderColor: 'rgba(255, 255, 255, 0.10)', borderWidth: 1 },
             ]}
           >
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -451,7 +451,7 @@ export const ReturnsScreen: React.FC = () => {
                 <TouchableOpacity
                   style={[
                     styles.checkItem,
-                    isDark && { backgroundColor: '#0F172A', borderColor: '#334155' },
+                    isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.10)' },
                   ]}
                   onPress={() => setIsWashed(!isWashed)}
                 >
@@ -470,7 +470,7 @@ export const ReturnsScreen: React.FC = () => {
                 <TouchableOpacity
                   style={[
                     styles.checkItem,
-                    isDark && { backgroundColor: '#0F172A', borderColor: '#334155' },
+                    isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.10)' },
                   ]}
                   onPress={() => {
                     setHasDamage(!hasDamage);
@@ -512,7 +512,7 @@ export const ReturnsScreen: React.FC = () => {
                       <TextInput
                         style={[
                           styles.input,
-                          isDark && { backgroundColor: '#0F172A', borderColor: '#475569', color: '#F8FAFC' },
+                          isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.12)', color: '#F5F5F7' },
                         ]}
                         value={damageDescription}
                         onChangeText={(val) => {
@@ -547,8 +547,8 @@ export const ReturnsScreen: React.FC = () => {
                               style={[
                                 styles.presetPill,
                                 isSelected && styles.presetPillActive,
-                                isDark && { backgroundColor: '#0F172A', borderColor: '#334155' },
-                                isSelected && isDark && { backgroundColor: colors.ocean[700] },
+                                isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.10)' },
+                                isSelected && isDark && { backgroundColor: '#FF5A36', borderColor: '#FF7A59' },
                               ]}
                               onPress={() => {
                                 setDamagePhotoUrl(preset.url);
@@ -573,7 +573,7 @@ export const ReturnsScreen: React.FC = () => {
                         style={[
                           styles.input,
                           { marginTop: spacing.xs },
-                          isDark && { backgroundColor: '#0F172A', borderColor: '#475569', color: '#F8FAFC' },
+                          isDark && { backgroundColor: '#141418', borderColor: 'rgba(255, 255, 255, 0.12)', color: '#F5F5F7' },
                         ]}
                         value={customPhotoInput}
                         onChangeText={(val) => {
@@ -716,8 +716,8 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   presetPillActive: {
-    backgroundColor: colors.ocean[500],
-    borderColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
+    borderColor: '#E04320',
   },
   photoPreviewWrapper: {
     marginTop: spacing.xs,

@@ -194,8 +194,8 @@ export const MyBoardsScreen: React.FC = () => {
           style={[
             styles.summaryCard,
             {
-              backgroundColor: isDark ? 'rgba(56, 189, 248, 0.06)' : '#EFF6FF',
-              borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : '#BFDBFE',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
             },
           ]}
         >
@@ -203,7 +203,7 @@ export const MyBoardsScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <Text
                 variant="caption"
-                color={isDark ? '#38BDF8' : colors.ocean[700]}
+                color={isDark ? '#FF7A59' : '#E04320'}
                 style={{ fontWeight: '700' }}
               >
                 SUSCRIPCIÓN OWNER
@@ -248,7 +248,7 @@ export const MyBoardsScreen: React.FC = () => {
 
         {/* Lista de Tablas del Owner */}
         {isLoading && boards.length === 0 ? (
-          <ActivityIndicator size="large" color={colors.ocean[500]} />
+          <ActivityIndicator size="large" color="#FF5A36" />
         ) : boards.length === 0 ? (
           <EmptyState
             title="No tenés tablas registradas"
@@ -282,7 +282,7 @@ export const MyBoardsScreen: React.FC = () => {
                     <Card
                       padding="md"
                       style={{
-                        borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.16)',
+                        borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
                         borderWidth: 1,
                       }}
                     >
@@ -425,8 +425,8 @@ export const MyBoardsScreen: React.FC = () => {
             style={[
               styles.actionModalCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : theme.border,
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
                 borderWidth: 1,
                 maxHeight: '90%',
               },
@@ -487,15 +487,15 @@ export const MyBoardsScreen: React.FC = () => {
                         paddingVertical: spacing.xs,
                         paddingHorizontal: spacing.sm,
                         borderRadius: radii.md,
-                        backgroundColor: inspectorType === 'SELF' ? (isDark ? 'rgba(14, 165, 233, 0.2)' : '#E0F2FE') : (isDark ? theme.surface : colors.sand[100]),
-                        borderColor: inspectorType === 'SELF' ? colors.ocean[500] : (isDark ? theme.border : colors.sand[200]),
+                        backgroundColor: inspectorType === 'SELF' ? (isDark ? 'rgba(255, 90, 54, 0.18)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? theme.surface : colors.sand[100]),
+                        borderColor: inspectorType === 'SELF' ? '#FF5A36' : (isDark ? theme.border : 'rgba(0, 0, 0, 0.08)'),
                         borderWidth: 1,
                         alignItems: 'center',
                       }}
                     >
                       <Text
                         variant="caption"
-                        color={inspectorType === 'SELF' ? (isDark ? '#7DD3FC' : colors.ocean[700]) : theme.subtext}
+                        color={inspectorType === 'SELF' ? (isDark ? '#FF7A59' : '#E04320') : theme.subtext}
                         style={{ fontWeight: inspectorType === 'SELF' ? '700' : '500', textAlign: 'center' }}
                       >
                         Yo mismo (Dueño / Shaper)
@@ -509,15 +509,15 @@ export const MyBoardsScreen: React.FC = () => {
                         paddingVertical: spacing.xs,
                         paddingHorizontal: spacing.sm,
                         borderRadius: radii.md,
-                        backgroundColor: inspectorType === 'DELEGATED' ? (isDark ? 'rgba(14, 165, 233, 0.2)' : '#E0F2FE') : (isDark ? theme.surface : colors.sand[100]),
-                        borderColor: inspectorType === 'DELEGATED' ? colors.ocean[500] : (isDark ? theme.border : colors.sand[200]),
+                        backgroundColor: inspectorType === 'DELEGATED' ? (isDark ? 'rgba(255, 90, 54, 0.18)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? theme.surface : colors.sand[100]),
+                        borderColor: inspectorType === 'DELEGATED' ? '#FF5A36' : (isDark ? theme.border : 'rgba(0, 0, 0, 0.08)'),
                         borderWidth: 1,
                         alignItems: 'center',
                       }}
                     >
                       <Text
                         variant="caption"
-                        color={inspectorType === 'DELEGATED' ? (isDark ? '#7DD3FC' : colors.ocean[700]) : theme.subtext}
+                        color={inspectorType === 'DELEGATED' ? (isDark ? '#FF7A59' : '#E04320') : theme.subtext}
                         style={{ fontWeight: inspectorType === 'DELEGATED' ? '700' : '500', textAlign: 'center' }}
                       >
                         Técnico / Encargado
@@ -555,7 +555,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkQuillas ? (
-                      <CheckSquare size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                      <CheckSquare size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}
@@ -569,7 +569,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkDeckFibra ? (
-                      <CheckSquare size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                      <CheckSquare size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}
@@ -583,7 +583,7 @@ export const MyBoardsScreen: React.FC = () => {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4, gap: 8 }}
                   >
                     {checkParafina ? (
-                      <CheckSquare size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                      <CheckSquare size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
                     ) : (
                       <Square size={16} color={theme.subtext} />
                     )}
@@ -628,14 +628,14 @@ export const MyBoardsScreen: React.FC = () => {
                 <Card
                   padding="xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(14, 165, 233, 0.1)' : '#EFF8FF',
-                    borderColor: isDark ? 'rgba(14, 165, 233, 0.3)' : '#BFDBFE',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
                     borderWidth: 1,
                   }}
                 >
                   <Row spacing="xs" align="center">
-                    <Info size={14} color={isDark ? '#93C5FD' : colors.ocean[700]} />
-                    <Text variant="caption" color={isDark ? '#93C5FD' : colors.ocean[700]} style={{ flex: 1 }}>
+                    <Info size={14} color={isDark ? '#FF7A59' : '#E04320'} />
+                    <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'} style={{ flex: 1 }}>
                       El ciclo de mantenimiento preventivo queda renovado a 45 días exactos a partir de la fecha de hoy.
                     </Text>
                   </Row>
@@ -685,7 +685,7 @@ export const MyBoardsScreen: React.FC = () => {
             style={[
               styles.actionModalCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor: isDark ? 'rgba(248, 113, 113, 0.35)' : theme.border,
                 borderWidth: 1,
               },

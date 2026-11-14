@@ -25,42 +25,42 @@ export interface ThemeColors {
 }
 
 export const lightTheme: ThemeColors = {
-  background: '#F2F8FC', // Atlantic daylight mist
+  background: '#F5F5F7', // Apple Pearl Alabaster
   surface: '#FFFFFF',
-  card: '#FFFFFF',
+  card: 'rgba(255, 255, 255, 0.86)',
   champagne: '#D97706', // Warm amber gold
-  primary: '#0284C7', // Vivid coastal blue
+  primary: '#FF5A36', // Coral Sunset
   primaryText: '#FFFFFF',
-  text: '#0F172A', // Rich slate midnight, maximum contrast & readability
-  subtext: '#475569', // Clear secondary slate
-  sand: '#E2E8F0',
-  border: 'rgba(2, 132, 199, 0.15)', // Crystalline sea-glass hairline
-  accent: '#0891B2', // Lagoon teal
-  accentLight: '#ECFEFF',
-  divider: 'rgba(14, 165, 233, 0.12)',
-  cardHighlight: '#F0F9FF',
+  text: '#111115', // Crisp Charcoal Obsidian Ink
+  subtext: '#52525B', // Clean neutral zinc
+  sand: '#E4E4E7',
+  border: 'rgba(0, 0, 0, 0.07)', // Subtle Apple hairline
+  accent: '#0891B2', // Lagoon Aqua
+  accentLight: 'rgba(8, 145, 178, 0.08)',
+  divider: 'rgba(0, 0, 0, 0.06)',
+  cardHighlight: '#FAFAFC',
   inputBg: '#FFFFFF',
-  inputBorder: '#CBD5E1',
+  inputBorder: 'rgba(0, 0, 0, 0.10)',
   isDark: false,
 };
 
 export const darkTheme: ThemeColors = {
-  background: '#040914', // Abyssal midnight sapphire
-  surface: '#0B182B',    // Smoked ocean glass panel
-  card: '#0B182B',
+  background: '#050507', // Pure Obsidian
+  surface: '#111115',    // Smoked Neutral Glass
+  card: 'rgba(18, 18, 22, 0.76)',
   champagne: '#FBBF24',  // Warm Golden Hour amber
-  primary: '#0EA5E9',    // Electric Pacific Ocean
-  primaryText: '#FFFFFF',// Crisp pure white
-  text: '#F8FAFC',       // Bright high-contrast white
-  subtext: '#94A3B8',    // Slate secondary
-  sand: '#CBD5E1',
-  border: 'rgba(56, 189, 248, 0.18)', // Bioluminescent ice border
-  accent: '#22D3EE',     // Bioluminescent cyan highlight
-  accentLight: 'rgba(34, 211, 238, 0.14)',
-  divider: 'rgba(56, 189, 248, 0.12)',
-  cardHighlight: 'rgba(34, 211, 238, 0.08)',
-  inputBg: '#071120',
-  inputBorder: 'rgba(56, 189, 248, 0.20)',
+  primary: '#FF5A36',    // Coral Sunset
+  primaryText: '#FFFFFF',
+  text: '#F5F5F7',       // Titanium White
+  subtext: '#A1A1AA',    // Neutral Zinc Secondary
+  sand: '#D4D4D8',
+  border: 'rgba(255, 255, 255, 0.08)', // Crisp neutral glass border
+  accent: '#00D2D3',     // Aqua Telemetry Secondary
+  accentLight: 'rgba(0, 210, 211, 0.12)',
+  divider: 'rgba(255, 255, 255, 0.07)',
+  cardHighlight: 'rgba(255, 255, 255, 0.04)',
+  inputBg: 'rgba(255, 255, 255, 0.04)',
+  inputBorder: 'rgba(255, 255, 255, 0.10)',
   isDark: true,
 };
 

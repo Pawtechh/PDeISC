@@ -89,8 +89,8 @@ export const GoogleMapSedeCard: React.FC = () => {
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#0D1420' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : colors.ocean[300],
+          backgroundColor: isDark ? '#121216' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
         },
       ]}
     >
@@ -99,7 +99,7 @@ export const GoogleMapSedeCard: React.FC = () => {
         <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
           <Row spacing="sm" align="center">
             <View style={styles.iconCircle}>
-              <Map size={16} color="#38BDF8" />
+              <Map size={16} color="#FF5A36" />
             </View>
             <View>
               <Text variant="h3" color={theme.text}>
@@ -135,8 +135,8 @@ export const GoogleMapSedeCard: React.FC = () => {
             style={[
               styles.distanceBanner,
               {
-                backgroundColor: isDark ? '#111A2B' : '#F0F9FF',
-                borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : colors.ocean[400],
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
               },
             ]}
           >
@@ -149,7 +149,7 @@ export const GoogleMapSedeCard: React.FC = () => {
                   <>
                     <Text
                       variant="display"
-                      color={isDark ? '#38BDF8' : colors.ocean[700]}
+                      color={isDark ? '#F5F5F7' : '#111115'}
                       style={styles.distanceValue}
                     >
                       {gpsData.distanceToPlayaGrande < 1000
@@ -183,7 +183,7 @@ export const GoogleMapSedeCard: React.FC = () => {
                 disabled={isLocating}
                 style={[
                   styles.refreshBtn,
-                  { backgroundColor: isDark ? '#F59E0B' : colors.ocean[600] },
+                  { backgroundColor: isDark ? '#FF5A36' : '#E04320' },
                 ]}
               >
                 {isLocating ? (
@@ -222,8 +222,8 @@ export const GoogleMapSedeCard: React.FC = () => {
               loading="lazy"
             />
           ) : (
-            <View style={[styles.nativeMapPlaceholder, { backgroundColor: isDark ? '#111826' : '#F1F5F9' }]}>
-              <MapPin size={28} color="#38BDF8" />
+            <View style={[styles.nativeMapPlaceholder, { backgroundColor: isDark ? '#141418' : '#F5F5F7' }]}>
+              <MapPin size={28} color="#FF5A36" />
               <Text variant="body" color={theme.text} style={{ fontWeight: '700', marginTop: 4 }}>
                 {PLAYA_GRANDE_COORDS.name}
               </Text>
@@ -231,7 +231,7 @@ export const GoogleMapSedeCard: React.FC = () => {
                 {PLAYA_GRANDE_COORDS.address}
               </Text>
               {gpsData && (
-                <Text variant="caption" color="#38BDF8" style={{ marginTop: 6, fontWeight: '700' }}>
+                <Text variant="caption" color="#FF7A59" style={{ marginTop: 6, fontWeight: '700' }}>
                   Tu GPS actual: {gpsData.latitude.toFixed(5)}, {gpsData.longitude.toFixed(5)}
                 </Text>
               )}
@@ -257,17 +257,17 @@ export const GoogleMapSedeCard: React.FC = () => {
             style={[
               styles.directionsBtn,
               {
-                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.14)' : colors.ocean[600],
-                borderColor: isDark ? '#38BDF8' : colors.ocean[600],
+                backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : '#FF5A36',
+                borderColor: isDark ? 'rgba(255, 90, 54, 0.45)' : '#FF5A36',
               },
             ]}
             testID="btn-google-maps-directions"
           >
             <Row spacing="xs" align="center">
-              <Navigation size={14} color={isDark ? '#38BDF8' : '#FFFFFF'} />
+              <Navigation size={14} color={isDark ? '#FF7A59' : '#FFFFFF'} />
               <Text
                 variant="caption"
-                color={isDark ? '#38BDF8' : '#FFFFFF'}
+                color={isDark ? '#FF7A59' : '#FFFFFF'}
                 style={{ fontWeight: '700' }}
               >
                 Cómo Llegar con Google Maps
@@ -289,9 +289,9 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+    backgroundColor: 'rgba(255, 90, 54, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.32)',
+    borderColor: 'rgba(255, 90, 54, 0.28)',
     alignItems: 'center',
     justifyContent: 'center',
   },

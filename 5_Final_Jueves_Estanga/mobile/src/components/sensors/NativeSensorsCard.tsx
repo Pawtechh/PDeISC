@@ -77,15 +77,15 @@ export const NativeSensorsCard: React.FC = () => {
       padding="lg"
       style={[
         styles.container,
-        { borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : colors.ocean[400] },
+        { borderColor: isDark ? 'rgba(255, 90, 54, 0.35)' : 'rgba(255, 90, 54, 0.30)' },
       ]}
     >
       <Stack spacing="md">
         {/* Header */}
         <Row justify="space-between" align="center">
           <Row spacing="xs" align="center">
-            <Radio size={16} color={isDark ? '#F59E0B' : colors.ocean[700]} />
-            <Text variant="h3" color={isDark ? '#F59E0B' : colors.ocean[700]}>
+            <Radio size={16} color={isDark ? '#FF7A59' : '#E04320'} />
+            <Text variant="h3" color={isDark ? '#F5F5F7' : '#111115'}>
               Sensores Nativos del Dispositivo & GPS
             </Text>
           </Row>
@@ -106,15 +106,15 @@ export const NativeSensorsCard: React.FC = () => {
             style={[
               styles.sensorMiniCard,
               {
-                backgroundColor: isDark ? '#111826' : '#F1F5F9',
-                borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
               },
             ]}
           >
             <Stack spacing="xs">
               <Row justify="space-between" align="center">
                 <Row spacing="xs" align="center">
-                  <Camera size={14} color="#38BDF8" />
+                  <Camera size={14} color="#FF5A36" />
                   <Text variant="caption" color={theme.text} style={styles.sensorTitle}>
                     Cámara Óptica QR
                   </Text>
@@ -130,10 +130,10 @@ export const NativeSensorsCard: React.FC = () => {
 
             <TouchableOpacity onPress={handleTestCamera} style={styles.miniBtn}>
               <Row spacing="xs" align="center">
-                <ScanLine size={13} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                <ScanLine size={13} color={isDark ? '#FF7A59' : '#E04320'} />
                 <Text
                   variant="caption"
-                  color={isDark ? '#38BDF8' : colors.ocean[600]}
+                  color={isDark ? '#FF7A59' : '#E04320'}
                   style={{ fontWeight: '700' }}
                 >
                   Abrir Cámara QR
@@ -148,8 +148,8 @@ export const NativeSensorsCard: React.FC = () => {
               style={[
                 styles.sensorMiniCard,
                 {
-                  backgroundColor: isDark ? '#111826' : '#F1F5F9',
-                  borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0',
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
                 },
               ]}
             >

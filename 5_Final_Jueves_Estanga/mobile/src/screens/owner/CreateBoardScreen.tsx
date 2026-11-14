@@ -356,12 +356,12 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                         styles.typePill,
                         {
                           backgroundColor: isSelected
-                            ? colors.ocean[500]
+                            ? '#FF5A36'
                             : isDark
                             ? theme.surface
                             : colors.sand[100],
                           borderColor: isSelected
-                            ? colors.ocean[600]
+                            ? '#E04320'
                             : isDark
                             ? theme.border
                             : colors.sand[200],
@@ -427,16 +427,16 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                     fotosSeleccionadas.length > 0
                       ? colors.semantic.success
                       : isDark
-                      ? 'rgba(56, 189, 248, 0.35)'
-                      : colors.ocean[300],
-                  backgroundColor: isDark ? '#0D1420' : '#F8FAFC',
+                      ? 'rgba(255, 255, 255, 0.14)'
+                      : 'rgba(255, 90, 54, 0.45)',
+                  backgroundColor: isDark ? '#141418' : '#F5F5F7',
                 },
               ]}
             >
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                    <Camera size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                    <Camera size={16} color={isDark ? '#FF7A59' : '#FF5A36'} />
                     <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                       Fotografías de la Tabla ({fotosSeleccionadas.length}) *
                     </Text>
@@ -459,7 +459,7 @@ export const CreateBoardScreen: React.FC<CreateBoardScreenProps> = ({ onClose })
                     title="🖼️ Galería / Archivos"
                     variant="secondary"
                     size="sm"
-                    iconLeft={<Upload size={14} color={isDark ? '#F1F5F9' : colors.sand[900]} />}
+                    iconLeft={<Upload size={14} color={isDark ? '#F5F5F7' : '#111115'} />}
                     onPress={handleUploadFromDevice}
                   />
                   <Button

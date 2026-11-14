@@ -228,9 +228,9 @@ export const RevisionsScreen: React.FC = () => {
           style={[
             styles.segmentContainer,
             {
-              backgroundColor: isDark ? 'rgba(6, 16, 32, 0.84)' : '#F0F9FF',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
               borderWidth: 1,
-              borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
             },
           ]}
         >
@@ -239,7 +239,7 @@ export const RevisionsScreen: React.FC = () => {
               styles.segmentBtn,
               activeSection === 'PENDIENTES' && styles.segmentBtnActive,
               activeSection === 'PENDIENTES' && {
-                backgroundColor: isDark ? '#0284C7' : colors.ocean[600],
+                backgroundColor: '#FF5A36',
               },
             ]}
             onPress={() => setActiveSection('PENDIENTES')}
@@ -259,7 +259,7 @@ export const RevisionsScreen: React.FC = () => {
               styles.segmentBtn,
               activeSection === 'RECLAMOS' && styles.segmentBtnActive,
               activeSection === 'RECLAMOS' && {
-                backgroundColor: isDark ? '#0284C7' : colors.ocean[600],
+                backgroundColor: '#FF5A36',
               },
             ]}
             onPress={() => setActiveSection('RECLAMOS')}
@@ -314,7 +314,7 @@ export const RevisionsScreen: React.FC = () => {
                   >
                     <Text
                       variant="caption"
-                      color={isDark ? '#38BDF8' : colors.ocean[700]}
+                      color={isDark ? '#FF7A59' : '#E04320'}
                       style={{ fontWeight: '700', textDecorationLine: 'underline' }}
                     >
                       {feedbackBanner.actionLabel}
@@ -386,7 +386,7 @@ export const RevisionsScreen: React.FC = () => {
             </Card>
 
             {isLoading && revisions.length === 0 ? (
-              <ActivityIndicator size="large" color={colors.ocean[500]} />
+              <ActivityIndicator size="large" color="#FF5A36" />
             ) : revisions.length === 0 ? (
               <EmptyState
                 title="Sin revisiones pendientes"
@@ -505,8 +505,8 @@ export const RevisionsScreen: React.FC = () => {
               style={[
                 styles.protocolCard,
                 {
-                  backgroundColor: isDark ? '#0F172A' : '#EFF6FF',
-                  borderColor: isDark ? colors.ocean[600] : '#93C5FD',
+                  backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
             >
@@ -514,7 +514,7 @@ export const RevisionsScreen: React.FC = () => {
                 <Row justify="space-between" align="flex-start" spacing="xs">
                   <Text
                     variant="caption"
-                    color={isDark ? colors.ocean[300] : colors.ocean[700]}
+                    color={isDark ? '#FF7A59' : '#E04320'}
                     style={{ fontWeight: '700', flex: 1, paddingRight: spacing.xs }}
                   >
                     PROTOCOLO TRIPARTITO DE GARANTÍA Y MEDIACIÓN (SURF RENTAL MDP)
@@ -528,16 +528,16 @@ export const RevisionsScreen: React.FC = () => {
                   style={[
                     styles.flowDiagram,
                     {
-                      backgroundColor: isDark ? 'rgba(6, 16, 32, 0.72)' : 'rgba(255,255,255,0.88)',
+                      backgroundColor: isDark ? 'rgba(18, 18, 22, 0.78)' : 'rgba(255, 255, 255, 0.88)',
                       borderWidth: 1,
-                      borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : '#BAE6FD',
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
                     },
                   ]}
                 >
                   <Text variant="caption" color={theme.text} style={styles.flowStep}>
                     <Text
                       variant="caption"
-                      color={isDark ? colors.ocean[300] : colors.ocean[600]}
+                      color={isDark ? '#FF7A59' : '#E04320'}
                       style={{ fontWeight: '700' }}
                     >
                       1. DUEÑO:
@@ -577,7 +577,7 @@ export const RevisionsScreen: React.FC = () => {
             </Card>
 
             {isLoadingClaims && claims.length === 0 ? (
-              <ActivityIndicator size="large" color={colors.ocean[500]} />
+              <ActivityIndicator size="large" color="#FF5A36" />
             ) : claims.length === 0 ? (
               <EmptyState
                 title="Sin reclamos ni mediaciones activas"
@@ -593,8 +593,8 @@ export const RevisionsScreen: React.FC = () => {
                     style={[
                       styles.revisionCard,
                       {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : theme.border,
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
               },
                     ]}
                   >
@@ -642,7 +642,7 @@ export const RevisionsScreen: React.FC = () => {
                         style={[
                           styles.claimDescBox,
                           {
-                            backgroundColor: isDark ? '#0F172A' : colors.sand[50],
+                            backgroundColor: isDark ? '#141418' : colors.sand[50],
                             borderColor: theme.border,
                           },
                         ]}
@@ -710,8 +710,8 @@ export const RevisionsScreen: React.FC = () => {
                             borderColor: isDark ? 'rgba(245, 158, 11, 0.32)' : '#FDE68A',
                           },
                           (claim.estado === 'EN_MEDIACION' || claim.estado === 'DISPUTADO') && {
-                            backgroundColor: isDark ? 'rgba(56, 189, 248, 0.06)' : '#EFF6FF',
-                            borderColor: isDark ? 'rgba(56, 189, 248, 0.28)' : '#60A5FA',
+                            backgroundColor: isDark ? 'rgba(255, 90, 54, 0.08)' : 'rgba(255, 90, 54, 0.05)',
+                            borderColor: isDark ? 'rgba(255, 90, 54, 0.28)' : 'rgba(255, 90, 54, 0.25)',
                           },
                           claim.estado === 'RESUELTO_OWNER' && {
                             backgroundColor: isDark ? 'rgba(16, 185, 129, 0.10)' : '#ECFDF5',
@@ -898,8 +898,8 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.confirmCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : theme.border,
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
               },
             ]}
           >
@@ -957,8 +957,8 @@ export const RevisionsScreen: React.FC = () => {
             style={[
               styles.claimModalCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : theme.border,
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
               },
             ]}
           >
@@ -1055,7 +1055,7 @@ export const RevisionsScreen: React.FC = () => {
                     style={[
                       styles.input,
                       {
-                        backgroundColor: isDark ? '#0F172A' : colors.sand[50],
+                        backgroundColor: isDark ? '#141418' : colors.sand[50],
                         color: theme.text,
                         borderColor: theme.border,
                       },
@@ -1084,8 +1084,8 @@ export const RevisionsScreen: React.FC = () => {
                           style={[
                             styles.presetAmountPill,
                             {
-                              backgroundColor: isDark ? 'rgba(8, 20, 38, 0.78)' : '#FFFFFF',
-                              borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)',
+                              backgroundColor: isDark ? 'rgba(18, 18, 22, 0.72)' : '#FFFFFF',
+                              borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
                             },
                             isSelected && styles.presetAmountPillActive,
                           ]}
@@ -1142,7 +1142,7 @@ export const RevisionsScreen: React.FC = () => {
                       styles.input,
                       styles.textArea,
                       {
-                        backgroundColor: isDark ? colors.ocean[900] : colors.sand[50],
+                        backgroundColor: isDark ? '#141418' : '#F5F5F7',
                         color: theme.text,
                         borderColor: theme.border,
                       },
@@ -1292,7 +1292,7 @@ const styles = StyleSheet.create({
     borderColor: '#FCD34D',
   },
   trackingMediacion: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(255, 90, 54, 0.08)',
     borderColor: '#93C5FD',
   },
   trackingResueltoOwner: {
@@ -1309,7 +1309,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(5, 42, 87, 0.65)',
+    backgroundColor: 'rgba(5, 5, 7, 0.78)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.md,

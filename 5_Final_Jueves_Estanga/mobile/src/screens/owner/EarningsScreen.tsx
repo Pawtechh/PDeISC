@@ -117,7 +117,7 @@ export const EarningsScreen: React.FC = () => {
   };
 
   const cardSurfaceStyle = {
-    borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.16)',
+    borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
   };
 
   return (
@@ -205,7 +205,7 @@ export const EarningsScreen: React.FC = () => {
         )}
 
         {isLoading && !earningsData ? (
-          <ActivityIndicator size="large" color={colors.ocean[500]} />
+          <ActivityIndicator size="large" color="#FF5A36" />
         ) : (
           <>
             {/* Card Principal: Saldo Disponible & Desglose 95% / 5% */}
@@ -214,7 +214,7 @@ export const EarningsScreen: React.FC = () => {
               style={[
                 styles.heroCard,
                 {
-                  borderColor: isDark ? 'rgba(34, 211, 238, 0.32)' : 'rgba(2, 132, 199, 0.20)',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
             >
@@ -258,7 +258,7 @@ export const EarningsScreen: React.FC = () => {
                     <Text variant="caption" color={theme.subtext}>
                       FACTURACIÓN BRUTA
                     </Text>
-                    <Text variant="h3" color={isDark ? colors.ocean[300] : colors.ocean[700]}>
+                    <Text variant="h3" color={isDark ? '#F5F5F7' : '#111115'}>
                       ${resumen.totalBruto.toLocaleString('es-AR')}
                     </Text>
                   </View>
@@ -281,7 +281,7 @@ export const EarningsScreen: React.FC = () => {
                 <Row justify="space-between" align="flex-start" spacing="xs">
                   <Text
                     variant="h3"
-                    color={isDark ? '#ECFDF5' : colors.ocean[900]}
+                    color={isDark ? '#ECFDF5' : '#111115'}
                     style={{ flex: 1, paddingRight: spacing.xs }}
                   >
                     Membresía Owner en Sede
@@ -447,7 +447,7 @@ export const EarningsScreen: React.FC = () => {
                 Solicitar Liquidación
               </Text>
               <TouchableOpacity onPress={() => setShowPayoutModal(false)}>
-                <Text variant="body" color={colors.ocean[500]}>
+                <Text variant="body" color="#FF5A36">
                   Cerrar
                 </Text>
               </TouchableOpacity>
@@ -477,8 +477,8 @@ export const EarningsScreen: React.FC = () => {
               style={[
                 styles.balanceInfoCard,
                 {
-                  backgroundColor: isDark ? '#0F172A' : colors.ocean[50],
-                  borderColor: isDark ? colors.ocean[700] : colors.ocean[200],
+                  backgroundColor: isDark ? '#141418' : '#F5F5F7',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
             >
@@ -498,7 +498,7 @@ export const EarningsScreen: React.FC = () => {
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDark ? '#0F172A' : colors.sand[50],
+                    backgroundColor: isDark ? '#141418' : colors.sand[50],
                     borderColor: theme.border,
                     color: theme.text,
                   },
@@ -522,7 +522,7 @@ export const EarningsScreen: React.FC = () => {
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDark ? '#0F172A' : colors.sand[50],
+                    backgroundColor: isDark ? '#141418' : colors.sand[50],
                     borderColor: theme.border,
                     color: theme.text,
                   },

@@ -1,15 +1,25 @@
 export const colors = {
+  coral: {
+    300: '#FF9E88',
+    400: '#FF7A59',
+    500: '#FF5A36', // PRIMARY CORAL SUNSET
+    600: '#E84522',
+    700: '#C83212',
+    border: 'rgba(255, 90, 54, 0.28)',
+    glow: 'rgba(255, 90, 54, 0.24)',
+    subtle: 'rgba(255, 90, 54, 0.12)',
+  },
   ocean: {
     50: '#ECFEFF',
     100: '#CFFAFE',
     200: '#A5F3FC',
     300: '#67E8F9',
-    400: '#22D3EE',
+    400: '#00D2D3',
     500: '#06B6D4',
-    600: '#0284C7', // PRIMARY OCEAN
-    700: '#0369A1',
-    800: '#075985',
-    900: '#0C4A6E',
+    600: '#0891B2', // CRISP AQUA SECONDARY
+    700: '#0E7490',
+    800: '#155E75',
+    900: '#164E63',
   },
   seafoam: {
     300: '#5EEAD4',
@@ -23,13 +33,13 @@ export const colors = {
     600: '#D97706',
   },
   sand: {
-    50: '#F8FAFC',
-    100: '#F1F5F9',
-    200: '#E2E8F0',
-    300: '#CBD5E1',
-    500: '#64748B',
-    700: '#334155',
-    900: '#0F172A',
+    50: '#FAFAFA',
+    100: '#F4F4F5',
+    200: '#E4E4E7',
+    300: '#D4D4D8',
+    500: '#71717A',
+    700: '#3F3F46',
+    900: '#111115',
   },
   champagne: {
     100: '#FEF3C7',
@@ -38,40 +48,40 @@ export const colors = {
     400: '#FBBF24',
     500: '#F59E0B', // Warm refined golden amber
     600: '#D97706',
-    border: 'rgba(251, 191, 36, 0.28)',
-    glow: 'rgba(245, 158, 11, 0.24)',
-    subtle: 'rgba(251, 191, 36, 0.1)',
+    border: 'rgba(251, 191, 36, 0.26)',
+    glow: 'rgba(245, 158, 11, 0.20)',
+    subtle: 'rgba(251, 191, 36, 0.10)',
   },
   neon: {
-    cyan: '#22D3EE',
-    bioluminescent: '#00E5FF',
-    cyanGlow: 'rgba(34, 211, 238, 0.28)',
-    cyanHighlight: 'rgba(34, 211, 238, 0.10)',
+    cyan: '#00D2D3',
+    bioluminescent: '#22D3EE',
+    cyanGlow: 'rgba(0, 210, 211, 0.22)',
+    cyanHighlight: 'rgba(0, 210, 211, 0.10)',
   },
   semantic: {
     success: '#10B981',
     warning: '#F59E0B',
     danger: '#EF4444',
-    info: '#0EA5E9',
+    info: '#00D2D3',
   },
   dark: {
-    background: '#040914', // Abyssal oceanic sapphire
-    surface: '#0B182B',    // Smoked midnight glass
-    card: '#0B182B',
+    background: '#050507', // Pure Obsidian
+    surface: '#111115',    // Smoked Charcoal Glass
+    card: '#121216',
     champagne: '#FBBF24',
-    primary: '#0EA5E9',    // Electric Pacific Blue
-    primaryText: '#FFFFFF',// Crisp pure white
-    text: '#F8FAFC',       // Bright high-contrast white
-    subtext: '#94A3B8',    // Slate secondary
-    sand: '#CBD5E1',
-    border: 'rgba(56, 189, 248, 0.18)', // Bioluminescent crystalline rim
-    accent: '#22D3EE',     // Bioluminescent cyan highlight
-    accentLight: 'rgba(34, 211, 238, 0.14)',
-    cardHighlight: 'rgba(34, 211, 238, 0.08)',
-    inputBg: '#071120',
-    inputBorder: 'rgba(56, 189, 248, 0.20)',
-    glowChampagne: 'rgba(251, 191, 36, 0.22)',
-    glowCyan: 'rgba(34, 211, 238, 0.24)',
+    primary: '#FF5A36',    // Coral Sunset
+    primaryText: '#FFFFFF',
+    text: '#F5F5F7',       // Apple Titanium White
+    subtext: '#A1A1AA',    // Neutral Zinc Secondary
+    sand: '#D4D4D8',
+    border: 'rgba(255, 255, 255, 0.08)', // Neutral Hairline Glass Rim
+    accent: '#00D2D3',     // Aqua Telemetry Secondary
+    accentLight: 'rgba(0, 210, 211, 0.12)',
+    cardHighlight: 'rgba(255, 255, 255, 0.04)',
+    inputBg: 'rgba(255, 255, 255, 0.04)',
+    inputBorder: 'rgba(255, 255, 255, 0.10)',
+    glowChampagne: 'rgba(251, 191, 36, 0.18)',
+    glowCyan: 'rgba(255, 90, 54, 0.20)',
   },
   white: '#FFFFFF',
   black: '#000000',

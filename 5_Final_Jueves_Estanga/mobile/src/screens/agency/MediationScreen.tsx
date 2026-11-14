@@ -114,10 +114,10 @@ export const MediationScreen: React.FC = () => {
         </Row>
 
         {/* Rol de la Agencia */}
-        <Card padding="md" style={[styles.arbitrationInfo, isDark && { backgroundColor: 'rgba(14, 165, 233, 0.12)', borderColor: 'rgba(34, 211, 238, 0.30)' }]}>
+        <Card padding="md" style={[styles.arbitrationInfo, isDark && { backgroundColor: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.10)' }]}>
           <Stack spacing="xs">
             <Row justify="space-between" align="center">
-              <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[700]} style={{ fontWeight: '700' }}>
+              <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '700' }}>
                 ARBITRAJE DE SEDE CENTRAL PLAYA GRANDE
               </Text>
               <Badge label="INAPELABLE" variant="sand" />
@@ -130,7 +130,7 @@ export const MediationScreen: React.FC = () => {
 
         {/* Lista de Casos en Disputa */}
         {isLoading && claims.length === 0 ? (
-          <ActivityIndicator size="large" color={colors.ocean[500]} />
+          <ActivityIndicator size="large" color="#FF5A36" />
         ) : claims.length === 0 ? (
           <EmptyState
             title="Sin disputas en mediación"
@@ -174,7 +174,7 @@ export const MediationScreen: React.FC = () => {
                   </Row>
 
                   {/* Argumentos de Ambas Partes */}
-                  <Card padding="sm" style={isDark ? { backgroundColor: 'rgba(6, 16, 32, 0.72)' } : { backgroundColor: colors.sand[50] }}>
+                  <Card padding="sm" style={isDark ? { backgroundColor: 'rgba(18, 18, 22, 0.78)' } : { backgroundColor: '#F5F5F7' }}>
                     <Stack spacing="xs">
                       <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700' }}>
                         REPORTE DEL DUEÑO:
@@ -185,7 +185,7 @@ export const MediationScreen: React.FC = () => {
                       {claim.resolucionAgencia && (
                         <>
                           <Divider />
-                          <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[700]} style={{ fontWeight: '700' }}>
+                          <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '700' }}>
                             DESCARGO DEL SURFISTA:
                           </Text>
                           <Text variant="caption" color={theme.text}>
@@ -246,7 +246,7 @@ export const MediationScreen: React.FC = () => {
                 Laudo Arbitral de Agencia
               </Text>
               <TouchableOpacity onPress={() => setShowResolutionModal(false)}>
-                <Text variant="body" color={isDark ? '#22D3EE' : colors.ocean[500]}>
+                <Text variant="body" color={isDark ? '#FF7A59' : '#E04320'}>
                   Cerrar
                 </Text>
               </TouchableOpacity>
@@ -314,9 +314,9 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   arbitrationInfo: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: 'rgba(255, 90, 54, 0.22)',
     borderRadius: radii.md,
   },
   partiesRow: {

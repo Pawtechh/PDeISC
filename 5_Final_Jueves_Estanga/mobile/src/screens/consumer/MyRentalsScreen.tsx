@@ -33,8 +33,8 @@ export const MyRentalsScreen: React.FC = () => {
     return (
       <Screen scrollable>
         <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center', marginTop: 40 }}>
-          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE', alignItems: 'center', justifyContent: 'center' }}>
-            <Waves size={32} color={isDark ? '#38BDF8' : '#0284C7'} />
+          <View style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: isDark ? 'rgba(255, 90, 54, 0.12)' : 'rgba(255, 90, 54, 0.08)', alignItems: 'center', justifyContent: 'center' }}>
+            <Waves size={32} color={isDark ? '#FF7A59' : '#FF5A36'} />
           </View>
           <Text variant="h2" align="center">Alquileres de Tablas</Text>
           <Text variant="body" color={theme.subtext} align="center" style={{ maxWidth: 460 }}>
@@ -187,8 +187,8 @@ export const MyRentalsScreen: React.FC = () => {
                 style={[
                   styles.tabPill,
                   {
-                    backgroundColor: isDark ? 'rgba(8, 20, 38, 0.78)' : '#FFFFFF',
-                    borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)',
+                    backgroundColor: isDark ? 'rgba(18, 18, 22, 0.72)' : '#FFFFFF',
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
                   },
                   isSelected && (isDark ? styles.tabPillSelectedDark : styles.tabPillSelected),
                 ]}
@@ -254,8 +254,8 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.qrModalCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : 'rgba(2, 132, 199, 0.20)',
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 borderWidth: 1,
               },
             ]}
@@ -283,8 +283,8 @@ export const MyRentalsScreen: React.FC = () => {
               {/* Código de Pase Destacado de Alto Contraste */}
               <View
                 style={{
-                  backgroundColor: isDark ? 'rgba(6, 16, 32, 0.88)' : '#F0F9FF',
-                  borderColor: isDark ? '#22D3EE' : colors.ocean[400],
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+                  borderColor: isDark ? 'rgba(255, 90, 54, 0.45)' : 'rgba(255, 90, 54, 0.35)',
                   borderWidth: 1.5,
                   borderRadius: 12,
                   paddingHorizontal: 16,
@@ -293,7 +293,7 @@ export const MyRentalsScreen: React.FC = () => {
                   width: '100%',
                 }}
               >
-                <Text style={{ fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: isDark ? '#22D3EE' : '#0284C7', marginBottom: 2 }}>
+                <Text style={{ fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: isDark ? '#FF7A59' : '#E04320', marginBottom: 2 }}>
                   CÓDIGO DE RETIRO
                 </Text>
                 <Text
@@ -302,7 +302,7 @@ export const MyRentalsScreen: React.FC = () => {
                     fontWeight: '900',
                     letterSpacing: 2,
                     fontFamily: 'monospace',
-                    color: isDark ? '#38BDF8' : colors.ocean[800],
+                    color: isDark ? '#F5F5F7' : '#111115',
                   }}
                   selectable
                 >
@@ -390,8 +390,8 @@ export const MyRentalsScreen: React.FC = () => {
             style={[
               styles.qrModalCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : 'rgba(2, 132, 199, 0.20)',
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 borderWidth: 1,
               },
             ]}
@@ -436,7 +436,7 @@ export const MyRentalsScreen: React.FC = () => {
               <Card
                 padding="md"
                 style={{
-                  backgroundColor: isDark ? '#0F172A' : colors.sand[50],
+                  backgroundColor: isDark ? '#141418' : colors.sand[50],
                   borderColor: theme.border,
                   borderWidth: 1,
                 }}
@@ -503,12 +503,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   tabPillSelected: {
-    backgroundColor: '#0284C7',
+    backgroundColor: '#FF5A36',
     borderColor: '#0369A1',
   },
   tabPillSelectedDark: {
-    backgroundColor: 'rgba(6, 182, 212, 0.24)',
-    borderColor: '#22D3EE',
+    backgroundColor: 'rgba(255, 90, 54, 0.22)',
+    borderColor: '#FF5A36',
   },
   bold: {
     fontWeight: '700',

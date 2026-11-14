@@ -196,7 +196,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         onPress={() => handleOAuthLogin('github')}
         disabled={loadingProvider !== null}
         {...(Platform.OS === 'web' ? ({ dataSet: { oauthBtn: 'true' } } as any) : {})}
-        style={[styles.oauthBtn, { backgroundColor: '#161B22', borderColor: 'rgba(56, 189, 248, 0.25)' }]}
+        style={[styles.oauthBtn, { backgroundColor: '#16161A', borderColor: 'rgba(255, 255, 255, 0.14)' }]}
         testID="btn-oauth-github"
       >
         {loadingProvider === 'github' ? (

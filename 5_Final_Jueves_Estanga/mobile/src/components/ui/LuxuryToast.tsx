@@ -61,7 +61,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return '#F59E0B';
       case 'info':
       default:
-        return isDark ? '#38BDF8' : '#0284C7';
+        return isDark ? '#FF7A59' : '#FF5A36';
     }
   };
 
@@ -93,7 +93,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               style={[
                 styles.toastCard,
                 {
-                  backgroundColor: isDark ? 'rgba(18, 24, 36, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+                  backgroundColor: isDark ? 'rgba(18, 18, 22, 0.94)' : 'rgba(255, 255, 255, 0.96)',
                   borderColor,
                   shadowColor: borderColor,
                 },
@@ -102,7 +102,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               <Row spacing="sm" align="flex-start">
                 <Text style={{ fontSize: 18, marginTop: 1 }}>{getIcon(toast.type)}</Text>
                 <View style={{ flex: 1 }}>
-                  <Text variant="button" color={isDark ? '#F1F5F9' : '#0F172A'}>
+                  <Text variant="button" color={isDark ? '#F5F5F7' : '#111115'}>
                     {toast.title}
                   </Text>
                   {toast.message && (

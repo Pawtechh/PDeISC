@@ -58,8 +58,8 @@ export function FormInput<T extends FieldValues>({
   const getBorderColor = (): string => {
     if (isError) return colors.semantic.danger;
     if (isValid) return colors.semantic.success;
-    if (isFocused) return isDark ? '#22D3EE' : theme.primary;
-    return isDark ? 'rgba(56, 189, 248, 0.22)' : colors.sand[200];
+    if (isFocused) return '#FF5A36';
+    return isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.10)';
   };
 
   const isSecure = secureTextEntry && !showPassword;
@@ -67,7 +67,7 @@ export function FormInput<T extends FieldValues>({
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
-        <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[700]} style={styles.label}>
+        <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'} style={styles.label}>
           {label}
         </Text>
       )}
@@ -81,7 +81,7 @@ export function FormInput<T extends FieldValues>({
           {
             borderColor: getBorderColor(),
             backgroundColor: isDark
-              ? (editable ? 'rgba(6, 16, 32, 0.85)' : 'rgba(5, 11, 22, 0.65)')
+              ? (editable ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.02)')
               : (editable ? colors.white : colors.sand[100]),
           },
         ]}
@@ -99,7 +99,7 @@ export function FormInput<T extends FieldValues>({
           value={value !== undefined && value !== null ? String(value) : ''}
           onChangeText={onChange}
           secureTextEntry={isSecure}
-          style={[styles.input, { color: isDark ? '#F1F5F9' : colors.sand[900] }, style]}
+          style={[styles.input, { color: isDark ? '#F5F5F7' : '#111115' }, style]}
           testID={testID || `input-${name}`}
           {...props}
         />
@@ -110,7 +110,7 @@ export function FormInput<T extends FieldValues>({
             style={styles.rightAction}
             activeOpacity={0.7}
           >
-            <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[600]}>
+            <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'}>
               {showPassword ? 'Ocultar' : 'Ver'}
             </Text>
           </TouchableOpacity>

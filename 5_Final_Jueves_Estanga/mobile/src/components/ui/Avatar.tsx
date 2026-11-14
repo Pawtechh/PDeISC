@@ -44,9 +44,9 @@ export const Avatar: React.FC<AvatarProps> = ({
         {
           width: dimension,
           height: dimension,
-          backgroundColor: isDark ? 'rgba(56, 189, 248, 0.14)' : colors.ocean[100],
+          backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.10)',
           borderWidth: 1.5,
-          borderColor: isDark ? 'rgba(56, 189, 248, 0.38)' : colors.ocean[300],
+          borderColor: isDark ? 'rgba(255, 90, 54, 0.36)' : 'rgba(255, 90, 54, 0.28)',
         },
         style,
       ]}
@@ -61,7 +61,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       ) : (
         <Text
           variant={size === 'xl' ? 'h2' : size === 'lg' ? 'h3' : 'button'}
-          color={isDark ? '#38BDF8' : colors.ocean[700]}
+          color={isDark ? '#FF7A59' : '#D93D1B'}
         >
           {initials || 'SR'}
         </Text>

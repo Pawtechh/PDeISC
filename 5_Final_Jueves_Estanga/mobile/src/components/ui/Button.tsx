@@ -84,35 +84,35 @@ export const Button: React.FC<ButtonProps> = ({
     switch (variant) {
       case 'primary':
         return {
-          backgroundColor: isDark ? '#0284C7' : colors.ocean[600],
+          backgroundColor: isDark ? '#FF5A36' : '#FF5A36',
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(103, 232, 249, 0.55)' : colors.ocean[700],
-          shadowColor: isDark ? '#06B6D4' : colors.ocean[600],
+          borderColor: isDark ? 'rgba(255, 148, 122, 0.42)' : '#E04320',
+          shadowColor: '#FF5A36',
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: isDark ? 0.42 : 0.22,
+          shadowOpacity: isDark ? 0.28 : 0.18,
           shadowRadius: 14,
           elevation: 5,
           ...(Platform.OS === 'web'
             ? ({
                 backgroundImage:
-                  'linear-gradient(135deg, #06B6D4 0%, #0EA5E9 52%, #0284C7 100%)',
+                  'linear-gradient(135deg, #FF6F4D 0%, #FF5A36 55%, #E04320 100%)',
                 boxShadow: isDark
-                  ? '0 8px 24px -4px rgba(14, 165, 233, 0.48), 0 0 16px rgba(34, 211, 238, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.30)'
-                  : '0 8px 20px -4px rgba(2, 132, 199, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35)',
+                  ? '0 8px 22px -6px rgba(255, 90, 54, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.26)'
+                  : '0 8px 20px -6px rgba(224, 67, 32, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.30)',
                 overflow: 'hidden',
               } as any)
             : {}),
         };
       case 'secondary':
         return {
-          backgroundColor: isDark ? 'rgba(14, 32, 58, 0.72)' : '#F1F5F9',
+          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F6',
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.09)',
           ...(Platform.OS === 'web'
             ? ({
                 overflow: 'hidden',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
               } as any)
             : {}),
         };
@@ -127,7 +127,7 @@ export const Button: React.FC<ButtonProps> = ({
         return {
           backgroundColor: 'transparent',
           borderWidth: 1,
-          borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.22)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.10)',
           ...(Platform.OS === 'web' ? ({ overflow: 'hidden' } as any) : {}),
         };
     }
@@ -140,9 +140,9 @@ export const Button: React.FC<ButtonProps> = ({
       case 'danger':
         return '#FFFFFF';
       case 'secondary':
-        return isDark ? '#F8FAFC' : colors.sand[900];
+        return isDark ? '#F5F5F7' : '#111115';
       case 'ghost':
-        return isDark ? '#22D3EE' : colors.ocean[700];
+        return isDark ? '#FF7A59' : '#D93D1B';
     }
   };
 

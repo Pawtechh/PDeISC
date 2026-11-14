@@ -201,7 +201,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
             <Path
               key={i}
               d={d}
-              stroke={colors.ocean[900]}
+              stroke="#111115"
               strokeWidth={3}
               fill="none"
               strokeLinecap="round"
@@ -211,7 +211,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
           {currentPath ? (
             <Path
               d={currentPath}
-              stroke={colors.ocean[900]}
+              stroke="#111115"
               strokeWidth={3}
               fill="none"
               strokeLinecap="round"
@@ -259,7 +259,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
               style={styles.quickSignBtn}
               testID={`${testID}-btn-quick`}
             >
-              <Text variant="caption" color={colors.ocean[700]} style={{ fontWeight: '600', fontSize: 12 }}>
+              <Text variant="caption" color="#E04320" style={{ fontWeight: '600', fontSize: 12 }}>
                 Firma Rápida
               </Text>
             </TouchableOpacity>
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: '700',
-    color: colors.ocean[900],
+    color: '#111115',
     fontSize: 15,
   },
   helperText: {
@@ -324,21 +324,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   lawPill: {
-    backgroundColor: colors.ocean[50],
+    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: colors.ocean[200],
+    borderColor: 'rgba(255, 90, 54, 0.22)',
   },
   lawText: {
-    color: colors.ocean[700],
+    color: '#E04320',
     fontWeight: '600',
     fontSize: 10,
   },
   padContainer: {
     backgroundColor: '#FFFFFF',
-    borderColor: colors.ocean[400],
+    borderColor: 'rgba(255, 90, 54, 0.45)',
     borderWidth: 2,
     borderStyle: 'solid',
     borderRadius: radii.md,
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
       : {}),
   },
   padContainerDrawing: {
-    borderColor: colors.ocean[600],
+    borderColor: '#FF5A36',
     borderWidth: 2,
     backgroundColor: '#FFFFFF',
   },
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   watermarkBadgeText: {
-    color: colors.ocean[800],
+    color: '#111115',
     fontWeight: '700',
     fontSize: 11,
     letterSpacing: 0.5,
@@ -409,9 +409,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: radii.sm,
-    backgroundColor: colors.ocean[50],
+    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     borderWidth: 1,
-    borderColor: colors.ocean[200],
+    borderColor: 'rgba(255, 90, 54, 0.22)',
   },
   statusBadge: {
     paddingVertical: 4,

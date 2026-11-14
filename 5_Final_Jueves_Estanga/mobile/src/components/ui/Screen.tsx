@@ -19,8 +19,8 @@ import { ScrollToTopWithRing } from './ScrollToTopWithRing';
 import { ReadingProgressBar } from './ReadingProgressBar';
 import { DesktopHeader } from './DesktopHeader';
 
-export const LUXURY_COASTAL_GRADIENT = ['#030812', '#061326', '#081B33'] as const;
-export const LIGHT_COASTAL_GRADIENT = ['#F2F8FC', '#E4F3FA', '#FDF8EE'] as const;
+export const LUXURY_COASTAL_GRADIENT = ['#050507', '#0A0A0E', '#050507'] as const;
+export const LIGHT_COASTAL_GRADIENT = ['#F5F5F7', '#FAFAFC', '#F2F2F5'] as const;
 
 export interface ScreenProps {
   children: React.ReactNode;
@@ -99,8 +99,8 @@ export const Screen: React.FC<ScreenProps> = ({
     gradientColors ||
     (Platform.OS === 'web'
       ? isDark
-        ? (['rgba(3, 8, 18, 0.34)', 'rgba(6, 19, 38, 0.14)', 'rgba(4, 10, 22, 0.48)'] as const)
-        : (['rgba(242, 248, 252, 0.40)', 'rgba(228, 243, 250, 0.16)', 'rgba(253, 248, 238, 0.44)'] as const)
+        ? (['rgba(5, 5, 7, 0.22)', 'rgba(10, 10, 14, 0.08)', 'rgba(5, 5, 7, 0.32)'] as const)
+        : (['rgba(245, 245, 247, 0.30)', 'rgba(255, 255, 255, 0.10)', 'rgba(245, 245, 247, 0.34)'] as const)
       : isDark
       ? LUXURY_COASTAL_GRADIENT
       : LIGHT_COASTAL_GRADIENT);
@@ -109,13 +109,13 @@ export const Screen: React.FC<ScreenProps> = ({
     Platform.OS === 'web'
       ? atmosphericGradient
         ? 'transparent'
-        : backgroundColor || (isDark ? 'rgba(4, 9, 20, 0.72)' : 'rgba(242, 248, 252, 0.78)')
+        : backgroundColor || (isDark ? 'rgba(5, 5, 7, 0.72)' : 'rgba(245, 245, 247, 0.78)')
       : atmosphericGradient
       ? isDark
-        ? '#040914'
-        : '#F2F8FC'
+        ? '#050507'
+        : '#F5F5F7'
       : backgroundColor || theme.background;
-  const statusBarBg = isDark ? '#040914' : '#F2F8FC';
+  const statusBarBg = isDark ? '#050507' : '#F5F5F7';
 
   const dynamicContentContainerStyle = [
     styles.contentContainer,
@@ -177,6 +177,7 @@ export const Screen: React.FC<ScreenProps> = ({
         {scrollable ? (
           <ScrollView
             ref={activeScrollRef as any}
+            {...(Platform.OS === 'web' ? ({ dataSet: { screenEnter: 'true' } } as any) : {})}
             style={styles.scrollView}
             contentContainerStyle={dynamicContentContainerStyle}
             showsVerticalScrollIndicator={false}
@@ -187,7 +188,12 @@ export const Screen: React.FC<ScreenProps> = ({
             {children}
           </ScrollView>
         ) : (
-          <View style={dynamicContentContainerStyle}>{children}</View>
+          <View
+            {...(Platform.OS === 'web' ? ({ dataSet: { screenEnter: 'true' } } as any) : {})}
+            style={dynamicContentContainerStyle}
+          >
+            {children}
+          </View>
         )}
 
         {/* Botón Volver Arriba Minimalista */}
@@ -234,26 +240,26 @@ const styles = StyleSheet.create({
   },
   ambientCyanGlow: {
     position: 'absolute',
-    top: -100,
-    left: '15%',
-    width: 600,
-    height: 400,
-    borderRadius: 300,
-    backgroundColor: 'rgba(34, 211, 238, 0.09)',
+    top: -120,
+    left: '12%',
+    width: 620,
+    height: 420,
+    borderRadius: 310,
+    backgroundColor: 'rgba(255, 90, 54, 0.08)',
   },
   ambientCyanGlowLight: {
-    backgroundColor: 'rgba(14, 165, 233, 0.08)',
+    backgroundColor: 'rgba(255, 90, 54, 0.055)',
   },
   ambientGoldGlow: {
     position: 'absolute',
-    top: 100,
-    right: '8%',
-    width: 500,
-    height: 360,
-    borderRadius: 250,
-    backgroundColor: 'rgba(251, 191, 36, 0.06)',
+    top: 120,
+    right: '6%',
+    width: 520,
+    height: 380,
+    borderRadius: 260,
+    backgroundColor: 'rgba(0, 210, 211, 0.055)',
   },
   ambientGoldGlowLight: {
-    backgroundColor: 'rgba(245, 158, 11, 0.07)',
+    backgroundColor: 'rgba(8, 145, 178, 0.045)',
   },
 });

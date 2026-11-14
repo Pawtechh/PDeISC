@@ -66,7 +66,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#0F172A' : colors.white,
+          backgroundColor: isDark ? '#141418' : colors.white,
           borderColor: theme.border,
         },
       ]}
@@ -97,7 +97,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
                 style={[
                   styles.zonePill,
                   {
-                    backgroundColor: isDark ? '#1E293B' : colors.sand[100],
+                    backgroundColor: isDark ? '#141418' : '#F4F4F5',
                     borderColor: theme.border,
                   },
                   isSelected && styles.zonePillActive,
@@ -124,7 +124,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
           spacing="xs"
           style={[
             styles.modeTabs,
-            { backgroundColor: isDark ? '#1E293B' : colors.sand[100] },
+            { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F4F4F5' },
           ]}
         >
           <TouchableOpacity
@@ -132,7 +132,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
               styles.modeTab,
               viewMode === 'split' && [
                 styles.modeTabActive,
-                { backgroundColor: isDark ? colors.ocean[700] : colors.white },
+                { backgroundColor: isDark ? '#FF5A36' : '#FFFFFF' },
               ],
             ]}
             onPress={() => setViewMode('split')}
@@ -143,7 +143,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
                 viewMode === 'split'
                   ? isDark
                     ? colors.white
-                    : colors.ocean[700]
+                    : '#E04320'
                   : theme.subtext
               }
               style={{ fontWeight: '600' }}
@@ -156,7 +156,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
               styles.modeTab,
               viewMode === 'retiro' && [
                 styles.modeTabActive,
-                { backgroundColor: isDark ? colors.ocean[700] : colors.white },
+                { backgroundColor: isDark ? '#FF5A36' : '#FFFFFF' },
               ],
             ]}
             onPress={() => setViewMode('retiro')}
@@ -167,7 +167,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
                 viewMode === 'retiro'
                   ? isDark
                     ? colors.white
-                    : colors.ocean[700]
+                    : '#E04320'
                   : theme.subtext
               }
               style={{ fontWeight: '600' }}
@@ -180,7 +180,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
               styles.modeTab,
               viewMode === 'devolucion' && [
                 styles.modeTabActive,
-                { backgroundColor: isDark ? colors.ocean[700] : colors.white },
+                { backgroundColor: isDark ? '#FF5A36' : '#FFFFFF' },
               ],
             ]}
             onPress={() => setViewMode('devolucion')}
@@ -191,7 +191,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
                 viewMode === 'devolucion'
                   ? isDark
                     ? colors.white
-                    : colors.ocean[700]
+                    : '#E04320'
                   : theme.subtext
               }
               style={{ fontWeight: '600' }}
@@ -208,7 +208,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
             <View
               style={[
                 styles.splitPhotoContainer,
-                { backgroundColor: isDark ? '#1E293B' : colors.sand[100] },
+                { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F4F4F5' },
               ]}
             >
               <View style={styles.photoHeaderTag}>
@@ -229,7 +229,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
             <View
               style={[
                 styles.splitPhotoContainer,
-                { backgroundColor: isDark ? '#1E293B' : colors.sand[100] },
+                { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F4F4F5' },
               ]}
             >
               <View style={styles.photoHeaderTag}>
@@ -250,7 +250,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
           <View
             style={[
               styles.singlePhotoContainer,
-              { backgroundColor: isDark ? '#1E293B' : colors.sand[100] },
+              { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F4F4F5' },
             ]}
           >
             <View style={styles.photoHeaderTag}>
@@ -267,7 +267,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
           <View
             style={[
               styles.singlePhotoContainer,
-              { backgroundColor: isDark ? '#1E293B' : colors.sand[100] },
+              { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F4F4F5' },
             ]}
           >
             <View style={styles.photoHeaderTag}>
@@ -287,7 +287,7 @@ export const PhotoComparator: React.FC<PhotoComparatorProps> = ({
           style={[
             styles.tipBox,
             {
-              backgroundColor: isDark ? '#1E293B' : colors.sand[50],
+              backgroundColor: isDark ? '#141418' : '#F5F5F7',
               borderColor: theme.border,
             },
           ]}
@@ -321,8 +321,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   zonePillActive: {
-    backgroundColor: colors.ocean[500],
-    borderColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
+    borderColor: '#E04320',
   },
   modeTabs: {
     borderRadius: radii.sm,

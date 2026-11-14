@@ -25,32 +25,33 @@ export const Badge: React.FC<BadgeProps> = ({
     if (isDark) {
       switch (variant) {
         case 'success':
-          return { bg: 'rgba(16, 185, 129, 0.14)', border: 'rgba(16, 185, 129, 0.35)', text: '#34D399' };
+          return { bg: 'rgba(16, 185, 129, 0.12)', border: 'rgba(16, 185, 129, 0.28)', text: '#34D399' };
         case 'warning':
-          return { bg: 'rgba(245, 158, 11, 0.14)', border: 'rgba(245, 158, 11, 0.35)', text: '#FBBF24' };
+          return { bg: 'rgba(245, 158, 11, 0.12)', border: 'rgba(245, 158, 11, 0.28)', text: '#FBBF24' };
         case 'danger':
-          return { bg: 'rgba(239, 68, 68, 0.14)', border: 'rgba(239, 68, 68, 0.35)', text: '#F87171' };
+          return { bg: 'rgba(239, 68, 68, 0.12)', border: 'rgba(239, 68, 68, 0.28)', text: '#F87171' };
         case 'info':
+          return { bg: 'rgba(0, 210, 211, 0.10)', border: 'rgba(0, 210, 211, 0.24)', text: '#00D2D3' };
         case 'ocean':
-          return { bg: 'rgba(56, 189, 248, 0.12)', border: 'rgba(56, 189, 248, 0.32)', text: '#38BDF8' };
+          return { bg: 'rgba(255, 90, 54, 0.12)', border: 'rgba(255, 90, 54, 0.28)', text: '#FF7A59' };
         case 'sand':
-          return { bg: 'rgba(203, 213, 225, 0.08)', border: 'rgba(203, 213, 225, 0.22)', text: '#CBD5E1' };
+          return { bg: 'rgba(255, 255, 255, 0.06)', border: 'rgba(255, 255, 255, 0.12)', text: '#A1A1AA' };
       }
     }
 
     switch (variant) {
       case 'success':
-        return { bg: '#D1FAE5', border: '#A7F3D0', text: '#065F46' };
+        return { bg: '#ECFDF5', border: '#A7F3D0', text: '#065F46' };
       case 'warning':
-        return { bg: '#FEF3C7', border: '#FDE68A', text: '#92400E' };
+        return { bg: '#FFFBEB', border: '#FDE68A', text: '#92400E' };
       case 'danger':
-        return { bg: '#FEE2E2', border: '#FECACA', text: '#991B1B' };
+        return { bg: '#FEF2F2', border: '#FECACA', text: '#991B1B' };
       case 'info':
-        return { bg: '#E0F2FE', border: '#BAE6FD', text: '#0369A1' };
+        return { bg: '#ECFEFF', border: '#A5F3FC', text: '#0E7490' };
       case 'ocean':
-        return { bg: '#0284C7', border: '#0369A1', text: '#FFFFFF' };
+        return { bg: 'rgba(255, 90, 54, 0.10)', border: 'rgba(255, 90, 54, 0.24)', text: '#D93D1B' };
       case 'sand':
-        return { bg: '#F1F5F9', border: '#CBD5E1', text: '#475569' };
+        return { bg: '#F4F4F5', border: '#E4E4E7', text: '#52525B' };
     }
   };
 

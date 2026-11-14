@@ -139,7 +139,7 @@ const PaginationDot: React.FC<PaginationDotProps> = ({ index, scrollX, cardWidth
     return {
       width,
       opacity,
-      backgroundColor: opacity > 0.65 ? '#38BDF8' : '#F59E0B',
+      backgroundColor: opacity > 0.65 ? '#FF5A36' : '#A1A1AA',
     };
   });
 
@@ -322,15 +322,15 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               styles.floatingArrow,
               styles.floatingArrowLeft,
               {
-                backgroundColor: isDark ? 'rgba(9, 12, 16, 0.85)' : 'rgba(255, 255, 255, 0.92)',
-                borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : '#CBD5E1',
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.08)',
               },
             ]}
             onPress={handlePrev}
             activeOpacity={0.8}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <ChevronLeft size={20} color={isDark ? '#F8FAFC' : '#0F172A'} />
+            <ChevronLeft size={20} color={isDark ? '#F5F5F7' : '#111115'} />
           </TouchableOpacity>
         )}
 
@@ -340,15 +340,15 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               styles.floatingArrow,
               styles.floatingArrowRight,
               {
-                backgroundColor: isDark ? 'rgba(9, 12, 16, 0.85)' : 'rgba(255, 255, 255, 0.92)',
-                borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : '#CBD5E1',
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.08)',
               },
             ]}
             onPress={handleNext}
             activeOpacity={0.8}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <ChevronRight size={20} color={isDark ? '#F8FAFC' : '#0F172A'} />
+            <ChevronRight size={20} color={isDark ? '#F5F5F7' : '#111115'} />
           </TouchableOpacity>
         )}
       </View>
@@ -358,8 +358,8 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           style={[
             styles.navArrowBtn,
             {
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.15)' : '#CBD5E1',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
             },
             isFirst && styles.navArrowBtnDisabled,
           ]}
@@ -368,7 +368,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <ChevronLeft size={15} color={isFirst ? '#64748B' : '#38BDF8'} />
+          <ChevronLeft size={15} color={isFirst ? '#71717A' : '#FF5A36'} />
         </TouchableOpacity>
 
         {boards.length <= 10 ? (
@@ -389,13 +389,13 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
               styles.counterBox,
               {
                 backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#CBD5E1',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
               },
             ]}
           >
             <Text style={styles.counterHighlight}>{currentIndex + 1}</Text>
             <Text style={styles.counterDivider}> / </Text>
-            <Text style={[styles.counterTotal, { color: isDark ? '#94A3B8' : '#475569' }]}>
+            <Text style={[styles.counterTotal, { color: isDark ? '#A1A1AA' : '#52525B' }]}>
               {boards.length}
             </Text>
           </View>
@@ -405,8 +405,8 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           style={[
             styles.navArrowBtn,
             {
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.15)' : '#CBD5E1',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
             },
             isLast && styles.navArrowBtnDisabled,
           ]}
@@ -415,7 +415,7 @@ export const Board3DCarousel: React.FC<Board3DCarouselProps> = ({
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <ChevronRight size={15} color={isLast ? '#64748B' : '#38BDF8'} />
+          <ChevronRight size={15} color={isLast ? '#71717A' : '#FF5A36'} />
         </TouchableOpacity>
       </View>
     </View>
@@ -500,16 +500,16 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   counterHighlight: {
-    color: '#38BDF8',
+    color: '#FF7A59',
     fontSize: 13,
     fontWeight: '800',
   },
   counterDivider: {
-    color: '#64748B',
+    color: '#71717A',
     fontSize: 12,
   },
   counterTotal: {
-    color: '#94A3B8',
+    color: '#A1A1AA',
     fontSize: 13,
     fontWeight: '600',
   },

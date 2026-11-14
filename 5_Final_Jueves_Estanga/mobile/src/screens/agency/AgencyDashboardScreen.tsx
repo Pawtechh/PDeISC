@@ -214,8 +214,8 @@ export const AgencyDashboardScreen: React.FC = () => {
         <Row spacing="sm">
           <Card padding="md" style={styles.metricCard}>
             <Stack spacing="xs" align="center">
-              <Waves size={18} color="#38BDF8" />
-              <Text variant="h1" color={isDark ? '#38BDF8' : colors.ocean[600]}>
+              <Waves size={18} color="#FF7A59" />
+              <Text variant="h1" color={isDark ? '#F5F5F7' : '#111115'}>
                 {metrics.enElAguaCount}
               </Text>
               <Text variant="caption" color={theme.subtext} style={{ textAlign: 'center', fontWeight: '600' }}>
@@ -247,7 +247,7 @@ export const AgencyDashboardScreen: React.FC = () => {
               style={[
                 styles.metricCard,
                 {
-                  borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : colors.ocean[300],
+                  borderColor: isDark ? 'rgba(255, 90, 54, 0.42)' : 'rgba(255, 90, 54, 0.35)',
                   borderWidth: 1.5,
                 },
               ]}
@@ -260,12 +260,12 @@ export const AgencyDashboardScreen: React.FC = () => {
                 <Row spacing="xs" align="center">
                   <Text
                     variant="caption"
-                    color={isDark ? '#38BDF8' : colors.ocean[700]}
+                    color={isDark ? '#FF7A59' : '#E04320'}
                     style={{ textAlign: 'center', fontWeight: '700' }}
                   >
                     Comisión Sede
                   </Text>
-                  <Edit3 size={11} color={isDark ? '#38BDF8' : colors.ocean[700]} />
+                  <Edit3 size={11} color={isDark ? '#FF7A59' : '#E04320'} />
                 </Row>
               </Stack>
             </Card>
@@ -278,8 +278,8 @@ export const AgencyDashboardScreen: React.FC = () => {
           style={[
             styles.commissionCard,
             {
-              backgroundColor: isDark ? 'rgba(56, 189, 248, 0.05)' : colors.ocean[50],
-              borderColor: isDark ? 'rgba(56, 189, 248, 0.28)' : colors.ocean[200],
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
             },
           ]}
         >
@@ -287,7 +287,7 @@ export const AgencyDashboardScreen: React.FC = () => {
             <Row justify="space-between" align="center">
               <View style={{ flex: 1, marginRight: spacing.sm }}>
                 <Row spacing="xs" align="center">
-                  <Sliders size={16} color="#38BDF8" />
+                  <Sliders size={16} color="#FF7A59" />
                   <Text variant="h3" color={theme.text}>
                     Política de Retención de Sede
                   </Text>
@@ -550,7 +550,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                   style={[
                     styles.input,
                     {
-                      backgroundColor: isDark ? '#131C2E' : colors.sand[100],
+                      backgroundColor: isDark ? '#141418' : '#F4F4F5',
                       color: theme.text,
                       borderColor: theme.border,
                     },
@@ -563,7 +563,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                   testID="input-commission-percent"
                 />
                 <Row justify="space-between" style={{ marginTop: 2 }}>
-                  <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[600]}>
+                  <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'}>
                     Agencia: {parsedNewPct}%
                   </Text>
                   <Text variant="caption" color={isDark ? '#34D399' : colors.semantic.success}>
@@ -583,7 +583,7 @@ export const AgencyDashboardScreen: React.FC = () => {
                   style={[
                     styles.input,
                     {
-                      backgroundColor: isDark ? '#131C2E' : colors.sand[100],
+                      backgroundColor: isDark ? '#141418' : '#F4F4F5',
                       color: theme.text,
                       borderColor: theme.border,
                     },

@@ -148,8 +148,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           style={[
             styles.palette,
             {
-              backgroundColor: isDark ? '#131C2E' : colors.white,
-              borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : colors.sand[300],
+              backgroundColor: isDark ? '#16161A' : '#FFFFFF',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.09)',
             },
           ]}
         >
@@ -215,17 +215,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                         styles.shortcutBadge,
                         {
                           backgroundColor: isDark
-                            ? 'rgba(56, 189, 248, 0.12)'
-                            : colors.ocean[50],
+                            ? 'rgba(255, 90, 54, 0.14)'
+                            : 'rgba(255, 90, 54, 0.08)',
                           borderColor: isDark
-                            ? 'rgba(56, 189, 248, 0.3)'
-                            : colors.ocean[200],
+                            ? 'rgba(255, 90, 54, 0.30)'
+                            : 'rgba(255, 90, 54, 0.20)',
                         },
                       ]}
                     >
                       <Text
                         variant="caption"
-                        color={isDark ? '#38BDF8' : colors.ocean[700]}
+                        color={isDark ? '#FF7A59' : '#E04320'}
                         style={{ fontSize: 10, fontWeight: '700' }}
                       >
                         {item.shortcut}
@@ -238,13 +238,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           </ScrollView>
 
           {/* Footer Informativo */}
-          <View style={[styles.footer, { backgroundColor: isDark ? '#0B0F17' : colors.sand[100] }]}>
+          <View style={[styles.footer, { backgroundColor: isDark ? '#0C0C10' : '#F4F4F5' }]}>
             <Row justify="space-between" align="center">
               <Text variant="caption" color={theme.subtext} style={{ fontSize: 11 }}>
                 Tip: Navegá con el teclado o tocá una acción
               </Text>
-              <Text variant="caption" color={isDark ? '#F59E0B' : colors.ocean[700]} style={{ fontSize: 11, fontWeight: '700' }}>
-                SURF RENTAL MDP • TITANIUM 6.0
+              <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontSize: 11, fontWeight: '700' }}>
+                SURF RENTAL MDP • OBSIDIAN LUXE
               </Text>
             </Row>
           </View>
@@ -267,13 +267,13 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 580,
     borderRadius: radii.xl,
-    borderWidth: 1.5,
+    borderWidth: 1,
     overflow: 'hidden',
     elevation: 20,
-    shadowColor: '#38BDF8',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.42,
+    shadowRadius: 28,
   },
   searchRow: {
     flexDirection: 'row',

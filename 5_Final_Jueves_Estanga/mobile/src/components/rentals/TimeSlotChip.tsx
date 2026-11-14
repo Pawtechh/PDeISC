@@ -32,15 +32,15 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
         styles.chip,
         {
           backgroundColor: selected
-            ? (isDark ? '#38BDF8' : colors.ocean[600])
+            ? '#FF5A36'
             : !disponible
-            ? (isDark ? 'rgba(255, 255, 255, 0.03)' : colors.sand[100])
-            : (isDark ? '#101726' : colors.white),
+            ? (isDark ? 'rgba(255, 255, 255, 0.03)' : '#F4F4F5')
+            : (isDark ? 'rgba(255, 255, 255, 0.05)' : colors.white),
           borderColor: selected
-            ? (isDark ? '#38BDF8' : colors.ocean[700])
+            ? '#FF5A36'
             : !disponible
-            ? (isDark ? 'rgba(255, 255, 255, 0.08)' : colors.sand[200])
-            : (isDark ? 'rgba(245, 158, 11, 0.45)' : colors.ocean[400]),
+            ? (isDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(0, 0, 0, 0.06)')
+            : (isDark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.12)'),
           opacity: !disponible ? 0.4 : 1,
         },
       ]}
@@ -54,10 +54,10 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
           variant="caption"
           color={
             selected
-              ? (isDark ? '#0B0F17' : colors.white)
+              ? '#FFFFFF'
               : !disponible
-              ? (isDark ? '#64748B' : colors.sand[500])
-              : (isDark ? '#F1F5F9' : colors.ocean[900])
+              ? (isDark ? '#71717A' : '#A1A1AA')
+              : (isDark ? '#F5F5F7' : '#111115')
           }
           style={[
             styles.text,
@@ -70,7 +70,7 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
         {!disponible && (
           <Text
             variant="caption"
-            color={isDark ? '#475569' : colors.sand[500]}
+            color={isDark ? '#52525B' : '#A1A1AA'}
             style={styles.subtext}
           >
             No disp.
@@ -79,7 +79,7 @@ export const TimeSlotChip: React.FC<TimeSlotChipProps> = ({
         {disponible && !selected && (
           <Text
             variant="caption"
-            color={isDark ? '#38BDF8' : colors.semantic.success}
+            color={isDark ? '#10B981' : colors.semantic.success}
             style={[styles.subtext, { fontWeight: '600' }]}
           >
             Libre
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     }),
   },
   chipSelected: {
-    backgroundColor: colors.ocean[500],
-    borderColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
+    borderColor: '#E04320',
   },
   chipDisabled: {
     opacity: 0.45,

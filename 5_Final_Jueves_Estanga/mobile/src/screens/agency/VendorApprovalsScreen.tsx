@@ -174,13 +174,13 @@ export const VendorApprovalsSection: React.FC = () => {
         padding="lg"
         style={{
           borderWidth: 1.5,
-          borderColor: isDark ? 'rgba(245, 158, 11, 0.4)' : colors.ocean[300],
+          borderColor: isDark ? 'rgba(255, 90, 54, 0.42)' : 'rgba(255, 90, 54, 0.35)',
         }}
       >
         <Stack spacing="md">
           <Row justify="space-between" align="center" style={{ flexWrap: 'wrap', gap: 8 }}>
             <Row spacing="xs" align="center" style={{ flex: 1, paddingRight: spacing.xs }}>
-              <UserCheck size={18} color={isDark ? '#F59E0B' : colors.ocean[600]} />
+              <UserCheck size={18} color={isDark ? '#FF7A59' : '#E04320'} />
               <Text variant="h2" color={theme.text} style={{ flex: 1 }}>
                 Zona de Habilitación y Gestión de Vendedores
               </Text>
@@ -229,18 +229,18 @@ export const VendorApprovalsSection: React.FC = () => {
                     {
                       backgroundColor: active
                         ? isDark
-                          ? 'rgba(34, 211, 238, 0.22)'
-                          : '#0284C7'
+                          ? 'rgba(255, 90, 54, 0.18)'
+                          : '#FF5A36'
                         : isDark
-                        ? 'rgba(8, 20, 38, 0.78)'
+                        ? 'rgba(18, 18, 22, 0.78)'
                         : '#FFFFFF',
                       borderColor: active
                         ? isDark
-                          ? '#22D3EE'
-                          : '#0284C7'
+                          ? '#FF5A36'
+                          : '#FF5A36'
                         : isDark
-                        ? 'rgba(56, 189, 248, 0.22)'
-                        : 'rgba(2, 132, 199, 0.18)',
+                        ? 'rgba(255, 255, 255, 0.10)'
+                        : 'rgba(0, 0, 0, 0.08)',
                     },
                   ]}
                 >
@@ -248,7 +248,7 @@ export const VendorApprovalsSection: React.FC = () => {
                     variant="caption"
                     style={{
                       fontWeight: '700',
-                      color: active ? (isDark ? '#67E8F9' : '#FFFFFF') : theme.text,
+                      color: active ? (isDark ? '#FF7A59' : '#FFFFFF') : theme.text,
                     }}
                   >
                     {item.label}
@@ -305,7 +305,7 @@ export const VendorApprovalsSection: React.FC = () => {
       {isLoading ? (
         <Card padding="lg">
           <Row spacing="sm" align="center" justify="center">
-            <ActivityIndicator size="small" color={colors.ocean[500]} />
+            <ActivityIndicator size="small" color="#FF5A36" />
             <Text variant="body" color={theme.subtext}>
               Cargando solicitudes y vendedores...
             </Text>
@@ -378,13 +378,13 @@ export const VendorApprovalsSection: React.FC = () => {
                   style={[
                     styles.infoBox,
                     {
-                      backgroundColor: isDark ? '#0D1322' : colors.sand[50],
+                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
                       borderColor: theme.border,
                     },
                   ]}
                 >
                   <Row spacing="xs" align="center" style={{ marginBottom: 4 }}>
-                    <FileText size={14} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                    <FileText size={14} color={isDark ? '#FF7A59' : '#E04320'} />
                     <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                       Descripción del Vendedor y Propuesta de Tablas:
                     </Text>
@@ -399,13 +399,13 @@ export const VendorApprovalsSection: React.FC = () => {
                   style={[
                     styles.infoBox,
                     {
-                      backgroundColor: isDark ? '#0D1322' : colors.sand[50],
+                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
                       borderColor: theme.border,
                     },
                   ]}
                 >
                   <Row spacing="xs" align="center" style={{ marginBottom: 4 }}>
-                    <Briefcase size={14} color={isDark ? '#F59E0B' : colors.ocean[600]} />
+                    <Briefcase size={14} color={isDark ? '#FF7A59' : '#E04320'} />
                     <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                       Experiencias Anteriores en el Rubro:
                     </Text>
@@ -418,7 +418,7 @@ export const VendorApprovalsSection: React.FC = () => {
                 {/* Fotos de las tablas */}
                 <View>
                   <Row spacing="xs" align="center" style={{ marginBottom: 6 }}>
-                    <Camera size={14} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                    <Camera size={14} color={isDark ? '#FF7A59' : '#E04320'} />
                     <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                       Fotos de Tablas Subidas por el Vendedor ({app.fotosTablas?.length || 0}):
                     </Text>
@@ -482,14 +482,14 @@ export const VendorApprovalsSection: React.FC = () => {
                     style={[
                       styles.quiverSection,
                       {
-                        backgroundColor: isDark ? 'rgba(56, 189, 248, 0.04)' : '#F0F9FF',
-                        borderColor: isDark ? 'rgba(56, 189, 248, 0.22)' : '#BAE6FD',
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+                        borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                       },
                     ]}
                   >
                     <Row justify="space-between" align="center" style={{ marginBottom: 6 }}>
                       <Row spacing="xs" align="center">
-                        <Waves size={15} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                        <Waves size={15} color={isDark ? '#FF7A59' : '#E04320'} />
                         <Text variant="caption" color={theme.text} style={{ fontWeight: '700' }}>
                           Quiver de Tablas en Custodia ({(app as any).tablasList?.length || 0}):
                         </Text>
@@ -604,7 +604,7 @@ export const VendorApprovalsSection: React.FC = () => {
             style={[
               styles.modalCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
                 borderColor:
                   decisionType === 'APROBADO'
                     ? colors.semantic.success
@@ -643,7 +643,7 @@ export const VendorApprovalsSection: React.FC = () => {
                     style={[
                       styles.infoBox,
                       {
-                        backgroundColor: isDark ? '#0D1322' : colors.sand[50],
+                        backgroundColor: isDark ? '#141418' : '#F5F5F7',
                         borderColor: theme.border,
                       },
                     ]}
@@ -673,15 +673,15 @@ export const VendorApprovalsSection: React.FC = () => {
                       borderColor: biometricProof
                         ? colors.semantic.success
                         : isDark
-                        ? '#F59E0B'
-                        : colors.ocean[500],
+                        ? '#FF7A59'
+                        : '#FF5A36',
                       backgroundColor: biometricProof
                         ? isDark
                           ? 'rgba(16, 185, 129, 0.1)'
                           : '#ECFDF5'
                         : isDark
-                        ? '#0D1420'
-                        : '#F8FAFC',
+                        ? '#141418'
+                        : '#F5F5F7',
                     },
                   ]}
                 >
@@ -695,7 +695,7 @@ export const VendorApprovalsSection: React.FC = () => {
                               ? colors.semantic.success
                               : isDark
                               ? '#F59E0B'
-                              : colors.ocean[600]
+                              : '#FF5A36'
                           }
                         />
                         <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
@@ -738,7 +738,7 @@ export const VendorApprovalsSection: React.FC = () => {
                         iconLeft={
                           <Fingerprint
                             size={16}
-                            color={isDark ? '#F1F5F9' : colors.sand[900]}
+                            color={isDark ? '#F5F5F7' : '#111115'}
                           />
                         }
                         onPress={handleScanFingerprint}
@@ -756,14 +756,14 @@ export const VendorApprovalsSection: React.FC = () => {
                         agencyPassword.trim().length >= 4
                           ? colors.semantic.success
                           : theme.border,
-                      backgroundColor: isDark ? '#0D1420' : '#F8FAFC',
+                      backgroundColor: isDark ? '#141418' : '#F4F4F5',
                     },
                   ]}
                 >
                   <Stack spacing="xs">
                     <Row justify="space-between" align="center">
                       <Row spacing="xs" align="center" style={{ flex: 1 }}>
-                        <Lock size={16} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                        <Lock size={16} color={isDark ? '#FF7A59' : '#E04320'} />
                         <Text variant="h3" color={theme.text} style={{ flex: 1 }}>
                           Paso 2: Contraseña de Agencia
                         </Text>
@@ -913,7 +913,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 85,
     borderRadius: radii.md,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#141418',
   },
   auditBox: {
     padding: spacing.sm,

@@ -127,7 +127,7 @@ export const ClaimDetailScreen: React.FC = () => {
     return (
       <Screen>
         <Stack spacing="lg" style={{ padding: spacing.xl, alignItems: 'center' }}>
-          <ActivityIndicator size="large" color={colors.ocean[500]} />
+          <ActivityIndicator size="large" color="#FF5A36" />
           <Text variant="body" color={colors.sand[500]}>
             Consultando registros de peritaje...
           </Text>
@@ -288,7 +288,7 @@ export const ClaimDetailScreen: React.FC = () => {
         onRequestClose={() => setShowDisputeModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <Card padding="lg" style={[styles.disputeCard, isDark && { backgroundColor: 'rgba(6, 16, 32, 0.96)', borderColor: 'rgba(34, 211, 238, 0.30)' }]}>
+          <Card padding="lg" style={[styles.disputeCard, isDark && { backgroundColor: 'rgba(18, 18, 22, 0.96)', borderColor: 'rgba(255, 255, 255, 0.12)' }]}>
             <Stack spacing="md">
               <Text variant="h2" color={theme.text}>
                 Presentar Descargo

@@ -21,14 +21,14 @@ export const MarineForecastCard: React.FC = () => {
         style={[
           styles.loadingContainer,
           {
-            backgroundColor: isDark ? 'rgba(13, 19, 29, 0.85)' : '#F0F9FF',
-            borderColor: isDark ? 'rgba(56, 189, 248, 0.2)' : '#BAE6FD',
+            backgroundColor: isDark ? 'rgba(18, 18, 22, 0.72)' : 'rgba(255, 255, 255, 0.88)',
+            borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
           },
         ]}
       >
         <Row align="center" justify="center" spacing="sm">
-          <ActivityIndicator size="small" color={isDark ? '#38BDF8' : colors.ocean[500]} />
-          <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[500]}>
+          <ActivityIndicator size="small" color={isDark ? '#FF7A59' : '#FF5A36'} />
+          <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'}>
             Sincronizando boya oceanográfica de Playa Grande...
           </Text>
         </Row>
@@ -49,16 +49,16 @@ export const MarineForecastCard: React.FC = () => {
       style={[
         styles.instrumentContainer,
         {
-          backgroundColor: isDark ? 'rgba(8, 19, 36, 0.78)' : 'rgba(255, 255, 255, 0.90)',
-          borderColor: isDark ? 'rgba(34, 211, 238, 0.24)' : 'rgba(2, 132, 199, 0.16)',
+          backgroundColor: isDark ? 'rgba(18, 18, 22, 0.72)' : 'rgba(255, 255, 255, 0.88)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(22px) saturate(175%)',
-              WebkitBackdropFilter: 'blur(22px) saturate(175%)',
+              backdropFilter: 'blur(24px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
               boxShadow: isDark
-                ? '0 18px 42px -12px rgba(0, 0, 0, 0.55), 0 0 28px rgba(6, 182, 212, 0.08), inset 0 1px 0 rgba(165, 243, 252, 0.16)'
-                : '0 14px 34px -10px rgba(2, 132, 199, 0.10)',
+                ? '0 20px 44px -14px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.06)'
+                : '0 14px 36px -12px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
             } as any)
           : {},
       ]}
@@ -76,7 +76,7 @@ export const MarineForecastCard: React.FC = () => {
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={styles.stationLabel}>ESTACIÓN TELEMÉTRICA EN VIVO</Text>
               <Text
-                style={[styles.spotTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}
+                style={[styles.spotTitle, { color: isDark ? '#F5F5F7' : '#111115' }]}
                 numberOfLines={2}
               >
                 {forecast.spotName} • Mar del Plata
@@ -89,7 +89,7 @@ export const MarineForecastCard: React.FC = () => {
           />
         </Row>
 
-        <Text style={[styles.conditionSummary, { color: isDark ? '#94A3B8' : '#64748B' }]}>
+        <Text style={[styles.conditionSummary, { color: isDark ? '#A1A1AA' : '#52525B' }]}>
           {forecast.conditionText}
         </Text>
 
@@ -101,17 +101,17 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.dialTile,
               {
-                backgroundColor: isDark ? 'rgba(5, 14, 28, 0.72)' : '#F4F9FD',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.16)' : 'rgba(2, 132, 199, 0.14)',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.035)' : 'rgba(0, 0, 0, 0.025)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(0, 0, 0, 0.06)',
               },
             ]}
           >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Waves size={14} color="#22D3EE" />
+              <Waves size={14} color="#00D2D3" />
               <Text style={styles.dialLabel}>ALTURA OLA</Text>
             </Row>
             <View style={styles.dialValueRow}>
-              <Text style={[styles.dialValue, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
+              <Text style={[styles.dialValue, { color: isDark ? '#F5F5F7' : '#111115' }]}>
                 {forecast.waveHeightMeters}
               </Text>
               <Text style={styles.dialUnit}>m</Text>
@@ -125,17 +125,17 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.dialTile,
               {
-                backgroundColor: isDark ? 'rgba(5, 14, 28, 0.72)' : '#F4F9FD',
-                borderColor: isDark ? 'rgba(56, 189, 248, 0.16)' : 'rgba(2, 132, 199, 0.14)',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.035)' : 'rgba(0, 0, 0, 0.025)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(0, 0, 0, 0.06)',
               },
             ]}
           >
             <Row align="center" spacing="xs" style={styles.dialHeader}>
-              <Timer size={14} color="#38BDF8" />
+              <Timer size={14} color="#FF7A59" />
               <Text style={styles.dialLabel}>PERIODO</Text>
             </Row>
             <View style={styles.dialValueRow}>
-              <Text style={[styles.dialValue, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
+              <Text style={[styles.dialValue, { color: isDark ? '#F5F5F7' : '#111115' }]}>
                 {forecast.wavePeriodSeconds}
               </Text>
               <Text style={styles.dialUnit}>s</Text>
@@ -149,7 +149,7 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.dialTile,
               {
-                backgroundColor: isDark ? 'rgba(5, 14, 28, 0.72)' : '#F4F9FD',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.035)' : 'rgba(0, 0, 0, 0.025)',
                 borderColor: isDark ? 'rgba(45, 212, 191, 0.16)' : 'rgba(2, 132, 199, 0.14)',
               },
             ]}
@@ -159,7 +159,7 @@ export const MarineForecastCard: React.FC = () => {
               <Text style={styles.dialLabel}>VIENTO</Text>
             </Row>
             <View style={styles.dialValueRow}>
-              <Text style={[styles.dialValue, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
+              <Text style={[styles.dialValue, { color: isDark ? '#F5F5F7' : '#111115' }]}>
                 {forecast.windSpeedKmh}
               </Text>
               <Text style={[styles.dialUnit, { color: '#2DD4BF' }]}>km/h</Text>
@@ -173,7 +173,7 @@ export const MarineForecastCard: React.FC = () => {
             style={[
               styles.dialTile,
               {
-                backgroundColor: isDark ? 'rgba(5, 14, 28, 0.72)' : '#F4F9FD',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.035)' : 'rgba(0, 0, 0, 0.025)',
                 borderColor: isDark ? 'rgba(251, 191, 36, 0.16)' : 'rgba(2, 132, 199, 0.14)',
               },
             ]}
@@ -183,7 +183,7 @@ export const MarineForecastCard: React.FC = () => {
               <Text style={styles.dialLabel}>TEMP. AGUA</Text>
             </Row>
             <View style={styles.dialValueRow}>
-              <Text style={[styles.dialValue, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
+              <Text style={[styles.dialValue, { color: isDark ? '#F5F5F7' : '#111115' }]}>
                 {forecast.waterTemperatureCelsius}
               </Text>
               <Text style={[styles.dialUnit, { color: '#FBBF24' }]}>°C</Text>
@@ -220,19 +220,19 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 20,
     borderWidth: 1,
-    shadowColor: '#38BDF8',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 20,
     elevation: 4,
   },
   radarPulse: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    backgroundColor: 'rgba(16, 185, 129, 0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.35)',
+    borderColor: 'rgba(16, 185, 129, 0.30)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   stationLabel: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#38BDF8',
+    color: '#00D2D3',
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderColor: 'rgba(255, 255, 255, 0.07)',
   },
   dialHeader: {
     marginBottom: 4,
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   dialLabel: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#94A3B8',
+    color: '#A1A1AA',
     letterSpacing: 1.2,
   },
   dialValueRow: {
@@ -293,11 +293,11 @@ const styles = StyleSheet.create({
   dialUnit: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#38BDF8',
+    color: '#00D2D3',
   },
   dialSubtext: {
     fontSize: 10,
-    color: '#64748B',
+    color: '#71717A',
     marginTop: 2,
   },
   shaperTipRow: {
@@ -308,20 +308,20 @@ const styles = StyleSheet.create({
   shaperTipLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#94A3B8',
+    color: '#A1A1AA',
   },
   recomPill: {
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+    backgroundColor: 'rgba(255, 90, 54, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.25)',
+    borderColor: 'rgba(255, 90, 54, 0.28)',
   },
   recomPillText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#38BDF8',
+    color: '#FF7A59',
     letterSpacing: 0.5,
   },
 });

@@ -198,7 +198,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Row justify="space-between" align="center">
         <View>
-          <Text variant="h1" color={colors.ocean[900]}>
+          <Text variant="h1" color={theme.text}>
             Confirmar Reserva
           </Text>
           <Text variant="caption" color={colors.sand[700]}>
@@ -234,11 +234,11 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                   styles.optionRow,
                   {
                     backgroundColor: isSelected
-                      ? (theme.isDark ? '#1E3A5F' : colors.ocean[50])
-                      : (theme.isDark ? 'rgba(8, 20, 38, 0.78)' : colors.white),
+                      ? (theme.isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.08)')
+                      : (theme.isDark ? 'rgba(18, 18, 22, 0.72)' : colors.white),
                     borderColor: isSelected
-                      ? (theme.isDark ? '#38BDF8' : colors.ocean[500])
-                      : (theme.isDark ? '#334155' : colors.sand[200]),
+                      ? '#FF5A36'
+                      : (theme.isDark ? 'rgba(255, 255, 255, 0.09)' : colors.sand[200]),
                   },
                 ]}
               >
@@ -246,7 +246,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                   <Text
                     variant="body"
                     style={isSelected ? styles.bold : undefined}
-                    color={isSelected ? (theme.isDark ? '#38BDF8' : colors.ocean[700]) : theme.text}
+                    color={isSelected ? (theme.isDark ? '#FF7A59' : '#E04320') : theme.text}
                   >
                     {dur.label}
                   </Text>
@@ -267,11 +267,11 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
               styles.pill,
               {
                 backgroundColor: !isEarlyBooking
-                  ? (theme.isDark ? '#0284C7' : colors.ocean[500])
-                  : (theme.isDark ? '#334155' : colors.sand[100]),
+                  ? '#FF5A36'
+                  : (theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[100]),
                 borderColor: !isEarlyBooking
-                  ? (theme.isDark ? '#38BDF8' : colors.ocean[600])
-                  : (theme.isDark ? '#475569' : colors.sand[200]),
+                  ? '#FF5A36'
+                  : (theme.isDark ? 'rgba(255, 255, 255, 0.10)' : colors.sand[200]),
               },
               { flex: 1 },
             ]}
@@ -291,11 +291,11 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
               styles.pill,
               {
                 backgroundColor: isEarlyBooking
-                  ? (theme.isDark ? '#0284C7' : colors.ocean[500])
-                  : (theme.isDark ? '#334155' : colors.sand[100]),
+                  ? '#FF5A36'
+                  : (theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[100]),
                 borderColor: isEarlyBooking
-                  ? (theme.isDark ? '#38BDF8' : colors.ocean[600])
-                  : (theme.isDark ? '#475569' : colors.sand[200]),
+                  ? '#FF5A36'
+                  : (theme.isDark ? 'rgba(255, 255, 255, 0.10)' : colors.sand[200]),
               },
               { flex: 1 },
             ]}
@@ -323,11 +323,11 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                 styles.pill,
                 {
                   backgroundColor: selectedHora === h
-                    ? (theme.isDark ? '#0284C7' : colors.ocean[500])
-                    : (theme.isDark ? '#334155' : colors.sand[100]),
+                    ? '#FF5A36'
+                    : (theme.isDark ? 'rgba(255, 255, 255, 0.06)' : colors.sand[100]),
                   borderColor: selectedHora === h
-                    ? (theme.isDark ? '#38BDF8' : colors.ocean[600])
-                    : (theme.isDark ? '#475569' : colors.sand[200]),
+                    ? '#FF5A36'
+                    : (theme.isDark ? 'rgba(255, 255, 255, 0.10)' : colors.sand[200]),
                   paddingHorizontal: spacing.md,
                   marginBottom: spacing.xs,
                 },
@@ -359,11 +359,11 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                   styles.pointPill,
                   {
                     backgroundColor: isSelected
-                      ? colors.sunset[500]
-                      : (theme.isDark ? 'rgba(8, 20, 38, 0.78)' : '#FFFFFF'),
+                      ? '#FF5A36'
+                      : (theme.isDark ? 'rgba(18, 18, 22, 0.72)' : '#FFFFFF'),
                     borderColor: isSelected
-                      ? colors.sunset[600]
-                      : (theme.isDark ? '#334155' : colors.sand[200]),
+                      ? '#FF5A36'
+                      : (theme.isDark ? 'rgba(255, 255, 255, 0.09)' : colors.sand[200]),
                   },
                 ]}
                 onPress={() => setSelectedPoints(opt.pts)}
@@ -387,8 +387,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
         style={[
           styles.quoteCard,
           {
-            backgroundColor: theme.isDark ? '#0F1E36' : colors.ocean[50],
-            borderColor: theme.isDark ? '#1E3A5F' : colors.ocean[200],
+            backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+            borderColor: theme.isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
           },
         ]}
       >
@@ -418,7 +418,7 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
             <Text variant="h2" color={theme.text}>
               Total a Pagar:
             </Text>
-            <Text variant="display" color={theme.isDark ? '#38BDF8' : colors.ocean[600]}>
+            <Text variant="display" color={theme.isDark ? '#FF7A59' : '#FF5A36'}>
               ${quote?.precioTotal || 0}
               <Text variant="caption" color={theme.subtext}>
                 {' '}ARS
@@ -459,8 +459,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
         style={[
           styles.termsCard,
           {
-            backgroundColor: theme.isDark ? 'rgba(8, 20, 38, 0.72)' : '#F8FAFC',
-            borderColor: theme.isDark ? 'rgba(56, 189, 248, 0.22)' : colors.sand[200],
+            backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+            borderColor: theme.isDark ? 'rgba(255, 255, 255, 0.08)' : colors.sand[200],
           },
         ]}
       >
@@ -497,12 +497,12 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
               style={[
                 styles.methodPill,
                 signMethod === 'biometric' && styles.methodPillActive,
-                { borderColor: signMethod === 'biometric' ? (theme.isDark ? theme.champagne : colors.ocean[600]) : colors.sand[300] },
+                { borderColor: signMethod === 'biometric' ? '#FF5A36' : (theme.isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.10)') },
               ]}
             >
               <Text
                 variant="caption"
-                color={signMethod === 'biometric' ? (theme.isDark ? theme.champagne : colors.ocean[700]) : theme.subtext}
+                color={signMethod === 'biometric' ? (theme.isDark ? '#FF7A59' : '#E04320') : theme.subtext}
                 style={signMethod === 'biometric' ? styles.bold : undefined}
               >
                 Huella Digital {isPhone ? '(Teléfono)' : ''}
@@ -514,12 +514,12 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
                 style={[
                   styles.methodPill,
                   signMethod === 'digital' && styles.methodPillActive,
-                  { borderColor: signMethod === 'digital' ? (theme.isDark ? theme.champagne : colors.ocean[600]) : colors.sand[300] },
+                  { borderColor: signMethod === 'digital' ? '#FF5A36' : (theme.isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.10)') },
                 ]}
               >
                 <Text
                   variant="caption"
-                  color={signMethod === 'digital' ? (theme.isDark ? theme.champagne : colors.ocean[700]) : theme.subtext}
+                  color={signMethod === 'digital' ? (theme.isDark ? '#FF7A59' : '#E04320') : theme.subtext}
                   style={signMethod === 'digital' ? styles.bold : undefined}
                 >
                   Firma PC
@@ -539,8 +539,8 @@ export const RentalBookingModal: React.FC<RentalBookingModalProps> = ({
           <Card
             padding="sm"
             style={{
-              backgroundColor: theme.isDark ? '#0F1E36' : colors.ocean[50],
-              borderColor: theme.isDark ? '#1E3A5F' : colors.ocean[200],
+              backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+              borderColor: theme.isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
               borderWidth: 1,
             }}
           >
@@ -612,8 +612,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   optionRowSelected: {
-    borderColor: colors.ocean[500],
-    backgroundColor: colors.ocean[50],
+    borderColor: '#FF5A36',
+    backgroundColor: 'rgba(255, 90, 54, 0.08)',
   },
   pill: {
     paddingVertical: spacing.sm,
@@ -625,8 +625,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pillSelected: {
-    backgroundColor: colors.ocean[500],
-    borderColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
+    borderColor: '#E04320',
   },
   pointPill: {
     paddingVertical: spacing.xs,
@@ -641,9 +641,9 @@ const styles = StyleSheet.create({
     borderColor: colors.sunset[600],
   },
   quoteCard: {
-    backgroundColor: colors.ocean[50],
+    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     borderWidth: 1,
-    borderColor: colors.ocean[200],
+    borderColor: 'rgba(255, 90, 54, 0.22)',
   },
   termsCard: {
     backgroundColor: colors.sand[50],
@@ -665,8 +665,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkboxActive: {
-    backgroundColor: colors.ocean[500],
-    borderColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
+    borderColor: '#E04320',
   },
   bold: {
     fontWeight: '700',
@@ -678,6 +678,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   methodPillActive: {
-    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+    backgroundColor: 'rgba(255, 90, 54, 0.12)',
   },
 });

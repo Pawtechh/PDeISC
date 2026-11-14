@@ -357,8 +357,8 @@ export function RootNavigator() {
               Platform.OS === 'web'
                 ? 'transparent'
                 : isDark
-                ? '#030812'
-                : '#F2F8FC',
+                ? '#050507'
+                : '#F5F5F7',
           },
         ]}
       >
@@ -366,8 +366,8 @@ export function RootNavigator() {
           style={[
             styles.splashCard,
             {
-              backgroundColor: isDark ? 'rgba(8, 19, 36, 0.85)' : '#FFFFFF',
-              borderColor: isDark ? 'rgba(34, 211, 238, 0.28)' : 'rgba(2, 132, 199, 0.16)',
+              backgroundColor: isDark ? 'rgba(18, 18, 22, 0.85)' : '#FFFFFF',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
             },
           ]}
         >
@@ -375,25 +375,25 @@ export function RootNavigator() {
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(34, 211, 238, 0.14)' : '#E0F2FE',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.42)' : '#7DD3FC',
+                backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.10)',
+                borderColor: isDark ? 'rgba(255, 90, 54, 0.36)' : 'rgba(255, 90, 54, 0.25)',
               },
             ]}
           >
-            <Waves size={32} color={isDark ? '#22D3EE' : '#0284C7'} strokeWidth={2.2} />
+            <Waves size={32} color={isDark ? '#FF7A59' : '#FF5A36'} strokeWidth={2.2} />
           </View>
-          <Text style={[styles.brandTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
+          <Text style={[styles.brandTitle, { color: isDark ? '#F5F5F7' : '#111115' }]}>
             SURF RENTAL
           </Text>
-          <Text style={[styles.brandSubtitle, { color: isDark ? '#FBBF24' : '#0284C7' }]}>
+          <Text style={[styles.brandSubtitle, { color: isDark ? '#FF7A59' : '#E04320' }]}>
             SEDE PLAYA GRANDE • MAR DEL PLATA
           </Text>
           <ActivityIndicator
             size="small"
-            color={isDark ? '#22D3EE' : '#0284C7'}
+            color={isDark ? '#FF7A59' : '#FF5A36'}
             style={{ marginTop: 18 }}
           />
-          <Text style={[styles.loadingHint, { color: isDark ? '#94A3B8' : '#64748B' }]}>
+          <Text style={[styles.loadingHint, { color: isDark ? '#A1A1AA' : '#52525B' }]}>
             Sincronizando catálogo y telemetría costera...
           </Text>
         </View>
@@ -406,8 +406,8 @@ export function RootNavigator() {
     ...baseNavTheme,
     colors: {
       ...baseNavTheme.colors,
-      background: Platform.OS === 'web' ? 'transparent' : isDark ? '#030812' : '#F2F8FC',
-      card: Platform.OS === 'web' ? 'transparent' : isDark ? '#0B182B' : '#FFFFFF',
+      background: Platform.OS === 'web' ? 'transparent' : isDark ? '#050507' : '#F5F5F7',
+      card: Platform.OS === 'web' ? 'transparent' : isDark ? '#111115' : '#FFFFFF',
     },
   };
 

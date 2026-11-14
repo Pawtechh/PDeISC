@@ -20,8 +20,8 @@ export const ReadingProgressBar: React.FC<ReadingProgressBarProps> = ({
   const widthPercent = `${(clampedProgress * 100).toFixed(1)}%`;
 
   const gradientColors = isDark
-    ? (['#38BDF8', '#F59E0B', '#38BDF8'] as const)
-    : (['#0284C7', '#F59E0B', '#0284C7'] as const);
+    ? (['#FF5A36', '#FF8F6B', '#00D2D3'] as const)
+    : (['#E04320', '#FF5A36', '#0891B2'] as const);
 
   return (
     <View style={styles.container} pointerEvents="none">
@@ -43,16 +43,16 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 3,
+    height: 2.5,
     backgroundColor: 'transparent',
     zIndex: 9999,
   },
   bar: {
     height: '100%',
-    shadowColor: '#38BDF8',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
+    shadowColor: '#FF5A36',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.45,
+    shadowRadius: 3,
     elevation: 4,
   },
 });

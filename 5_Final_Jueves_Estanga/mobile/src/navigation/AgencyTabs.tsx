@@ -22,41 +22,41 @@ export const AgencyTabs: React.FC = () => {
         position: 'absolute' as const,
         bottom: 24,
         left: '50%' as any,
-        transform: [{ translateX: -280 }],
-        width: 560,
+        transform: [{ translateX: -325 }],
+        width: 650,
         height: 64,
         borderRadius: 32,
-        backgroundColor: isDark ? 'rgba(6, 16, 32, 0.84)' : 'rgba(255, 255, 255, 0.94)',
+        backgroundColor: isDark ? 'rgba(15, 15, 19, 0.80)' : 'rgba(255, 255, 255, 0.88)',
         borderWidth: 1,
-        borderColor: isDark ? 'rgba(34, 211, 238, 0.24)' : 'rgba(2, 132, 199, 0.14)',
+        borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
         paddingBottom: 8,
         paddingTop: 6,
-        shadowColor: '#06B6D4',
+        shadowColor: '#000000',
         shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.32,
+        shadowOpacity: 0.35,
         shadowRadius: 24,
         elevation: 20,
         ...(Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(24px) saturate(185%)',
-              WebkitBackdropFilter: 'blur(24px) saturate(185%)',
+              backdropFilter: 'blur(24px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
               boxShadow: isDark
-                ? '0 16px 42px rgba(0, 0, 0, 0.58), 0 0 28px rgba(34, 211, 238, 0.16), inset 0 1px 0 rgba(165, 243, 252, 0.18)'
-                : '0 14px 36px rgba(2, 132, 199, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+                ? '0 18px 44px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.10)'
+                : '0 14px 36px rgba(0, 0, 0, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.95)',
             } as any)
           : {}),
       }
     : {
-        backgroundColor: isDark ? 'rgba(6, 16, 32, 0.94)' : 'rgba(255, 255, 255, 0.96)',
-        borderTopColor: isDark ? 'rgba(34, 211, 238, 0.22)' : 'rgba(2, 132, 199, 0.12)',
+        backgroundColor: isDark ? 'rgba(12, 12, 16, 0.92)' : 'rgba(255, 255, 255, 0.94)',
+        borderTopColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)',
         borderTopWidth: 1,
         height: 68,
         paddingBottom: 10,
         paddingTop: 6,
         ...(Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(20px) saturate(175%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(175%)',
+              backdropFilter: 'blur(20px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
             } as any)
           : {}),
       };
@@ -69,8 +69,8 @@ export const AgencyTabs: React.FC = () => {
         sceneStyle: {
           backgroundColor: Platform.OS === 'web' ? 'transparent' : theme.background,
         },
-        tabBarActiveTintColor: isDark ? '#22D3EE' : '#0284C7',
-        tabBarInactiveTintColor: isDark ? '#64748B' : '#94A3B8',
+        tabBarActiveTintColor: isDark ? '#FF5A36' : '#E04320',
+        tabBarInactiveTintColor: isDark ? '#71717A' : '#71717A',
         tabBarStyle,
         tabBarLabelStyle: {
           fontSize: 10.5,

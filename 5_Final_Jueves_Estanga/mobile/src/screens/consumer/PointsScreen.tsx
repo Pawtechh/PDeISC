@@ -267,21 +267,21 @@ export const PointsScreen: React.FC = () => {
         )}
 
         {loadingLoyalty ? (
-          <ActivityIndicator size="large" color={colors.ocean[500]} />
+          <ActivityIndicator size="large" color="#FF5A36" />
         ) : (
           <>
             {/* Card Principal: Puntos y Nivel de Rider */}
             <View style={[
               styles.heroCardWrapper,
               {
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.34)' : 'rgba(2, 132, 199, 0.22)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.07)',
               },
             ]}>
               <LinearGradient
                 colors={
                   isDark
-                    ? ['rgba(7, 22, 46, 0.92)', 'rgba(4, 13, 28, 0.95)', 'rgba(12, 32, 60, 0.90)']
-                    : ['#FFFFFF', '#EFF9FF', '#FEF9EE']
+                    ? ['rgba(18, 18, 22, 0.94)', 'rgba(28, 22, 22, 0.94)', 'rgba(18, 18, 22, 0.92)']
+                    : ['#FFFFFF', '#FFF8F6', '#F5F5F7']
                 }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -297,7 +297,7 @@ export const PointsScreen: React.FC = () => {
                   </Row>
                   <Text
                     variant="display"
-                    color={isDark ? '#38BDF8' : colors.sunset[500]}
+                    color={isDark ? '#FF7A59' : '#FF5A36'}
                     style={{ fontSize: 44, fontWeight: '900' }}
                   >
                     {loyalty?.puntos ?? 0} pts
@@ -313,7 +313,7 @@ export const PointsScreen: React.FC = () => {
                   <View style={styles.progressContainer}>
                     <View style={[styles.progressTrack, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : colors.sand[200] }]}>
                       <LinearGradient
-                        colors={['#38BDF8', '#F59E0B']}
+                        colors={['#FF5A36', '#F59E0B']}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                         style={[
@@ -343,16 +343,16 @@ export const PointsScreen: React.FC = () => {
               style={[
                 styles.expirationCard,
                 {
-                  backgroundColor: isDark ? 'rgba(56, 189, 248, 0.06)' : colors.ocean[50],
-                  borderColor: isDark ? 'rgba(56, 189, 248, 0.28)' : colors.ocean[200],
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.07)',
                 },
               ]}
             >
               <Row justify="space-between" align="center">
                 <Row spacing="sm" align="center" style={{ flex: 1 }}>
-                  <Clock size={18} color="#38BDF8" />
+                  <Clock size={18} color="#FF7A59" />
                   <View style={{ flex: 1 }}>
-                    <Text variant="button" color={isDark ? '#E0F2FE' : colors.ocean[900]}>
+                    <Text variant="button" color={isDark ? '#F5F5F7' : '#111115'}>
                       Vigencia de Puntos (12 Meses)
                     </Text>
                     <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[700]}>
@@ -400,7 +400,7 @@ export const PointsScreen: React.FC = () => {
               <Stack spacing="sm">
                 <Row justify="space-between" align="center">
                   <Row spacing="xs" align="center">
-                    <Calculator size={16} color="#38BDF8" />
+                    <Calculator size={16} color="#FF7A59" />
                     <Text variant="h3" color={theme.text}>
                       Calculadora de Canje
                     </Text>
@@ -427,19 +427,19 @@ export const PointsScreen: React.FC = () => {
                           paddingVertical: 6,
                           borderRadius: radii.full,
                           backgroundColor: isSelected
-                            ? (isDark ? 'rgba(34, 211, 238, 0.20)' : '#0284C7')
+                            ? (isDark ? 'rgba(255, 90, 54, 0.22)' : '#FF5A36')
                             : isDark
-                            ? 'rgba(8, 20, 38, 0.78)'
+                            ? 'rgba(18, 18, 22, 0.72)'
                             : '#FFFFFF',
                           borderWidth: 1,
                           borderColor: isSelected
-                            ? (isDark ? '#22D3EE' : '#0284C7')
-                            : (isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)'),
+                            ? '#FF5A36'
+                            : (isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.08)'),
                         }}
                       >
                         <Text
                           variant="caption"
-                          color={isSelected ? (isDark ? '#67E8F9' : colors.white) : theme.text}
+                          color={isSelected ? '#FFFFFF' : theme.text}
                           style={{ fontWeight: isSelected ? '700' : '500' }}
                         >
                           {preset} pts (${(parseInt(preset, 10) * 10).toLocaleString('es-AR')})
@@ -454,8 +454,8 @@ export const PointsScreen: React.FC = () => {
                     style={[
                       styles.input,
                       {
-                        backgroundColor: isDark ? 'rgba(6, 16, 32, 0.82)' : theme.inputBg,
-                        borderColor: calculatorError ? colors.semantic.danger : (isDark ? 'rgba(56, 189, 248, 0.24)' : theme.border),
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : theme.inputBg,
+                        borderColor: calculatorError ? colors.semantic.danger : (isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border),
                         color: theme.text,
                       },
                     ]}

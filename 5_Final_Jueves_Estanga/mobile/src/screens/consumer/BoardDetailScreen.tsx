@@ -101,7 +101,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
               </Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-              <Text variant="display" color={isDark ? '#38BDF8' : colors.ocean[600]}>
+              <Text variant="display" color={isDark ? '#FF7A59' : '#E04320'}>
                 ${board.precioHora}
               </Text>
               <Text variant="caption" color={theme.subtext}>
@@ -122,15 +122,15 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
                   style={[
                     styles.merchantAvatar,
                     {
-                      backgroundColor: isDark ? 'rgba(56, 189, 248, 0.15)' : '#E0F2FE',
-                      borderColor: isDark ? '#38BDF8' : colors.ocean[500],
+                      backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.08)',
+                      borderColor: isDark ? 'rgba(255, 90, 54, 0.35)' : 'rgba(255, 90, 54, 0.25)',
                     },
                   ]}
                 >
-                  <Briefcase size={20} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+                  <Briefcase size={20} color={isDark ? '#FF7A59' : '#E04320'} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text variant="caption" color={isDark ? '#F59E0B' : colors.ocean[600]} style={{ fontWeight: '800', letterSpacing: 1 }}>
+                  <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '800', letterSpacing: 1 }}>
                     COMERCIANTE HABILITADO
                   </Text>
                   <Text variant="h3" color={theme.text}>
@@ -175,14 +175,14 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
             </Text>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Ruler size={14} color="#38BDF8" />
+                <Ruler size={14} color="#00D2D3" />
                 <Text variant="body" color={theme.subtext}>Medidas:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>{board.medidas}</Text>
             </Row>
             <Row justify="space-between" align="center">
               <Row spacing="xs" align="center">
-                <Droplets size={14} color="#38BDF8" />
+                <Droplets size={14} color="#00D2D3" />
                 <Text variant="body" color={theme.subtext}>Volumen:</Text>
               </Row>
               <Text variant="body" color={theme.text} style={styles.bold}>{board.volumenLitros || '-'} Litros</Text>
@@ -272,15 +272,15 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
         style={[
           styles.bottomBar,
           {
-            backgroundColor: isDark ? 'rgba(9, 12, 16, 0.94)' : theme.card,
-            borderTopColor: isDark ? 'rgba(245, 158, 11, 0.25)' : theme.border,
+            backgroundColor: isDark ? 'rgba(17, 17, 21, 0.94)' : theme.card,
+            borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : theme.border,
           },
         ]}
       >
         <Row justify="space-between" align="center" style={{ maxWidth: 1200, width: '100%', alignSelf: 'center' }}>
           <View>
             <Text variant="caption" color={theme.subtext}>Tarifa base (2h)</Text>
-            <Text variant="h2" color={isDark ? '#38BDF8' : colors.ocean[600]}>
+            <Text variant="h2" color={isDark ? '#F5F5F7' : '#111115'}>
               ${(Number(board.precioHora) * 2).toLocaleString('es-AR')} ARS
             </Text>
           </View>
@@ -329,7 +329,7 @@ export const BoardDetailScreen: React.FC<BoardDetailScreenProps> = ({ route, nav
           <Card padding="xl" style={styles.authModalCard}>
             <Stack spacing="md" align="center">
               <View style={styles.authIconCircle}>
-                <UserCheck size={36} color="#38BDF8" />
+                <UserCheck size={36} color="#FF5A36" />
               </View>
 
               <Text variant="h2" align="center">
@@ -405,9 +405,9 @@ const styles = StyleSheet.create({
     width: 68,
     height: 68,
     borderRadius: 34,
-    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+    backgroundColor: 'rgba(255, 90, 54, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.35)',
+    borderColor: 'rgba(255, 90, 54, 0.30)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,

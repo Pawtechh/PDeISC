@@ -167,7 +167,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
     <Card style={styles.cardContainer} testID="legal-signature-card">
       <Stack spacing="xs">
         <Row justify="space-between" align="center">
-          <Text variant="button" style={{ fontWeight: '700', color: colors.ocean[900], fontSize: 15 }}>
+          <Text variant="button" style={{ fontWeight: '700', color: '#111115', fontSize: 15 }}>
             Recuadro de Firma Digital
           </Text>
           <View style={styles.lawPill}>
@@ -205,7 +205,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
               <Path
                 key={i}
                 d={d}
-                stroke={colors.ocean[900]}
+                stroke="#111115"
                 strokeWidth={3}
                 fill="none"
                 strokeLinecap="round"
@@ -215,7 +215,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
             {currentPath ? (
               <Path
                 d={currentPath}
-                stroke={colors.ocean[900]}
+                stroke="#111115"
                 strokeWidth={3}
                 fill="none"
                 strokeLinecap="round"
@@ -265,7 +265,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
                 style={styles.quickSignBtn}
                 testID="legal-signature-btn-quick"
               >
-                <Text variant="caption" style={{ color: colors.ocean[700], fontWeight: '600', fontSize: 12 }}>
+                <Text variant="caption" style={{ color: '#E04320', fontWeight: '600', fontSize: 12 }}>
                   Firma Rápida
                 </Text>
               </TouchableOpacity>
@@ -322,7 +322,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 const styles = StyleSheet.create({
   cardContainer: {
     borderWidth: 1,
-    borderColor: colors.ocean[200],
+    borderColor: 'rgba(255, 90, 54, 0.22)',
     backgroundColor: colors.white,
     padding: spacing.md,
     borderRadius: radii.lg,
@@ -330,15 +330,15 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   lawPill: {
-    backgroundColor: colors.ocean[50],
+    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: colors.ocean[200],
+    borderColor: 'rgba(255, 90, 54, 0.22)',
   },
   lawText: {
-    color: colors.ocean[700],
+    color: '#E04320',
     fontWeight: '600',
     fontSize: 10,
   },
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 2,
     borderStyle: 'solid',
-    borderColor: colors.ocean[400],
+    borderColor: 'rgba(255, 90, 54, 0.45)',
     position: 'relative',
     overflow: 'hidden',
     marginTop: spacing.xs,
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
       : {}),
   },
   canvasWrapperDrawing: {
-    borderColor: colors.ocean[600],
+    borderColor: '#FF5A36',
     borderWidth: 2,
     backgroundColor: '#FFFFFF',
   },
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   watermarkBadgeText: {
-    color: colors.ocean[800],
+    color: '#111115',
     fontWeight: '700',
     fontSize: 11,
     letterSpacing: 0.5,
@@ -411,9 +411,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: radii.sm,
-    backgroundColor: colors.ocean[50],
+    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     borderWidth: 1,
-    borderColor: colors.ocean[200],
+    borderColor: 'rgba(255, 90, 54, 0.22)',
   },
   statusBadge: {
     paddingVertical: 4,

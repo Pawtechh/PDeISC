@@ -161,20 +161,20 @@ export const RentalCard: React.FC<RentalCardProps> = ({
               <Text variant="caption" color={theme.subtext}>
                 {formatDate(rental.fechaInicio)}
               </Text>
-              <Clock size={12} color={isDark ? '#38BDF8' : colors.ocean[600]} />
+              <Clock size={12} color={isDark ? '#FF7A59' : '#E04320'} />
               <Text
                 variant="caption"
-                color={isDark ? '#38BDF8' : colors.ocean[600]}
+                color={isDark ? '#FF7A59' : '#E04320'}
                 style={{ fontWeight: '700' }}
               >
                 ({rental.horas}h)
               </Text>
             </Row>
             <Row spacing="xs" align="center">
-              <MapPin size={12} color={isDark ? '#F59E0B' : colors.ocean[700]} />
+              <MapPin size={12} color={isDark ? '#FF7A59' : '#E04320'} />
               <Text
                 variant="caption"
-                color={isDark ? '#F59E0B' : colors.ocean[700]}
+                color={isDark ? '#FF7A59' : '#E04320'}
                 style={styles.locationText}
               >
                 Sede Central Playa Grande
@@ -249,7 +249,7 @@ export const RentalCard: React.FC<RentalCardProps> = ({
             <Text variant="caption" color={theme.subtext}>
               Total pagado
             </Text>
-            <Text variant="h3" color={isDark ? '#38BDF8' : colors.ocean[600]}>
+            <Text variant="h3" color={isDark ? '#F5F5F7' : '#111115'}>
               ${Number(rental.precioTotal || 0).toLocaleString('es-AR')} ARS
             </Text>
           </View>

@@ -144,9 +144,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           />
           <LinearGradient
             colors={[
-              'rgba(3, 8, 18, 0.22)',
-              'rgba(5, 16, 34, 0.74)',
-              'rgba(4, 10, 22, 0.96)',
+              'rgba(5, 5, 7, 0.24)',
+              'rgba(12, 12, 16, 0.72)',
+              'rgba(5, 5, 7, 0.94)',
             ]}
             locations={[0, 0.62, 1]}
             style={StyleSheet.absoluteFillObject}
@@ -196,17 +196,17 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             style={[
               styles.authCard,
               {
-                backgroundColor: isDark ? 'rgba(8, 19, 36, 0.80)' : 'rgba(255, 255, 255, 0.92)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.26)' : 'rgba(2, 132, 199, 0.18)',
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.76)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
               },
             ]}
           >
             <Stack spacing="md">
               <View style={styles.cardHeader}>
-                <Text variant="h2" style={{ color: isDark ? '#F1F5F9' : '#0F172A' }}>
+                <Text variant="h2" style={{ color: isDark ? '#F5F5F7' : '#111115' }}>
                   Iniciar Sesión
                 </Text>
-                <Text variant="caption" style={{ color: isDark ? '#94A3B8' : '#64748B' }}>
+                <Text variant="caption" style={{ color: isDark ? '#A1A1AA' : '#52525B' }}>
                   Ingresá a tu cuenta para gestionar tus reservas
                 </Text>
               </View>
@@ -242,7 +242,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation?.navigate?.('ForgotPassword')}>
                   <Text
                     variant="caption"
-                    style={[styles.link, { color: isDark ? '#22D3EE' : colors.ocean[600] }]}
+                    style={[styles.link, { color: isDark ? '#FF7A59' : '#E04320' }]}
                   >
                     ¿Olvidaste tu contraseña?
                   </Text>
@@ -272,13 +272,13 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               <OAuthButtons onError={(msg) => setErrorMessage(msg)} />
 
               <Row justify="center" spacing="xs">
-                <Text variant="caption" color={isDark ? '#94A3B8' : colors.sand[500]}>
+                <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'}>
                   ¿No tenés cuenta?
                 </Text>
                 <TouchableOpacity onPress={() => navigation?.navigate?.('Register')}>
                   <Text
                     variant="caption"
-                    style={[styles.link, { color: isDark ? '#FBBF24' : colors.ocean[600] }]}
+                    style={[styles.link, { color: isDark ? '#FF7A59' : '#E04320' }]}
                   >
                     Registrate acá
                   </Text>
@@ -321,11 +321,11 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(34, 211, 238, 0.28)',
-    shadowColor: '#06B6D4',
-    shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.28,
-    shadowRadius: 28,
+    borderColor: 'rgba(255, 255, 255, 0.12)',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 18 },
+    shadowOpacity: 0.42,
+    shadowRadius: 32,
     elevation: 10,
   },
   heroPanelDesktop: {
@@ -348,38 +348,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(4, 14, 28, 0.80)',
+    backgroundColor: 'rgba(12, 12, 16, 0.78)',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(34, 211, 238, 0.45)',
+    borderColor: 'rgba(255, 90, 54, 0.42)',
     marginBottom: spacing.xs,
   },
   brandPillDot: {
-    color: '#22D3EE',
+    color: '#FF5A36',
     fontSize: 8,
   },
   brandPillText: {
-    color: '#22D3EE',
+    color: '#FF7A59',
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
   heroBrandTitle: {
-    color: '#F8FAFC',
+    color: '#F5F5F7',
     fontSize: 32,
     fontWeight: '800',
     lineHeight: 38,
   },
   heroBrandTagline: {
-    color: '#FCD34D',
+    color: '#FF7A59',
     fontSize: 16,
     fontWeight: '600',
     lineHeight: 22,
   },
   heroBrandDesc: {
-    color: '#CBD5E1',
+    color: '#D4D4D8',
     fontSize: 13,
     lineHeight: 19,
     maxWidth: 440,
@@ -394,18 +394,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(6, 20, 40, 0.80)',
+    backgroundColor: 'rgba(18, 18, 22, 0.78)',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.22)',
+    borderColor: 'rgba(255, 255, 255, 0.12)',
   },
   telemetryIcon: {
     fontSize: 13,
   },
   telemetryLabel: {
-    color: '#F1F5F9',
+    color: '#F5F5F7',
     fontSize: 11,
     fontWeight: '600',
   },

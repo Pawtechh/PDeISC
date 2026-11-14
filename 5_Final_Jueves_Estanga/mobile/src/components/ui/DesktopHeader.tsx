@@ -42,16 +42,16 @@ export const DesktopHeader: React.FC = () => {
       style={[
         styles.headerContainer,
         {
-          backgroundColor: isDark ? 'rgba(5, 13, 27, 0.78)' : 'rgba(255, 255, 255, 0.88)',
-          borderBottomColor: isDark ? 'rgba(56, 189, 248, 0.18)' : 'rgba(2, 132, 199, 0.14)',
+          backgroundColor: isDark ? 'rgba(9, 9, 12, 0.76)' : 'rgba(255, 255, 255, 0.82)',
+          borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(24px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+              backdropFilter: 'blur(24px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
               boxShadow: isDark
-                ? '0 8px 30px rgba(0, 0, 0, 0.35)'
-                : '0 6px 24px rgba(2, 132, 199, 0.06)',
+                ? '0 8px 28px rgba(0, 0, 0, 0.45)'
+                : '0 4px 20px rgba(0, 0, 0, 0.05)',
               position: 'sticky',
               top: 0,
               zIndex: 1000,
@@ -67,21 +67,21 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.logoBadge,
               {
-                backgroundColor: isDark ? 'rgba(34, 211, 238, 0.14)' : '#E0F2FE',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.42)' : '#7DD3FC',
+                backgroundColor: isDark ? 'rgba(255, 90, 54, 0.14)' : 'rgba(255, 90, 54, 0.10)',
+                borderColor: isDark ? 'rgba(255, 90, 54, 0.34)' : 'rgba(255, 90, 54, 0.28)',
               },
             ]}
           >
-            <Waves size={18} color={isDark ? '#22D3EE' : '#0284C7'} strokeWidth={2.2} />
+            <Waves size={18} color={isDark ? '#FF6B4A' : '#E04320'} strokeWidth={2.2} />
           </View>
           <View style={styles.brandTexts}>
-            <Text style={[styles.brandTitle, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
+            <Text style={[styles.brandTitle, { color: isDark ? '#F5F5F7' : '#111115' }]}>
               SURF RENTAL
             </Text>
             <Text
               style={[
                 styles.brandSubtitle,
-                { color: isDark ? '#22D3EE' : '#0284C7' },
+                { color: isDark ? '#A1A1AA' : '#71717A' },
               ]}
             >
               MAR DEL PLATA • EST. 2026
@@ -96,8 +96,8 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.telemetryPill,
               {
-                backgroundColor: isDark ? 'rgba(14, 165, 233, 0.10)' : '#F0F9FF',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.28)' : '#BAE6FD',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.07)',
               },
             ]}
           >
@@ -105,11 +105,11 @@ export const DesktopHeader: React.FC = () => {
               {...(Platform.OS === 'web' ? ({ dataSet: { liveDot: 'true' } } as any) : {})}
               style={styles.livePulseDot}
             />
-            <Compass size={13} color={isDark ? '#22D3EE' : '#0284C7'} />
+            <Compass size={13} color={isDark ? '#00D2D3' : '#0891B2'} />
             <Text
               style={[
                 styles.telemetryText,
-                { color: isDark ? '#CBD5E1' : '#0F172A' },
+                { color: isDark ? '#D4D4D8' : '#27272A' },
               ]}
             >
               PLAYA GRANDE • OLA 1.3M • 14KT OFFSHORE • AGUA 16.5°C
@@ -124,16 +124,16 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.roleBadgeGroup,
                 {
-                  backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE',
-                  borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#7DD3FC',
+                  backgroundColor: isDark ? 'rgba(255, 90, 54, 0.12)' : 'rgba(255, 90, 54, 0.09)',
+                  borderColor: isDark ? 'rgba(255, 90, 54, 0.28)' : 'rgba(255, 90, 54, 0.24)',
                 },
               ]}
             >
-              <ShieldCheck size={13} color={isDark ? '#38BDF8' : '#0284C7'} />
+              <ShieldCheck size={13} color={isDark ? '#FF7A59' : '#D93D1B'} />
               <Text
                 style={[
                   styles.roleBadgeText,
-                  { color: isDark ? '#38BDF8' : '#0369A1' },
+                  { color: isDark ? '#FF7A59' : '#D93D1B' },
                 ]}
               >
                 {roleBadgeLabel}
@@ -145,22 +145,22 @@ export const DesktopHeader: React.FC = () => {
                 style={[
                   styles.userAvatar,
                   {
-                    backgroundColor: isDark ? 'rgba(56, 189, 248, 0.14)' : '#E0F2FE',
-                    borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#7DD3FC',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#F4F4F6',
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.09)',
                   },
                 ]}
               >
                 <Text
                   style={[
                     styles.avatarLetter,
-                    { color: isDark ? '#38BDF8' : '#0369A1' },
+                    { color: isDark ? '#F5F5F7' : '#111115' },
                   ]}
                 >
                   {(user.nombre || user.email || 'S').charAt(0).toUpperCase()}
                 </Text>
               </View>
               <Text
-                style={[styles.userName, { color: isDark ? '#F1F5F9' : '#0F172A' }]}
+                style={[styles.userName, { color: isDark ? '#F5F5F7' : '#111115' }]}
                 numberOfLines={1}
               >
                 {user.nombre || user.email?.split('@')[0]}
@@ -173,8 +173,8 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.logoutBtn,
                 {
-                  backgroundColor: isDark ? 'rgba(34, 211, 238, 0.10)' : '#E0F2FE',
-                  borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : '#7DD3FC',
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F6',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
               accessibilityLabel={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
@@ -183,7 +183,7 @@ export const DesktopHeader: React.FC = () => {
               {isDark ? (
                 <Sun size={15} color="#FBBF24" />
               ) : (
-                <Moon size={15} color="#0284C7" />
+                <Moon size={15} color="#111115" />
               )}
             </TouchableOpacity>
 
@@ -193,14 +193,14 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.logoutBtn,
                 {
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#CBD5E1',
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F6',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
               accessibilityLabel="Cerrar sesión"
               testID="desktop-header-logout"
             >
-              <LogOut size={15} color={isDark ? '#94A3B8' : '#475569'} />
+              <LogOut size={15} color={isDark ? '#A1A1AA' : '#52525B'} />
             </TouchableOpacity>
           </View>
         ) : (
@@ -212,8 +212,8 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.logoutBtn,
                 {
-                  backgroundColor: isDark ? 'rgba(34, 211, 238, 0.10)' : '#E0F2FE',
-                  borderColor: isDark ? 'rgba(34, 211, 238, 0.30)' : '#7DD3FC',
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F6',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.11)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
               accessibilityLabel={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
@@ -222,7 +222,7 @@ export const DesktopHeader: React.FC = () => {
               {isDark ? (
                 <Sun size={15} color="#FBBF24" />
               ) : (
-                <Moon size={15} color="#0284C7" />
+                <Moon size={15} color="#111115" />
               )}
             </TouchableOpacity>
 
@@ -230,16 +230,16 @@ export const DesktopHeader: React.FC = () => {
               style={[
                 styles.guestPill,
                 {
-                  backgroundColor: isDark ? 'rgba(8, 20, 38, 0.72)' : '#F8FAFC',
-                  borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : '#E2E8F0',
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F4F4F6',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}
             >
-              <Shield size={12} color={isDark ? '#38BDF8' : '#0284C7'} />
+              <Shield size={12} color={isDark ? '#FF7A59' : '#D93D1B'} />
               <Text
                 style={[
                   styles.guestText,
-                  { color: isDark ? '#CBD5E1' : '#475569' },
+                  { color: isDark ? '#D4D4D8' : '#3F3F46' },
                 ]}
               >
                 SEDE CENTRAL • BALNEARIO PLAYA GRANDE
@@ -261,8 +261,8 @@ export const DesktopHeader: React.FC = () => {
             style={[
               styles.logoutModalCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.94)' : 'rgba(255, 255, 255, 0.96)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.24)' : 'rgba(2, 132, 199, 0.18)',
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.09)',
               },
               Platform.OS === 'web'
                 ? ({
@@ -274,7 +274,7 @@ export const DesktopHeader: React.FC = () => {
           >
             <View style={styles.modalHeaderRow}>
               <LogOut size={20} color="#EF4444" />
-              <Text style={[styles.modalTitle, { color: isDark ? '#F1F5F9' : '#0F172A' }]}>
+              <Text style={[styles.modalTitle, { color: isDark ? '#F5F5F7' : '#111115' }]}>
                 Cerrar Sesión
               </Text>
             </View>
@@ -290,7 +290,7 @@ export const DesktopHeader: React.FC = () => {
                   { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F1F5F9' },
                 ]}
               >
-                <Text style={[styles.modalCancelText, { color: isDark ? '#F1F5F9' : '#0F172A' }]}>
+                <Text style={[styles.modalCancelText, { color: isDark ? '#F5F5F7' : '#111115' }]}>
                   Cancelar
                 </Text>
               </TouchableOpacity>

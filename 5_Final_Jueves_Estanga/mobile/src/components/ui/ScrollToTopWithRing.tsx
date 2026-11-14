@@ -41,8 +41,8 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
     onPress();
   };
 
-  const primaryColor = isDark ? '#22D3EE' : colors.ocean[600];
-  const trackColor = isDark ? 'rgba(34, 211, 238, 0.18)' : 'rgba(0, 0, 0, 0.08)';
+  const primaryColor = isDark ? '#FF5A36' : '#E04320';
+  const trackColor = isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)';
 
   return (
     <TouchableOpacity
@@ -52,9 +52,9 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? 'rgba(8, 19, 36, 0.88)' : 'rgba(255, 255, 255, 0.96)',
-          shadowColor: primaryColor,
-          borderColor: isDark ? 'rgba(34, 211, 238, 0.35)' : 'rgba(2, 132, 199, 0.18)',
+          backgroundColor: isDark ? 'rgba(18, 18, 22, 0.86)' : 'rgba(255, 255, 255, 0.94)',
+          shadowColor: '#000000',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
         },
         style,
       ]}
@@ -90,7 +90,7 @@ export const ScrollToTopWithRing: React.FC<ScrollToTopWithRingProps> = ({
         <Text
           style={[
             styles.arrowIcon,
-            { color: isDark ? '#38BDF8' : colors.ocean[600] },
+            { color: isDark ? '#FF7A59' : '#E04320' },
           ]}
         >
           ↑

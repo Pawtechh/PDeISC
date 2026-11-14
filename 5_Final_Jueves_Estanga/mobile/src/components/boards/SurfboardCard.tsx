@@ -87,10 +87,10 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
       style={[
         styles.cardContainer,
         {
-          backgroundColor: isDark ? 'rgba(9, 21, 39, 0.88)' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(56, 189, 248, 0.20)' : 'rgba(2, 132, 199, 0.14)',
-          shadowColor: isDark ? '#0284C7' : '#0284C7',
-          shadowOpacity: isDark ? 0.28 : 0.10,
+          backgroundColor: isDark ? 'rgba(18, 18, 22, 0.78)' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
+          shadowColor: '#000000',
+          shadowOpacity: isDark ? 0.35 : 0.07,
         },
         Platform.OS === 'web'
           ? ({
@@ -162,7 +162,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
           <Text
             style={[
               styles.brandSubtitle,
-              { color: isDark ? '#22D3EE' : '#0284C7' },
+              { color: isDark ? '#FF7A59' : '#E04320' },
             ]}
             numberOfLines={1}
           >
@@ -175,7 +175,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
         <Text
           style={[
             styles.boardTitle,
-            { color: isDark ? '#F8FAFC' : '#0F172A' },
+            { color: isDark ? '#F5F5F7' : '#111115' },
           ]}
           numberOfLines={1}
         >
@@ -190,8 +190,8 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
             </Text>
           </View>
           {Boolean(board.volumenLitros) && (
-            <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#E0F2FE' }]}>
-              <Text style={[styles.specChipText, { color: isDark ? '#38BDF8' : '#0284C7' }]}>
+            <View style={[styles.specChip, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#F4F4F5' }]}>
+              <Text style={[styles.specChipText, { color: isDark ? '#FF7A59' : '#E04320' }]}>
                 {board.volumenLitros} L
               </Text>
             </View>
@@ -241,7 +241,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
         ) : (
           <View style={[styles.footerRow, { borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : '#F1F5F9' }]}>
             <View style={styles.priceContainer}>
-              <Text style={[styles.priceValue, { color: isDark ? '#F8FAFC' : '#0F172A' }]}>
+              <Text style={[styles.priceValue, { color: isDark ? '#F5F5F7' : '#111115' }]}>
                 ${board.precioHora}
               </Text>
               <Text style={[styles.priceUnit, { color: isDark ? '#94A3B8' : '#64748B' }]}> / hr</Text>
@@ -260,7 +260,7 @@ export const SurfboardCard: React.FC<SurfboardCardProps> = ({
               testID={`board-3d-reserve-${board.id}`}
             >
               <LinearGradient
-                colors={isDark ? ['#06B6D4', '#0EA5E9', '#0284C7'] : ['#0EA5E9', '#0284C7', '#0369A1']}
+                colors={['#FF6F4D', '#FF5A36', '#E04320']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.reserveBtnGradient}
@@ -328,9 +328,9 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: 'rgba(6, 16, 32, 0.85)',
+    backgroundColor: 'rgba(12, 12, 16, 0.82)',
     borderWidth: 1,
-    borderColor: 'rgba(251, 191, 36, 0.48)',
+    borderColor: 'rgba(245, 158, 11, 0.42)',
     borderRadius: 6,
   },
   featuredBadgeText: {
@@ -344,20 +344,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: 'rgba(6, 16, 32, 0.78)',
+    backgroundColor: 'rgba(12, 12, 16, 0.78)',
     borderWidth: 1,
-    borderColor: 'rgba(103, 232, 249, 0.25)',
+    borderColor: 'rgba(255, 255, 255, 0.14)',
     borderRadius: 6,
     gap: 4,
   },
   categoryPillText: {
-    color: '#F8FAFC',
+    color: '#F5F5F7',
     fontSize: 9,
     fontWeight: '700',
     letterSpacing: 1,
   },
   ratingText: {
-    color: '#F8FAFC',
+    color: '#F5F5F7',
     fontSize: 10,
     fontWeight: '700',
   },
@@ -426,10 +426,10 @@ const styles = StyleSheet.create({
   reserveBtnWrapper: {
     borderRadius: 10,
     overflow: 'hidden',
-    shadowColor: '#0284C7',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
+    shadowColor: '#FF5A36',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.30,
+    shadowRadius: 10,
     elevation: 4,
   },
   reserveBtnGradient: {
@@ -473,12 +473,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+    backgroundColor: 'rgba(255, 90, 54, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.3)',
+    borderColor: 'rgba(255, 90, 54, 0.30)',
   },
   ownerEditBtnText: {
-    color: '#38BDF8',
+    color: '#FF7A59',
     fontSize: 11,
     fontWeight: '700',
   },

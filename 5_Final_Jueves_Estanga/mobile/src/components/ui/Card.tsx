@@ -30,17 +30,17 @@ export const Card: React.FC<CardProps> = ({
       style={[
         styles.card,
         {
-          backgroundColor: isDark ? 'rgba(9, 20, 38, 0.74)' : 'rgba(255, 255, 255, 0.88)',
-          borderColor: isDark ? 'rgba(56, 189, 248, 0.20)' : 'rgba(2, 132, 199, 0.14)',
+          backgroundColor: isDark ? 'rgba(18, 18, 22, 0.72)' : 'rgba(255, 255, 255, 0.84)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)',
         },
         Platform.OS === 'web'
           ? ({
-              backdropFilter: 'blur(22px) saturate(170%)',
-              WebkitBackdropFilter: 'blur(22px) saturate(170%)',
+              backdropFilter: 'blur(24px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
               boxShadow: isDark
-                ? '0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(165, 243, 252, 0.14)'
-                : '0 12px 32px -8px rgba(2, 132, 199, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-              transition: 'border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease',
+                ? '0 14px 36px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.06)'
+                : '0 8px 28px -8px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95)',
+              transition: 'border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)',
             } as any)
           : null,
         shadows[shadow],

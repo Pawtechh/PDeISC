@@ -66,7 +66,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 }) => {
   const { theme, isDark } = useTheme();
   const labelColor = isDark ? '#E2E8F0' : colors.sand[700];
-  const titleColor = isDark ? '#F1F5F9' : colors.ocean[900];
+  const titleColor = isDark ? '#F5F5F7' : '#111115';
   const subtextColor = isDark ? '#94A3B8' : colors.sand[500];
   const [createRentalApi] = useCreateRentalMutation();
   const scrollRef = useRef<ScrollView>(null);
@@ -469,7 +469,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             style={[
               styles.successCard,
               isDark && {
-                borderColor: 'rgba(34, 211, 238, 0.28)',
+                borderColor: 'rgba(255, 255, 255, 0.09)',
                 borderWidth: 1,
               },
             ]}
@@ -504,7 +504,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 </Row>
                 <Row justify="space-between">
                   <Text variant="caption" color={subtextColor}>Total abonado:</Text>
-                  <Text variant="body" color={colors.ocean[500]} style={styles.bold}>
+                  <Text variant="body" color={isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
                     ${receiptData.total.toLocaleString('es-AR')} ARS
                   </Text>
                 </Row>
@@ -576,7 +576,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           style={[
             styles.boardCard,
             isDark && {
-              borderColor: 'rgba(34, 211, 238, 0.26)',
+              borderColor: 'rgba(255, 255, 255, 0.09)',
               borderWidth: 1,
             },
           ]}
@@ -596,7 +596,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               <Text variant="caption" color={subtextColor}>
                 {board.marca} • {board.medidas}
               </Text>
-              <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[700]} style={styles.bold}>
+              <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
                 Sede Central Playa Grande
               </Text>
             </Stack>
@@ -619,8 +619,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     style={[
                       styles.hourPill,
                       isDark && {
-                        backgroundColor: 'rgba(8, 20, 38, 0.78)',
-                        borderColor: 'rgba(56, 189, 248, 0.24)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        borderColor: 'rgba(255, 255, 255, 0.10)',
                       },
                       isSelected && styles.hourPillSelected,
                     ]}
@@ -678,8 +678,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.viewModeToggle,
                         {
-                          backgroundColor: isDark ? 'rgba(8, 20, 38, 0.80)' : '#FFFFFF',
-                          borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : 'rgba(2, 132, 199, 0.22)',
+                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
+                          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                         },
                       ]}
                       accessibilityRole="button"
@@ -793,7 +793,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   <View style={styles.selectedSlotNotice}>
                     <Row align="center" spacing="xs">
                       <Text style={{ fontSize: 13 }}></Text>
-                      <Text variant="caption" color={isDark ? '#38BDF8' : colors.ocean[700]} style={{ fontWeight: '600' }}>
+                      <Text variant="caption" color={isDark ? '#FF7A59' : '#E04320'} style={{ fontWeight: '600' }}>
                         Horario de retiro seleccionado: <Text style={{ fontWeight: '800' }}>{horaRetiro} hs</Text>
                       </Text>
                     </Row>
@@ -832,8 +832,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.scrollArrowBtn,
                         {
-                          backgroundColor: isDark ? 'rgba(8, 20, 38, 0.80)' : '#FFFFFF',
-                          borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : 'rgba(2, 132, 199, 0.22)',
+                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
+                          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                         },
                       ]}
                       accessibilityLabel="Desplazar horarios anteriores"
@@ -872,8 +872,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                       style={[
                         styles.scrollArrowBtn,
                         {
-                          backgroundColor: isDark ? 'rgba(8, 20, 38, 0.80)' : '#FFFFFF',
-                          borderColor: isDark ? 'rgba(56, 189, 248, 0.24)' : 'rgba(2, 132, 199, 0.22)',
+                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#FFFFFF',
+                          borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                         },
                       ]}
                       accessibilityLabel="Desplazar horarios siguientes"
@@ -909,7 +909,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   backgroundColor: isDark ? theme.surface : colors.sand[50],
                   borderColor: isDark ? theme.border : colors.sand[200],
                 },
-                incluyeNeoprene && (isDark ? { backgroundColor: 'rgba(14, 165, 233, 0.2)', borderColor: colors.ocean[500] } : styles.accessoryItemActive),
+                incluyeNeoprene && (isDark ? { backgroundColor: 'rgba(255, 90, 54, 0.16)', borderColor: '#FF5A36' } : styles.accessoryItemActive),
               ]}
               testID="toggle-accessory-neoprene"
             >
@@ -927,7 +927,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     styles.accessoryCheck,
                     {
                       backgroundColor: incluyeNeoprene
-                        ? colors.ocean[600]
+                        ? '#FF5A36'
                         : isDark
                         ? theme.border
                         : colors.sand[200],
@@ -950,7 +950,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                         styles.tallePill,
                         {
                           backgroundColor: talleNeoprene === t
-                            ? colors.ocean[600]
+                            ? '#FF5A36'
                             : isDark
                             ? theme.card
                             : colors.sand[200],
@@ -981,7 +981,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   backgroundColor: isDark ? theme.surface : colors.sand[50],
                   borderColor: isDark ? theme.border : colors.sand[200],
                 },
-                incluyeLeash && (isDark ? { backgroundColor: 'rgba(14, 165, 233, 0.2)', borderColor: colors.ocean[500] } : styles.accessoryItemActive),
+                incluyeLeash && (isDark ? { backgroundColor: 'rgba(255, 90, 54, 0.16)', borderColor: '#FF5A36' } : styles.accessoryItemActive),
               ]}
               testID="toggle-accessory-leash"
             >
@@ -999,7 +999,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     styles.accessoryCheck,
                     {
                       backgroundColor: incluyeLeash
-                        ? colors.ocean[600]
+                        ? '#FF5A36'
                         : isDark
                         ? theme.border
                         : colors.sand[200],
@@ -1022,7 +1022,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   backgroundColor: isDark ? theme.surface : colors.sand[50],
                   borderColor: isDark ? theme.border : colors.sand[200],
                 },
-                incluyeParafina && (isDark ? { backgroundColor: 'rgba(14, 165, 233, 0.2)', borderColor: colors.ocean[500] } : styles.accessoryItemActive),
+                incluyeParafina && (isDark ? { backgroundColor: 'rgba(255, 90, 54, 0.16)', borderColor: '#FF5A36' } : styles.accessoryItemActive),
               ]}
               testID="toggle-accessory-parafina"
             >
@@ -1040,7 +1040,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     styles.accessoryCheck,
                     {
                       backgroundColor: incluyeParafina
-                        ? colors.ocean[600]
+                        ? '#FF5A36'
                         : isDark
                         ? theme.border
                         : colors.sand[200],
@@ -1062,8 +1062,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           style={[
             styles.breakdownCard,
             {
-              backgroundColor: isDark ? theme.card : colors.ocean[50],
-              borderColor: isDark ? theme.border : colors.ocean[200],
+              backgroundColor: isDark ? theme.card : '#F5F5F7',
+              borderColor: isDark ? theme.border : 'rgba(0, 0, 0, 0.08)',
             },
           ]}
           testID="checkout-price-breakdown"
@@ -1092,10 +1092,10 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
             {precioAccesorios > 0 && (
               <Row justify="space-between">
-                <Text variant="body" color={isDark ? '#38BDF8' : colors.ocean[700]} style={styles.bold}>
+                <Text variant="body" color={isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
                   Accesorios seleccionados:
                 </Text>
-                <Text variant="body" color={isDark ? '#38BDF8' : colors.ocean[700]} style={styles.bold}>
+                <Text variant="body" color={isDark ? '#FF7A59' : '#E04320'} style={styles.bold}>
                   +${precioAccesorios.toLocaleString('es-AR')} ARS
                 </Text>
               </Row>
@@ -1116,7 +1116,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               <Text variant="h2" color={theme.text}>
                 TOTAL A PAGAR HOY:
               </Text>
-              <Text variant="display" color={colors.ocean[500]} testID="checkout-total-price">
+              <Text variant="display" color={isDark ? '#FF7A59' : '#E04320'} testID="checkout-total-price">
                 ${totalAPagar.toLocaleString('es-AR')} ARS
               </Text>
             </Row>
@@ -1133,14 +1133,14 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 style={[
                   styles.debitBanner,
                   {
-                    backgroundColor: isDark ? 'rgba(59, 130, 246, 0.15)' : '#EFF6FF',
-                    borderColor: isDark ? '#3B82F6' : '#BFDBFE',
+                    backgroundColor: isDark ? 'rgba(255, 90, 54, 0.10)' : 'rgba(255, 90, 54, 0.06)',
+                    borderColor: isDark ? 'rgba(255, 90, 54, 0.35)' : 'rgba(255, 90, 54, 0.24)',
                   },
                 ]}
               >
                 <Row spacing="xs" align="center">
                   <Text style={{ fontSize: 18 }}>ℹ️</Text>
-                  <Text variant="caption" color={isDark ? '#93C5FD' : colors.ocean[900]} style={{ flex: 1, fontWeight: '600' }}>
+                  <Text variant="caption" color={isDark ? '#F5F5F7' : '#111115'} style={{ flex: 1, fontWeight: '600' }}>
                     Solo aceptamos TARJETA DE DÉBITO. No aceptamos crédito.
                   </Text>
                 </Row>
@@ -1165,11 +1165,11 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   <Row justify="space-between" align="center">
                     <Row spacing="xs" align="center">
                       <Text style={{ fontSize: 14 }}></Text>
-                      <Text variant="caption" color={isDark ? '#93C5FD' : colors.ocean[800]} style={styles.bold}>
+                      <Text variant="caption" color={isDark ? '#F5F5F7' : '#111115'} style={styles.bold}>
                         Números de prueba válidos (Sandbox DEV)
                       </Text>
                     </Row>
-                    <Text variant="caption" color={isDark ? '#60A5FA' : colors.ocean[600]}>
+                    <Text variant="caption" color={isDark ? '#A1A1AA' : '#52525B'}>
                       {showTestCardsAccordion ? '▲ Ocultar' : '▼ Ver'}
                     </Text>
                   </Row>
@@ -1446,8 +1446,8 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                     style={[
                       styles.checkbox,
                       {
-                        backgroundColor: aceptaGarantia ? colors.ocean[500] : colors.white,
-                        borderColor: aceptaGarantia ? colors.ocean[500] : colors.sand[500],
+                        backgroundColor: aceptaGarantia ? '#FF5A36' : colors.white,
+                        borderColor: aceptaGarantia ? '#FF5A36' : colors.sand[500],
                       },
                     ]}
                   >
@@ -1633,9 +1633,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     borderRadius: radii.full,
-    backgroundColor: colors.ocean[50],
+    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     borderWidth: 1,
-    borderColor: colors.ocean[200],
+    borderColor: 'rgba(255, 90, 54, 0.22)',
   },
   globalErrorBanner: {
     backgroundColor: '#FEE2E2',
@@ -1664,18 +1664,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   hourPillSelected: {
-    backgroundColor: colors.ocean[500],
-    borderColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
+    borderColor: '#E04320',
   },
   breakdownCard: {
-    backgroundColor: colors.ocean[50],
+    backgroundColor: 'rgba(255, 90, 54, 0.05)',
     borderWidth: 1,
-    borderColor: colors.ocean[200],
+    borderColor: 'rgba(255, 90, 54, 0.20)',
   },
   debitBanner: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(255, 90, 54, 0.06)',
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: 'rgba(255, 90, 54, 0.22)',
     borderRadius: radii.md,
   },
   testCardsBox: {
@@ -1695,7 +1695,7 @@ const styles = StyleSheet.create({
     borderColor: colors.sand[200],
   },
   useCardButton: {
-    backgroundColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     borderRadius: radii.sm,
@@ -1813,7 +1813,7 @@ const styles = StyleSheet.create({
   },
   accessoryItemActive: {
     backgroundColor: '#EFF8FF',
-    borderColor: colors.ocean[400],
+    borderColor: 'rgba(255, 90, 54, 0.45)',
   },
   accessoryCheck: {
     width: 28,
@@ -1824,7 +1824,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   accessoryCheckActive: {
-    backgroundColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
   },
   tallePill: {
     paddingHorizontal: 10,
@@ -1833,7 +1833,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.sand[200],
   },
   tallePillActive: {
-    backgroundColor: colors.ocean[600],
+    backgroundColor: '#FF5A36',
   },
   viewModeToggle: {
     paddingHorizontal: 8,
@@ -1851,8 +1851,8 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   filterPeriodPillActive: {
-    backgroundColor: colors.ocean[600],
-    borderColor: colors.ocean[700],
+    backgroundColor: '#FF5A36',
+    borderColor: '#E04320',
   },
   filterPeriodText: {
     fontSize: 11,
@@ -1867,9 +1867,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: radii.sm,
-    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+    backgroundColor: 'rgba(255, 90, 54, 0.10)',
     borderWidth: 1,
-    borderColor: 'rgba(14, 165, 233, 0.25)',
+    borderColor: 'rgba(255, 90, 54, 0.28)',
   },
   slotsWrapContainer: {
     flexDirection: 'row',
@@ -1900,6 +1900,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   sigMethodPillActive: {
-    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+    backgroundColor: 'rgba(255, 90, 54, 0.12)',
   },
 });

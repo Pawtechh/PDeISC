@@ -182,10 +182,10 @@ function openWebCameraAsync(quality: number): Promise<string | null> {
         overlay.style.fontFamily = 'system-ui, -apple-system, sans-serif';
 
         const card = document.createElement('div');
-        card.style.backgroundColor = '#111827';
+        card.style.backgroundColor = '#111115';
         card.style.borderRadius = '16px';
-        card.style.border = '1px solid rgba(56, 189, 248, 0.35)';
-        card.style.boxShadow = '0 25px 60px rgba(0,0,0,0.7)';
+        card.style.border = '1px solid rgba(255, 255, 255, 0.12)';
+        card.style.boxShadow = '0 25px 60px rgba(0,0,0,0.75)';
         card.style.maxWidth = '560px';
         card.style.width = '100%';
         card.style.display = 'flex';
@@ -203,7 +203,7 @@ function openWebCameraAsync(quality: number): Promise<string | null> {
 
         const title = document.createElement('div');
         title.innerText = '📸 Cámara en Vivo';
-        title.style.color = '#F8FAFC';
+        title.style.color = '#F5F5F7';
         title.style.fontWeight = '700';
         title.style.fontSize = '17px';
 
@@ -211,7 +211,7 @@ function openWebCameraAsync(quality: number): Promise<string | null> {
         closeBtn.innerText = '✕';
         closeBtn.style.background = 'transparent';
         closeBtn.style.border = 'none';
-        closeBtn.style.color = '#94A3B8';
+        closeBtn.style.color = '#A1A1AA';
         closeBtn.style.fontSize = '22px';
         closeBtn.style.cursor = 'pointer';
         closeBtn.style.padding = '4px 8px';
@@ -238,7 +238,7 @@ function openWebCameraAsync(quality: number): Promise<string | null> {
 
         const captureBtn = document.createElement('button');
         captureBtn.innerText = '🔘 Capturar Foto';
-        captureBtn.style.backgroundColor = '#0284C7';
+        captureBtn.style.backgroundColor = '#FF5A36';
         captureBtn.style.color = '#FFFFFF';
         captureBtn.style.border = 'none';
         captureBtn.style.borderRadius = '8px';

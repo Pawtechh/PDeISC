@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Modal, TouchableOpacity, RefreshControl, Platform } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Screen, Stack, Row, Text, Card, Badge, Button, EmptyState, Input } from '../../components/ui';
@@ -386,8 +386,8 @@ export const DeliveriesScreen: React.FC = () => {
             style={[
               styles.modalCard,
               {
-                backgroundColor: isDark ? 'rgba(6, 16, 32, 0.96)' : 'rgba(255, 255, 255, 0.97)',
-                borderColor: isDark ? 'rgba(34, 211, 238, 0.32)' : theme.border,
+                backgroundColor: isDark ? 'rgba(18, 18, 22, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : theme.border,
                 borderWidth: 1,
               },
             ]}
@@ -431,7 +431,7 @@ export const DeliveriesScreen: React.FC = () => {
                   style={[
                     styles.prereqPill,
                     {
-                      backgroundColor: isDark ? '#0F172A' : colors.sand[100],
+                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
                       borderColor: theme.border,
                     },
                     dniChecked && styles.prereqPillActive,
@@ -455,7 +455,7 @@ export const DeliveriesScreen: React.FC = () => {
                   style={[
                     styles.prereqPill,
                     {
-                      backgroundColor: isDark ? '#0F172A' : colors.sand[100],
+                      backgroundColor: isDark ? '#141418' : '#F5F5F7',
                       borderColor: theme.border,
                     },
                     hasPhotos && styles.prereqPillActive,
@@ -479,14 +479,14 @@ export const DeliveriesScreen: React.FC = () => {
                   style={[
                     styles.lawPill,
                     {
-                      backgroundColor: isDark ? '#0F172A' : colors.ocean[50],
-                      borderColor: isDark ? colors.ocean[700] : colors.ocean[200],
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : '#F5F5F7',
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(0, 0, 0, 0.08)',
                     },
                   ]}
                 >
                   <Text
                     variant="caption"
-                    color={isDark ? colors.ocean[300] : colors.ocean[700]}
+                    color={isDark ? '#FF7A59' : '#E04320'}
                     style={styles.lawText}
                   >
                     Ley 25.506
@@ -502,15 +502,15 @@ export const DeliveriesScreen: React.FC = () => {
                     style={[
                       styles.methodTab,
                       {
-                        borderColor: signMethod === 'biometric' ? colors.ocean[500] : theme.border,
-                        backgroundColor: signMethod === 'biometric' ? (isDark ? '#064E3B' : '#E0F2FE') : (isDark ? '#0F172A' : '#F1F5F9'),
+                        borderColor: signMethod === 'biometric' ? '#FF5A36' : theme.border,
+                        backgroundColor: signMethod === 'biometric' ? (isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? '#141418' : '#F4F4F5'),
                       },
                     ]}
                     testID="tab-sign-biometric"
                   >
                     <Text
                       variant="caption"
-                      color={signMethod === 'biometric' ? (isDark ? '#A7F3D0' : colors.ocean[700]) : theme.subtext}
+                      color={signMethod === 'biometric' ? (isDark ? '#FF7A59' : '#E04320') : theme.subtext}
                       style={{ fontWeight: '700', fontSize: 11 }}
                     >
                       Huella Digital (Teléfono)
@@ -522,15 +522,15 @@ export const DeliveriesScreen: React.FC = () => {
                     style={[
                       styles.methodTab,
                       {
-                        borderColor: signMethod === 'pad' ? colors.ocean[500] : theme.border,
-                        backgroundColor: signMethod === 'pad' ? (isDark ? '#064E3B' : '#E0F2FE') : (isDark ? '#0F172A' : '#F1F5F9'),
+                        borderColor: signMethod === 'pad' ? '#FF5A36' : theme.border,
+                        backgroundColor: signMethod === 'pad' ? (isDark ? 'rgba(255, 90, 54, 0.16)' : 'rgba(255, 90, 54, 0.10)') : (isDark ? '#141418' : '#F4F4F5'),
                       },
                     ]}
                     testID="tab-sign-pad"
                   >
                     <Text
                       variant="caption"
-                      color={signMethod === 'pad' ? (isDark ? '#A7F3D0' : colors.ocean[700]) : theme.subtext}
+                      color={signMethod === 'pad' ? (isDark ? '#FF7A59' : '#E04320') : theme.subtext}
                       style={{ fontWeight: '700', fontSize: 11 }}
                     >
                       Firma Manuscrita en Pantalla
@@ -636,8 +636,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   prereqPillActive: {
-    backgroundColor: colors.ocean[600],
-    borderColor: colors.ocean[700],
+    backgroundColor: '#FF5A36',
+    borderColor: '#E04320',
   },
   lawPill: {
     paddingHorizontal: 8,
