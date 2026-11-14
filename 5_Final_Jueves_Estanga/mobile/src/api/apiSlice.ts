@@ -29,6 +29,7 @@ export const apiSlice = createApi({
     'VendorRequest',
     'Zone',
     'Agency',
+    'AdminOverview',
   ],
   endpoints: () => ({}),
 });

@@ -121,6 +121,7 @@ export const Screen: React.FC<ScreenProps> = ({
     styles.contentContainer,
     fullWidth ? styles.fullWidthContainer : styles.standardContainer,
     {
+      paddingHorizontal: isDesktop ? 32 : spacing.md,
       paddingBottom: isDesktop ? 160 : 48,
     },
     contentContainerStyle,
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   standardContainer: {
-    maxWidth: 1280,
+    maxWidth: 1220,
   },
   fullWidthContainer: {
     maxWidth: '100%',

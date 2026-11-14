@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Modal, RefreshControl, Platform } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -23,6 +23,7 @@ import { AgencyProfileScreen } from './AgencyProfileScreen';
 import { getContrastInk } from '../../theme/ThemeContext';
 import { useAppSelector, useAppDispatch } from '../../store';
 import { setGuestMode } from '../../store/slices/authSlice';
+import { setActiveZone } from '../../store/slices/uiSlice';
 
 const FILTER_TYPES = ['Todos', 'Longboard', 'Fish', 'Funboard', 'Shortboard', 'Bodyboard', 'SUP'];
 
@@ -37,6 +38,8 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
   const [selectedAgencySlug, setSelectedAgencySlug] = useState<string | null>(null);
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const { numColumns } = useResponsive();
+  const catalogScrollRef = useRef<any>(null);
+  const [mapSectionY, setMapSectionY] = useState(0);
 
   const triggerHaptic = useCallback(() => {
     safeHaptic.impact();
@@ -52,6 +55,23 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
     () => zones.find((z) => z.id === selectedZoneId) ?? null,
     [zones, selectedZoneId]
   );
+
+  useEffect(() => {
+    dispatch(
+      setActiveZone(
+        selectedZone
+          ? {
+              id: selectedZone.id,
+              slug: selectedZone.slug,
+              ciudad: selectedZone.ciudad,
+              nombre: selectedZone.nombre,
+              latitud: selectedZone.latitud,
+              longitud: selectedZone.longitud,
+            }
+          : null
+      )
+    );
+  }, [selectedZone, dispatch]);
 
   const boardsQueryArgs = useMemo(() => {
     const params: { tipo?: string; zoneId?: string } = {};
@@ -109,6 +129,7 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
     <Screen
       atmosphericGradient={true}
       scrollable
+      scrollRef={catalogScrollRef}
       showScrollToTop={true}
       refreshControl={
         <RefreshControl
@@ -217,9 +238,31 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
                   EXPLORAR POR ZONA / CIUDAD
                 </Text>
               </Row>
-              <Text variant="caption" color={theme.subtext}>
-                {selectedZone ? `${selectedZone.ciudad} (${selectedZone.boardCount} tablas)` : `${zones.length} zonas activas`}
-              </Text>
+              <Row spacing="xs" align="center">
+                <Text variant="caption" color={theme.subtext}>
+                  {selectedZone ? `${selectedZone.ciudad} (${selectedZone.boardCount} tablas)` : `${zones.length} zonas activas`}
+                </Text>
+                <RNPressable
+                  onPress={() => {
+                    if (mapSectionY > 0) {
+                      catalogScrollRef.current?.scrollTo({ y: Math.max(0, mapSectionY - 24), animated: true });
+                    }
+                  }}
+                  style={{
+                    paddingHorizontal: 10,
+                    paddingVertical: 4,
+                    borderRadius: radii.full,
+                    backgroundColor: theme.primarySubtle,
+                    borderWidth: 1,
+                    borderColor: theme.primaryBorder,
+                  }}
+                  testID="btn-scroll-to-zone-map"
+                >
+                  <Text variant="caption" color={isDark ? theme.primaryHover : theme.primary} style={{ fontWeight: '700', fontSize: 11 }}>
+                    Ver Google Maps ↓
+                  </Text>
+                </RNPressable>
+              </Row>
             </Row>
             {numColumns >= 2 ? (
               <View style={[styles.zoneScrollContent, styles.filterRow]}>
@@ -598,22 +641,27 @@ export const CatalogScreen: React.FC<any> = ({ navigation }) => {
         </View>
 
         {/* Ubicación de la Sede & Cómo Llegar con Google Maps (y Sensor GPS en Móvil) */}
-          <GoogleMapSedeCard
-            spotName={
-              selectedZone
-                ? `${selectedZone.nombre} — ${selectedZone.ciudad}`
-                : agencies[0]?.nombre
-                  ? `${agencies[0].nombre} (${agencies[0].zone?.ciudad || 'Costa Atlántica'})`
-                  : undefined
-            }
-            address={
-              agencies[0]?.direccion ||
-              (selectedZone ? `${selectedZone.nombre}, ${selectedZone.ciudad}, Argentina` : undefined)
-            }
-            latitude={selectedZone?.latitud ?? agencies[0]?.zone?.latitud}
-            longitude={selectedZone?.longitud ?? agencies[0]?.zone?.longitud}
-            badgeLabel={selectedZone ? `SPOT • ${selectedZone.ciudad.toUpperCase()}` : undefined}
-          />
+          <View
+            onLayout={(e) => setMapSectionY(e.nativeEvent.layout.y)}
+            testID="catalog-google-maps-section"
+          >
+            <GoogleMapSedeCard
+              spotName={
+                selectedZone
+                  ? `${selectedZone.nombre} — ${selectedZone.ciudad}`
+                  : agencies[0]?.nombre
+                    ? `${agencies[0].nombre} (${agencies[0].zone?.ciudad || 'Costa Atlántica'})`
+                    : undefined
+              }
+              address={
+                agencies[0]?.direccion ||
+                (selectedZone ? `${selectedZone.nombre}, ${selectedZone.ciudad}, Argentina` : undefined)
+              }
+              latitude={selectedZone?.latitud ?? agencies[0]?.zone?.latitud}
+              longitude={selectedZone?.longitud ?? agencies[0]?.zone?.longitud}
+              badgeLabel={selectedZone ? `SPOT • ${selectedZone.ciudad.toUpperCase()}` : undefined}
+            />
+          </View>
       </Stack>
 
       {/* Modal with Full Surfboard Detail */}

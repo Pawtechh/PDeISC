@@ -27,10 +27,12 @@ export const MandatoryKycModal: React.FC = () => {
   const auth = useAppSelector((s) => s.auth);
   const user = auth.user;
 
-  // Determinar si el usuario necesita completar su verificación de identidad
+  // Determinar si un consumidor o vendedor necesita completar su verificación de identidad (los operadores AGENCIA / SUPER_ADMIN provistos administrativamente no quedan bloqueados)
+  const isKycExempt = user?.role === 'SUPER_ADMIN' || user?.role === 'AGENCIA';
   const isKycIncomplete = Boolean(
     auth.isAuthenticated &&
       user &&
+      !isKycExempt &&
       (!user.dni || user.dni.startsWith('OAUTH-') || !user.dniFotoUrl)
   );
 

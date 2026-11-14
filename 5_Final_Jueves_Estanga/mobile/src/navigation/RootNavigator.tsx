@@ -17,6 +17,7 @@ import { AuthNavigator } from './AuthNavigator';
 import { ConsumerTabs } from './ConsumerTabs';
 import { OwnerTabs } from './OwnerTabs';
 import { AgencyTabs } from './AgencyTabs';
+import { AdminTabs } from './AdminTabs';
 import { useTheme } from '../theme/ThemeContext';
 import { MandatoryKycModal } from '../components/auth/MandatoryKycModal';
 
@@ -342,7 +343,10 @@ export function RootNavigator() {
     if (isGuest) return <ConsumerTabs key="guest-tabs" />;
     if (!isAuthenticated) return <AuthNavigator key="auth-nav" />;
     const normalizedRole = (rol || '').toUpperCase();
-    if (normalizedRole === 'AGENCIA' || normalizedRole === 'SUPER_ADMIN') {
+    if (normalizedRole === 'SUPER_ADMIN') {
+      return <AdminTabs key="admin-tabs" />;
+    }
+    if (normalizedRole === 'AGENCIA') {
       return <AgencyTabs key="agency-tabs" />;
     }
     if (normalizedRole === 'OWNER') return <OwnerTabs key="owner-tabs" />;

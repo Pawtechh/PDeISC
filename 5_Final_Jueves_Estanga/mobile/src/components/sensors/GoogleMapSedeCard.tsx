@@ -36,6 +36,7 @@ export const GoogleMapSedeCard: React.FC<GoogleMapSedeCardProps> = ({
   const [gpsData, setGpsData] = useState<RealGpsReading | null>(null);
   const [gpsError, setGpsError] = useState<string | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+  const [mapProvider, setMapProvider] = useState<'google' | 'osm'>('google');
 
   useEffect(() => {
     // En PC/Web no se ejecuta el sensor de ubicación móvil
@@ -104,9 +105,11 @@ export const GoogleMapSedeCard: React.FC<GoogleMapSedeCardProps> = ({
     );
   };
 
-  // OpenStreetMap embed evita peticiones de telemetría de Google Maps (gen_204) bloqueadas por AdBlock/uBlock
-  const bbox = `${(activeLon - 0.011).toFixed(4)},${(activeLat - 0.007).toFixed(4)},${(activeLon + 0.011).toFixed(4)},${(activeLat + 0.007).toFixed(4)}`;
-  const mapEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${activeLat},${activeLon}`;
+  const bbox = `${(activeLon - 0.012).toFixed(4)},${(activeLat - 0.008).toFixed(4)},${(activeLon + 0.012).toFixed(4)},${(activeLat + 0.008).toFixed(4)}`;
+  const googleEmbedUrl = `https://maps.google.com/maps?q=${activeLat},${activeLon}&hl=es&z=15&output=embed`;
+  const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${activeLat},${activeLon}`;
+  const mapEmbedUrl = mapProvider === 'google' ? googleEmbedUrl : osmEmbedUrl;
+  const mapKey = `${activeLat.toFixed(4)}-${activeLon.toFixed(4)}-${mapProvider}`;
 
   return (
     <Card
@@ -139,7 +142,24 @@ export const GoogleMapSedeCard: React.FC<GoogleMapSedeCardProps> = ({
           </Row>
 
           {isPcWeb ? (
-            <Badge label={activeBadge.toUpperCase()} variant="ocean" />
+            <Row spacing="xs" align="center">
+              <TouchableOpacity
+                onPress={() => setMapProvider((prev) => (prev === 'google' ? 'osm' : 'google'))}
+                style={[
+                  styles.providerSwitchBtn,
+                  {
+                    backgroundColor: theme.surfaceElevated,
+                    borderColor: theme.border,
+                  },
+                ]}
+                testID="btn-toggle-map-provider"
+              >
+                <Text variant="caption" color={theme.subtext} style={{ fontWeight: '700', fontSize: 10.5 }}>
+                  {mapProvider === 'google' ? 'Google Maps ▾' : 'OSM Ligero ▾'}
+                </Text>
+              </TouchableOpacity>
+              <Badge label={activeBadge.toUpperCase()} variant="ocean" />
+            </Row>
           ) : gpsData ? (
             <Badge
               label={
@@ -230,14 +250,15 @@ export const GoogleMapSedeCard: React.FC<GoogleMapSedeCardProps> = ({
           </View>
         )}
 
-        {/* Mapa Interactivo de Google Maps */}
+        {/* Mapa Interactivo de Google Maps / OpenStreetMap sincronizado con Zona */}
         <View style={styles.mapContainer}>
           {isPcWeb ? (
             <iframe
-              title="Google Maps Sede Playa Grande"
+              key={mapKey}
+              title={`Mapa ${activeName}`}
               src={mapEmbedUrl}
               width="100%"
-              height="240"
+              height="260"
               style={{
                 border: 0,
                 borderRadius: '10px',
@@ -364,6 +385,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: radii.md,
+    borderWidth: 1,
+  },
+  providerSwitchBtn: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: radii.full,
     borderWidth: 1,
   },
 });

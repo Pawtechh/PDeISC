@@ -12,6 +12,8 @@ module.exports = {
     '**/__tests__/**/rentals.test.ts',
     '**/__tests__/**/payments.test.ts',
     '**/__tests__/**/agency.test.ts',
+    '**/__tests__/**/agencies.test.ts',
+    '**/__tests__/**/admin.test.ts',
     '**/__tests__/**/owner.test.ts',
     '**/__tests__/**/claims.test.ts',
     '**/__tests__/**/loyalty.test.ts',

@@ -19,9 +19,11 @@ export const DesktopHeader: React.FC = () => {
   const { theme, isDark, toggleTheme } = useTheme();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth?.user);
+  const activeZone = useSelector((state: any) => state.ui?.activeZone);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const targetZoneId = activeZone?.id || user?.agency?.zoneId || undefined;
   const { data: marineRes } = useGetMarineForecastQuery(
-    user?.agency?.zoneId ? { zoneId: user.agency.zoneId } : undefined,
+    targetZoneId ? { zoneId: targetZoneId } : undefined,
     { pollingInterval: 120000 }
   );
   const marine = marineRes?.data;
@@ -33,22 +35,23 @@ export const DesktopHeader: React.FC = () => {
   const activeUserRole = user?.role || user?.rol || 'CONSUMER';
   const roleBadgeLabel =
     activeUserRole === 'SUPER_ADMIN'
-      ? 'SUPER ADMIN SAAS'
+      ? 'ADMIN SAAS'
       : activeUserRole === 'AGENCIA'
-      ? user?.agency?.nombre
-        ? `AGENCIA • ${user.agency.nombre.slice(0, 18).toUpperCase()}`
-        : 'SEDE AGENCIA (ADMIN)'
+      ? 'AGENCIA'
       : activeUserRole === 'OWNER'
-      ? 'PERFIL VENDEDOR'
-      : 'PERFIL USUARIO';
+      ? 'VENDEDOR'
+      : 'USUARIO';
 
-  const brandSubtitleText = user?.agency?.zone
+  const brandSubtitleText = activeZone
+    ? `${activeZone.ciudad.toUpperCase()} • ${activeZone.nombre.toUpperCase()}`
+    : user?.agency?.zone
     ? `${user.agency.zone.ciudad.toUpperCase()} • ${user.agency.zone.nombre.toUpperCase()}`
     : 'RED COSTERA MULTI-ZONA • EST. 2026';
 
+  const spotShortName = (activeZone?.nombre || marine?.spotName || 'PLAYA GRANDE').split('—')[0].trim();
   const telemetryLine = marine
-    ? `${(marine.spotName || 'COSTA ATLÁNTICA').toUpperCase()} • OLA ${marine.waveHeightMeters}M • ${marine.windSpeedKmh}KM/H ${marine.windDirectionText.toUpperCase()} • AGUA ${marine.waterTemperatureCelsius}°C`
-    : 'MAR DEL PLATA & COSTA • EN VIVO';
+    ? `${spotShortName.toUpperCase()} • ${marine.waveHeightMeters}M • ${marine.windSpeedKmh}KM/H • ${marine.waterTemperatureCelsius}°C`
+    : 'COSTA ATLÁNTICA • EN VIVO';
 
   const handleLogout = () => {
     setShowLogoutModal(true);
@@ -108,7 +111,7 @@ export const DesktopHeader: React.FC = () => {
         </View>
 
         {/* Center: Live Coastal Telemetry Pill */}
-        {width >= 1120 && (
+        {width >= 1180 && (
           <View
             {...(Platform.OS === 'web' ? ({ dataSet: { telemetryPill: 'true' } } as any) : {})}
             style={[
@@ -116,6 +119,7 @@ export const DesktopHeader: React.FC = () => {
               {
                 backgroundColor: isDark ? 'rgba(245, 242, 236, 0.05)' : theme.cardHighlight,
                 borderColor: theme.border,
+                maxWidth: width < 1340 ? 320 : 420,
               },
             ]}
           >
@@ -123,8 +127,10 @@ export const DesktopHeader: React.FC = () => {
               {...(Platform.OS === 'web' ? ({ dataSet: { liveDot: 'true' } } as any) : {})}
               style={[styles.livePulseDot, { backgroundColor: theme.success }]}
             />
-            <Compass size={13} color={theme.accent} />
+            <Compass size={13} color={theme.accent} style={{ flexShrink: 0 }} />
             <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
               style={[
                 styles.telemetryText,
                 { color: theme.subtext },
@@ -333,23 +339,25 @@ export const DesktopHeader: React.FC = () => {
 const styles = StyleSheet.create({
   headerContainer: {
     width: '100%',
-    height: 62,
+    height: 64,
     borderBottomWidth: 1,
     paddingHorizontal: 28,
     justifyContent: 'center',
   },
   innerContainer: {
-    maxWidth: 1400,
+    maxWidth: 1220,
     width: '100%',
     alignSelf: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 14,
   },
   brandRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
+    flexShrink: 0,
   },
   logoBadge: {
     width: 36,
@@ -363,59 +371,68 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   brandTitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '800',
-    letterSpacing: 2,
+    letterSpacing: 1.6,
   },
   brandSubtitle: {
     fontSize: 9,
     fontWeight: '700',
-    letterSpacing: 2.2,
+    letterSpacing: 1.5,
     textTransform: 'uppercase',
+    maxWidth: 210,
   },
   telemetryPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 14,
+    gap: 7,
+    paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     borderWidth: 1,
+    flexShrink: 1,
+    minWidth: 0,
+    overflow: 'hidden',
   },
   livePulseDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
     backgroundColor: '#52B097',
+    flexShrink: 0,
   },
   telemetryText: {
     fontSize: 10.5,
     fontWeight: '700',
-    letterSpacing: 1.1,
+    letterSpacing: 0.7,
+    flexShrink: 1,
   },
   userSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 8,
+    flexShrink: 0,
   },
   roleBadgeGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
+    gap: 5,
+    paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 14,
     borderWidth: 1,
+    flexShrink: 0,
   },
   roleBadgeText: {
-    fontSize: 10.5,
+    fontSize: 10,
     fontWeight: '800',
-    letterSpacing: 0.6,
+    letterSpacing: 0.5,
   },
   userCapsule: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 7,
+    flexShrink: 0,
   },
   userAvatar: {
     width: 30,
@@ -430,9 +447,9 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   userName: {
-    fontSize: 13,
+    fontSize: 12.5,
     fontWeight: '600',
-    maxWidth: 120,
+    maxWidth: 110,
   },
   logoutBtn: {
     width: 32,

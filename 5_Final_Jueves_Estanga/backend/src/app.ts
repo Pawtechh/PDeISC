@@ -24,6 +24,7 @@ import usersRoutes from './modules/users/users.routes';
 import reviewsRoutes from './modules/reviews/reviews.routes';
 import weatherRoutes from './modules/weather/weather.routes';
 import agenciesRoutes from './modules/agencies/agencies.routes';
+import adminRoutes from './modules/admin/admin.routes';
 import { prisma } from './config/prisma';
 
 export const createApp = (): Application => {
@@ -222,6 +223,7 @@ export const createApp = (): Application => {
   app.use('/api/rentals', rentalsRoutes);
   app.use('/api/payments', paymentsRoutes);
   app.use('/api/agency', agencyRoutes);
+  app.use('/api/admin', adminRoutes);
   app.use('/api', agenciesRoutes);
   app.use('/api/owner', ownerRoutes);
   app.use('/api/claims', claimsRoutes);
