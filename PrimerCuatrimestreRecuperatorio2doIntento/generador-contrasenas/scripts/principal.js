@@ -36,6 +36,7 @@ const configActual = new ConfiguracionGenerador();
 
 // Variables de estado del cliente
 let clavePrincipalActual = '';
+let listaVariantesActual = [];
 let visorOculto = false;
 let temporizadorSlider = null;
 
@@ -85,6 +86,7 @@ async function solicitarGeneracion(mostrarAviso = false) {
         const datos = respuesta.datos;
 
         clavePrincipalActual = datos.principal.contrasena;
+        listaVariantesActual = Array.isArray(datos.lista) ? datos.lista : [];
         renderizarVisorContrasena(dom.visorContrasena, clavePrincipalActual, visorOculto);
         renderizarBarraSeguridad(dom.barraSeguridadRelleno, dom.etiquetaNivelSeguridad, datos.principal);
         renderizarVariantesGeneradas(dom.contenedorVariantes, datos.lista);
@@ -190,6 +192,13 @@ function registrarEventosGenerador() {
             const ok = await copiarAlPortapapeles(clave);
             mostrarNotificacion(ok ? 'Variante copiada al portapapeles.' : 'Error al copiar.', ok ? 'exito' : 'error');
         } else if (btn.dataset.accionLote === 'usar') {
+            // Actualizamos tambien el visor principal de arriba y su barra de seguridad
+            clavePrincipalActual = clave;
+            renderizarVisorContrasena(dom.visorContrasena, clavePrincipalActual, visorOculto);
+            const variante = listaVariantesActual.find((item) => item.contrasena === clave);
+            if (variante) {
+                renderizarBarraSeguridad(dom.barraSeguridadRelleno, dom.etiquetaNivelSeguridad, variante);
+            }
             cargarClaveEnFormulario(clave);
         }
     });
