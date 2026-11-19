@@ -24,6 +24,17 @@ export const CATEGORIAS_VALIDAS = [
 ];
 
 /**
+ * Comprueba si un texto cumple con el formato estandar de correo electronico (texto@dominio.ext).
+ * En criollo: Valida que si el usuario escribio algo en el campo de correo, sea un mail real.
+ * 
+ * @param {string} valor Cadena a validar.
+ * @returns {boolean} true si tiene formato valido de correo.
+ */
+export function esCorreoValido(valor) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(valor || '').trim());
+}
+
+/**
  * Clase que encapsula las opciones de configuracion del generador de contrasenias.
  * 
  * En criollo formal: Esta clase representa la "receta" que pide el usuario (cuantos caracteres,
@@ -174,7 +185,7 @@ export class ConfiguracionGenerador {
  * tenga un tamanio logico antes de tocar el disco.
  */
 export class RegistroContrasena {
-    constructor(datos = {}) {
+    constructor(datos = {}, opciones = {}) {
         // Generamos un ID por si viene vacio (usando timestamp para unicidad)
         this._id = String(datos.id || `reg_${Date.now()}_${Math.floor(Math.random() * 1000)}`);
         this._servicio = '';
@@ -187,7 +198,13 @@ export class RegistroContrasena {
         this._fechaCreacion = datos.fechaCreacion || new Date().toISOString();
 
         if (datos.servicio !== undefined) this.servicio = datos.servicio;
-        if (datos.usuario !== undefined) this.usuario = datos.usuario;
+        if (datos.usuario !== undefined) {
+            if (opciones.permitirLegacy) {
+                this._usuario = String(datos.usuario || '').trim().slice(0, 70);
+            } else {
+                this.usuario = datos.usuario;
+            }
+        }
         if (datos.categoria !== undefined) this.categoria = datos.categoria;
         if (datos.contrasena !== undefined) this.contrasena = datos.contrasena;
         if (datos.puntuacion !== undefined) this.puntuacion = datos.puntuacion;
@@ -212,7 +229,12 @@ export class RegistroContrasena {
 
     get usuario() { return this._usuario; }
     set usuario(valor) {
-        this._usuario = String(valor || '').trim().slice(0, 70);
+        const limpio = String(valor || '').trim().slice(0, 70);
+        // Es opcional (si queda vacio pasa), pero si escribio aunque sea 1 caracter debe ser un correo valido
+        if (limpio.length > 0 && !esCorreoValido(limpio)) {
+            throw new Error('Si escribis un correo, debe tener formato valido (ej. usuario@correo.com) o quedar vacio.');
+        }
+        this._usuario = limpio;
     }
 
     get categoria() { return this._categoria; }
@@ -320,10 +342,16 @@ export class GestorContrasenas {
 
     /**
      * Llena el vector a partir de los datos leidos del archivo database/contrasenas.json.
-     * En criollo: Carga la base de datos cruda en memoria convirtiendola en instancias de clase.
+     * En criollo: Carga la base de datos cruda en memoria convirtiendola en instancias de clase
+     * sin rechazar registros viejos heredados de versiones previas.
      */
     cargarDesdeJSON(arregloCrudo = []) {
-        this.registros = Array.isArray(arregloCrudo) ? arregloCrudo : [];
+        const lista = Array.isArray(arregloCrudo) ? arregloCrudo : [];
+        this._vectorRegistros = lista.map((item) => (
+            item instanceof RegistroContrasena
+                ? item
+                : new RegistroContrasena(item, { permitirLegacy: true })
+        ));
         return this;
     }
 

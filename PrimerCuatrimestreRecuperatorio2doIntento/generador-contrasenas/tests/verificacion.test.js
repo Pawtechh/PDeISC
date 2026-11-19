@@ -77,6 +77,18 @@ test('Clases ConfiguracionGenerador y RegistroContrasena validan con GET y SET',
     assert.throws(() => {
         reg.categoria = 'CategoriaInvalida';
     }, Error);
+
+    // El correo es opcional (vacio pasa), pero si se ingresa al menos una letra debe ser correo valido
+    reg.usuario = '';
+    assert.equal(reg.usuario, '');
+    assert.throws(() => {
+        reg.usuario = 'a';
+    }, Error);
+    assert.throws(() => {
+        reg.usuario = 'sin-dominio@local';
+    }, Error);
+    reg.usuario = 'nuevo@correo.com';
+    assert.equal(reg.usuario, 'nuevo@correo.com');
 });
 
 /**
@@ -188,12 +200,25 @@ test('Integracion HTTP en localhost con JSON, Axios, Fetch y EventEmitter', asyn
     const bodyListar = await resListar.json();
     assert.equal(bodyListar.datos.registros.length, 2);
 
+    // Validacion de correo opcional en el servidor: rechaza texto invalido con HTTP 400
+    const resCorreoInvalido = await fetch(`${urlBase}/api/contrasenas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            servicio: 'Cuenta Pruebas',
+            usuario: 'x',
+            categoria: 'Trabajo',
+            contrasena: resGenerar.data.datos.principal.contrasena
+        })
+    });
+    assert.equal(resCorreoInvalido.status, 400);
+
     const resGuardar = await fetch(`${urlBase}/api/contrasenas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             servicio: 'Cuenta Pruebas',
-            usuario: 'tester@local',
+            usuario: 'tester@correo.local',
             categoria: 'Trabajo',
             contrasena: resGenerar.data.datos.principal.contrasena
         })

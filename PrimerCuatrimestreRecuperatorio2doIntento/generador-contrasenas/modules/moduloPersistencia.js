@@ -48,7 +48,7 @@ function crearDatosIniciales() {
         {
             id: 'reg_demo_2',
             servicio: 'GitHub Estudio',
-            usuario: 'estudiante.dev',
+            usuario: 'estudiante@dev.local',
             categoria: 'Estudio',
             contrasena: 'N3!wT7@pB5#cF1$m',
             fechaCreacion: ahora

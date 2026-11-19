@@ -283,6 +283,7 @@ export async function inicializarHistorial(categorias = CATEGORIAS_VALIDAS, call
     });
 
     dom.inputServicio?.addEventListener('input', () => limpiarMensajeInlineDOM(dom.mensajeValidacionForm));
+    dom.inputUsuario?.addEventListener('input', () => limpiarMensajeInlineDOM(dom.mensajeValidacionForm));
     dom.inputClaveGuardar?.addEventListener('input', () => limpiarMensajeInlineDOM(dom.mensajeValidacionForm));
     dom.btnCancelarEdicion?.addEventListener('click', reiniciarFormulario);
     dom.formGuardar?.addEventListener('submit', manejarEnvioGuardar);
