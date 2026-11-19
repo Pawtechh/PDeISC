@@ -1,0 +1,49 @@
+{
+    "ultimaActualizacion": "2026-11-19T21:15:09.775Z",
+    "registros": [
+        {
+            "id": "reg_1795122655431_722",
+            "servicio": "asd",
+            "usuario": "",
+            "categoria": "Personal",
+            "contrasena": "DF_{fJ3${eJwq8HP:eC2.WpiK@;5duf=",
+            "puntuacion": 100,
+            "nivelSeguridad": "Muy Fuerte",
+            "claseSeguridad": "muy-fuerte",
+            "fechaCreacion": "2026-11-19T21:10:55.431Z"
+        },
+        {
+            "id": "reg_1795122312555_14",
+            "servicio": "asdasd",
+            "usuario": "asd",
+            "categoria": "Personal",
+            "contrasena": "5FZdn+XwX:kDQRcPTRqk9qJv(}p:Z!",
+            "puntuacion": 100,
+            "nivelSeguridad": "Muy Fuerte",
+            "claseSeguridad": "muy-fuerte",
+            "fechaCreacion": "2026-11-19T21:05:12.555Z"
+        },
+        {
+            "id": "reg_demo_1",
+            "servicio": "Correo Personal",
+            "usuario": "usuario@correo.local",
+            "categoria": "Personal",
+            "contrasena": "K8#mP4!vQ2@xL9$zR",
+            "puntuacion": 92,
+            "nivelSeguridad": "Muy Fuerte",
+            "claseSeguridad": "muy-fuerte",
+            "fechaCreacion": "2026-11-19T20:56:43.305Z"
+        },
+        {
+            "id": "reg_demo_2",
+            "servicio": "GitHub Estudio",
+            "usuario": "estudiante.dev",
+            "categoria": "Estudio",
+            "contrasena": "N3!wT7@pB5#cF1$m",
+            "puntuacion": 90,
+            "nivelSeguridad": "Muy Fuerte",
+            "claseSeguridad": "muy-fuerte",
+            "fechaCreacion": "2026-11-19T20:56:43.305Z"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "name": "generador-contrasenas",
+    "version": "1.0.0",
+    "description": "Generador de contrasenias criptograficas con Node.js, Clases GET/SET, Vector de Clases, Axios, Fetch, Eventos y base JSON en localhost",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node --watch server.js",
+        "test": "node --test tests/verificacion.test.js"
+    },
+    "keywords": [
+        "nodejs",
+        "express",
+        "generador-contrasenas",
+        "axios",
+        "fetch",
+        "clases",
+        "eventos",
+        "json"
+    ],
+    "author": "Proyecto Academico 1er Cuatrimestre",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^1.21.1",
+        "cors": "^2.8.6",
+        "express": "^5.3.0",
+        "morgan": "^1.12.1"
+    }
+}
