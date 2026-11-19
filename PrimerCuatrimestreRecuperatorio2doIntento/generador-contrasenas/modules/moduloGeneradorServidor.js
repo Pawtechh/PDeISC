@@ -25,8 +25,7 @@ const CARACTERES_AMBIGUOS = new Set(['0', 'O', 'o', '1', 'I', 'l']);
 
 /**
  * Filtra los caracteres que se prestan a confusion visual si el usuario tildo esa opcion.
- * En criollo: Si tildaste "Evitar caracteres ambiguos", saca las letras y numeros que se confunden facil.
- * 
+ * Si evitarAmbiguos es true, excluye los caracteres visualmente confusos (0, O, o, 1, I, l).
  * @param {string[]} vector Vector original de caracteres.
  * @param {boolean} evitarAmbiguos Si es true, excluye los ambiguos; si es false, deja el vector intacto.
  * @returns {string[]} Nuevo vector con los caracteres permitidos.
@@ -38,11 +37,8 @@ function filtrarAmbiguos(vector, evitarAmbiguos) {
 
 /**
  * Elige un caracter al azar de un vector de forma criptograficamente segura.
- * 
- * En criollo formal: En vez de usar Math.random() (que usa una formula matematica predecible
- * y no es segura para claves), usamos crypto.randomInt del motor de Node.js.
- * Esta funcion se conecta directo con el generador de entropia del sistema operativo,
- * garantizando que nadie pueda predecir que caracter va a salir.
+ * En lugar de Math.random() (pseudoaleatorio y predecible), utiliza crypto.randomInt de Node.js,
+ * conectado con la entropia criptografica del sistema operativo para garantizar impredecibilidad.
  * 
  * @param {string[]} vector Arreglo de donde sacar el caracter.
  * @returns {string} El caracter seleccionado al azar.
@@ -54,11 +50,8 @@ function elegirAleatorio(vector) {
 
 /**
  * Mezcla aleatoriamente los elementos de un vector usando el Algoritmo Fisher-Yates (o Knuth Shuffle).
- * 
- * En criollo formal: Es el equivalente a mezclar un mazo de cartas de verdad.
- * Recorre el vector desde el final hasta el principio y en cada paso intercambia la posicion
- * actual con otra elegida al azar con randomInt. Asi nos aseguramos de que el orden final
- * de la contrasenia no siga ningun patron predecible.
+ * Recorre el vector de atras hacia adelante intercambiando cada posicion con otra elegida
+ * aleatoriamente mediante randomInt, eliminando cualquier patron posicional predecible.
  * 
  * @param {string[]} vector Vector de caracteres a mezclar en su propio lugar.
  * @returns {string[]} El mismo vector barajado.
@@ -75,9 +68,7 @@ function mezclarVector(vector) {
 
 /**
  * Evalua la fortaleza de una contrasenia del lado del servidor.
- * 
- * En criollo formal: Analiza la clave como si fuera un auditor de seguridad.
- * Le da puntos segun su longitud y segun la variedad de caracteres que tenga:
+ * Calcula la fortaleza de la clave asignando puntaje segun su longitud y diversidad de caracteres:
  * - Longitud: hasta 45 puntos.
  * - Mayusculas: +13 puntos.
  * - Minusculas: +13 puntos.
@@ -85,7 +76,6 @@ function mezclarVector(vector) {
  * - Simbolos especiales: +15 puntos.
  * Con esa suma (de 0 a 100), define si es 'Debil', 'Media', 'Fuerte' o 'Muy Fuerte',
  * devolviendo tambien la clase CSS correspondiente para pintar la barra en la pantalla.
- * 
  * @param {string} contrasena Texto de la clave a analizar.
  * @returns {{ puntuacion: number, nivelSeguridad: string, claseSeguridad: string }}
  */
@@ -124,11 +114,8 @@ export function evaluarSeguridad(contrasena) {
 
 /**
  * Genera una contrasenia individual respetando todas las reglas solicitadas.
- * 
- * En criollo formal: Para que no haya "mala suerte" y una clave pedida con numeros no tenga
- * ningun numero, esta funcion primero mete obligatoriamente 1 caracter de cada grupo que este activo.
- * Luego rellena el resto de la longitud con el alfabeto completo mezclado, y finalmente baraja
- * todo el resultado con mezclarVector() para que el primer caracter no sea siempre predecible.
+ * Garantiza al menos un caracter de cada grupo habilitado, completa la longitud requerida
+ * usando el alfabeto unificado y baraja el vector resultante con mezclarVector().
  * 
  * @param {ConfiguracionGenerador} config Instancia con las opciones validadas.
  * @returns {string} La contrasenia final en texto plano.
@@ -166,10 +153,8 @@ function generarUnaContrasena(config) {
 
 /**
  * Genera un vector con la cantidad de contrasenias solicitadas (de 1 a 5) y evalua cada una.
- * 
- * En criollo formal: Es el punto de entrada que llama el servidor cuando llega un POST a /api/generar.
- * Valida la configuracion recibida con la clase ConfiguracionGenerador, crea las claves una a una,
- * les calcula la fuerza a cada una y arma un paquete completo con la clave principal y la lista de variantes.
+ * Punto de entrada utilizado por el servidor ante POST /api/generar: valida la configuracion,
+ * genera las claves solicitadas y adjunta la evaluacion de seguridad de cada una.
  * 
  * @param {Object|ConfiguracionGenerador} datosConfig Opciones enviadas desde el cliente.
  * @returns {Object} Objeto con la configuracion, tipos activos, clave principal y lista completa.

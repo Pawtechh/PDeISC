@@ -41,8 +41,7 @@ const __directorioRaiz = path.dirname(__nombreArchivo);
 
 /**
  * Clase que hereda de EventEmitter para emitir y escuchar eventos internos en el servidor.
- * 
- * En criollo formal: Cumple con el tema de "Eventos" del lado del servidor.
+ * Implementa el patron de Eventos en Node.js heredando de EventEmitter.
  * Cuando alguien genera una clave o guarda una credencial, el servidor dispara un evento
  * que puede registrar logs, auditorias o notificar a otros servicios desacoplados.
  */
@@ -50,11 +49,9 @@ class EmisorEventosServidor extends EventEmitter {}
 
 /**
  * Fabrica asincrona para construir, configurar y retornar la aplicacion de Express.
- * 
- * En criollo formal: Centraliza toda la configuracion del servidor (middlewares, rutas estaticas,
+ * Centraliza toda la configuracion del servidor (middlewares, rutas estaticas,
  * endpoints de la API y eventos) permitiendo tanto encender el servidor en produccion
  * como correr pruebas unitarias aisladas sin levantar puertos fijos.
- * 
  * @param {Object} opciones Opciones de configuracion (rutaBaseDatos, silenciarLogs).
  * @returns {Promise<{ aplicacion: express.Application, emisorEventos: EmisorEventosServidor }>}
  */
@@ -114,7 +111,7 @@ export async function crearAplicacion(opciones = {}) {
 
     /**
      * GET /api/salud
-     * En criollo: Chequeo de estado. Responde si Node.js esta vivo y cuantas claves hay guardadas.
+     * Endpoint de estado: informa version de Node.js, archivo JSON activo, total de claves y categorias.
      * Consumido desde el cliente mediante Axios.
      */
     aplicacion.get('/api/salud', async (_req, res) => {
@@ -140,7 +137,7 @@ export async function crearAplicacion(opciones = {}) {
 
     /**
      * POST /api/generar
-     * En criollo: Genera de 1 a 5 contrasenias seguras con node:crypto y calcula su fuerza.
+     * Genera de 1 a 5 contrasenias seguras en el servidor usando node:crypto y evalua su fuerza.
      * Consumido desde el cliente mediante Axios.
      */
     aplicacion.post('/api/generar', (req, res) => {
@@ -173,7 +170,7 @@ export async function crearAplicacion(opciones = {}) {
 
     /**
      * GET /api/contrasenas
-     * En criollo: Lee el archivo database/contrasenas.json y devuelve las claves filtradas.
+     * Lee database/contrasenas.json y devuelve los registros filtrados por busqueda y categoria.
      * Consumido desde el cliente mediante Fetch API.
      */
     aplicacion.get('/api/contrasenas', async (req, res) => {
@@ -202,7 +199,7 @@ export async function crearAplicacion(opciones = {}) {
 
     /**
      * POST /api/contrasenas
-     * En criollo: Guarda una nueva clave en el archivo database/contrasenas.json.
+     * Valida con RegistroContrasena y guarda una nueva credencial en database/contrasenas.json.
      * Consumido desde el cliente mediante Fetch API.
      */
     aplicacion.post('/api/contrasenas', async (req, res) => {
@@ -247,7 +244,7 @@ export async function crearAplicacion(opciones = {}) {
 
     /**
      * PUT /api/contrasenas/:id
-     * En criollo: Modifica una contrasenia existente segun su ID.
+     * Actualiza una credencial existente por su ID en database/contrasenas.json.
      * Consumido desde el cliente mediante Fetch API.
      */
     aplicacion.put('/api/contrasenas/:id', async (req, res) => {
@@ -294,7 +291,7 @@ export async function crearAplicacion(opciones = {}) {
 
     /**
      * DELETE /api/contrasenas/:id
-     * En criollo: Borra una contrasenia especifica de database/contrasenas.json.
+     * Elimina una credencial puntual de database/contrasenas.json por su ID.
      * Consumido desde el cliente mediante Fetch API.
      */
     aplicacion.delete('/api/contrasenas/:id', async (req, res) => {
@@ -335,7 +332,7 @@ export async function crearAplicacion(opciones = {}) {
 
     /**
      * DELETE /api/contrasenas
-     * En criollo: Vacia todas las contrasenias del archivo JSON.
+     * Elimina todos los registros almacenados en database/contrasenas.json.
      * Consumido desde el cliente mediante Fetch API.
      */
     aplicacion.delete('/api/contrasenas', async (_req, res) => {

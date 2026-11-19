@@ -23,14 +23,13 @@ const __directorioModulos = path.dirname(__archivoActual);
 export const RUTA_BASE_DATOS = path.resolve(__directorioModulos, '..', 'database', 'contrasenas.json');
 
 // Cola de promesas para escrituras en disco
-// En criollo formal: Si dos usuarios o peticiones quieren guardar casi al mismo milisegundo,
-// esta variable encadena las escrituras una detras de la otra para que nunca se pisen ni corrompan el archivo JSON.
+// Encadena las escrituras en orden secuencial para evitar condiciones de carrera
+// o corrupcion del archivo JSON ante peticiones simultaneas.
 let colaEscritura = Promise.resolve();
 
 /**
  * Genera la estructura inicial con un par de registros de muestra si la base arranca vacia.
- * En criollo: Si el archivo JSON no existe o esta en blanco, crea un par de contrasenias demo
- * para que cuando abras la pagina por primera vez ya se vea el funcionamiento del historial.
+ * Inicializa el archivo JSON con registros de ejemplo cuando la base arranca vacia.
  * 
  * @returns {{ ultimaActualizacion: string, registros: Array<Object> }}
  */
@@ -69,8 +68,7 @@ function crearDatosIniciales() {
 
 /**
  * Garantiza que la carpeta 'database' y el archivo 'contrasenas.json' existan y sean validos.
- * En criollo: Si no existe la carpeta, la crea; si el archivo no esta, lo escribe con los datos demo.
- * 
+ * Crea el directorio database/ si falta y valida o genera el archivo contrasenas.json inicial.
  * @param {string} rutaArchivo Ruta absoluta al archivo JSON.
  */
 export async function asegurarBaseDatosJSON(rutaArchivo = RUTA_BASE_DATOS) {
@@ -88,8 +86,7 @@ export async function asegurarBaseDatosJSON(rutaArchivo = RUTA_BASE_DATOS) {
 
 /**
  * Lee el archivo JSON desde el disco y retorna una instancia viva del Vector de Clases GestorContrasenas.
- * En criollo: Abre el archivo .json, lo lee, y carga cada registro adentro del Vector de Clases en memoria.
- * 
+ * Lee el archivo JSON del disco e instancia un Vector de Clases GestorContrasenas con los datos.
  * @param {string} rutaArchivo Ruta absoluta al archivo de base de datos.
  * @returns {Promise<GestorContrasenas>} Instancia del gestor cargada con los datos del disco.
  */
@@ -105,8 +102,7 @@ export async function cargarGestorContrasenas(rutaArchivo = RUTA_BASE_DATOS) {
 
 /**
  * Guarda el estado actual del Vector de Clases en el archivo JSON del disco.
- * En criollo: Toma el Vector de Clases, lo pasa a texto con formato prolijo (4 espacios)
- * y lo guarda fisicamente en database/contrasenas.json usando la cola para evitar colisiones.
+ * Serializa el Vector de Clases a JSON legible (4 espacios) y lo escribe en disco con la cola.
  * 
  * @param {GestorContrasenas} gestor Instancia del gestor que contiene las contrasenias.
  * @param {string} rutaArchivo Ruta absoluta al archivo de persistencia.

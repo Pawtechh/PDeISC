@@ -45,7 +45,7 @@ const dom = {};
 
 /**
  * Busca y guarda en el objeto 'dom' todos los elementos HTML necesarios.
- * En criollo: Agarra los botones, inputs y etiquetas del HTML por su ID para tenerlos a mano.
+ * Captura por ID todas las referencias del DOM necesarias para controlar la interfaz.
  */
 function capturarDOM() {
     dom.btnAlternarTema = document.getElementById('btnAlternarTema');
@@ -72,10 +72,8 @@ function capturarDOM() {
 
 /**
  * Pide al servidor Node.js que genere contrasenias usando Axios (POST /api/generar).
- * 
- * En criollo formal: Toma las opciones activas (validadas con la clase ConfiguracionGenerador),
- * hace la peticion con Axios y cuando Node.js responde, actualiza el visor de texto, la barra
- * de fuerza de colores, las variantes extra y pasa la clave al formulario de guardado.
+ * Valida la configuracion actual, solicita claves al servidor via Axios y actualiza
+ * visor, barra de seguridad, lista de variantes y campo del formulario de guardado.
  * 
  * @param {boolean} mostrarAviso Si es true, muestra un toast de confirmacion en pantalla.
  */
@@ -102,8 +100,7 @@ async function solicitarGeneracion(mostrarAviso = false) {
 
 /**
  * Registra todos los escuchadores de eventos para los controles del generador.
- * 
- * En criollo formal: Conecta cada boton, checkbox y deslizador con su funcion correspondiente.
+ * Vincula los eventos de interfaz (click, input, change) con el generador, portapapeles y variantes.
  * Demuestra eventos de DOM como 'click', 'input', 'change' y debounce de slider.
  */
 function registrarEventosGenerador() {
@@ -206,7 +203,7 @@ function registrarEventosGenerador() {
 
 /**
  * Funcion de arranque general ejecutada cuando el DOM esta completamente cargado.
- * En criollo: La chispa que enciende toda la maquinaria de la aplicacion en el cliente.
+ * Orquesta el arranque completo: tema, scroll-top, eventos, estado del servidor e historial.
  */
 async function iniciarAplicacion() {
     capturarDOM();

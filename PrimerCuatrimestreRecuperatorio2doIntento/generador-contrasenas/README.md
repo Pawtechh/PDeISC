@@ -17,21 +17,30 @@ Desarrollada para integrar y demostrar todos los temas vistos en el **Primer Cua
 
 ---
 
-## 1. Explicacion de Toda la Aplicacion en "Criollo Formal" (Para Defender ante el Profesor)
+## 1. Explicacion Clara de Toda la Aplicacion (Para Defender ante el Profesor)
 
 > *"Profesor, este proyecto es un **Generador y Gestor de Contrasenias** conectado a un servidor backend propio en **Node.js con Express**.*
 >
-> *Apenas se abre la pagina en `http://localhost:3000`, el navegador no genera una clave inventada a ciegas: se conecta con el servidor mediante una peticion HTTP con la libreria **Axios** (`POST /api/generar`). En el backend, Node.js lee la configuracion (longitud, mayusculas, minusculas, numeros, simbolos), valida los datos con una clase (`ConfiguracionGenerador`) y genera la clave usando el modulo criptografico nativo `node:crypto`. Ahi mismo, el servidor calcula de 0 a 100 la fortaleza de la clave (Debil, Media, Fuerte o Muy Fuerte) y devuelve la respuesta en formato JSON.*
+> *Apenas se abre la pagina en `http://localhost:3000`, el navegador no genera una clave al azar por su cuenta: se conecta con el servidor mediante una peticion HTTP con **Axios** (`POST /api/generar`). En el backend, Node.js valida la configuracion con la clase `ConfiguracionGenerador` y genera la clave de forma segura usando el modulo nativo `node:crypto`. Ahi mismo, el servidor calcula de 0 a 100 la fortaleza de la clave (Debil, Media, Fuerte o Muy Fuerte) y devuelve la respuesta en JSON.*
 >
-> *En la pantalla, el usuario ve el visor de la contrasenia, una barra visual de colores con su puntaje y puede copiarla al portapapeles o cambiar las opciones (por ejemplo, pedir 3 o 5 contrasenias de golpe). Cada cambio en los controles le pide inmediatamente una nueva clave al servidor.*
+> *En la pantalla, el usuario ve el visor de la contrasenia, una barra de fortaleza con su puntaje y puede copiarla o elegir generar 1, 3 o 5 variantes. Si presiona "Usar" en cualquiera de las variantes, esta pasa automaticamente al visor principal de arriba y al formulario de guardado.*
 >
-> *Al lado derecho, el usuario tiene un formulario para **guardar** esa contrasenia. Antes de mandar nada, el navegador valida en caliente con la clase `RegistroContrasena`: si el usuario pone un nombre vacio o una categoria invalida, los `setters` lanzan un error que mostramos en una caja roja en el DOM, **sin usar jamas `alert()`**.*
+> *Al lado derecho, el usuario tiene un formulario para **guardar** la contrasenia asociada a un servicio, un correo opcional (validado si se escribe al menos una letra) y una categoria. Antes de enviar nada, el navegador valida con la clase `RegistroContrasena`: si falta un dato o el correo es invalido, los `setters` lanzan un error que mostramos en una caja dentro del DOM, **sin usar `alert()`**.*
 >
-> *Para guardar, el cliente hace una peticion mediante la **Fetch API** nativa (`POST /api/contrasenas`). El servidor recibe los datos, los almacena adentro de un **Vector de Clases** (`GestorContrasenas`) y los escribe de forma persistente en el disco en el archivo **`database/contrasenas.json`** en `localhost`.*
+> *Para guardar, editar o borrar en el archivo **`database/contrasenas.json`** en `localhost`, el cliente utiliza la **Fetch API** nativa (`GET`, `POST`, `PUT`, `DELETE`). El servidor almacena los registros dentro de un **Vector de Clases** (`GestorContrasenas`) y los persiste en disco. Abajo aparece el historial completo para buscar, filtrar por categoria, ver/ocultar con asteriscos, copiar, editar o eliminar mediante un **modal propio en el DOM** (sin `confirm()`).*
 >
-> *En la seccion inferior se muestra el historial de contrasenias leidas de ese archivo JSON. El usuario puede buscar por nombre o filtrar por categoria en tiempo real con metodos de arrays (`.filter()`), ver u ocultar la clave con asteriscos, copiarla, editarla (`PUT` con Fetch) o eliminarla (`DELETE` con Fetch). Si quiere borrar una clave o vaciar todo el historial, la aplicacion abre un **modal propio en el DOM**, evitando el uso del clasico `confirm()` del navegador.*
->
-> *Por ultimo, la interfaz cuenta con un interruptor para alternar entre **Modo Claro y Modo Oscuro** guardado en `localStorage`, un **boton flotante para subir arriba al toque** cuando se hace scroll, y un maquetado 100% fluido: en pantallas mayores a 768px los paneles se distribuyen en filas horizontales ocupando todo el ancho sin bordes blancos vacios, y en pantallas de celular se acomodan de forma vertical en una sola columna."*
+> *Por ultimo, la pagina incluye un boton de **Modo Claro / Modo Oscuro** guardado en `localStorage`, un **boton flotante para subir hacia arriba** al hacer scroll, y un disenio 100% responsive: en escritorio ocupa todo el ancho en filas horizontales sin margenes vacios laterales, y en movil pasa a columna vertical."*
+
+### Resumen Flash (Que Responder Rapido por Cada Tema)
+* **Node.js + Express:** Es el servidor backend (`server.js`) que entrega el HTML/CSS/JS y procesa las peticiones en `http://localhost:3000`.
+* **Respuestas del servidor:** Todas las claves, puntajes de seguridad y guardados se calculan y validan en Node.js, respondiendo siempre `{ exito, mensaje, datos }`.
+* **Arrays / Vectores:** Listas de caracteres (`VECTOR_MAYUSCULAS`, etc.), mezcla con algoritmo Fisher-Yates y metodos `.map()`, `.filter()`, `.find()`, `.splice()`.
+* **Clases (`get` y `set`):** `ConfiguracionGenerador` y `RegistroContrasena` encapsulan los datos con `_propiedad` y los validan automaticamente dentro de cada `set`.
+* **Vector de Clases:** `GestorContrasenas` administra un arreglo donde cada elemento es una instancia real de `RegistroContrasena`, asegurando integridad en altas, bajas, modificaciones y filtros.
+* **Import / Export:** Modulos ES6 (`"type": "module"`) para compartir las mismas clases entre Node.js y el navegador sin repetir codigo.
+* **Fetch vs Axios:** Axios se uso para generar claves y chequear salud del servidor (serializa JSON y rechaza errores 4xx/5xx solo); Fetch se uso para todo el ABM en `contrasenas.json` (API nativa, parseo manual con `.json()` y control con `respuesta.ok`).
+* **Eventos:** En el cliente: `DOMContentLoaded`, `click`, `input`, `change`, `submit`, `scroll`, `keydown`. En el servidor: `EventEmitter` (`contrasena:generada`, `registro:guardado`, etc.).
+* **Base `.json` en localhost:** Archivo `database/contrasenas.json` leido y guardado con `node:fs/promises` y cola de escritura para evitar choques.
 
 ---
 

@@ -32,8 +32,8 @@ import { crearAplicacion } from '../server.js';
 
 /**
  * Prueba 1: Verifica que las clases con getters y setters validen correctamente los datos.
- * En criollo: Comprueba que si alguien intenta poner una longitud invalida o una categoria trucha,
- * la clase salte con un error y no deje pasar datos corruptos.
+ * Comprueba que las clases rechacen longitudes fuera de rango, correos invalidos
+ * o categorias inexistentes lanzando las excepciones esperadas.
  */
 test('Clases ConfiguracionGenerador y RegistroContrasena validan con GET y SET', () => {
     const config = new ConfiguracionGenerador({
@@ -93,8 +93,8 @@ test('Clases ConfiguracionGenerador y RegistroContrasena validan con GET y SET',
 
 /**
  * Prueba 2: Verifica el funcionamiento del Vector de Clases GestorContrasenas.
- * En criollo: Comprueba que el gestor guarde instancias reales de RegistroContrasena,
- * sepa buscar por ID, filtrar por categoria, actualizar y borrar con splice.
+ * Comprueba que el Vector de Clases almacene instancias de RegistroContrasena
+ * y ejecute correctamente filtrar(), actualizar() y eliminar().
  */
 test('Vector de Clases GestorContrasenas filtra, actualiza y elimina instancias', () => {
     const gestor = new GestorContrasenas([
@@ -123,8 +123,8 @@ test('Vector de Clases GestorContrasenas filtra, actualiza y elimina instancias'
 
 /**
  * Prueba 3: Verifica la generacion segura de claves en el backend y evaluacion de fuerza.
- * En criollo: Comprueba que las claves tengan la longitud exacta, que no tengan caracteres
- * ambiguos si se pidio evitarlos y que el auditor de seguridad clasifique bien las contrasenias.
+ * Comprueba que el generador respete longitud exacta, excluya caracteres ambiguos
+ * y clasifique adecuadamente la fortaleza de las claves.
  */
 test('Generador del servidor respeta longitud, evitar ambiguos y evaluacion', () => {
     const res = generarContrasenasServidor({
@@ -146,8 +146,8 @@ test('Generador del servidor respeta longitud, evitar ambiguos y evaluacion', ()
 
 /**
  * Prueba 4: Prueba de integracion completa con servidor Express levantado en puerto dinamico.
- * En criollo: Levanta un servidor de pruebas real, hace peticiones HTTP con Axios y con Fetch,
- * escribe en un archivo JSON temporal y captura los eventos de EventEmitter.
+ * Levanta un servidor Express de pruebas en puerto dinamico para validar rutas HTTP
+ * con Axios y Fetch, persistencia JSON y eventos EventEmitter.
  */
 test('Integracion HTTP en localhost con JSON, Axios, Fetch y EventEmitter', async (t) => {
     const dirTemporal = await fs.mkdtemp(path.join(os.tmpdir(), 'generador-test-'));

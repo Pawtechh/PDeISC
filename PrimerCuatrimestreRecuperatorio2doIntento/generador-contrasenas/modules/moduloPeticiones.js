@@ -11,17 +11,13 @@
 
 /**
  * Servicio HTTP basado en la libreria externa Axios.
- * 
- * En criollo formal: Axios es una libreria que facilita las peticiones HTTP porque ya viene
- * con esteroides: transforma los datos a JSON automaticamente y cuando el servidor responde
- * con un codigo de error (como 400 o 500), salta directo al bloque catch sin que tengamos
- * que verificar a mano si la respuesta salio bien o mal.
+ * Axios es una libreria HTTP basada en promesas que serializa JSON automaticamente y rechaza
+ * la promesa ante codigos HTTP 4xx/5xx para capturar cualquier error del servidor en el catch.
  */
 export const servicioAxios = {
     /**
      * Consulta el estado operativo del servidor y las categorias disponibles.
-     * En criollo: Le pregunta al servidor "¿estas despierto y funcionando?".
-     * 
+     * Verifica que el servidor Node.js este operativo y obtiene las categorias configuradas.
      * @returns {Promise<Object>} Promesa que resuelve con los datos del servidor (motor Node, base JSON, categorias).
      * @throws {Error} Si el servidor esta apagado o hubo un fallo de conexion.
      */
@@ -41,8 +37,7 @@ export const servicioAxios = {
 
     /**
      * Envia la configuracion elegida en los controles al servidor para que este genere la clave.
-     * En criollo: Le manda a Node.js las opciones (longitud, mayusculas, etc.) y recibe la contrasenia lista.
-     * 
+     * Envia las opciones de configuracion via POST y recibe las contrasenias generadas.
      * @param {Object} configuracion Objeto plano con longitud, booleanos de caracteres y cantidad.
      * @returns {Promise<Object>} Promesa que resuelve con el JSON de respuesta ({ exito, mensaje, datos }).
      * @throws {Error} Si las opciones son invalidas segun las reglas del servidor.
@@ -62,14 +57,9 @@ export const servicioAxios = {
 
 /**
  * Funcion auxiliar interna para procesar las respuestas de la Fetch API nativa.
- * 
- * En criollo formal: A diferencia de Axios, la funcion nativa fetch() NO lanza un error
- * si el servidor contesta con un 400 (Bad Request) o 500 (Internal Error); para fetch eso
- * sigue siendo una respuesta valida. Por eso creamos esta funcion que hace dos cosas clave:
- * 1. Extrae el JSON manualmente con respuesta.json().
- * 2. Comprueba si 'respuesta.ok' es true (codigos 200-299); si no lo es, tira un throw Error
- *    con el mensaje exacto que mando el servidor, para que la app se entere del problema.
- * 
+ * A diferencia de Axios, fetch() nativo no lanza excepciones ante codigos HTTP 400 o 500.
+ * Esta funcion auxiliar extrae el JSON con respuesta.json() y verifica respuesta.ok
+ * para lanzar un Error con el mensaje exacto del servidor si la solicitud fallo.
  * @param {Response} respuesta Objeto de respuesta nativo devuelto por fetch().
  * @returns {Promise<Object>} Objeto JSON ya desempaquetado si todo salio bien.
  * @throws {Error} Si el servidor devolvio un estado no exitoso o el cuerpo no es valido.
@@ -91,16 +81,13 @@ async function procesarRespuestaFetch(respuesta) {
 
 /**
  * Servicio HTTP basado en la Fetch API nativa del navegador.
- * 
- * En criollo formal: Fetch viene incorporado de fábrica en JavaScript moderno sin instalar nada.
- * Aqui lo usamos para todas las operaciones de la base de datos local 'database/contrasenas.json':
- * leer la lista, crear un registro nuevo, modificarlo, eliminar uno solo o vaciar todos.
+ * La Fetch API viene integrada de forma nativa en los navegadores modernos sin dependencias.
+ * Se utiliza aqui para todas las operaciones ABM sobre database/contrasenas.json.
  */
 export const servicioFetch = {
     /**
      * Obtiene todas las contrasenias guardadas en el archivo JSON del servidor.
-     * En criollo: Trae del backend el listado completo para pintarlo en la pantalla.
-     * 
+     * Consulta al backend mediante GET el listado completo de registros guardados en el JSON.
      * @returns {Promise<Array<Object>>} Vector con los registros guardados en la base de datos.
      */
     async listarGuardadas() {
@@ -115,8 +102,7 @@ export const servicioFetch = {
 
     /**
      * Guarda una nueva contrasenia con su servicio, usuario y categoria en el archivo JSON.
-     * En criollo: Da de alta una nueva credencial en la base de datos local.
-     * 
+     * Envia una nueva credencial mediante POST serializando el cuerpo con JSON.stringify().
      * @param {Object} datos Objeto con servicio, usuario, categoria y contrasena.
      * @returns {Promise<Object>} Respuesta del servidor confirmando el guardado.
      */
@@ -136,8 +122,7 @@ export const servicioFetch = {
 
     /**
      * Modifica los datos de una contrasenia ya existente segun su identificador unico.
-     * En criollo: Actualiza un registro que ya teniamos guardado en el archivo JSON.
-     * 
+     * Actualiza un registro existente en el servidor mediante PUT.
      * @param {string} id Identificador unico del registro (ej: 'reg_12345').
      * @param {Object} cambios Objeto con los nuevos valores a actualizar.
      * @returns {Promise<Object>} Respuesta del servidor confirmando la actualizacion.
@@ -157,8 +142,7 @@ export const servicioFetch = {
 
     /**
      * Borra una contrasenia puntual de la base de datos JSON segun su ID.
-     * En criollo: Elimina del archivo del servidor la clave que el usuario selecciono.
-     * 
+     * Elimina una credencial puntual del archivo JSON mediante DELETE.
      * @param {string} id Identificador unico del registro a eliminar.
      * @returns {Promise<Object>} Confirmacion del servidor de que el registro fue borrado.
      */
@@ -172,8 +156,7 @@ export const servicioFetch = {
 
     /**
      * Borra absolutamente todas las contrasenias guardadas en el archivo JSON.
-     * En criollo: Limpia por completo la base de datos dejandola vacia.
-     * 
+     * Vacia todos los registros de la base de datos JSON mediante DELETE.
      * @returns {Promise<Object>} Confirmacion del servidor indicando cuantos registros se eliminaron.
      */
     async vaciarHistorial() {

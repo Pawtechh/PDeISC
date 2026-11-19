@@ -13,7 +13,7 @@
 
 /**
  * Vector constante con las categorias validas permitidas en todo el sistema.
- * En criollo: Es la lista oficial de grupos donde se puede clasificar una contrasenia.
+ * Lista oficial de categorias permitidas para clasificar las credenciales.
  */
 export const CATEGORIAS_VALIDAS = [
     'Personal',
@@ -25,8 +25,7 @@ export const CATEGORIAS_VALIDAS = [
 
 /**
  * Comprueba si un texto cumple con el formato estandar de correo electronico (texto@dominio.ext).
- * En criollo: Valida que si el usuario escribio algo en el campo de correo, sea un mail real.
- * 
+ * Valida que, si el usuario escribio texto en el campo opcional, cumpla con el formato de email.
  * @param {string} valor Cadena a validar.
  * @returns {boolean} true si tiene formato valido de correo.
  */
@@ -36,10 +35,9 @@ export function esCorreoValido(valor) {
 
 /**
  * Clase que encapsula las opciones de configuracion del generador de contrasenias.
- * 
- * En criollo formal: Esta clase representa la "receta" que pide el usuario (cuantos caracteres,
- * si quiere mayusculas, numeros, etc.). Mediante sus setters nos aseguramos de que nadie
- * pueda poner numeros locos (como una longitud de 0 o 999 caracteres).
+ * Modela las opciones elegidas por el usuario (longitud, conjuntos de caracteres y cantidad).
+ * Sus metodos set validan los rangos permitidos para impedir configuraciones invalidas
+ * (como longitudes fuera de 6-32 o cantidades fuera de 1-5).
  */
 export class ConfiguracionGenerador {
     /**
@@ -136,8 +134,7 @@ export class ConfiguracionGenerador {
 
     /**
      * Getter calculado: Construye dinamicamente un vector con los nombres de los grupos activos.
-     * En criollo: Revisa que casillas tildo el usuario y devuelve un array con los nombres.
-     * 
+     * Inspecciona las opciones habilitadas y retorna un vector con los nombres de los conjuntos activos.
      * @returns {string[]} Vector de textos con los conjuntos habilitados.
      */
     get tiposActivos() {
@@ -151,7 +148,7 @@ export class ConfiguracionGenerador {
 
     /**
      * Comprueba que haya al menos un conjunto de caracteres seleccionado.
-     * En criollo: Evita que el usuario destilde todo y pida una clave hecha de la nada.
+     * Evita que se desmarquen todos los tipos de caracteres al mismo tiempo.
      */
     validar() {
         if (this.tiposActivos.length === 0) {
@@ -178,11 +175,9 @@ export class ConfiguracionGenerador {
 
 /**
  * Clase que representa una contrasenia guardada en la base de datos JSON local.
- * 
- * En criollo formal: Cada registro de nuestra base de datos (por ejemplo, la clave de "Gmail"
- * o de "Banco") es una instancia viva de esta clase. Sus setters se encargan de validar
- * que el nombre no este vacio, que la categoria pertenezca al vector oficial y que la clave
- * tenga un tamanio logico antes de tocar el disco.
+ * Modela cada credencial guardada en el archivo JSON (por ejemplo, una cuenta de Gmail o Banco).
+ * Sus metodos set validan servicio, correo opcional, categoria y longitud de clave
+ * antes de permitir cualquier escritura en disco.
  */
 export class RegistroContrasena {
     constructor(datos = {}, opciones = {}) {
@@ -271,7 +266,7 @@ export class RegistroContrasena {
 
     /**
      * Getter calculado: Devuelve asteriscos para ocultar la contrasenia real en la pantalla.
-     * En criollo: Si la clave es 'secreto123', devuelve '**********' para no mostrarla a simple vista.
+     * Retorna una mascara de asteriscos para ocultar la clave real salvo que el usuario pulse Ver.
      */
     get contrasenaEnmascarada() {
         return '*'.repeat(Math.min(Math.max(this._contrasena.length, 8), 16));
@@ -297,11 +292,9 @@ export class RegistroContrasena {
 
 /**
  * Vector de Clases: Administra una coleccion interna de instancias RegistroContrasena.
- * 
- * En criollo formal: Cumple al 100% el requisito de "Vector de Clases" pedido en la materia.
- * En lugar de tener arreglos sueltos de objetos sin control, esta clase envuelve un vector
- * (`_vectorRegistros`) asegurando que cada elemento sea una instancia valida de RegistroContrasena,
- * proveyendo metodos para buscar por ID, agregar, actualizar, eliminar, vaciar y filtrar.
+ * Implementa el patron Vector de Clases: administra un arreglo interno (_vectorRegistros)
+ * garantizando que cada elemento sea una instancia valida de RegistroContrasena
+ * y proveyendo metodos centralizados para buscar, agregar, actualizar, eliminar y filtrar.
  */
 export class GestorContrasenas {
     /**
@@ -342,7 +335,7 @@ export class GestorContrasenas {
 
     /**
      * Llena el vector a partir de los datos leidos del archivo database/contrasenas.json.
-     * En criollo: Carga la base de datos cruda en memoria convirtiendola en instancias de clase
+     * Convierte los objetos leidos del disco en instancias de RegistroContrasena
      * sin rechazar registros viejos heredados de versiones previas.
      */
     cargarDesdeJSON(arregloCrudo = []) {
@@ -366,8 +359,7 @@ export class GestorContrasenas {
 
     /**
      * Agrega una nueva credencial al principio del vector usando .unshift().
-     * En criollo: Pone la nueva contrasenia primera en la fila para que aparezca arriba de todo.
-     * 
+     * Inserta la nueva credencial al inicio del vector para mostrarla primero en el historial.
      * @param {Object|RegistroContrasena} datos Datos de la clave a agregar.
      * @returns {RegistroContrasena} La instancia que fue agregada al vector.
      */
@@ -399,8 +391,7 @@ export class GestorContrasenas {
 
     /**
      * Elimina un elemento del vector de clases segun su ID usando .splice().
-     * En criollo: Encuentra en que posicion del array esta y lo saca de raiz.
-     * 
+     * Localiza la posicion exacta del registro en el vector y lo elimina mediante splice().
      * @param {string} id ID del registro a remover.
      * @returns {RegistroContrasena|null} El registro eliminado o null si no existia.
      */
@@ -423,8 +414,7 @@ export class GestorContrasenas {
 
     /**
      * Filtra el vector por texto de busqueda (servicio/usuario) y por categoria usando .filter().
-     * En criollo: Filtra la lista en tiempo real segun lo que el usuario tipea o elige en el select.
-     * 
+     * Filtra el vector en tiempo real combinando el texto de busqueda y la categoria elegida.
      * @param {{ busqueda?: string, categoria?: string }} opciones Criterios de filtrado.
      * @returns {RegistroContrasena[]} Vector con las instancias que cumplen con el filtro.
      */

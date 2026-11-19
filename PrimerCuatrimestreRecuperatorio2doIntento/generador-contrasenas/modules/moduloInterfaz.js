@@ -14,11 +14,8 @@ const CLAVE_TEMA_STORAGE = 'generador_claves_tema';
 
 /**
  * Sanitiza cualquier texto antes de insertarlo en el HTML para evitar ataques XSS.
- * 
- * En criollo formal: Como las contrasenias generadas pueden tener simbolos raros
- * como '<', '>', '&' o comillas, si las metieramos directamente con innerHTML el navegador
- * podria confundirlas con etiquetas HTML. Esta funcion reemplaza esos caracteres especiales
- * por sus entidades HTML seguras (&lt;, &gt;, etc.) para que se vean intactas sin romper la pantalla.
+ * Convierte caracteres especiales (<, >, &, ", ') en entidades HTML seguras para evitar
+ * conflictos de renderizado e inyeccion XSS al mostrar contrasenias con simbolos.
  * 
  * @param {string} texto Cadena de caracteres a escapar.
  * @returns {string} Cadena sanitizada y segura para innerHTML.
@@ -34,10 +31,8 @@ export function escaparHTML(texto) {
 
 /**
  * Copia un texto al portapapeles del sistema operativo de manera compatible.
- * 
- * En criollo formal: Intenta primero usar la API moderna navigator.clipboard. Si el navegador
- * esta en un entorno restringido o no lo permite, usa un truco clasico con un textarea temporal
- * invisible y document.execCommand('copy'), devolviendo true si pudo copiarlo o false si fallo.
+ * Copia el texto al portapapeles usando navigator.clipboard y un textarea temporal con
+ * execCommand('copy') como respaldo compatible, retornando true si tuvo exito.
  * 
  * @param {string} texto Texto a copiar (por ejemplo, la contrasenia).
  * @returns {Promise<boolean>} Resuelve true si se copio con exito.
@@ -84,8 +79,7 @@ function actualizarBotonTema(botonTema, tema) {
 
 /**
  * Inicializa el tema claro/oscuro al cargar la pagina leyendo el valor de localStorage.
- * En criollo: Se fija si el usuario ya habia elegido el modo oscuro antes para respetarselo.
- * 
+ * Lee de localStorage el ultimo tema guardado (claro u oscuro) y lo aplica al cargar.
  * @param {HTMLElement} botonTema Boton selector de tema.
  */
 export function inicializarTema(botonTema) {
@@ -100,8 +94,7 @@ export function inicializarTema(botonTema) {
 
 /**
  * Alterna entre el tema claro y el tema oscuro y persiste la eleccion en localStorage.
- * En criollo: Hace el cambio de dia/noche al tocar el boton y lo guarda para no perderlo al refrescar.
- * 
+ * Alterna el atributo data-tema entre claro y oscuro y guarda la eleccion en localStorage.
  * @param {HTMLElement} botonTema Boton selector de tema.
  */
 export function alternarTemaColor(botonTema) {
@@ -120,10 +113,8 @@ export function alternarTemaColor(botonTema) {
 
 /**
  * Configura el comportamiento del boton flotante para subir hacia arriba al toque.
- * 
- * En criollo formal: Escucha el scroll de la ventana; cuando el usuario bajo mas de 110 pixeles,
- * le agrega la clase '.visible' con transicion suave. Cuando el usuario hace click,
- * ejecuta scrollTo con animacion smooth hacia la posicion superior (top: 0).
+ * Escucha el evento scroll para mostrar el boton tras bajar 110px y ejecuta scrollTo
+ * con desplazamiento suave (smooth) hacia el inicio de la pagina al hacer click.
  * 
  * @param {HTMLElement} botonFlotante Boton flotante en la esquina inferior.
  * @param {HTMLElement|null} botonFooter Boton o link secundario opcional.
@@ -151,10 +142,8 @@ export function inicializarBotonSubirArriba(botonFlotante, botonFooter = null) {
 
 /**
  * Muestra una notificacion flotante tipo Toast en pantalla (prohibido usar alert()).
- * 
- * En criollo formal: En lugar de interrumpir al usuario con una molesta ventana alert(),
- * crea un elemento visual en la esquina superior con el mensaje (exito, error, info),
- * lo anima con CSS y lo hace desaparecer automaticamente tras unos segundos.
+ * Reemplaza alert(): inserta una notificacion temporal animada en el DOM que desaparece
+ * automaticamente tras la duracion configurada o al cerrarla manualmente.
  * 
  * @param {string} mensaje Texto a comunicar al usuario.
  * @param {'info'|'exito'|'error'|'advertencia'} tipo Estilo visual del mensaje.
@@ -192,7 +181,7 @@ export function mostrarNotificacion(mensaje, tipo = 'info', duracionMs = 3000) {
 
 /**
  * Muestra un mensaje de validacion dentro del propio formulario (prohibido usar alert()).
- * En criollo: Muestra el error de validacion en una cajita roja debajo del formulario.
+ * Renderiza el aviso de validacion dentro de la caja inline del formulario sin usar alert().
  */
 export function mostrarMensajeInlineDOM(contenedor, mensaje, tipo = 'error') {
     if (!contenedor) return;
@@ -212,10 +201,8 @@ export function limpiarMensajeInlineDOM(contenedor) {
 
 /**
  * Abre un modal de confirmacion propio en el DOM (prohibido usar confirm()).
- * 
- * En criollo formal: Reemplaza por completo la funcion nativa confirm(). Devuelve una Promesa
- * que se resuelve en 'true' si el usuario toco "Confirmar" o en 'false' si toco "Cancelar",
- * apreto la tecla Escape o hizo click fuera de la cajita.
+ * Reemplaza confirm(): abre el modal propio en el DOM y retorna una Promesa resuelta
+ * en true si confirma o false si cancela, presiona Escape o hace click fuera del dialogo.
  * 
  * @param {{ titulo?: string, mensaje?: string, textoConfirmar?: string }} opciones
  * @returns {Promise<boolean>} Resuelve true si el usuario acepto la operacion.
@@ -333,10 +320,8 @@ export function renderizarVariantesGeneradas(contenedor, lista) {
 
 /**
  * Renderiza en el DOM la lista de contrasenias guardadas en database/contrasenas.json.
- * 
- * En criollo formal: Toma el vector filtrado de registros y dibuja una tarjeta por cada uno.
- * Si no hay ningun registro guardado en la base, muestra un cartel informativo vacio.
- * Cada tarjeta incluye botones atomicos para Ver/Ocultar, Copiar, Editar y Eliminar.
+ * Renderiza una tarjeta por cada registro filtrado con botones de Ver/Ocultar, Copiar,
+ * Editar y Eliminar, o muestra un estado vacio informativo si no hay coincidencias.
  */
 export function renderizarListaGuardadas(contenedor, vectorRegistros, idsVisibles, totalGeneral) {
     if (!contenedor) return;

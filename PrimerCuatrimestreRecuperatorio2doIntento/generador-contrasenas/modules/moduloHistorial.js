@@ -41,8 +41,7 @@ let obtenerClaveActual = () => '';
 
 /**
  * Aplica los filtros activos sobre el Vector de Clases y redibuja la lista en el DOM.
- * En criollo: Toma las contrasenias del gestor, las pasa por el colador de busqueda y categoria,
- * y manda a pintar en pantalla unicamente las que coincidan.
+ * Aplica los filtros activos sobre el Vector de Clases y actualiza la lista renderizada en el DOM.
  */
 function refrescarListado() {
     const filtradas = gestorCliente.filtrar(filtros);
@@ -54,7 +53,7 @@ function refrescarListado() {
 
 /**
  * Consulta las contrasenias guardadas al servidor Node.js usando Fetch (GET /api/contrasenas).
- * En criollo: Trae el archivo JSON del servidor y rellena el Vector de Clases cliente.
+ * Descarga los registros desde el servidor via Fetch y sincroniza el Vector de Clases cliente.
  */
 export async function cargarHistorialServidor() {
     try {
@@ -87,7 +86,7 @@ export function cargarClaveEnFormulario(clave) {
 
 /**
  * Limpia el formulario y lo devuelve al modo inicial "Guardar en Base de Datos (.json)".
- * En criollo: Cancela cualquier edicion pendiente y deja las cajas listas para una nueva clave.
+ * Restablece el formulario al modo de alta inicial y limpia los mensajes de validacion.
  */
 function reiniciarFormulario() {
     if (!dom.formGuardar) return;
@@ -123,12 +122,8 @@ function abrirEdicion(id) {
 
 /**
  * Maneja el evento submit del formulario para dar de alta (POST) o editar (PUT) con Fetch.
- * 
- * En criollo formal: Antes de mandar nada al servidor, instanciamos un 'new RegistroContrasena'
- * en el navegador. Si el usuario puso un nombre de 1 letra o una categoria rara, los setters
- * de la clase tiran una excepcion inmediatamente. La capturamos en el 'catch' y mostramos
- * el mensaje de error en una cajita roja dentro del DOM, sin usar jamas la funcion alert().
- * Si pasa la validacion, se envia via Fetch al servidor y se persiste en database/contrasenas.json.
+ * Valida los datos en el navegador instanciando RegistroContrasena; si algun setter rechaza un dato,
+ * muestra el aviso dentro del DOM sin usar alert(). Si es valido, persiste mediante Fetch.
  */
 async function manejarEnvioGuardar(evento) {
     evento.preventDefault();
@@ -176,10 +171,8 @@ async function manejarEnvioGuardar(evento) {
 
 /**
  * Manejador centralizado (delegacion de eventos) para los botones de cada tarjeta de contrasenia.
- * 
- * En criollo formal: En vez de pegarle 4 escuchadores de eventos a cada tarjeta individual,
- * le ponemos un solo listener al contenedor padre 'listaGuardadas'. Cuando el usuario hace click,
- * detectamos a que boton le dio (ver, copiar, editar o eliminar) usando closest('button[data-accion]').
+ * Aplica delegacion de eventos en el contenedor padre para atender con un unico listener
+ * las acciones de ver, copiar, editar y eliminar mediante closest('button[data-accion]').
  */
 async function manejarClickTarjeta(evento) {
     const boton = evento.target.closest('button[data-accion]');
@@ -234,7 +227,6 @@ async function manejarClickTarjeta(evento) {
 
 /**
  * Inicializa los elementos DOM, los eventos de escucha y la carga inicial del historial.
- * 
  * @param {string[]} categorias Vector de categorias oficiales recibidas del servidor.
  * @param {Function} callbackClaveActual Funcion para obtener la contrasenia activa del visor.
  */
